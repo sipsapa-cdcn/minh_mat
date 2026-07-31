@@ -1522,8 +1522,11 @@ function nt() {
         desc: o.desc,
         label: {
           show: !0,
-          fontSize: 12,
+          fontSize: 13,
+          fontWeight: "bold",
           color: r,
+          textBorderColor: a ? "rgba(20,15,10,0.85)" : "rgba(255,255,255,0.85)",
+          textBorderWidth: 2.5,
           distance: 16,
           opacity: d ? 0.35 : 1,
         },
@@ -4417,7 +4420,7 @@ function sa() {
             symbolSize: e.symbolSize,
             symbol: e.symbol,
             desc: e.desc,
-            label: { show: !0, fontSize: 12, color: r, distance: 16 },
+            label: { show: !0, fontSize: 13, fontWeight: "bold", color: r, textBorderColor: a ? "rgba(20,15,10,0.85)" : "rgba(255,255,255,0.85)", textBorderWidth: 2.5, distance: 16 },
             itemStyle:
               "Nhân vật chính" === e.id
                 ? {
@@ -4443,11 +4446,12 @@ function sa() {
           tooltip: {
             formatter: (e) =>
               "node" === e.dataType
-                ? `<b>${e.name}</b><br/><span style="font-size:12px;color:#999">${o[e.data.id]?.desc || ""}</span>`
+                ? `<div style="max-width:320px; white-space:normal; word-wrap:break-word; line-height:1.6;"><b style="font-size:15px; color:${a ? '#f2d27a' : '#a43d2d'};">${e.name}</b><br/><span style="font-size:13px; color:${a ? '#d4c5a0' : '#666'}">${o[e.data.id]?.desc || ""}</span></div>`
                 : e.data.label?.formatter || e.data.label || "",
             backgroundColor: a ? "rgba(30,22,16,.94)" : "rgba(255,248,226,.94)",
             borderColor: a ? "rgba(180,140,100,.3)" : "rgba(150,120,80,.3)",
             textStyle: { color: r },
+            extraCssText: "white-space: normal; word-break: break-word; max-width: 340px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-radius: 10px;",
           },
           legend: { show: !1 },
           series: [
