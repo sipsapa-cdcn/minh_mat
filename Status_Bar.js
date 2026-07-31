@@ -2253,9 +2253,17 @@ function Kt(e, t, n = {}) {
   const a = n.min ?? 0,
     r = n.max ?? 100,
     i = St(t, 0),
-    o = _t(((i - a) / (r - a)) * 100, 0, 100),
     c = n.tone ?? (i < 30 ? "low" : i > 70 ? "high" : "mid");
-  return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar"><i class="${c}" style="width:${o}%"></i></div>\n    </div>`;
+  let s = "", l = "", d = "";
+  if (a < 0 && r > 0) {
+    s = ' style="position:relative"';
+    l = '<div style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--card);z-index:2;transform:translateX(-50%)"></div>';
+    const p = Math.min((Math.abs(i) / Math.max(Math.abs(a), r)) * 50, 50);
+    d = i >= 0 ? `position:absolute;left:50%;top:0;bottom:0;width:${p}%;border-radius:0 999px 999px 0` : `position:absolute;right:50%;top:0;bottom:0;width:${p}%;border-radius:999px 0 0 999px`;
+  } else {
+    d = `width:${_t(((i - a) / (r - a)) * 100, 0, 100)}%`;
+  }
+  return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar"${s}>${l}<i class="${c}" style="${d}"></i></div>\n    </div>`;
 }
 function en(e, t, n = "Sổ này tạm thời chưa có ghi chép.") {
   const a = $t(e);
@@ -2281,7 +2289,7 @@ function an() {
     (function () {
       const e = String(kt(ee, "Thế giới vận hành.Hai mươi bốn giờ.Giờ", 0)).padStart(2, "0"),
         t = String(kt(ee, "Thế giới vận hành.Hai mươi bốn giờ.Phút", 0)).padStart(2, "0");
-      return `${kt(ee, "Thế giới vận hành.Mười hai canh giờ.Canh giờ", "Giờ mão")}${kt(ee, "Thế giới vận hành.Mười hai canh giờ.Khắc", "Tam khắc")} / ${e}:${t}`;
+      return `${kt(ee, "Thế giới vận hành.Mười hai canh giờ.Canh giờ", "Giờ mão")} ${kt(ee, "Thế giới vận hành.Mười hai canh giờ.Khắc", "Tam khắc")} / ${e}:${t}`;
     })(),
   )} · ${dt(kt(ee, "Thế giới vận hành.Thời tiết", "Không ghi rõ thời tiết"))} · ${Yt(
     e,
