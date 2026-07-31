@@ -2254,16 +2254,22 @@ function Kt(e, t, n = {}) {
     r = n.max ?? 100,
     i = St(t, 0),
     c = n.tone ?? (i < 30 ? "low" : i > 70 ? "high" : "mid");
-  let s = "", l = "", d = "";
+  let s = ' style="position:relative"', l = "", d = "";
+  
   if (a < 0 && r > 0) {
-    s = ' style="position:relative"';
-    l = '<div style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--card);z-index:2;transform:translateX(-50%)"></div>';
+    // Thiết kế cho thanh 2 chiều (-100 đến 100)
+    l = '<div style="position:absolute;left:50%;top:-1px;bottom:-1px;width:2px;background:var(--muted);z-index:2;transform:translateX(-50%);box-shadow:0 0 3px var(--card)"></div>';
     const p = Math.min((Math.abs(i) / Math.max(Math.abs(a), r)) * 50, 50);
-    d = i >= 0 ? `position:absolute;left:50%;top:0;bottom:0;width:${p}%;border-radius:0 999px 999px 0` : `position:absolute;right:50%;top:0;bottom:0;width:${p}%;border-radius:999px 0 0 999px`;
+    d = i >= 0 
+      ? `position:absolute;left:50%;top:0;bottom:0;width:${p}%;border-radius:0 999px 999px 0;box-shadow:inset 12px 0 10px -8px rgba(0,0,0,0.4)` 
+      : `position:absolute;right:50%;top:0;bottom:0;width:${p}%;border-radius:999px 0 0 999px;box-shadow:inset -12px 0 10px -8px rgba(0,0,0,0.4)`;
   } else {
-    d = `width:${_t(((i - a) / (r - a)) * 100, 0, 100)}%`;
+    // Thiết kế cho thanh 1 chiều (0 đến 100) dạng thước đo chiến thuật
+    l = '<div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg, transparent, transparent calc(25% - 2px), var(--card) calc(25% - 2px), var(--card) 25%);z-index:2;pointer-events:none"></div>';
+    d = `position:absolute;left:0;top:0;bottom:0;width:${_t(((i - a) / (r - a)) * 100, 0, 100)}%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.15)`;
   }
-  return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar"${s}>${l}<i class="${c}" style="${d}"></i></div>\n    </div>`;
+  
+  return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b style="font-family:monospace;letter-spacing:0.5px;font-size:1.1em">${dt(i)}</b></div>\n      <div class="cm-bar"${s}>${l}<i class="${c}" style="${d}"></i></div>\n    </div>`;
 }
 function en(e, t, n = "Sổ này tạm thời chưa có ghi chép.") {
   const a = $t(e);
