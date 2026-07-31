@@ -1072,7 +1072,7 @@ const Fe = {
     'Hồ Quảng': ["Hồ Quảng"],
     'An Nam': ["Trịnh chủ", "Quảng Nam"],
     'Úc Châu': ["Úc Châu"],
-    'Lan Thương·Chân Lạp': ["Lan Thương"],
+    'Lan Thương - Chân Lạp': ["Lan Thương"],
   },
   Je = (() => {
     const e = {};
