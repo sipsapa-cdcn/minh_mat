@@ -2256,8 +2256,18 @@ function Kt(e, t, n = {}) {
   const a = n.min ?? 0,
     r = n.max ?? 100,
     i = St(t, 0),
+    isBi = a < 0,
     o = _t(((i - a) / (r - a)) * 100, 0, 100),
     c = n.tone ?? (i < 30 ? "low" : i > 70 ? "high" : "mid");
+  
+  if (isBi) {
+    const pct = _t((Math.abs(i) / Math.max(Math.abs(a), Math.abs(r))) * 50, 0, 50),
+          isNeg = i < 0,
+          dir = isNeg ? `right:50%;width:${pct}%;border-radius:4px 0 0 4px` : `left:50%;width:${pct}%;border-radius:0 4px 4px 0`,
+          col = isNeg ? "danger" : "high",
+          txtCol = isNeg ? "var(--bar-low)" : "var(--bar-high)";
+    return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b style="color:${i===0?'inherit':txtCol}; font-weight:700;">${i>0?'+':''}${dt(i)}</b></div>\n      <div class="cm-bar" style="position:relative;overflow:visible"><div style="position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:var(--muted);z-index:2;transform:translateX(-50%);border-radius:2px;opacity:0.6"></div><i class="${col}" style="position:absolute;top:0;height:100%;${dir}"></i></div>\n    </div>`;
+  }
   return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar"><i class="${c}" style="width:${o}%"></i></div>\n    </div>`;
 }
 function en(e, t, n = "Sổ này tạm thời chưa có ghi chép.") {
