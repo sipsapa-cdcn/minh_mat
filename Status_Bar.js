@@ -2252,22 +2252,10 @@ function Ut(e, t, n = "") {
 function Kt(e, t, n = {}) {
   const a = n.min ?? 0,
     r = n.max ?? 100,
-    i = St(t, 0);
-
-  // Nếu là thanh tiến trình hai chiều (âm/dương, ví dụ: -100 đến 100)
-  if (a < 0 && r > 0) {
-    const zeroPos = (Math.abs(a) / (r - a)) * 100; // Vị trí mốc 0 ở giữa
-    const val = _t(i, a, r); // Giới hạn giá trị không vượt quá min/max
-    const isNegative = val < 0;
-    
-    // Tính toán độ rộng và vị trí bắt đầu đổ màu
-    const width = (Math.abs(val) / (r - a)) * 100;
-    const left = isNegative ? (zeroPos - width) : zeroPos;
-    
-    // Màu sắc: Âm dùng tone danger (đỏ), Dương dùng tone mặc định hoặc high (xanh)
-    const c = n.tone ?? (isNegative ? "danger" : "high");
-
-    return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar" style="position:relative;">\n        <div style="position:absolute; left:${zeroPos}%; width:2px; height:100%; background:var(--ink); opacity:0.25; z-index:2; transform:translateX(-50%);"></div>\n        <i class="${c}" style="position:absolute; top:0; left:${left}%; width:${width}%; height:100%; border-radius:999px; z-index:1; transition:all 0.3s ease;"></i>\n      </div>\n    </div>`;
+    i = St(t, 0),
+    o = _t(((i - a) / (r - a)) * 100, 0, 100),
+    c = n.tone ?? (i < 30 ? "low" : i > 70 ? "high" : "mid");
+  return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar"><i class="${c}" style="width:${o}%"></i></div>\n    </div>`;
 }
 function en(e, t, n = "Sổ này tạm thời chưa có ghi chép.") {
   const a = $t(e);
