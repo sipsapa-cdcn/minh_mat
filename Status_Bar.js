@@ -2268,7 +2268,7 @@ function Kt(e, t, n = {}) {
     const c = n.tone ?? (isNegative ? "danger" : "high");
 
     return `\n    <div class="cm-bar-row">\n      <div class="cm-bar-head"><span>${dt(e)}</span><b>${dt(i)}</b></div>\n      <div class="cm-bar" style="position:relative;">\n        <div style="position:absolute; left:${zeroPos}%; width:2px; height:100%; background:var(--ink); opacity:0.25; z-index:2; transform:translateX(-50%);"></div>\n        <i class="${c}" style="position:absolute; top:0; left:${left}%; width:${width}%; height:100%; border-radius:999px; z-index:1; transition:all 0.3s ease;"></i>\n      </div>\n    </div>`;
-  }
+}
 function en(e, t, n = "Sổ này tạm thời chưa có ghi chép.") {
   const a = $t(e);
   return a.length
