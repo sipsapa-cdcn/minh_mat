@@ -2,1995 +2,1995 @@ const MAP_FRAME_ID = 'ming-dynasty-map-frame';
 const LAMP_ID = 'ming-map-lamp';
 const STORAGE_PREFIX = 'ming-map:';
 
-// 每次更新地图内容后，修改此版本号（如变为 v1.1、v1.2），即可重新触发玩家界面上的红点提示
+// Sửa đổi số phiên bản này mỗi khi cập nhật nội dung bản đồ (Nếu đổi thành v1.1, v1.2), Để có thể kích hoạt lại thông báo chấm đỏ trên giao diện người chơi
 const MING_MAP_VERSION = 'v1.0'; 
 
 // ==========================================
-// 地图核心数据常量与映射
+// Các hằng số và ánh xạ dữ liệu cốt lõi của bản đồ
 // ==========================================
 const GEO_NAME_DISPLAY = {
-    '山东布政使司': '山东', '山西布政使司': '山西', '河南布政使司': '河南',
-    '陕西布政使司': '陕西', '陕西行都司': '陕西',
-    '四川布政使司': '四川', '江西布政使司': '江西', '浙江布政使司': '浙江',
-    '福建布政使司': '福建', '广东布政使司': '广东', '广西布政使司': '广西',
-    '云南布政使司': '云南', '贵州布政使司': '贵州',
-    '湖广布政使司(北)': '湖广', '湖广布政使司(南)': '湖广',
-    '南直隶(江南)': '南直隶', '南直隶(江北)': '南直隶',
-    '辽东都司': '辽东', '宁夏卫': '宁夏', '莫卧儿帝国': '莫卧儿',
-    '阿瑜陀耶王朝(暹罗)': '暹罗', '不丹竺巴': '不丹',
-    '尼泊尔马拉王朝': '尼婆罗', '西属菲律宾': '吕宋',
-    '马打蓝苏丹国': '爪哇',
-    '藏巴汗': '乌思藏', '康区土司': '乌思藏', '叶尔羌汗国': '西域', '和硕特部': '青海',
-    '建州女真(后金)': '后金', '野人女真诸部': '野人女真',
-    '蒙古察哈尔部': '察哈尔', '蒙古土默特部': '土默特',
-    '朵颜三卫': '朵颜三卫', '喀尔喀蒙古': '喀尔喀',
-    '后黎朝·郑主': '郑主', '阮主(广南)': '广南',
-    '澳大利亚(原住民)': '澳洲',
-    '澜沧·真腊': '澜沧'
+    'Sơn Đông Bố chính sứ ty': 'Sơn Đông', 'Sơn Tây Bố chính sứ ty': 'Sơn Tây', 'Hà Nam Bố chính sứ ty': 'Hà Nam',
+    'Thiểm Tây Bố chính sứ ty': 'Thiểm Tây', 'Thiểm Tây Hành đô ty': 'Thiểm Tây',
+    'Tứ Xuyên Bố chính sứ ty': 'Tứ Xuyên', 'Giang Tây Bố chính sứ ty': 'Giang Tây', 'Chiết Giang Bố chính sứ ty': 'Chiết Giang',
+    'Phúc Kiến Bố chính sứ ty': 'Phúc Kiến', 'Quảng Đông Bố chính sứ ty': 'Quảng Đông', 'Quảng Tây Bố chính sứ ty': 'Quảng Tây',
+    'Vân Nam Bố chính sứ ty': 'Vân Nam', 'Quý Châu Bố chính sứ ty': 'Quý Châu',
+    'Hồ Quảng Bố chính sứ ty (Bắc)': 'Hồ Quảng', 'Hồ Quảng Bố chính sứ ty (Nam)': 'Hồ Quảng',
+    'Nam Trực Lệ (Giang Nam)': 'Nam Trực Lệ', 'Nam Trực Lệ (Giang Bắc)': 'Nam Trực Lệ',
+    'Liêu Đông Đô ty': 'Liêu Đông', 'Ninh Hạ Vệ': 'Ninh Hạ', 'Đế quốc Mughal': 'Mughal',
+    'Vương triều Ayutthaya (Xiêm La)': 'Xiêm La', 'Bhutan Drukpa': 'Bhutan',
+    'Vương triều Malla Nepal': 'Nepal', 'Philippines thuộc Tây Ban Nha': 'Luzon',
+    'Vương quốc Hồi giáo Mataram': 'Java',
+    'Tạng Ba Hãn': 'Ô Tư Tạng', 'Khang Khu thổ ty': 'Ô Tư Tạng', 'Hãn quốc Yarkent': 'Tây Vực', 'Bộ Hòa Thạc Đặc': 'Thanh Hải',
+    'Kiến Châu Nữ Chân (Hậu Kim)': 'Hậu Kim', 'Các bộ Dã Nhân Nữ Chân': 'Dã Nhân Nữ Chân',
+    'Bộ Sát Cáp Nhĩ Mông Cổ': 'Sát Cáp Nhĩ', 'Bộ Thổ Mặc Đặc Mông Cổ': 'Thổ Mặc Đặc',
+    'Đóa Nhan Tam Vệ': 'Đóa Nhan Tam Vệ', 'Khách Nhĩ Khách Mông Cổ (Khalkha)': 'Khách Nhĩ Khách (Khalkha)',
+    'Hậu Lê triều - Chúa Trịnh': 'Chúa Trịnh', 'Chúa Nguyễn (Quảng Nam)': 'Quảng Nam',
+    'Úc (Thổ dân)': 'Úc',
+    'Lạn Thương - Chân Lạp': 'Lạn Thương'
 };
 
 const modernToMingProvince = {
-    '北京市':'北直隶','天津市':'北直隶','河北省':'北直隶','江苏省':'南直隶','安徽省':'南直隶','上海市':'南直隶',
-    '山东省':'山东','山西省':'山西','河南省':'河南','陕西省':'陕西','甘肃省':'陕西',
-    '湖北省':'湖广','湖南省':'湖广','江西省':'江西','浙江省':'浙江','福建省':'福建','广东省':'广东',
-    '广西壮族自治区':'广西','云南省':'云南','贵州省':'贵州','四川省':'四川','重庆市':'四川',
-    '辽宁省':'辽东','宁夏回族自治区':'宁夏', '台湾省':'东番', '海南省':'广东', '香港特别行政区':'广东','澳门特别行政区':'广东','吉林省':'后金', '黑龙江省':'野人女真', '内蒙古自治区':'察哈尔', '青海省':'青海', '新疆维吾尔自治区':'西域', '西藏自治区':'乌思藏'
+    'Thành phố Bắc Kinh':'Bắc Trực Lệ','Thành phố Thiên Tân':'Bắc Trực Lệ','Tỉnh Hà Bắc':'Bắc Trực Lệ','Tỉnh Giang Tô':'Nam Trực Lệ','Tỉnh An Huy':'Nam Trực Lệ','Thành phố Thượng Hải':'Nam Trực Lệ',
+    'Tỉnh Sơn Đông':'Sơn Đông','Tỉnh Sơn Tây':'Sơn Tây','Tỉnh Hà Nam':'Hà Nam','Tỉnh Thiểm Tây':'Thiểm Tây','Tỉnh Cam Túc':'Thiểm Tây',
+    'Tỉnh Hồ Bắc':'Hồ Quảng','Tỉnh Hồ Nam':'Hồ Quảng','Tỉnh Giang Tây':'Giang Tây','Tỉnh Chiết Giang':'Chiết Giang','Tỉnh Phúc Kiến':'Phúc Kiến','Tỉnh Quảng Đông':'Quảng Đông',
+    'Khu tự trị dân tộc Choang Quảng Tây':'Quảng Tây','Tỉnh Vân Nam':'Vân Nam','Tỉnh Quý Châu':'Quý Châu','Tỉnh Tứ Xuyên':'Tứ Xuyên','Thành phố Trùng Khánh':'Tứ Xuyên',
+    'Tỉnh Liêu Ninh':'Liêu Đông','Khu tự trị dân tộc Hồi Ninh Hạ':'Ninh Hạ', 'Tỉnh Đài Loan':'Đông Phiên', 'Tỉnh Hải Nam':'Quảng Đông', 'Đặc khu hành chính Hồng Kông':'Quảng Đông','Đặc khu hành chính Ma Cao':'Quảng Đông','Tỉnh Cát Lâm':'Hậu Kim', 'Tỉnh Hắc Long Giang':'Dã Nhân Nữ Chân', 'Khu tự trị Nội Mông Cổ':'Sát Cáp Nhĩ', 'Tỉnh Thanh Hải':'Thanh Hải', 'Khu tự trị dân tộc Duy Ngô Nhĩ Tân Cương':'Tây Vực', 'Khu tự trị Tây Tạng':'Ô Tư Tạng'
 };
 
 const PROVINCE_ADCODE = {
-    '北京市':'110000', '天津市':'120000', '河北省':'130000', '山西省':'140000',
-    '辽宁省':'210000', '上海市':'310000', '江苏省':'320000', '浙江省':'330000',
-    '安徽省':'340000', '福建省':'350000', '江西省':'360000', '山东省':'370000',
-    '河南省':'410000', '湖北省':'420000', '湖南省':'430000', '广东省':'440000',
-    '广西壮族自治区':'450000', '海南省':'460000', '重庆市':'500000', '四川省':'510000',
-    '贵州省':'520000', '云南省':'530000', '陕西省':'610000', '甘肃省':'620000', '宁夏回族自治区':'640000',
-    '香港特别行政区':'810000', '澳门特别行政区':'820000', '内蒙古自治区':'150000', '吉林省':'220000', '黑龙江省':'230000',
-    '西藏自治区':'540000', '青海省':'630000', '新疆维吾尔自治区':'650000', '台湾省':'710000'
+    'Thành phố Bắc Kinh':'110000', 'Thành phố Thiên Tân':'120000', 'Tỉnh Hà Bắc':'130000', 'Tỉnh Sơn Tây':'140000',
+    'Tỉnh Liêu Ninh':'210000', 'Thành phố Thượng Hải':'310000', 'Tỉnh Giang Tô':'320000', 'Tỉnh Chiết Giang':'330000',
+    'Tỉnh An Huy':'340000', 'Tỉnh Phúc Kiến':'350000', 'Tỉnh Giang Tây':'360000', 'Tỉnh Sơn Đông':'370000',
+    'Tỉnh Hà Nam':'410000', 'Tỉnh Hồ Bắc':'420000', 'Tỉnh Hồ Nam':'430000', 'Tỉnh Quảng Đông':'440000',
+    'Khu tự trị dân tộc Choang Quảng Tây':'450000', 'Tỉnh Hải Nam':'460000', 'Thành phố Trùng Khánh':'500000', 'Tỉnh Tứ Xuyên':'510000',
+    'Tỉnh Quý Châu':'520000', 'Tỉnh Vân Nam':'530000', 'Tỉnh Thiểm Tây':'610000', 'Tỉnh Cam Túc':'620000', 'Khu tự trị dân tộc Hồi Ninh Hạ':'640000',
+    'Đặc khu hành chính Hồng Kông':'810000', 'Đặc khu hành chính Ma Cao':'820000', 'Khu tự trị Nội Mông Cổ':'150000', 'Tỉnh Cát Lâm':'220000', 'Tỉnh Hắc Long Giang':'230000',
+    'Khu tự trị Tây Tạng':'540000', 'Tỉnh Thanh Hải':'630000', 'Khu tự trị dân tộc Duy Ngô Nhĩ Tân Cương':'650000', 'Tỉnh Đài Loan':'710000'
 };
 
 // ==========================================
-// 新增：日本现代都道府县 -> 江户时代令制国 映射
+// Mới: Các đô đạo phủ huyện của Nhật Bản hiện đại -> Mapping Lệnh chế quốc thời Edo
 // ==========================================
 const japanToEdoMap = {
-    '東京': '武藏', '神奈川': '相模', '埼玉': '武藏', '千葉': '下总', '茨城': '常陆', '栃木': '下野', '群馬': '上野',
-    '京都': '山城', '大阪': '摄津', '兵庫': '播磨', '奈良': '大和', '滋賀': '近江', '和歌山': '纪伊',
-    '愛知': '尾张', '静岡': '骏河', '岐阜': '美浓', '三重': '伊势',
-    '北海道': '虾夷', '青森': '陆奥', '岩手': '陆奥', '宮城': '陆奥', '秋田': '出羽', '山形': '出羽', '福島': '陆奥',
-    '新潟': '越后', '富山': '越中', '石川': '加贺', '福井': '越前', '山梨': '甲斐', '長野': '信浓',
-    '鳥取': '因幡', '島根': '出云', '岡山': '备前', '広島': '安艺', '山口': '长门',
-    '徳島': '阿波', '香川': '赞岐', '愛媛': '伊予', '高知': '土佐',
-    '福岡': '筑前', '佐賀': '肥前', '長崎': '肥前', '熊本': '肥后', '大分': '丰后', '宮崎': '日向', '鹿児島': '萨摩', '沖縄': '琉球'
+    'Đông Kinh': 'Musashi', 'Kanagawa': 'Sagami', 'Saitama': 'Musashi', 'Chiba': 'Shimosa', 'Ibaraki': 'Hitachi', 'Tochigi': 'Shimotsuke', 'Gunma': 'Kozuke',
+    'Kyoto': 'Yamashiro', 'Osaka': 'Settsu', 'Hyogo': 'Harima', 'Nara': 'Yamato', 'Shiga': 'Omi', 'Wakayama': 'Kii',
+    'Aichi': 'Owari', 'Shizuoka': 'Suruga', 'Gifu': 'Mino', 'Mie': 'Ise',
+    'Hokkaido': 'Ezo', 'Aomori': 'Mutsu', 'Iwate': 'Mutsu', 'Miyagi': 'Mutsu', 'Akita': 'Dewa', 'Yamagata': 'Dewa', 'Fukushima': 'Mutsu',
+    'Niigata': 'Echigo', 'Toyama': 'Etchu', 'Ishikawa': 'Kaga', 'Fukui': 'Echizen', 'Yamanashi': 'Kai', 'Nagano': 'Shinano',
+    'Tottori': 'Inaba', 'Shimane': 'Izumo', 'Okayama': 'Bizen', 'Hiroshima': 'Aki', 'Yamaguchi': 'Nagato',
+    'Tokushima': 'Awa', 'Kagawa': 'Sanuki', 'Ehime': 'Iyo', 'Kochi': 'Tosa',
+    'Fukuoka': 'Chikuzen', 'Saga': 'Hizen', 'Nagasaki': 'Hizen', 'Kumamoto': 'Higo', 'Oita': 'Bungo', 'Miyazaki': 'Hyuga', 'Kagoshima': 'Satsuma', 'Okinawa': 'Lưu Cầu'
 };
 
 const edoToRegionMap = {
-    '山城': '畿内', '大和': '畿内', '摄津': '畿内', '河内': '畿内', '和泉': '畿内',
-    '伊贺': '东海道', '伊势': '东海道', '志摩': '东海道', '尾张': '东海道', '三河': '东海道', '远江': '东海道', '骏河': '东海道', '伊豆': '东海道', '甲斐': '东海道', '相模': '东海道', '武藏': '东海道', '安房': '东海道', '上总': '东海道', '下总': '东海道', '常陆': '东海道',
-    '近江': '东山道', '美浓': '东山道', '飞驒': '东山道', '信浓': '东山道', '上野': '东山道', '下野': '东山道', '陆奥': '东山道', '出羽': '东山道',
-    '若狭': '北陆道', '越前': '北陆道', '加贺': '北陆道', '能登': '北陆道', '越中': '北陆道', '越后': '北陆道', '佐渡': '北陆道',
-    '丹波': '山阴道', '丹后': '山阴道', '但马': '山阴道', '因幡': '山阴道', '伯耆': '山阴道', '出云': '山阴道', '石见': '山阴道', '隐岐': '山阴道',
-    '播磨': '山阳道', '美作': '山阳道', '备前': '山阳道', '备中': '山阳道', '备后': '山阳道', '安艺': '山阳道', '周防': '山阳道', '长门': '山阳道',
-    '纪伊': '南海道', '淡路': '南海道', '阿波': '南海道', '赞岐': '南海道', '伊予': '南海道', '土佐': '南海道',
-    '筑前': '西海道', '筑后': '西海道', '丰前': '西海道', '丰后': '西海道', '肥前': '西海道', '肥后': '西海道', '日向': '西海道', '大隅': '西海道', '萨摩': '西海道', '壹岐': '西海道', '对马': '西海道',
-    '虾夷': '虾夷', '琉球': '琉球'
+    'Yamashiro': 'Kinai', 'Yamato': 'Kinai', 'Settsu': 'Kinai', 'Hà Nội': 'Kinai', 'Izumi': 'Kinai',
+    'Iga': 'Tokaido', 'Ise': 'Tokaido', 'Shima': 'Tokaido', 'Owari': 'Tokaido', 'Mikawa': 'Tokaido', 'Totomi': 'Tokaido', 'Suruga': 'Tokaido', 'Izu': 'Tokaido', 'Kai': 'Tokaido', 'Sagami': 'Tokaido', 'Musashi': 'Tokaido', 'Awa': 'Tokaido', 'Kazusa': 'Tokaido', 'Shimosa': 'Tokaido', 'Hitachi': 'Tokaido',
+    'Omi': 'Tosando', 'Mino': 'Tosando', 'Hida': 'Tosando', 'Shinano': 'Tosando', 'Kozuke': 'Tosando', 'Shimotsuke': 'Tosando', 'Mutsu': 'Tosando', 'Dewa': 'Tosando',
+    'Wakasa': 'Hokurikudo', 'Echizen': 'Hokurikudo', 'Kaga': 'Hokurikudo', 'Noto': 'Hokurikudo', 'Etchu': 'Hokurikudo', 'Echigo': 'Hokurikudo', 'Sado': 'Hokurikudo',
+    'Tamba': 'San’indo', 'Tango': 'San’indo', 'Tajima': 'San’indo', 'Inaba': 'San’indo', 'Hoki': 'San’indo', 'Izumo': 'San’indo', 'Iwami': 'San’indo', 'Oki': 'San’indo',
+    'Harima': 'San’yodo', 'Mimasaka': 'San’yodo', 'Bizen': 'San’yodo', 'Bitchu': 'San’yodo', 'Bingo': 'San’yodo', 'Aki': 'San’yodo', 'Suo': 'Sanyodo', 'Nagato': 'Sanyodo',
+    'Kii': 'Nankaido', 'Awaji': 'Nankaido', 'Awa': 'Nankaido', 'Sanuki': 'Nankaido', 'Iyo': 'Nankaido', 'Tosa': 'Nankaido',
+    'Chikuzen': 'Saikaido', 'Chikugo': 'Saikaido', 'Buzen': 'Saikaido', 'Bungo': 'Saikaido', 'Hizen': 'Saikaido', 'Higo': 'Saikaido', 'Hyuga': 'Saikaido', 'Osumi': 'Saikaido', 'Satsuma': 'Saikaido', 'Iki': 'Saikaido', 'Tsushima': 'Saikaido',
+    'Ezo': 'Ezo', 'Lưu Cầu': 'Lưu Cầu'
 };
 
 // ==========================================
-// 新增：现代朝韩道/市 -> 1634年朝鲜八道 映射
+// Thêm mới: Các đạo Triều Tiên - Hàn Quốc hiện đại/Thị -> 1634 Ánh xạ Bát đạo Triều Tiên năm
 // ==========================================
 const koreaToJoseonMap = {
-    'P\'yŏngyang': '平安道', 'P\'yŏngan-namdo': '平安道', 'P\'yŏngan-bukto': '平安道', 'Namp\'o': '平安道', 'Chagang-do': '平安道',
-    'Hamgyŏng-namdo': '咸镜道', 'Hamgyŏng-bukto': '咸镜道', 'Rasŏn': '咸镜道', 'Ryanggang': '咸镜道',
-    'Hwanghae-namdo': '黄海道', 'Hwanghae-bukto': '黄海道', 'Kaesŏng': '京畿道', 'Kangwŏn-do': '江原道',
-    'Seoul': '京畿道', 'Incheon': '京畿道', 'Gyeonggi-do': '京畿道', 'Gangwon-do': '江原道',
-    'Daejeon': '忠清道', 'Sejong': '忠清道', 'Chungcheongnam-do': '忠清道', 'Chungcheongbuk-do': '忠清道',
-    'Busan': '庆尚道', 'Daegu': '庆尚道', 'Ulsan': '庆尚道', 'Gyeongsangnam-do': '庆尚道', 'Gyeongsangbuk-do': '庆尚道',
-    'Gwangju': '全罗道', 'Jeollanam-do': '全罗道', 'Jeollabuk-do': '全罗道', 'Jeju-do': '全罗道'
+    'P\'yŏngyang': 'Pyongan-do', 'P\'yŏngan-namdo': 'Pyongan-do', 'P\'yŏngan-bukto': 'Pyongan-do', 'Namp\'o': 'Pyongan-do', 'Chagang-do': 'Pyongan-do',
+    'Hamgyŏng-namdo': 'Hamgyong-do', 'Hamgyŏng-bukto': 'Hamgyong-do', 'Rasŏn': 'Hamgyong-do', 'Ryanggang': 'Hamgyong-do',
+    'Hwanghae-namdo': 'Hwanghae-do', 'Hwanghae-bukto': 'Hwanghae-do', 'Kaesŏng': 'Gyeonggi-do', 'Kangwŏn-do': 'Gangwon-do',
+    'Seoul': 'Gyeonggi-do', 'Incheon': 'Gyeonggi-do', 'Gyeonggi-do': 'Gyeonggi-do', 'Gangwon-do': 'Gangwon-do',
+    'Daejeon': 'Chungcheong-do', 'Sejong': 'Chungcheong-do', 'Chungcheongnam-do': 'Chungcheong-do', 'Chungcheongbuk-do': 'Chungcheong-do',
+    'Busan': 'Gyeongsang-do', 'Daegu': 'Gyeongsang-do', 'Ulsan': 'Gyeongsang-do', 'Gyeongsangnam-do': 'Gyeongsang-do', 'Gyeongsangbuk-do': 'Gyeongsang-do',
+    'Gwangju': 'Jeolla-do', 'Jeollanam-do': 'Jeolla-do', 'Jeollabuk-do': 'Jeolla-do', 'Jeju-do': 'Jeolla-do'
 };
 
-// 1634朝鲜八道：严格遵循真实历史建制，消除现代伪古名，配合离近原则保证无飞地
+// 1634 Bát đạo Triều Tiên: Tuân thủ nghiêm ngặt hệ thống hành chính lịch sử chân thực, loại bỏ các tên giả cổ hiện đại, phối hợp với nguyên tắc lân cận để đảm bảo không có vùng lãnh thổ tách rời.
 const joseonCountyMap = {
-    // 京畿
-    'Seoul':'汉城府', 'Kaesong':'开城府', 'Kaesŏng':'开城府',
-    'Incheon':'仁川都护府', 'Gimpo':'金浦郡', 'Bucheon':'富平都护府', 'Gwangmyeong':'衿川县', 
-    'Siheung':'安山郡', 'Ansan':'安山郡', 'Anyang':'果川县', 'Gwacheon':'果川县', 'Gunpo':'果川县', 'Uiwang':'果川县', 
-    'Suwon':'水原都护府', 'Osan':'水原都护府', 'Hwaseong':'南阳都护府', 
-    'Seongnam':'广州府', 'Gwangju':'广州府', 'Hanam':'广州府', 
-    'Yongin':'龙仁县', 'Icheon':'利川都护府', 'Anseong':'安城郡', 'Pyeongtaek':'振威县',
-    'Goyang':'高阳郡', 'Paju':'坡州牧', 'Yangju':'杨州牧', 'Dongducheon':'杨州牧', 'Uijeongbu':'杨州牧', 
-    'Guri':'杨州牧', 'Namyangju':'杨州牧', 'Gapyeong':'加平郡', 'Yeoju':'骊州牧', 'Yangpyeong':'杨根郡', 
-    'Pocheon':'抱川郡', 'Yeoncheon':'涟川县', 'Ganghwa':'江华都护府', 'Ongjin':'江华都护府',
+    // Gyeonggi
+    'Seoul':'Phủ Hán Thành', 'Kaesong':'Phủ Kaesong', 'Kaesŏng':'Phủ Kaesong',
+    'Incheon':'Incheon Đô hộ phủ', 'Gimpo':'Quận Gimpo', 'Bucheon':'Bupyeong Đô hộ phủ', 'Gwangmyeong':'Huyện Geumcheon', 
+    'Siheung':'Quận Ansan', 'Ansan':'Quận Ansan', 'Anyang':'Huyện Gwacheon', 'Gwacheon':'Huyện Gwacheon', 'Gunpo':'Huyện Gwacheon', 'Uiwang':'Huyện Gwacheon', 
+    'Suwon':'Suwon Đô hộ phủ', 'Osan':'Suwon Đô hộ phủ', 'Hwaseong':'Namyang Đô hộ phủ', 
+    'Seongnam':'Phủ Gwangju', 'Gwangju':'Phủ Gwangju', 'Hanam':'Phủ Gwangju', 
+    'Yongin':'Huyện Yongin', 'Icheon':'Icheon Đô hộ phủ', 'Anseong':'Quận Anseong', 'Pyeongtaek':'Huyện Jinwi',
+    'Goyang':'Quận Goyang', 'Paju':'Mục Paju', 'Yangju':'Mục Yangju', 'Dongducheon':'Mục Yangju', 'Uijeongbu':'Mục Yangju', 
+    'Guri':'Mục Yangju', 'Namyangju':'Mục Yangju', 'Gapyeong':'Quận Gapyeong', 'Yeoju':'Mục Yeoju', 'Yangpyeong':'Quận Yanggeun', 
+    'Pocheon':'Quận Pocheon', 'Yeoncheon':'Huyện Yeoncheon', 'Ganghwa':'Ganghwa Đô hộ phủ', 'Ongjin':'Ganghwa Đô hộ phủ',
 
-    // 江原
-    'Chuncheon':'春川都护府', 'Hwacheon':'华川县', 'Yanggu':'杨口县', 'Inje':'麟蹄县', 
-    'Wonju':'原州牧', 'Hoengseong':'横城县', 'Pyeongchang':'平昌郡', 'Yeongwol':'宁越郡', 'Jeongseon':'旌善郡', 
-    'Gangneung':'江陵大都护府', 'Donghae':'三陟都护府', 'Taebaek':'三陟都护府', 'Samcheok':'三陟都护府', 
-    'Sokcho':'襄阳都护府', 'Yangyang':'襄阳都护府', 'Goseong':'杆城郡', 'Kosong':'杆城郡', 'Kosŏng':'杆城郡',
-    'Hongcheon':'洪川县', 'Cheolwon':'铁原都护府', 'Chorwon':'铁原都护府', 'Ch\'ŏrwŏn':'铁原都护府',
-    'Wonsan':'安边都护府', 'Wŏnsan':'安边都护府', 'Anbyon':'安边都护府', 'Anbyŏn':'安边都护府',
-    'Pyeonggang':'平康县', 'Pyonggang':'平康县', 'P\'yŏnggang':'平康县', 
-    'Tongchon':'通川郡', 'T\'ongch\'ŏn':'通川郡', 
-    'Ichon':'伊川郡', 'Ich\'ŏn':'伊川郡', 'Pangyo':'伊川郡',
-    'Hoeyang':'淮阳都护府', 'Sepo':'淮阳都护府', 'Kosan':'淮阳都护府', 'Gimhwa':'金化县', 'Kimhwa':'金化县',
+    // Gangwon
+    'Chuncheon':'Chuncheon Đô hộ phủ', 'Hwacheon':'Huyện Hwacheon', 'Yanggu':'Huyện Yanggu', 'Inje':'Huyện Inje', 
+    'Wonju':'Phủ Wonju', 'Hoengseong':'Huyện Hoengseong', 'Pyeongchang':'Quận Pyeongchang', 'Yeongwol':'Quận Yeongwol', 'Jeongseon':'Quận Jeongseon', 
+    'Gangneung':'Gangneung Đại đô hộ phủ', 'Donghae':'Samcheok Đô hộ phủ', 'Taebaek':'Samcheok Đô hộ phủ', 'Samcheok':'Samcheok Đô hộ phủ', 
+    'Sokcho':'Yangyang Đô hộ phủ', 'Yangyang':'Yangyang Đô hộ phủ', 'Goseong':'Quận Ganseong', 'Kosong':'Quận Ganseong', 'Kosŏng':'Quận Ganseong',
+    'Hongcheon':'Huyện Hongcheon', 'Cheolwon':'Cheorwon Đô hộ phủ', 'Chorwon':'Cheorwon Đô hộ phủ', 'Ch\'ŏrwŏn':'Cheorwon Đô hộ phủ',
+    'Wonsan':'Đô hộ phủ Anbyeon', 'Wŏnsan':'Đô hộ phủ Anbyeon', 'Anbyon':'Đô hộ phủ Anbyeon', 'Anbyŏn':'Đô hộ phủ Anbyeon',
+    'Pyeonggang':'Huyện Pyeonggang', 'Pyonggang':'Huyện Pyeonggang', 'P\'yŏnggang':'Huyện Pyeonggang', 
+    'Tongchon':'Quận Tongcheon', 'T\'ongch\'ŏn':'Quận Tongcheon', 
+    'Ichon':'Quận Icheon', 'Ich\'ŏn':'Quận Icheon', 'Pangyo':'Quận Icheon',
+    'Hoeyang':'Đô hộ phủ Hoeyang', 'Sepo':'Đô hộ phủ Hoeyang', 'Kosan':'Đô hộ phủ Hoeyang', 'Gimhwa':'Huyện Gimhwa', 'Kimhwa':'Huyện Gimhwa',
 
-    // 忠清
-    'Cheongju':'清州牧', 'Chungju':'忠州牧', 'Jecheon':'堤川县', 'Danyang':'丹阳郡', 'Cheonan':'天安都护府', 
-    'Gongju':'公州牧', 'Gyeryong':'公州牧', 'Boryeong':'保宁县', 'Asan':'牙山县', 'Seosan':'瑞山郡', 'Taean':'泰安郡', 
-    'Nonsan':'尼山县', 'Dangjin':'唐津县', 'Geumsan':'锦山郡', 'Buyeo':'扶余县', 'Seocheon':'舒川郡', 
-    'Cheongyang':'青阳县', 'Hongseong':'洪州牧', 'Yesan':'礼山县', 'Daejeon':'怀德县', 'Sejong':'燕岐县', 
-    'Boeun':'报恩县', 'Okcheon':'沃川郡', 'Yeongdong':'永同县', 'Jincheon':'镇川县', 'Goesan':'槐山郡', 'Eumseong':'阴城县', 'Jeungpyeong':'清州牧',
+    // Chungcheong
+    'Cheongju':'Phủ Cheongju', 'Chungju':'Phủ Chungju', 'Jecheon':'Huyện Jecheon', 'Danyang':'Quận Danyang', 'Cheonan':'Đô hộ phủ Cheonan', 
+    'Gongju':'Phủ Gongju', 'Gyeryong':'Phủ Gongju', 'Boryeong':'Huyện Boryeong', 'Asan':'Huyện Asan', 'Seosan':'Quận Seosan', 'Taean':'Quận Taean', 
+    'Nonsan':'Huyện Nisan', 'Dangjin':'Huyện Dangjin', 'Geumsan':'Quận Geumsan', 'Buyeo':'Huyện Buyeo', 'Seocheon':'Quận Seocheon', 
+    'Cheongyang':'Huyện Thanh Dương', 'Hongseong':'Phủ Hongju', 'Yesan':'Huyện Yesan', 'Daejeon':'Huyện Hoedeok', 'Sejong':'Huyện Yeongi', 
+    'Boeun':'Huyện Boeun', 'Okcheon':'Quận Okcheon', 'Yeongdong':'Huyện Yeongdong', 'Jincheon':'Huyện Jincheon', 'Goesan':'Quận Goesan', 'Eumseong':'Huyện Eumseong', 'Jeungpyeong':'Mục Cheongju',
 
-    // 庆尚 
-    'Daegu':'大邱都护府', 'Gyeongsan':'庆山县', 'Chilgok':'漆谷都护府',
-    'Busan':'东莱都护府', 'Gimhae':'金海都护府', 'Yangsan':'梁山郡', 'Gijang':'机张县',
-    'Ulsan':'蔚山都护府', 'Pohang':'迎日县', 'Gyeongju':'庆州府', 
-    'Gimcheon':'金山郡', 'Andong':'安东大都护府', 'Gumi':'善山都护府', 'Yeongju':'荣川郡', 'Yeongcheon':'永川郡', 
-    'Sangju':'尚州牧', 'Mungyeong':'闻庆县', 'Gunwi':'军威县', 'Uiseong':'义城县', 
-    'Cheongsong':'青松都护府', 'Yeongyang':'英阳县', 'Yeongdeok':'盈德县', 'Cheongdo':'清道郡', 'Goryeong':'高灵县', 
-    'Seongju':'星州牧', 'Yecheon':'醴泉郡', 'Bonghwa':'奉化县', 'Uljin':'蔚珍县', 'Ulleung':'平海郡', 
-    'Changwon':'昌原都护府', 'Jinju':'晋州牧', 'Tongyeong':'固城县', 'Goseong':'固城县', 'Sacheon':'泗川县', 
-    'Miryang':'密阳都护府', 'Geoje':'巨济县', 'Uiryeong':'宜宁县', 'Haman':'咸安郡', 'Changnyeong':'昌宁县', 
-    'Namhae':'南海县', 'Hadong':'河东县', 'Sancheong':'山阴县', 'Hamyang':'咸阳郡', 'Geochang':'居昌郡', 'Hapcheon':'陕川郡',
+    // Gyeongsang 
+    'Daegu':'Đô hộ phủ Daegu', 'Gyeongsan':'Huyện Gyeongsan', 'Chilgok':'Đô hộ phủ Chilgok',
+    'Busan':'Đô hộ phủ Dongnae', 'Gimhae':'Đô hộ phủ Gimhae', 'Yangsan':'Quận Yangsan', 'Gijang':'Huyện Gijang',
+    'Ulsan':'Đô hộ phủ Ulsan', 'Pohang':'Huyện Yeongil', 'Gyeongju':'Phủ Gyeongju', 
+    'Gimcheon':'Quận Geumsan', 'Andong':'Andong Đại đô hộ phủ', 'Gumi':'Đô hộ phủ Seonsan', 'Yeongju':'Quận Yeongcheon', 'Yeongcheon':'Quận Yeongcheon', 
+    'Sangju':'Mục Sangju', 'Mungyeong':'Huyện Mungyeong', 'Gunwi':'Huyện Gunwi', 'Uiseong':'Huyện Uiseong', 
+    'Cheongsong':'Đô hộ phủ Cheongsong', 'Yeongyang':'Huyện Yeongyang', 'Yeongdeok':'Huyện Yeongdeok', 'Cheongdo':'Quận Cheongdo', 'Goryeong':'Huyện Goryeong', 
+    'Seongju':'Mục Seongju', 'Yecheon':'Quận Yecheon', 'Bonghwa':'Huyện Bonghwa', 'Uljin':'Huyện Uljin', 'Ulleung':'Quận Pyeonghae', 
+    'Changwon':'Đô hộ phủ Changwon', 'Jinju':'Mục Jinju', 'Tongyeong':'Huyện Goseong', 'Goseong':'Huyện Goseong', 'Sacheon':'Huyện Sacheon', 
+    'Miryang':'Đô hộ phủ Miryang', 'Geoje':'Huyện Geoje', 'Uiryeong':'Huyện Uiryeong', 'Haman':'Quận Haman', 'Changnyeong':'Huyện Xương Ninh', 
+    'Namhae':'Huyện Namhae', 'Hadong':'Huyện Hadong', 'Sancheong':'Huyện Sơn Âm', 'Hamyang':'Quận Hamyang', 'Geochang':'Huyện Geochang', 'Hapcheon':'Huyện Hapcheon',
 
-    // 全罗
-    'Jeonju':'全州府', 'Wanju':'全州府', 'Gunsan':'临陂县', 'Iksan':'益山郡', 'Jeongeup':'井邑县', 'Namwon':'南原都护府', 
-    'Gimje':'金堤郡', 'Jinan':'镇安县', 'Muju':'茂朱府', 'Jangsu':'长水县', 'Imsil':'任实县', 
-    'Sunchang':'淳昌郡', 'Gochang':'高敞县', 'Buan':'扶安县', 
-    'Gwangju':'光州牧', 'Mokpo':'务安县', 'Muan':'务安县', 'Sinan':'务安县', 
-    'Yeosu':'顺天都护府', 'Suncheon':'顺天都护府', 'Gwangyang':'光阳县', 
-    'Naju':'罗州牧', 'Damyang':'潭阳都护府', 'Damnyang':'潭阳都护府', 'Gokseong':'谷城县', 'Gurye':'求礼县', 'Goheung':'兴阳县', 
-    'Boseong':'宝城郡', 'Hwasun':'和顺县', 'Jangheung':'长兴都护府', 'Gangjin':'康津县', 'Wando':'康津县', 
-    'Haenam':'海南县', 'Yeongam':'灵岩郡', 'Hampyeong':'咸平县', 'Yeonggwang':'灵光郡', 'Jangseong':'长城都护府', 
-    'Jindo':'珍岛郡', 'Jeju-do':'济州牧', 'Jeju':'济州牧', 'Seogwipo':'大静县',
+    // Jeolla
+    'Jeonju':'Phủ Jeonju', 'Wanju':'Phủ Jeonju', 'Gunsan':'Huyện Impi', 'Iksan':'Huyện Iksan', 'Jeongeup':'Huyện Jeongeup', 'Namwon':'Đô hộ phủ Namwon', 
+    'Gimje':'Huyện Gimje', 'Jinan':'Huyện Trấn An', 'Muju':'Phủ Muju', 'Jangsu':'Huyện Jangsu', 'Imsil':'Huyện Imsil', 
+    'Sunchang':'Huyện Sunchang', 'Gochang':'Huyện Gochang', 'Buan':'Huyện Buan', 
+    'Gwangju':'Mục Gwangju', 'Mokpo':'Huyện Muan', 'Muan':'Huyện Muan', 'Sinan':'Huyện Muan', 
+    'Yeosu':'Đô hộ phủ Suncheon', 'Suncheon':'Đô hộ phủ Suncheon', 'Gwangyang':'Huyện Gwangyang', 
+    'Naju':'Mục Naju', 'Damyang':'Đô hộ phủ Damyang', 'Damnyang':'Đô hộ phủ Damyang', 'Gokseong':'Huyện Cốc Thành', 'Gurye':'Huyện Gurye', 'Goheung':'Huyện Heungyang', 
+    'Boseong':'Huyện Boseong', 'Hwasun':'Huyện Hòa Thuận', 'Jangheung':'Đô hộ phủ Jangheung', 'Gangjin':'Huyện Gangjin', 'Wando':'Huyện Gangjin', 
+    'Haenam':'Huyện Haenam', 'Yeongam':'Huyện Yeongam', 'Hampyeong':'Huyện Hampyeong', 'Yeonggwang':'Huyện Yeonggwang', 'Jangseong':'Đô hộ phủ Jangseong', 
+    'Jindo':'Huyện Jindo', 'Jeju-do':'Mục Jeju', 'Jeju':'Mục Jeju', 'Seogwipo':'Huyện Daejeong',
 
-    // 平安 
-    'Pyongyang':'平壤府', 'P\'yŏngyang':'平壤府', 'Nampo':'江西县', 'Namp\'o':'江西县', 'Kangnam':'平壤府', 'Chunghwa':'平壤府', 'Sangwon':'平壤府',
-    'Anju':'安州牧', 'Mundok':'安州牧', 'Mundŏk':'安州牧', 'Sukchon':'肃川都护府', 'Sukch\'ŏn':'肃川都护府', 
-    'Pyongwon':'永柔县', 'P\'yŏngwŏn':'永柔县', 'Chungsan':'甑山县', 'Chŭngsan':'甑山县', 
-    'Sinuiju':'义州府', 'Sinŭiju':'义州府', 'Uiju':'义州府', 'Pihyon':'义州府', 'Pihyŏn':'义州府',
-    'Yangdok':'阳德县', 'Yangdŏk':'阳德县', 'Sinyang':'阳德县', 'Hoechang':'阳德县', 'Hoech\'ang':'阳德县',
-    'Sunchon':'顺川郡', 'Sunch\'ŏn':'顺川郡', 'Pyongsong':'顺川郡', 'P\'yŏngsŏng':'顺川郡', 
-    'Songchon':'成川都护府', 'Sŏngch\'ŏn':'成川都护府', 'Unsan':'殷山县', 'Ŭnsan':'殷山县', 
-    'Pukchang':'北仓郡', 'Pukch\'ang':'北仓郡', 'Taedong':'大同郡',
-    'Changsong':'昌城都护府', 'Ch\'angsŏng':'昌城都护府', 'Tongchang':'昌城都护府', 'Tongch\'ang':'昌城都护府', 
-    'Pyoktong':'碧潼郡', 'Pyŏktong':'碧潼郡', 'Taechon':'泰川县', 'T\'aech\'ŏn':'泰川县',
-    'Pakchon':'博川郡', 'Pakch\'ŏn':'博川郡', 'Kujang':'博川郡', 'Hyangsan':'博川郡', 'Unsan-gun':'云山郡', 
-    'Nyongbyon':'宁边大都护府', 'Yongbyon':'宁边大都护府', 'Nyŏngbyŏn':'宁边大都护府', 'Yŏngbyŏn':'宁边大都护府',
-    'Kusong':'龟城都护府', 'Kusŏng':'龟城都护府', 'Taegwan':'龟城都护府', 'Chonma':'龟城都护府', 'Ch\'ŏnma':'龟城都护府',
-    'Ryongchon':'龙川郡', 'Ryongch\'ŏn':'龙川郡', 'Yomju':'龙川郡', 'Yŏmju':'龙川郡', 'Sindo':'龙川郡',
-    'Cholsan':'铁山都护府', 'Ch\'ŏlsan':'铁山都护府', 'Tongrim':'铁山都护府', 
-    'Chongju':'定州牧', 'Chŏngju':'定州牧', 'Kwaksan':'郭山郡', 'Sonchon':'宣川郡', 'Sŏnch\'ŏn':'宣川郡',
-    'Kanggye':'江界都护府', 'Changgang':'江界都护府', 'Nangrim':'江界都护府', 'Rangrim':'江界都护府',
-    'Chasong':'慈城郡', 'Chasŏng':'慈城郡', 'Chunggang':'慈城郡', 'Hwapyong':'厚昌郡', 'Hwap\'yŏng':'厚昌郡',
-    'Manpo':'理山郡', 'Manp\'o':'理山郡', 'Sijung':'理山郡',
-    'Wiwon':'渭原郡', 'Wiwŏn':'渭原郡', 'Chonchon':'渭原郡', 'Chŏnch\'ŏn':'渭原郡', 'Ryongnim':'渭原郡', 
-    'Chosan':'楚山郡', 'Ch\'osan':'楚山郡', 'Kopung':'楚山郡', 'Kop\'ung':'楚山郡', 'Usan':'楚山郡', 
-    'Huichon':'熙川郡', 'Hŭich\'ŏn':'熙川郡', 'Songwon':'熙川郡', 'Songwŏn':'熙川郡', 'Tongsin':'熙川郡',
-    'Taehung':'宁远郡', 'Taehŭng':'宁远郡', 'Nyongwon':'宁远郡', 'Nyŏngwŏn':'宁远郡', 'Maengsan':'孟山县', 
-    'Kaechon':'价川郡', 'Kaech\'ŏn':'价川郡', 'Tokchon':'德川郡', 'Tŏkch\'ŏn':'德川郡',
+    // Pyeongan 
+    'Pyongyang':'Phủ Bình Nhưỡng', 'P\'yŏngyang':'Phủ Bình Nhưỡng', 'Nampo':'Huyện Giang Tây', 'Namp\'o':'Huyện Giang Tây', 'Kangnam':'Phủ Bình Nhưỡng', 'Chunghwa':'Phủ Bình Nhưỡng', 'Sangwon':'Phủ Bình Nhưỡng',
+    'Anju':'Mục Anju', 'Mundok':'Mục Anju', 'Mundŏk':'Mục Anju', 'Sukchon':'Đô hộ phủ Sukcheon', 'Sukch\'ŏn':'Đô hộ phủ Sukcheon', 
+    'Pyongwon':'Huyện Yeongyu', 'P\'yŏngwŏn':'Huyện Yeongyu', 'Chungsan':'Huyện Jeungsan', 'Chŭngsan':'Huyện Jeungsan', 
+    'Sinuiju':'Phủ Uiju', 'Sinŭiju':'Phủ Uiju', 'Uiju':'Phủ Uiju', 'Pihyon':'Phủ Uiju', 'Pihyŏn':'Phủ Uiju',
+    'Yangdok':'Huyện Yangdeok', 'Yangdŏk':'Huyện Yangdeok', 'Sinyang':'Huyện Yangdeok', 'Hoechang':'Huyện Yangdeok', 'Hoech\'ang':'Huyện Yangdeok',
+    'Sunchon':'Quận Suncheon', 'Sunch\'ŏn':'Quận Suncheon', 'Pyongsong':'Quận Suncheon', 'P\'yŏngsŏng':'Quận Suncheon', 
+    'Songchon':'Đô hộ phủ Seongcheon', 'Sŏngch\'ŏn':'Đô hộ phủ Seongcheon', 'Unsan':'Huyện Eunsan', 'Ŭnsan':'Huyện Eunsan', 
+    'Pukchang':'Quận Bukchang', 'Pukch\'ang':'Quận Bukchang', 'Taedong':'Quận Daedong',
+    'Changsong':'Đô hộ phủ Changseong', 'Ch\'angsŏng':'Đô hộ phủ Changseong', 'Tongchang':'Đô hộ phủ Changseong', 'Tongch\'ang':'Đô hộ phủ Changseong', 
+    'Pyoktong':'Quận Byeoktong', 'Pyŏktong':'Quận Byeoktong', 'Taechon':'Huyện Taecheon', 'T\'aech\'ŏn':'Huyện Taecheon',
+    'Pakchon':'Quận Bakcheon', 'Pakch\'ŏn':'Quận Bakcheon', 'Kujang':'Quận Bakcheon', 'Hyangsan':'Quận Bakcheon', 'Unsan-gun':'Quận Unsan', 
+    'Nyongbyon':'Yeongbyeon Đại đô hộ phủ', 'Yongbyon':'Yeongbyeon Đại đô hộ phủ', 'Nyŏngbyŏn':'Yeongbyeon Đại đô hộ phủ', 'Yŏngbyŏn':'Yeongbyeon Đại đô hộ phủ',
+    'Kusong':'Đô hộ phủ Guseong', 'Kusŏng':'Đô hộ phủ Guseong', 'Taegwan':'Đô hộ phủ Guseong', 'Chonma':'Đô hộ phủ Guseong', 'Ch\'ŏnma':'Đô hộ phủ Guseong',
+    'Ryongchon':'Quận Yongcheon', 'Ryongch\'ŏn':'Quận Yongcheon', 'Yomju':'Huyện Yongcheon', 'Yŏmju':'Huyện Yongcheon', 'Sindo':'Huyện Yongcheon',
+    'Cholsan':'Đô hộ phủ Cheolsan', 'Ch\'ŏlsan':'Đô hộ phủ Cheolsan', 'Tongrim':'Đô hộ phủ Cheolsan', 
+    'Chongju':'Mục Jeongju', 'Chŏngju':'Mục Jeongju', 'Kwaksan':'Huyện Gwaksan', 'Sonchon':'Huyện Seoncheon', 'Sŏnch\'ŏn':'Huyện Seoncheon',
+    'Kanggye':'Đô hộ phủ Ganggye', 'Changgang':'Đô hộ phủ Ganggye', 'Nangrim':'Đô hộ phủ Ganggye', 'Rangrim':'Đô hộ phủ Ganggye',
+    'Chasong':'Huyện Jaseong', 'Chasŏng':'Huyện Jaseong', 'Chunggang':'Huyện Jaseong', 'Hwapyong':'Huyện Huchang', 'Hwap\'yŏng':'Huyện Huchang',
+    'Manpo':'Huyện Isan', 'Manp\'o':'Huyện Isan', 'Sijung':'Huyện Isan',
+    'Wiwon':'Huyện Wiwon', 'Wiwŏn':'Huyện Wiwon', 'Chonchon':'Huyện Wiwon', 'Chŏnch\'ŏn':'Huyện Wiwon', 'Ryongnim':'Huyện Wiwon', 
+    'Chosan':'Huyện Chosan', 'Ch\'osan':'Huyện Chosan', 'Kopung':'Huyện Chosan', 'Kop\'ung':'Huyện Chosan', 'Usan':'Huyện Chosan', 
+    'Huichon':'Huyện Huicheon', 'Hŭich\'ŏn':'Huyện Huicheon', 'Songwon':'Huyện Huicheon', 'Songwŏn':'Huyện Huicheon', 'Tongsin':'Huyện Huicheon',
+    'Taehung':'Huyện Yeongwon', 'Taehŭng':'Huyện Yeongwon', 'Nyongwon':'Huyện Yeongwon', 'Nyŏngwŏn':'Huyện Yeongwon', 'Maengsan':'Huyện Maengsan', 
+    'Kaechon':'Huyện Gaecheon', 'Kaech\'ŏn':'Huyện Gaecheon', 'Tokchon':'Huyện Deokcheon', 'Tŏkch\'ŏn':'Huyện Deokcheon',
 
-    // 咸镜 
-    'Chongjin':'镜城都护府', 'Ch\'ŏngjin':'镜城都护府', 'Kyongsong':'镜城都护府', 'Kyŏngsŏng':'镜城都护府', 'Orang':'镜城都护府', 
-    'Puryong':'富宁都护府', 'Puryŏng':'富宁都护府',
-    'Musan':'茂山府', 'Taehongdan':'茂山府', 'Yonsa':'茂山府', 'Yŏnsa':'茂山府', 'Samjiyon':'茂山府', 'Samjiyŏn':'茂山府',
-    'Hoeryong':'会宁都护府', 'Hoeryŏng':'会宁都护府',
-    'Onsong':'稳城都护府', 'Onsŏng':'稳城都护府', 'Chongsong':'钟城都护府',
-    'Kyongwon':'庆源都护府', 'Kyŏngwŏn':'庆源都护府', 'Undok':'庆源都护府', 'Ŭndŏk':'庆源都护府', 'Saebyol':'钟城都护府', 'Saeppyŏl':'钟城都护府',
-    'Kyonghung':'庆兴都护府', 'Kyŏnghŭng':'庆兴都护府', 'Rason':'庆兴都护府', 'Rasŏn':'庆兴都护府', 'Sonbong':'庆兴都护府',
-    'Myongchon':'明川都护府', 'Myŏngch\'ŏn':'明川都护府', 'Hwadae':'明川都护府', 'Myonggan':'明川都护府', 'Myŏnggan':'明川都护府', 
-    'Kilchu':'吉州牧', 'Kimchaek':'吉州牧', 'Kimch\'aek':'吉州牧', 'Paegam':'吉州牧', 
-    'Tanchon':'端川郡', 'Tanch\'ŏn':'端川郡', 'Hochon':'端川郡', 'Hŏch\'ŏn':'端川郡',
-    'Kapsan':'甲山都护府', 'Hyesan':'甲山都护府', 'Pochon':'甲山都护府', 'Poch\'ŏn':'甲山都护府', 'Unhung':'甲山都护府', 'Unhŭng':'甲山都护府',
-    'Pungsan':'甲山都护府', 'P\'ungsan':'甲山都护府', 'Kimhyonggwon':'甲山都护府', 'Kimhyŏnggwŏn':'甲山都护府', 'Pungso':'甲山都护府', 'P\'ungsŏ':'甲山都护府',
-    'Samsu':'三水都护府', 'Kimhyongjik':'三水都护府', 'Kimhyŏngjik':'三水都护府', 'Kimjongsuk':'三水都护府', 'Kimjŏngsuk':'三水都护府', 'Huchang':'三水都护府',
-    'Hamhung':'咸兴府', 'Hamhŭng':'咸兴府', 'Hungnam':'咸兴府', 'Hŭngnam':'咸兴府', 'Rakwon':'咸兴府', 'Rakwŏn':'咸兴府', 'Sinhung':'咸兴府', 'Sinhŭng':'咸兴府', 'Pujon':'咸兴府', 'Pujŏn':'咸兴府', 'Hamju':'咸兴府',
-    'Hongwon':'洪原郡', 'Hongwŏn':'洪原郡',
-    'Chongpyong':'定平都护府', 'Chŏngp\'yŏng':'定平都护府', 'Yonggwang':'定平都护府', 'Yŏnggwang':'定平都护府',
-    'Yonghung':'永兴大都护府', 'Kumya':'永兴大都护府', 'Kŭmya':'永兴大都护府', 'Kowon':'永兴大都护府', 'Kowŏn':'永兴大都护府', 'Yodok':'永兴大都护府', 'Yodŏk':'永兴大都护府', 'Sudok':'永兴大都护府', 'Sudŏk':'永兴大都护府',
-    'Pukchong':'北青都护府', 'Pukch\'ŏng':'北青都护府', 'Sinpo':'北青都护府', 'Sinp\'o':'北青都护府', 'Pukchon':'北青都护府', 'Pukch\'ŏn':'北青都护府', 'Toksong':'北青都护府', 'Tŏksŏng':'北青都护府',
-    'Changjin':'长津郡', 
+    // Hamgyeong 
+    'Chongjin':'Đô hộ phủ Gyeongseong', 'Ch\'ŏngjin':'Đô hộ phủ Gyeongseong', 'Kyongsong':'Đô hộ phủ Gyeongseong', 'Kyŏngsŏng':'Đô hộ phủ Gyeongseong', 'Orang':'Đô hộ phủ Gyeongseong', 
+    'Puryong':'Đô hộ phủ Buryeong', 'Puryŏng':'Đô hộ phủ Buryeong',
+    'Musan':'Phủ Musan', 'Taehongdan':'Phủ Musan', 'Yonsa':'Phủ Musan', 'Yŏnsa':'Phủ Musan', 'Samjiyon':'Phủ Musan', 'Samjiyŏn':'Phủ Musan',
+    'Hoeryong':'Đô hộ phủ Hoeryeong', 'Hoeryŏng':'Đô hộ phủ Hoeryeong',
+    'Onsong':'Đô hộ phủ Onseong', 'Onsŏng':'Đô hộ phủ Onseong', 'Chongsong':'Đô hộ phủ Jongseong',
+    'Kyongwon':'Đô hộ phủ Gyeongwon', 'Kyŏngwŏn':'Đô hộ phủ Gyeongwon', 'Undok':'Đô hộ phủ Gyeongwon', 'Ŭndŏk':'Đô hộ phủ Gyeongwon', 'Saebyol':'Đô hộ phủ Jongseong', 'Saeppyŏl':'Đô hộ phủ Jongseong',
+    'Kyonghung':'Đô hộ phủ Gyeongheung', 'Kyŏnghŭng':'Đô hộ phủ Gyeongheung', 'Rason':'Đô hộ phủ Gyeongheung', 'Rasŏn':'Đô hộ phủ Gyeongheung', 'Sonbong':'Đô hộ phủ Gyeongheung',
+    'Myongchon':'Đô hộ phủ Myeongcheon', 'Myŏngch\'ŏn':'Đô hộ phủ Myeongcheon', 'Hwadae':'Đô hộ phủ Myeongcheon', 'Myonggan':'Đô hộ phủ Myeongcheon', 'Myŏnggan':'Đô hộ phủ Myeongcheon', 
+    'Kilchu':'Mục Gilju', 'Kimchaek':'Mục Gilju', 'Kimch\'aek':'Mục Gilju', 'Paegam':'Mục Gilju', 
+    'Tanchon':'Quận Dancheon', 'Tanch\'ŏn':'Quận Dancheon', 'Hochon':'Quận Dancheon', 'Hŏch\'ŏn':'Quận Dancheon',
+    'Kapsan':'Đô hộ phủ Gapsan', 'Hyesan':'Đô hộ phủ Gapsan', 'Pochon':'Đô hộ phủ Gapsan', 'Poch\'ŏn':'Đô hộ phủ Gapsan', 'Unhung':'Đô hộ phủ Gapsan', 'Unhŭng':'Đô hộ phủ Gapsan',
+    'Pungsan':'Đô hộ phủ Gapsan', 'P\'ungsan':'Đô hộ phủ Gapsan', 'Kimhyonggwon':'Phủ đô hộ Gapsan', 'Kimhyŏnggwŏn':'Phủ đô hộ Gapsan', 'Pungso':'Phủ đô hộ Gapsan', 'P\'ungsŏ':'Phủ đô hộ Gapsan',
+    'Samsu':'Phủ đô hộ Samsu', 'Kimhyongjik':'Phủ đô hộ Samsu', 'Kimhyŏngjik':'Phủ đô hộ Samsu', 'Kimjongsuk':'Phủ đô hộ Samsu', 'Kimjŏngsuk':'Phủ đô hộ Samsu', 'Huchang':'Phủ đô hộ Samsu',
+    'Hamhung':'Phủ Hamheung', 'Hamhŭng':'Phủ Hamheung', 'Hungnam':'Phủ Hamheung', 'Hŭngnam':'Phủ Hamheung', 'Rakwon':'Phủ Hamheung', 'Rakwŏn':'Phủ Hamheung', 'Sinhung':'Phủ Hamheung', 'Sinhŭng':'Phủ Hamheung', 'Pujon':'Phủ Hamheung', 'Pujŏn':'Phủ Hamheung', 'Hamju':'Phủ Hamheung',
+    'Hongwon':'Quận Hongwon', 'Hongwŏn':'Quận Hongwon',
+    'Chongpyong':'Phủ đô hộ Jeongpyeong', 'Chŏngp\'yŏng':'Phủ đô hộ Jeongpyeong', 'Yonggwang':'Phủ đô hộ Jeongpyeong', 'Yŏnggwang':'Phủ đô hộ Jeongpyeong',
+    'Yonghung':'Yeongheung Đại đô hộ phủ', 'Kumya':'Yeongheung Đại đô hộ phủ', 'Kŭmya':'Yeongheung Đại đô hộ phủ', 'Kowon':'Yeongheung Đại đô hộ phủ', 'Kowŏn':'Yeongheung Đại đô hộ phủ', 'Yodok':'Yeongheung Đại đô hộ phủ', 'Yodŏk':'Yeongheung Đại đô hộ phủ', 'Sudok':'Yeongheung Đại đô hộ phủ', 'Sudŏk':'Yeongheung Đại đô hộ phủ',
+    'Pukchong':'Phủ đô hộ Bukcheong', 'Pukch\'ŏng':'Phủ đô hộ Bukcheong', 'Sinpo':'Phủ đô hộ Bukcheong', 'Sinp\'o':'Phủ đô hộ Bukcheong', 'Pukchon':'Phủ đô hộ Bukcheong', 'Pukch\'ŏn':'Phủ đô hộ Bukcheong', 'Toksong':'Phủ đô hộ Bukcheong', 'Tŏksŏng':'Phủ đô hộ Bukcheong',
+    'Changjin':'Quận Jangjin', 
 
-    // 黄海 
-    'Haeju':'海州牧', 'Sariwon':'凤山郡', 'Sariwŏn':'凤山郡', 'Songnim':'黄州牧', 'Ongjin':'瓮津都护府', 'Yonan':'延安都护府', 'Yŏnan':'延安都护府',
-    'Kangryong':'康翎县', 'Kangryŏng':'康翎县', 'Pyoksong':'海州牧', 'Pyŏksŏng':'海州牧', 'Taetan':'长渊县', 'T\'aet\'an':'长渊县', 'Ryongyon':'长渊县', 'Ryongyŏn':'长渊县', 'Changyon':'长渊县', 'Changyŏn':'长渊县',
-    'Samchon':'安岳郡', 'Samch\'ŏn':'安岳郡', 'Songhwa':'松禾县', 'Ullyul':'殷栗县', 'Ŭllyul':'殷栗县', 'Unchon':'丰川都护府', 'Ŭnch\'ŏn':'丰川都护府', 'Anak':'安岳郡',
-    'Sinchon':'信川郡', 'Sinch\'ŏn':'信川郡', 'Chaeryong':'载宁郡', 'Chaeryŏng':'载宁郡', 'Sinchang':'遂安郡', 'Sinch\'ang':'遂安郡', 'Hwangju':'黄州牧', 'Chunghwa':'中和都护府',
-    'Yontan':'黄州牧', 'Yŏntan':'黄州牧', 'Suan':'遂安郡', 'Koksan':'谷山都护府', 'Sinpyong':'谷山都护府', 'Sinp\'yŏng':'谷山都护府',
-    'Pyongsan':'平山都护府', 'P\'yŏngsan':'平山都护府', 'Kumchon':'金川郡', 'Kŭmch\'ŏn':'金川郡', 'Tosan':'平山都护府', 'T\'osan':'平山都护府', 'Sinchyong':'新溪县', 'Singye':'新溪县', 'Pongsan':'凤山郡',
-    'Rinsan':'平山都护府', 'Paehyon':'白川郡', 'Paehyŏn':'白川郡', 'Paechon':'白川郡', 'Paech\'ŏn':'白川郡'
+    // Hwanghae 
+    'Haeju':'Mục Haeju', 'Sariwon':'Quận Bongsan', 'Sariwŏn':'Quận Bongsan', 'Songnim':'Mục Hwangju', 'Ongjin':'Phủ đô hộ Ongjin', 'Yonan':'Phủ đô hộ Yeonan', 'Yŏnan':'Phủ đô hộ Yeonan',
+    'Kangryong':'Huyện Gangnyeong', 'Kangryŏng':'Huyện Gangnyeong', 'Pyoksong':'Mục Haeju', 'Pyŏksŏng':'Mục Haeju', 'Taetan':'Huyện Jangyeon', 'T\'aet\'an':'Huyện Jangyeon', 'Ryongyon':'Huyện Jangyeon', 'Ryongyŏn':'Huyện Jangyeon', 'Changyon':'Huyện Jangyeon', 'Changyŏn':'Huyện Jangyeon',
+    'Samchon':'Quận Anak', 'Samch\'ŏn':'Quận Anak', 'Songhwa':'Huyện Songhwa', 'Ullyul':'Huyện Eullyul', 'Ŭllyul':'Huyện Eullyul', 'Unchon':'Phủ đô hộ Pungcheon', 'Ŭnch\'ŏn':'Phủ đô hộ Pungcheon', 'Anak':'Quận Anak',
+    'Sinchon':'Quận Sinchon', 'Sinch\'ŏn':'Quận Sinchon', 'Chaeryong':'Quận Jaeryeong', 'Chaeryŏng':'Quận Jaeryeong', 'Sinchang':'Quận Suan', 'Sinch\'ang':'Quận Suan', 'Hwangju':'Mok Hwangju', 'Chunghwa':'Phủ đô hộ Junghwa',
+    'Yontan':'Mok Hwangju', 'Yŏntan':'Mok Hwangju', 'Suan':'Quận Suan', 'Koksan':'Phủ đô hộ Goksan', 'Sinpyong':'Phủ đô hộ Goksan', 'Sinp\'yŏng':'Phủ đô hộ Goksan',
+    'Pyongsan':'Phủ đô hộ Pyeongsan', 'P\'yŏngsan':'Phủ đô hộ Pyeongsan', 'Kumchon':'Quận Geumcheon', 'Kŭmch\'ŏn':'Quận Geumcheon', 'Tosan':'Phủ đô hộ Pyeongsan', 'T\'osan':'Phủ đô hộ Pyeongsan', 'Sinchyong':'Huyện Singye', 'Singye':'Huyện Singye', 'Pongsan':'Quận Bongsan',
+    'Rinsan':'Phủ đô hộ Pyeongsan', 'Paehyon':'Quận Baecheon', 'Paehyŏn':'Quận Baecheon', 'Paechon':'Quận Baecheon', 'Paech\'ŏn':'Quận Baecheon'
 };
 // ==========================================
-// 新增：喀尔喀、尼婆罗、不丹 现代->1634 映射 (全语言模糊匹配增强版)
+// Thêm mới: Khách Nhĩ Khách (Khalkha), Nepal, Bhutan hiện đại->1634 Ánh xạ (Phiên bản nâng cao khớp mờ đa ngôn ngữ)
 // ==========================================
 const khalkhaToCountyMap = {
-    'Ulaanbaatar': '库伦', '乌兰巴托': '库伦', 'Ulan Bator': '库伦',
-    'Töv': '土谢图中部', '中央': '土谢图中部', 'Tov': '土谢图中部',
-    'Selenge': '土谢图北部', '色楞格': '土谢图北部', 'Darkhan': '土谢图北部', '达尔汗': '土谢图北部', 'Darhan': '土谢图北部',
-    'Dundgovi': '土谢图南部', '中戈壁': '土谢图南部', 
-    'Ömnögovi': '戈壁诸部', '南戈壁': '戈壁诸部', 'Omnogovi': '戈壁诸部',
-    'Khentii': '车臣汗中部', '肯特': '车臣汗中部', 'Hentiy': '车臣汗中部', 'Govisümber': '车臣汗中部', '戈壁苏木贝尔': '车臣汗中部',
-    'Dornod': '车臣汗东部', '东方': '车臣汗东部', 
-    'Sukhbaatar': '车臣汗南部', '苏赫巴托': '车臣汗南部', 'Sühbaatar': '车臣汗南部',
-    'Dornogovi': '车臣汗西南部', '东戈壁': '车臣汗西南部',
-    'Arkhangai': '赛音诺颜部', '后杭爱': '赛音诺颜部', 'Arhangay': '赛音诺颜部',
-    'Övörkhangai': '赛音诺颜部', '前杭爱': '赛音诺颜部', 'Ovorkhangai': '赛音诺颜部', 'Övörhangay': '赛音诺颜部',
-    'Bayankhongor': '扎萨克图南部', '巴彦洪戈尔': '扎萨克图南部', 'Bayanhongor': '扎萨克图南部',
-    'Zavkhan': '扎萨克图中部', '扎布汗': '扎萨克图中部', 'Dzavhan': '扎萨克图中部',
-    'Govi-Altai': '扎萨克图西部', '戈壁阿尔泰': '扎萨克图西部', 'Govi Altai': '扎萨克图西部', 'Govi-Altay': '扎萨克图西部',
-    'Khövsgöl': '唐努乌梁海', '库苏古尔': '唐努乌梁海', 'Khovsgol': '唐努乌梁海', 'Hövsgöl': '唐努乌梁海',
-    'Bulgan': '土谢图西部', '布尔干': '土谢图西部', 'Orkhon': '土谢图西部', '鄂尔浑': '土谢图西部', 'Orhon': '土谢图西部',
-    'Khovd': '科布多', '科布多': '科布多', 'Hovd': '科布多',
-    'Uvs': '杜尔伯特部', '乌布苏': '杜尔伯特部', 
-    'Bayan-Ölgii': '阿尔泰乌梁海', '巴彦乌列盖': '阿尔泰乌梁海', 'Bayan-Olgii': '阿尔泰乌梁海', 'Bayan-Ölgiy': '阿尔泰乌梁海'
+    'Ulaanbaatar': 'Khüree', 'Ulaanbaatar': 'Khüree', 'Ulan Bator': 'Khüree',
+    'Töv': 'Tusheet Khan Trung bộ', 'Töv': 'Tusheet Khan Trung bộ', 'Tov': 'Tusheet Khan Trung bộ',
+    'Selenge': 'Tusheet Khan Bắc bộ', 'Selenge': 'Tusheet Khan Bắc bộ', 'Darkhan': 'Tusheet Khan Bắc bộ', 'Darkhan': 'Tusheet Khan Bắc bộ', 'Darhan': 'Tusheet Khan Bắc bộ',
+    'Dundgovi': 'Tusheet Khan Nam bộ', 'Dundgovi': 'Tusheet Khan Nam bộ', 
+    'Ömnögovi': 'Các bộ Qua Bích', 'Ömnögovi': 'Các bộ Qua Bích', 'Omnogovi': 'Các bộ Qua Bích',
+    'Khentii': 'Setsen Khan Trung bộ', 'Khentii': 'Setsen Khan Trung bộ', 'Hentiy': 'Setsen Khan Trung bộ', 'Govisümber': 'Setsen Khan Trung bộ', 'Govisümber': 'Setsen Khan Trung bộ',
+    'Dornod': 'Setsen Khan Đông bộ', 'Dornod': 'Setsen Khan Đông bộ', 
+    'Sukhbaatar': 'Setsen Khan Nam bộ', 'Sükhbaatar': 'Setsen Khan Nam bộ', 'Sühbaatar': 'Setsen Khan Nam bộ',
+    'Dornogovi': 'Setsen Khan Tây Nam bộ', 'Dornogovi': 'Setsen Khan Tây Nam bộ',
+    'Arkhangai': 'Sain Noyon Khan', 'Arkhangai': 'Sain Noyon Khan', 'Arhangay': 'Sain Noyon Khan',
+    'Övörkhangai': 'Sain Noyon Khan', 'Övörkhangai': 'Sain Noyon Khan', 'Ovorkhangai': 'Sain Noyon Khan', 'Övörhangay': 'Sain Noyon Khan',
+    'Bayankhongor': 'Zasagt Khan Nam bộ', 'Bayankhongor': 'Zasagt Khan Nam bộ', 'Bayanhongor': 'Zasagt Khan Nam bộ',
+    'Zavkhan': 'Zasagt Khan Trung bộ', 'Zavkhan': 'Zasagt Khan Trung bộ', 'Dzavhan': 'Zasagt Khan Trung bộ',
+    'Govi-Altai': 'Zasagt Khan Tây bộ', 'Govi-Altai': 'Zasagt Khan Tây bộ', 'Govi Altai': 'Zasagt Khan Tây bộ', 'Govi-Altay': 'Zasagt Khan Tây bộ',
+    'Khövsgöl': 'Tannu Uriankhai', 'Khövsgöl': 'Tannu Uriankhai', 'Khovsgol': 'Tannu Uriankhai', 'Hövsgöl': 'Tannu Uriankhai',
+    'Bulgan': 'Tusheet Khan Tây bộ', 'Bulgan': 'Tusheet Khan Tây bộ', 'Orkhon': 'Tusheet Khan Tây bộ', 'Orkhon': 'Tusheet Khan Tây bộ', 'Orhon': 'Tusheet Khan Tây bộ',
+    'Khovd': 'Khovd', 'Khovd': 'Khovd', 'Hovd': 'Khovd',
+    'Uvs': 'Đỗ Nhĩ Bá Đặc', 'Uvs': 'Đỗ Nhĩ Bá Đặc', 
+    'Bayan-Ölgii': 'Altai Uriankhai', 'Bayan-Ölgii': 'Altai Uriankhai', 'Bayan-Olgii': 'Altai Uriankhai', 'Bayan-Ölgiy': 'Altai Uriankhai'
 };
 const khalkhaCountyToFuMap = {
-    '库伦': '土谢图汗部', '土谢图中部': '土谢图汗部', '土谢图北部': '土谢图汗部', '土谢图南部': '土谢图汗部', '戈壁诸部': '土谢图汗部', '土谢图西部': '土谢图汗部',
-    '车臣汗中部': '车臣汗部', '车臣汗东部': '车臣汗部', '车臣汗南部': '车臣汗部', '车臣汗西南部': '车臣汗部',
-    '扎萨克图中部': '扎萨克图汗部', '扎萨克图南部': '扎萨克图汗部', '扎萨克图西部': '扎萨克图汗部', '赛音诺颜部': '扎萨克图汗部', 
-    '唐努乌梁海': '和托辉特部', '科布多': '和托辉特部', '杜尔伯特部': '和托辉特部', '阿尔泰乌梁海': '和托辉特部'
+    'Khüree': 'Tusheet Khan bộ', 'Tusheet Khan Trung bộ': 'Tusheet Khan bộ', 'Tusheet Khan Bắc bộ': 'Tusheet Khan bộ', 'Tusheet Khan Nam bộ': 'Tusheet Khan bộ', 'Các bộ Qua Bích': 'Tusheet Khan bộ', 'Tusheet Khan Tây bộ': 'Tusheet Khan bộ',
+    'Setsen Khan Trung bộ': 'Setsen Khan bộ', 'Setsen Khan Đông bộ': 'Setsen Khan bộ', 'Setsen Khan Nam bộ': 'Setsen Khan bộ', 'Setsen Khan Tây Nam bộ': 'Xa Thần Hãn bộ',
+    'Zasagt Khan Trung bộ': 'Zasagt Khan bộ', 'Zasagt Khan Nam bộ': 'Zasagt Khan bộ', 'Zasagt Khan Tây bộ': 'Zasagt Khan bộ', 'Sain Noyon Khan': 'Zasagt Khan bộ', 
+    'Tannu Uriankhai': 'Bộ Khotogoid', 'Khovd': 'Bộ Khotogoid', 'Đỗ Nhĩ Bá Đặc': 'Bộ Khotogoid', 'Altai Uriankhai': 'Bộ Khotogoid'
 };
 
 const nepalToCountyMap = {
-    'Sudurpashchim': '多提王国', '远西': '多提王国', 'Far-Western': '多提王国', 
-    'Karnali': '朱姆拉王国', '卡尔纳利': '朱姆拉王国', 'Mid-Western': '朱姆拉王国', 
-    'Lumbini': '帕尔帕王国', '蓝毗尼': '帕尔帕王国', 
-    'Gandaki': '卡斯基王国', '甘达基': '卡斯基王国', 'Western': '卡斯基王国', 
-    'Bagmati': '坎提普尔', '巴格马蒂': '坎提普尔', 'Central': '坎提普尔', 
-    'Madhesh': '玛克万普尔', '马德什': '玛克万普尔', 'Janakpur': '玛克万普尔',
-    'Koshi': '维阇耶补罗', '科希': '维阇耶补罗', 'Eastern': '维阇耶补罗',
-    'P1': '维阇耶补罗', 'P2': '玛克万普尔', 'P3': '坎提普尔', 'P4': '卡斯基王国', 'P5': '帕尔帕王国', 'P6': '朱姆拉王国', 'P7': '多提王国',
-    'Province 1': '维阇耶补罗', 'Province 2': '玛克万普尔', 'Province 3': '坎提普尔', 'Province 4': '卡斯基王国', 'Province 5': '帕尔帕王国', 'Province 6': '朱姆拉王国', 'Province 7': '多提王国',
-    'Seti': '多提王国', 'Mahakali': '多提王国', 'Bheri': '朱姆拉王国', 'Rapti': '朱姆拉王国', 'Dhawalagiri': '帕尔帕王国', 'Narayani': '坎提普尔', 'Sagarmatha': '维阇耶补罗', 'Mechi': '维阇耶补罗'
+    'Sudurpashchim': 'Vương quốc Doti', 'Viễn Tây': 'Vương quốc Doti', 'Far-Western': 'Vương quốc Doti', 
+    'Karnali': 'Vương quốc Jumla', 'Karnali': 'Vương quốc Jumla', 'Mid-Western': 'Vương quốc Jumla', 
+    'Lumbini': 'Vương quốc Palpa', 'Lumbini': 'Vương quốc Palpa', 
+    'Gandaki': 'Vương quốc Kaski', 'Gandaki': 'Vương quốc Kaski', 'Western': 'Vương quốc Kaski', 
+    'Bagmati': 'Kantipur', 'Bagmati': 'Kantipur', 'Central': 'Kantipur', 
+    'Madhesh': 'Makwanpur', 'Madhesh': 'Makwanpur', 'Janakpur': 'Makwanpur',
+    'Koshi': 'Vijayapur', 'Koshi': 'Vijayapur', 'Eastern': 'Vijayapur',
+    'P1': 'Vijayapur', 'P2': 'Makwanpur', 'P3': 'Kantipur', 'P4': 'Vương quốc Kaski', 'P5': 'Vương quốc Palpa', 'P6': 'Vương quốc Jumla', 'P7': 'Vương quốc Doti',
+    'Province 1': 'Vijayapur', 'Province 2': 'Makwanpur', 'Province 3': 'Kantipur', 'Province 4': 'Vương quốc Kaski', 'Province 5': 'Vương quốc Palpa', 'Province 6': 'Vương quốc Jumla', 'Province 7': 'Vương quốc Doti',
+    'Seti': 'Vương quốc Doti', 'Mahakali': 'Vương quốc Doti', 'Bheri': 'Vương quốc Jumla', 'Rapti': 'Vương quốc Jumla', 'Dhawalagiri': 'Vương quốc Palpa', 'Narayani': 'Kantipur', 'Sagarmatha': 'Vijayapur', 'Mechi': 'Vijayapur'
 };
 const nepalCountyToFuMap = {
-    '多提王国': '拜塞诸国', '朱姆拉王国': '拜塞诸国', '帕尔帕王国': '乔比西诸国', '卡斯基王国': '乔比西诸国',
-    '坎提普尔': '马拉王朝', '玛克万普尔': '森王朝', '维阇耶补罗': '森王朝'
+    'Vương quốc Doti': 'Các tiểu quốc Baise', 'Vương quốc Jumla': 'Các tiểu quốc Baise', 'Vương quốc Palpa': 'Các phiên quốc Chaubisi', 'Vương quốc Kaski': 'Các phiên quốc Chaubisi',
+    'Kantipur': 'Vương triều Malla', 'Makwanpur': 'Vương triều Sen', 'Vijayapur': 'Vương triều Sen'
 };
 
 const bhutanToCountyMap = {
-    'Paro': '帕罗宗', '帕罗': '帕罗宗', 'Haa': '哈宗', '哈': '哈宗', 'Ha': '哈宗',
-    'Samtse': '萨姆奇', '萨姆奇': '萨姆奇', 'Samchi': '萨姆奇',
-    'Chukha': '楚卡', '楚卡': '楚卡', 'Chhukha': '楚卡',
-    'Thimphu': '廷布宗', '廷布': '廷布宗', 'Gasa': '加萨宗', '加萨': '加萨宗',
-    'Punakha': '普那卡宗', '普那卡': '普那卡宗', 'Wangdue Phodrang': '旺杜波德朗', '旺杜波德朗': '旺杜波德朗', 'Wangdi Phodrang': '旺杜波德朗',
-    'Dagana': '达加纳', '达加纳': '达加纳', 'Daga': '达加纳',
-    'Tsirang': '奇朗', '奇朗': '奇朗', 'Chirang': '奇朗',
-    'Trongsa': '同萨宗', '同萨': '同萨宗', 'Bumthang': '布姆唐', '布姆唐': '布姆唐', 
-    'Zhemgang': '谢姆冈', '谢姆冈': '谢姆冈', 'Sarpang': '萨尔庞', '萨尔庞': '萨尔庞',
-    'Mongar': '蒙加尔', '蒙加尔': '蒙加尔', 'Trashigang': '塔西冈宗', '塔西冈': '塔西冈宗', 
-    'Lhuntse': '伦奇', '伦奇': '伦奇', 'Lhuntshi': '伦奇',
-    'Trashiyangtse': '塔西央奇', '塔西央奇': '塔西央奇', 'Trashiyangtsi': '塔西央奇',
-    'Pemagatshel': '佩马加策尔', '佩马加策尔': '佩马加策尔', 'Pemagatsel': '佩马加策尔',
-    'Samdrup Jongkhar': '萨姆德鲁琼卡尔', '萨姆德鲁琼卡尔': '萨姆德鲁琼卡尔'
+    'Paro': 'Paro Dzong', 'Paro': 'Paro Dzong', 'Haa': 'Haa Dzong', 'Haa': 'Haa Dzong', 'Ha': 'Haa Dzong',
+    'Samtse': 'Samtse', 'Samtse': 'Samtse', 'Samchi': 'Samtse',
+    'Chukha': 'Chukha', 'Chukha': 'Chukha', 'Chhukha': 'Chukha',
+    'Thimphu': 'Thimphu Dzong', 'Thimphu': 'Thimphu Dzong', 'Gasa': 'Gasa Dzong', 'Gasa': 'Gasa Dzong',
+    'Punakha': 'Punakha Dzong', 'Punakha': 'Punakha Dzong', 'Wangdue Phodrang': 'Wangdue Phodrang', 'Wangdue Phodrang': 'Wangdue Phodrang', 'Wangdi Phodrang': 'Wangdue Phodrang',
+    'Dagana': 'Dagana', 'Dagana': 'Dagana', 'Daga': 'Dagana',
+    'Tsirang': 'Tsirang', 'Tsirang': 'Tsirang', 'Chirang': 'Tsirang',
+    'Trongsa': 'Trongsa Dzong', 'Trongsa': 'Trongsa Dzong', 'Bumthang': 'Bumthang', 'Bumthang': 'Bumthang', 
+    'Zhemgang': 'Zhemgang', 'Zhemgang': 'Zhemgang', 'Sarpang': 'Sarpang', 'Sarpang': 'Sarpang',
+    'Mongar': 'Mongar', 'Mongar': 'Mongar', 'Trashigang': 'Trashigang Dzong', 'Trashigang': 'Trashigang Dzong', 
+    'Lhuntse': 'Lhuntse', 'Lhuntse': 'Lhuntse', 'Lhuntshi': 'Lhuntse',
+    'Trashiyangtse': 'Trashiyangtse', 'Trashiyangtse': 'Trashiyangtse', 'Trashiyangtsi': 'Trashiyangtse',
+    'Pemagatshel': 'Pemagatshel', 'Pemagatshel': 'Pemagatshel', 'Pemagatsel': 'Pemagatshel',
+    'Samdrup Jongkhar': 'Samdrup Jongkhar', 'Samdrup Jongkhar': 'Samdrup Jongkhar'
 };
 const bhutanCountyToFuMap = {
-    '帕罗宗': '西不丹', '哈宗': '西不丹', '萨姆奇': '西不丹', '楚卡': '西不丹',
-    '廷布宗': '中不丹', '加萨宗': '中不丹', '普那卡宗': '中不丹', '旺杜波德朗': '中不丹', '达加纳': '中不丹', '奇朗': '中不丹',
-    '同萨宗': '东不丹', '布姆唐': '东不丹', '谢姆冈': '东不丹', '萨尔庞': '东不丹',
-    '蒙加尔': '东不丹', '塔西冈宗': '东不丹', '伦奇': '东不丹', '塔西央奇': '东不丹', '佩马加策尔': '东不丹', '萨姆德鲁琼卡尔': '东不丹'
+    'Paro Dzong': 'Tây Bhutan', 'Haa Dzong': 'Tây Bhutan', 'Samtse': 'Tây Bhutan', 'Chukha': 'Tây Bhutan',
+    'Thimphu Dzong': 'Trung Bhutan', 'Gasa Dzong': 'Trung Bhutan', 'Punakha Dzong': 'Trung Bhutan', 'Wangdue Phodrang': 'Trung Bhutan', 'Dagana': 'Trung Bhutan', 'Tsirang': 'Trung Bhutan',
+    'Trongsa Dzong': 'Đông Bhutan', 'Bumthang': 'Đông Bhutan', 'Zhemgang': 'Đông Bhutan', 'Sarpang': 'Đông Bhutan',
+    'Mongar': 'Đông Bhutan', 'Trashigang Dzong': 'Đông Bhutan', 'Lhuntse': 'Đông Bhutan', 'Trashiyangtse': 'Đông Bhutan', 'Pemagatshel': 'Đông Bhutan', 'Samdrup Jongkhar': 'Đông Bhutan'
 };
 // ==========================================
-// 新增：澜沧、暹罗、越南、莫卧儿 现代->1634 映射
+// Mới: Lạn Thương, Xiêm La, Việt Nam, Mughal hiện đại->1634 Ánh xạ
 // ==========================================
 const lancangToCountyMap = {
-    'Vientiane': '万象', '万象': '万象', 'Viangchan': '万象', 'Xaisomboun': '赛宋奔', '赛宋奔': '赛宋奔',
-    'Luang Prabang': '琅勃拉邦', '琅勃拉邦': '琅勃拉邦', 'Louangphabang': '琅勃拉邦', 'Oudomxay': '乌多姆塞', '乌多姆塞': '乌多姆塞', 'Phongsaly': '丰沙里', '丰沙里': '丰沙里', 'Luang Namtha': '琅南塔', '琅南塔': '琅南塔', 'Bokeo': '博胶', '博胶': '博胶', 'Xayabury': '沙耶武里', '沙耶武里': '沙耶武里',
-    'Xiangkhouang': '川圹', '川圹': '川圹', 'Houaphanh': '华潘', '华潘': '华潘',
-    'Champasak': '占巴塞', '占巴塞': '占巴塞', 'Savannakhet': '沙湾拿吉', '沙湾拿吉': '沙湾拿吉', 'Khammouane': '甘蒙', '甘蒙': '甘蒙', 'Saravane': '沙拉湾', '沙拉湾': '沙拉湾', 'Sekong': '塞贡', '塞贡': '塞贡', 'Attapeu': '阿速坡', '阿速坡': '阿速坡', 'Borikhamxay': '波里坎塞', '波里坎塞': '波里坎塞'
+    'Vientiane': 'Viêng Chăn', 'Viêng Chăn': 'Viêng Chăn', 'Viangchan': 'Viêng Chăn', 'Xaisomboun': 'Xaisomboun', 'Xaisomboun': 'Xaisomboun',
+    'Luang Prabang': 'Luông Pha Băng', 'Luông Pha Băng': 'Luông Pha Băng', 'Louangphabang': 'Luông Pha Băng', 'Oudomxay': 'Oudomxay', 'Oudomxay': 'Oudomxay', 'Phongsaly': 'Phongsaly', 'Phongsaly': 'Phongsaly', 'Luang Namtha': 'Luông Nam Tha', 'Luông Nam Tha': 'Luông Nam Tha', 'Bokeo': 'Bokeo', 'Bokeo': 'Bokeo', 'Xayabury': 'Sainyabuli', 'Sainyabuli': 'Sainyabuli',
+    'Xiangkhouang': 'Xiêng Khoảng', 'Xiêng Khoảng': 'Xiêng Khoảng', 'Houaphanh': 'Hủa Phăn', 'Hủa Phăn': 'Hủa Phăn',
+    'Champasak': 'Chăm Pa Sắc', 'Chăm Pa Sắc': 'Chăm Pa Sắc', 'Savannakhet': 'Savannakhet', 'Savannakhet': 'Savannakhet', 'Khammouane': 'Khammouane', 'Khammouane': 'Khammouane', 'Saravane': 'Salavan', 'Salavan': 'Salavan', 'Sekong': 'Sekong', 'Sekong': 'Sekong', 'Attapeu': 'Attapeu', 'Attapeu': 'Attapeu', 'Borikhamxay': 'Bolikhamsai', 'Bolikhamsai': 'Bolikhamsai'
 };
 const lancangCountyToFuMap = {
-    '万象': '万象', '赛宋奔': '万象', '琅勃拉邦': '琅勃拉邦', '乌多姆塞': '琅勃拉邦', '丰沙里': '琅勃拉邦', '琅南塔': '琅勃拉邦', '博胶': '琅勃拉邦', '沙耶武里': '琅勃拉邦',
-    '川圹': '勐潘', '华潘': '勐潘', '占巴塞': '占巴塞', '沙湾拿吉': '占巴塞', '甘蒙': '占巴塞', '沙拉湾': '占巴塞', '塞贡': '占巴塞', '阿速坡': '占巴塞', '波里坎塞': '万象'
+    'Viêng Chăn': 'Viêng Chăn', 'Xaisomboun': 'Viêng Chăn', 'Luông Pha Băng': 'Luông Pha Băng', 'Oudomxay': 'Luông Pha Băng', 'Phongsaly': 'Luông Pha Băng', 'Luông Nam Tha': 'Luông Pha Băng', 'Bokeo': 'Luông Pha Băng', 'Sainyabuli': 'Luông Pha Băng',
+    'Xiêng Khoảng': 'Muang Phuan', 'Hủa Phăn': 'Muang Phuan', 'Chăm Pa Sắc': 'Chăm Pa Sắc', 'Savannakhet': 'Chăm Pa Sắc', 'Khammouane': 'Chăm Pa Sắc', 'Salavan': 'Chăm Pa Sắc', 'Sekong': 'Chăm Pa Sắc', 'Attapeu': 'Chăm Pa Sắc', 'Bolikhamsai': 'Viêng Chăn'
 };
 
 const siamToCountyMap = {
-    'Bangkok': '阿瑜陀耶', '曼谷': '阿瑜陀耶', 'Ayutthaya': '阿瑜陀耶', '大城': '阿瑜陀耶', 'Nonthaburi': '阿瑜陀耶', 'Pathum Thani': '阿瑜陀耶', 'Samut': '阿瑜陀耶', 'Nakhon Pathom': '阿瑜陀耶', 'Suphan Buri': '阿瑜陀耶', 'Saraburi': '阿瑜陀耶', 'Lop Buri': '阿瑜陀耶', 'Ang Thong': '阿瑜陀耶', 'Sing Buri': '阿瑜陀耶', 'Chai Nat': '阿瑜陀耶',
-    'Chiang Mai': '清迈', '清迈': '清迈', 'Chiang Rai': '清迈', '清莱': '清迈', 'Mae Hong Son': '清迈', 'Lampang': '清迈', '南邦': '清迈', 'Lamphun': '清迈', '南奔': '清迈', 'Phrae': '清迈', '帕府': '清迈', 'Nan': '清迈', '难府': '清迈', 'Phayao': '清迈', '帕夭': '清迈',
-    'Nakhon Ratchasima': '呵叻', '呵叻': '呵叻', 'Khon Kaen': '呵叻', '孔敬': '呵叻', 'Udon Thani': '呵叻', '乌隆': '呵叻', 'Ubon Ratchathani': '呵叻', '乌汶': '呵叻', 'Nong Khai': '呵叻', '廊开': '呵叻', 'Surin': '呵叻', '素林': '呵叻', 'Buri Ram': '呵叻', '武里南': '呵叻', 'Chaiyaphum': '呵叻', 'Sakon Nakhon': '呵叻', 'Roi Et': '呵叻', 'Maha Sarakham': '呵叻', 'Loei': '呵叻', 'Nong Bua Lam Phu': '呵叻', 'Amnat Charoen': '呵叻', 'Si Sa Ket': '呵叻', 'Yasothon': '呵叻', 'Mukdahan': '呵叻', 'Kalasin': '呵叻', 'Bueng Kan': '呵叻',
-    'Phitsanulok': '彭世洛', '彭世洛': '彭世洛', 'Sukhothai': '彭世洛', '素可泰': '彭世洛', 'Phetchabun': '彭世洛', '碧差汶': '彭世洛', 'Tak': '彭世洛', '来兴': '彭世洛', 'Kamphaeng Phet': '彭世洛', '甘烹碧': '彭世洛', 'Uttaradit': '彭世洛', '程逸': '彭世洛', 'Nakhon Sawan': '彭世洛', '那空沙旺': '彭世洛', 'Uthai Thani': '彭世洛', 'Phichit': '彭世洛',
-    'Nakhon Si Thammarat': '洛坤', '洛坤': '洛坤', 'Surat Thani': '洛坤', '素叻他尼': '洛坤', 'Phuket': '洛坤', '普吉': '洛坤', 'Krabi': '洛坤', '甲米': '洛坤', 'Songkhla': '洛坤', '宋卡': '洛坤', 'Chumphon': '洛坤', '春蓬': '洛坤', 'Phang Nga': '洛坤', '攀牙': '洛坤', 'Phatthalung': '洛坤', '博他仑': '洛坤', 'Trang': '洛坤', '董里': '洛坤', 'Ranong': '洛坤',
-    'Pattani': '北大年', '北大年': '北大年', 'Yala': '北大年', '惹拉': '北大年', 'Narathiwat': '北大年', '那拉提瓦': '北大年', 'Satun': '北大年',
-    'Chon Buri': '尖竹汶', '春武里': '尖竹汶', 'Rayong': '尖竹汶', '罗勇': '尖竹汶', 'Chanthaburi': '尖竹汶', '尖竹汶': '尖竹汶', 'Trat': '尖竹汶', '达叻': '尖竹汶', 'Prachin Buri': '尖竹汶', '巴真': '尖竹汶', 'Sa Kaeo': '尖竹汶', 'Chachoengsao': '尖竹汶', 'Nakhon Nayok': '尖竹汶',
-    'Kanchanaburi': '叻丕', '北碧': '叻丕', 'Ratchaburi': '叻丕', '叻丕': '叻丕', 'Phetchaburi': '叻丕', '佛丕': '叻丕', 'Prachuap Khiri Khan': '叻丕', '巴蜀': '叻丕'
+    'Bangkok': 'Ayutthaya', 'Bangkok': 'Ayutthaya', 'Ayutthaya': 'Ayutthaya', 'Ayutthaya': 'Ayutthaya', 'Nonthaburi': 'Ayutthaya', 'Pathum Thani': 'Ayutthaya', 'Samut': 'Ayutthaya', 'Nakhon Pathom': 'Ayutthaya', 'Suphan Buri': 'Ayutthaya', 'Saraburi': 'Ayutthaya', 'Lop Buri': 'Ayutthaya', 'Ang Thong': 'Ayutthaya', 'Sing Buri': 'Ayutthaya', 'Chai Nat': 'Ayutthaya',
+    'Chiang Mai': 'Chiang Mai', 'Chiang Mai': 'Chiang Mai', 'Chiang Rai': 'Chiang Mai', 'Chiang Rai': 'Chiang Mai', 'Mae Hong Son': 'Chiang Mai', 'Lampang': 'Chiang Mai', 'Lampang': 'Chiang Mai', 'Lamphun': 'Chiang Mai', 'Lamphun': 'Chiang Mai', 'Phrae': 'Chiang Mai', 'Phrae': 'Chiang Mai', 'Nan': 'Chiang Mai', 'Nan': 'Chiang Mai', 'Phayao': 'Chiang Mai', 'Phayao': 'Chiang Mai',
+    'Nakhon Ratchasima': 'Nakhon Ratchasima (Khorat)', 'Nakhon Ratchasima (Khorat)': 'Nakhon Ratchasima (Khorat)', 'Khon Kaen': 'Nakhon Ratchasima (Khorat)', 'Khon Kaen': 'Nakhon Ratchasima (Khorat)', 'Udon Thani': 'Nakhon Ratchasima (Khorat)', 'Udon Thani': 'Nakhon Ratchasima (Khorat)', 'Ubon Ratchathani': 'Nakhon Ratchasima (Khorat)', 'Ubon Ratchathani': 'Nakhon Ratchasima (Khorat)', 'Nong Khai': 'Nakhon Ratchasima (Khorat)', 'Nong Khai': 'Nakhon Ratchasima (Khorat)', 'Surin': 'Nakhon Ratchasima (Khorat)', 'Surin': 'Nakhon Ratchasima (Khorat)', 'Buri Ram': 'Nakhon Ratchasima (Khorat)', 'Buriram': 'Nakhon Ratchasima (Khorat)', 'Chaiyaphum': 'Nakhon Ratchasima (Khorat)', 'Sakon Nakhon': 'Nakhon Ratchasima (Khorat)', 'Roi Et': 'Nakhon Ratchasima (Khorat)', 'Maha Sarakham': 'Nakhon Ratchasima (Khorat)', 'Loei': 'Nakhon Ratchasima (Khorat)', 'Nong Bua Lam Phu': 'Nakhon Ratchasima (Khorat)', 'Amnat Charoen': 'Nakhon Ratchasima (Khorat)', 'Si Sa Ket': 'Nakhon Ratchasima (Khorat)', 'Yasothon': 'Nakhon Ratchasima (Khorat)', 'Mukdahan': 'Nakhon Ratchasima (Khorat)', 'Kalasin': 'Nakhon Ratchasima (Khorat)', 'Bueng Kan': 'Nakhon Ratchasima (Khorat)',
+    'Phitsanulok': 'Phitsanulok', 'Phitsanulok': 'Phitsanulok', 'Sukhothai': 'Phitsanulok', 'Sukhothai': 'Phitsanulok', 'Phetchabun': 'Phitsanulok', 'Phetchabun': 'Phitsanulok', 'Tak': 'Phitsanulok', 'Tak': 'Phitsanulok', 'Kamphaeng Phet': 'Phitsanulok', 'Kamphaeng Phet': 'Phitsanulok', 'Uttaradit': 'Phitsanulok', 'Uttaradit': 'Phitsanulok', 'Nakhon Sawan': 'Phitsanulok', 'Nakhon Sawan': 'Phitsanulok', 'Uthai Thani': 'Phitsanulok', 'Phichit': 'Phitsanulok',
+    'Nakhon Si Thammarat': 'Nakhon Si Thammarat', 'Nakhon Si Thammarat': 'Nakhon Si Thammarat', 'Surat Thani': 'Nakhon Si Thammarat', 'Surat Thani': 'Nakhon Si Thammarat', 'Phuket': 'Nakhon Si Thammarat', 'Phuket': 'Nakhon Si Thammarat', 'Krabi': 'Nakhon Si Thammarat', 'Krabi': 'Nakhon Si Thammarat', 'Songkhla': 'Nakhon Si Thammarat', 'Songkhla': 'Nakhon Si Thammarat', 'Chumphon': 'Nakhon Si Thammarat', 'Chumphon': 'Nakhon Si Thammarat', 'Phang Nga': 'Nakhon Si Thammarat', 'Phang Nga': 'Nakhon Si Thammarat', 'Phatthalung': 'Nakhon Si Thammarat', 'Phatthalung': 'Nakhon Si Thammarat', 'Trang': 'Nakhon Si Thammarat', 'Trang': 'Nakhon Si Thammarat', 'Ranong': 'Nakhon Si Thammarat',
+    'Pattani': 'Pattani', 'Pattani': 'Pattani', 'Yala': 'Pattani', 'Yala': 'Pattani', 'Narathiwat': 'Pattani', 'Narathiwat': 'Pattani', 'Satun': 'Pattani',
+    'Chon Buri': 'Chanthaburi', 'Chonburi': 'Chanthaburi', 'Rayong': 'Chanthaburi', 'Rayong': 'Chanthaburi', 'Chanthaburi': 'Chanthaburi', 'Chanthaburi': 'Chanthaburi', 'Trat': 'Chanthaburi', 'Trat': 'Chanthaburi', 'Prachin Buri': 'Chanthaburi', 'Prachinburi': 'Chanthaburi', 'Sa Kaeo': 'Chanthaburi', 'Chachoengsao': 'Chanthaburi', 'Nakhon Nayok': 'Chanthaburi',
+    'Kanchanaburi': 'Ratchaburi', 'Kanchanaburi': 'Ratchaburi', 'Ratchaburi': 'Ratchaburi', 'Ratchaburi': 'Ratchaburi', 'Phetchaburi': 'Ratchaburi', 'Phetchaburi': 'Ratchaburi', 'Prachuap Khiri Khan': 'Ratchaburi', 'Prachuap Khiri Khan': 'Ratchaburi'
 };
 const siamCountyToFuMap = {
-    '清迈': '兰纳', '彭世洛': '彭世洛', '阿瑜陀耶': '中部核心', '叻丕': '中部核心', '尖竹汶': '中部核心', '呵叻': '伊善地区', '洛坤': '马来半岛', '北大年': '马来半岛'
+    'Chiang Mai': 'Lanna', 'Phitsanulok': 'Phitsanulok', 'Ayutthaya': 'Trung tâm miền Trung', 'Ratchaburi': 'Trung tâm miền Trung', 'Chanthaburi': 'Trung tâm miền Trung', 'Nakhon Ratchasima (Khorat)': 'Vùng Isan', 'Nakhon Si Thammarat': 'Bán đảo Mã Lai', 'Pattani': 'Bán đảo Mã Lai'
 };
 
 const vietnamToCountyMap = {
-    'Hanoi': '升龙', '河内': '升龙', 'Hai Phong': '升龙', '海防': '升龙', 'Bac Ninh': '升龙', '北宁': '升龙', 'Nam Dinh': '山南', '南定': '山南', 'Ninh Binh': '山南', '宁平': '山南', 'Thai Binh': '山南', '太平': '山南', 'Vinh Phuc': '山南', '永福': '山南', 'Hung Yen': '山南', '兴安': '山南', 'Hai Duong': '海阳', '海阳': '海阳', 'Ha Nam': '山南', '河南': '山南',
-    'Quang Ninh': '海阳', '广宁': '海阳', 'Lang Son': '海阳', '谅山': '海阳', 'Bac Giang': '海阳', '北江': '海阳', 'Thai Nguyen': '海阳', '太原': '海阳', 'Cao Bang': '海阳', '高平': '海阳', 'Bac Kan': '海阳', '北干': '海阳',
-    'Phu Tho': '山西', '富寿': '山西', 'Tuyen Quang': '山西', '宣光': '山西', 'Ha Giang': '山西', '河江': '山西', 'Yen Bai': '山西', '安沛': '山西', 'Lao Cai': '山西', '老街': '山西',
-    'Hoa Binh': '兴化', '和平': '兴化', 'Son La': '兴化', '山罗': '兴化', 'Dien Bien': '兴化', '奠边': '兴化', 'Lai Chau': '兴化', '莱州': '兴化',
-    'Thanh Hoa': '清化', '清化': '清化', 'Nghe An': '乂安', '乂安': '乂安', 'Ha Tinh': '乂安', '河静': '乂安',
-    'Quang Binh': '顺化', '广平': '顺化', 'Quang Tri': '顺化', '广治': '顺化', 'Thua Thien Hue': '顺化', '承天顺化': '顺化',
-    'Da Nang': '广南', '岘港': '广南', 'Quang Nam': '广南', '广南': '广南', 'Quang Ngai': '广南', '广义': '广南',
-    'Binh Dinh': '归仁', '平定': '归仁', 'Phu Yen': '归仁', '富安': '归仁', 'Khanh Hoa': '归仁', '庆和': '归仁', 'Kon Tum': '归仁', '昆嵩': '归仁', 'Gia Lai': '归仁', '嘉莱': '归仁', 'Dak Lak': '归仁', '多乐': '归仁',
-    'Ninh Thuan': '宾童龙', '宁顺': '宾童龙', 'Binh Thuan': '宾童龙', '平顺': '宾童龙', 'Lam Dong': '宾童龙', '林同': '宾童龙', 'Dak Nong': '宾童龙', '得农': '宾童龙',
-    'Ho Chi Minh': '水真腊', '胡志明': '水真腊', 'Dong Nai': '水真腊', '同奈': '水真腊', 'Binh Duong': '水真腊', '平阳': '水真腊', 'Ba Ria-Vung Tau': '水真腊', '巴地头顿': '水真腊', 'Tay Ninh': '水真腊', '西宁': '水真腊', 'Binh Phuoc': '水真腊', '平福': '水真腊', 'Long An': '水真腊', '隆安': '水真腊', 'Tien Giang': '水真腊', '前江': '水真腊', 'Ben Tre': '水真腊', '槟椥': '水真腊', 'Dong Thap': '水真腊', '同塔': '水真腊', 'Vinh Long': '水真腊', '永隆': '水真腊', 'Tra Vinh': '水真腊', '茶荣': '水真腊', 'Can Tho': '水真腊', '芹苴': '水真腊', 'Hau Giang': '水真腊', '后江': '水真腊', 'An Giang': '水真腊', '安江': '水真腊', 'Kien Giang': '水真腊', '坚江': '水真腊', 'Soc Trang': '水真腊', '朔庄': '水真腊', 'Bac Lieu': '水真腊', '薄寮': '水真腊', 'Ca Mau': '水真腊', '金瓯': '水真腊'
+    'Hanoi': 'Thăng Long', 'Hà Nội': 'Thăng Long', 'Hai Phong': 'Thăng Long', 'Hải Phòng': 'Thăng Long', 'Bac Ninh': 'Thăng Long', 'Bắc Ninh': 'Thăng Long', 'Nam Dinh': 'Sơn Nam', 'Nam Định': 'Sơn Nam', 'Ninh Binh': 'Sơn Nam', 'Ninh Bình': 'Sơn Nam', 'Thai Binh': 'Sơn Nam', 'Thái Bình': 'Sơn Nam', 'Vinh Phuc': 'Sơn Nam', 'Vĩnh Phúc': 'Sơn Nam', 'Hung Yen': 'Sơn Nam', 'Hưng Yên': 'Sơn Nam', 'Hai Duong': 'Hải Dương', 'Hải Dương': 'Hải Dương', 'Ha Nam': 'Sơn Nam', 'Hà Nam': 'Sơn Nam',
+    'Quang Ninh': 'Hải Dương', 'Quảng Ninh': 'Hải Dương', 'Lang Son': 'Hải Dương', 'Lạng Sơn': 'Hải Dương', 'Bac Giang': 'Hải Dương', 'Bắc Giang': 'Hải Dương', 'Thai Nguyen': 'Hải Dương', 'Thái Nguyên': 'Hải Dương', 'Cao Bang': 'Hải Dương', 'Cao Bằng': 'Hải Dương', 'Bac Kan': 'Hải Dương', 'Bắc Kạn': 'Hải Dương',
+    'Phu Tho': 'Sơn Tây', 'Phú Thọ': 'Sơn Tây', 'Tuyen Quang': 'Sơn Tây', 'Tuyên Quang': 'Sơn Tây', 'Ha Giang': 'Sơn Tây', 'Hà Giang': 'Sơn Tây', 'Yen Bai': 'Sơn Tây', 'Yên Bái': 'Sơn Tây', 'Lao Cai': 'Sơn Tây', 'Lào Cai': 'Sơn Tây',
+    'Hoa Binh': 'Hưng Hóa', 'Hòa Bình': 'Hưng Hóa', 'Son La': 'Hưng Hóa', 'Sơn La': 'Hưng Hóa', 'Dien Bien': 'Hưng Hóa', 'Điện Biên': 'Hưng Hóa', 'Lai Chau': 'Hưng Hóa', 'Lai Châu': 'Hưng Hóa',
+    'Thanh Hoa': 'Thanh Hóa', 'Thanh Hóa': 'Thanh Hóa', 'Nghe An': 'Nghệ An', 'Nghệ An': 'Nghệ An', 'Ha Tinh': 'Nghệ An', 'Hà Tĩnh': 'Nghệ An',
+    'Quang Binh': 'Thuận Hóa', 'Quảng Bình': 'Thuận Hóa', 'Quang Tri': 'Thuận Hóa', 'Quảng Trị': 'Thuận Hóa', 'Thua Thien Hue': 'Thuận Hóa', 'Thừa Thiên Huế': 'Thuận Hóa',
+    'Da Nang': 'Quảng Nam', 'Đà Nẵng': 'Quảng Nam', 'Quang Nam': 'Quảng Nam', 'Quảng Nam': 'Quảng Nam', 'Quang Ngai': 'Quảng Nam', 'Quảng Ngãi': 'Quảng Nam',
+    'Binh Dinh': 'Quy Nhơn', 'Bình Định': 'Quy Nhơn', 'Phu Yen': 'Quy Nhơn', 'Phú Yên': 'Quy Nhơn', 'Khanh Hoa': 'Quy Nhơn', 'Khánh Hòa': 'Quy Nhơn', 'Kon Tum': 'Quy Nhơn', 'Kon Tum': 'Quy Nhơn', 'Gia Lai': 'Quy Nhơn', 'Gia Lai': 'Quy Nhơn', 'Dak Lak': 'Quy Nhơn', 'Đắk Lắk': 'Quy Nhơn',
+    'Ninh Thuan': 'Panduranga', 'Ninh Thuận': 'Panduranga', 'Binh Thuan': 'Panduranga', 'Bình Thuận': 'Panduranga', 'Lam Dong': 'Panduranga', 'Lâm Đồng': 'Panduranga', 'Dak Nong': 'Panduranga', 'Đắk Nông': 'Panduranga',
+    'Ho Chi Minh': 'Thủy Chân Lạp', 'Hồ Chí Minh': 'Thủy Chân Lạp', 'Dong Nai': 'Thủy Chân Lạp', 'Đồng Nai': 'Thủy Chân Lạp', 'Binh Duong': 'Thủy Chân Lạp', 'Bình Dương': 'Thủy Chân Lạp', 'Ba Ria-Vung Tau': 'Thủy Chân Lạp', 'Bà Rịa - Vũng Tàu': 'Thủy Chân Lạp', 'Tay Ninh': 'Thủy Chân Lạp', 'Tây Ninh': 'Thủy Chân Lạp', 'Binh Phuoc': 'Thủy Chân Lạp', 'Bình Phước': 'Thủy Chân Lạp', 'Long An': 'Thủy Chân Lạp', 'Long An': 'Thủy Chân Lạp', 'Tien Giang': 'Thủy Chân Lạp', 'Tiền Giang': 'Thủy Chân Lạp', 'Ben Tre': 'Thủy Chân Lạp', 'Bến Tre': 'Thủy Chân Lạp', 'Dong Thap': 'Thủy Chân Lạp', 'Đồng Tháp': 'Thủy Chân Lạp', 'Vinh Long': 'Thủy Chân Lạp', 'Vĩnh Long': 'Thủy Chân Lạp', 'Tra Vinh': 'Thủy Chân Lạp', 'Trà Vinh': 'Thủy Chân Lạp', 'Can Tho': 'Thủy Chân Lạp', 'Cần Thơ': 'Thủy Chân Lạp', 'Hau Giang': 'Thủy Chân Lạp', 'Hậu Giang': 'Thủy Chân Lạp', 'An Giang': 'Thủy Chân Lạp', 'An Giang': 'Thủy Chân Lạp', 'Kien Giang': 'Thủy Chân Lạp', 'Kiên Giang': 'Thủy Chân Lạp', 'Soc Trang': 'Thủy Chân Lạp', 'Sóc Trăng': 'Thủy Chân Lạp', 'Bac Lieu': 'Thủy Chân Lạp', 'Bạc Liêu': 'Thủy Chân Lạp', 'Ca Mau': 'Thủy Chân Lạp', 'Cà Mau': 'Thủy Chân Lạp'
 };
 const vietnamCountyToFuMap = {
-    '升龙': '交趾', '山南': '交趾', '海阳': '交趾', '山西': '交趾', '兴化': '交趾', '清化': '清华', '乂安': '清华', // 郑主辖区
-    '顺化': '顺化', '广南': '广南', '归仁': '占城', '宾童龙': '占城', '水真腊': '水真腊' // 广南辖区
+    'Thăng Long': 'Giao Chỉ', 'Sơn Nam': 'Giao Chỉ', 'Hải Dương': 'Giao Chỉ', 'Sơn Tây': 'Giao Chỉ', 'Hưng Hóa': 'Giao Chỉ', 'Thanh Hóa': 'Thanh Hoa', 'Nghệ An': 'Thanh Hoa', // Lãnh thổ Chúa Trịnh
+    'Thuận Hóa': 'Thuận Hóa', 'Quảng Nam': 'Quảng Nam', 'Quy Nhơn': 'Chiêm Thành', 'Panduranga': 'Chiêm Thành', 'Thủy Chân Lạp': 'Thủy Chân Lạp' // Lãnh thổ Quảng Nam
 };
 
 const mughalToCountyMap = {
-    'Dhaka': '孟加拉东', '达卡': '孟加拉东', 'Chittagong': '孟加拉东', '吉大港': '孟加拉东', 'Sylhet': '孟加拉东', 'Rajshahi': '孟加拉东', 'Khulna': '孟加拉东', 'Barisal': '孟加拉东', 'Rangpur': '孟加拉东', 'Mymensingh': '孟加拉东',
-    'Punjab': '旁遮普', '旁遮普': '旁遮普', 'Islamabad': '旁遮普', '伊斯兰堡': '旁遮普', 'Himachal': '旁遮普', '喜马偕尔': '旁遮普',
-    'Sindh': '信德', '信德': '信德', 'Balochistan': '俾路支', '俾路支': '俾路支', 'Khyber': '开伯尔', '开伯尔': '开伯尔', 'FATA': '开伯尔',
-    'Delhi': '德里', '德里': '德里', 'Haryana': '德里', '哈里亚纳': '德里', 'Chandigarh': '德里', '昌迪加尔': '德里',
-    'Uttar Pradesh': '阿瓦德', '北方邦': '阿瓦德', 'Uttarakhand': '阿瓦德', '北阿坎德': '阿瓦德',
-    'Bihar': '比哈尔', '比哈尔': '比哈尔', 'Jharkhand': '比哈尔', '贾坎德': '比哈尔',
-    // 【修改点】：剔除了特里普拉(Tripura)和梅加拉亚(Meghalaya)，保证孟加拉西绝对只在西边
-    'West Bengal': '孟加拉西', '西孟加拉': '孟加拉西', 
-    // 【修改点】：将它们并入阿萨姆，在地理上它们正好构成连续的印度东北部板块，完美消除飞地
-    'Assam': '阿萨姆', '阿萨姆': '阿萨姆', 'Arunachal': '阿萨姆', '阿鲁纳恰尔': '阿萨姆', 'Nagaland': '阿萨姆', '那加兰': '阿萨姆', 'Manipur': '阿萨姆', '曼尼普尔': '阿萨姆', 'Mizoram': '阿萨姆', '米佐拉姆': '阿萨姆', 'Tripura': '阿萨姆', '特里普拉': '阿萨姆', 'Meghalaya': '阿萨姆', '梅加拉亚': '阿萨姆',
-    'Odisha': '奥里萨', '奥里萨': '奥里萨', 'Orissa': '奥里萨',
-    'Madhya Pradesh': '中央邦', '中央邦': '中央邦', 'Chhattisgarh': '中央邦', '恰蒂斯加尔': '中央邦',
-    'Rajasthan': '拉贾斯坦', '拉贾斯坦': '拉贾斯坦',
-    'Gujarat': '古吉拉特', '古吉拉特': '古吉拉特', 'Daman': '古吉拉特', '达曼': '古吉拉特', 'Dadra': '古吉拉特', '达德拉': '古吉拉特',
-    'Maharashtra': '马哈拉施特拉', '马哈拉施特拉': '马哈拉施特拉', 'Goa': '马哈拉施特拉', '果阿': '马哈拉施特拉',
-    'Telangana': '特伦甘纳', '特伦甘纳': '特伦甘纳', 'Andhra Pradesh': '特伦甘纳', '安得拉': '特伦甘纳',
-    'Karnataka': '卡纳塔克', '卡纳塔克': '卡纳塔克',
-    'Tamil Nadu': '马杜赖', '泰米尔纳德': '马杜赖', 'Kerala': '马杜赖', '喀拉拉': '马杜赖', 'Puducherry': '马杜赖', '本地治里': '马杜赖', 'Lakshadweep': '马杜赖',
-    'Jammu': '喀什米尔', '查谟': '喀什米尔', 'Kashmir': '喀什米尔', '克什米尔': '喀什米尔', 'Ladakh': '喀什米尔', '拉达克': '喀什米尔', 'Gilgit': '喀什米尔', 'Azad Kashmir': '喀什米尔'
+    'Dhaka': 'Đông Bengal', 'Dhaka': 'Đông Bengal', 'Chittagong': 'Đông Bengal', 'Chittagong': 'Đông Bengal', 'Sylhet': 'Đông Bengal', 'Rajshahi': 'Đông Bengal', 'Khulna': 'Đông Bengal', 'Barisal': 'Đông Bengal', 'Rangpur': 'Đông Bengal', 'Mymensingh': 'Đông Bengal',
+    'Punjab': 'Punjab', 'Punjab': 'Punjab', 'Islamabad': 'Punjab', 'Islamabad': 'Punjab', 'Himachal': 'Punjab', 'Himachal Pradesh': 'Punjab',
+    'Sindh': 'Sindh', 'Sindh': 'Sindh', 'Balochistan': 'Balochistan', 'Balochistan': 'Balochistan', 'Khyber': 'Khyber', 'Khyber': 'Khyber', 'FATA': 'Khyber',
+    'Delhi': 'Delhi', 'Delhi': 'Delhi', 'Haryana': 'Delhi', 'Haryana': 'Delhi', 'Chandigarh': 'Delhi', 'Chandigarh': 'Delhi',
+    'Uttar Pradesh': 'Awadh', 'Uttar Pradesh': 'Awadh', 'Uttarakhand': 'Awadh', 'Uttarakhand': 'Awadh',
+    'Bihar': 'Bihar', 'Bihar': 'Bihar', 'Jharkhand': 'Bihar', 'Jharkhand': 'Bihar',
+    // [Điểm sửa đổi]: Đã loại bỏ Tripura(Tripura) và Meghalaya(Meghalaya), Đảm bảo Tây Bengal tuyệt đối chỉ nằm ở phía tây
+    'West Bengal': 'Tây Bengal', 'Tây Bengal': 'Tây Bengal', 
+    // [Điểm sửa đổi]: Sáp nhập chúng vào Assam, về mặt địa lý chúng vừa vặn tạo thành mảng Đông Bắc Ấn Độ liên tục, loại bỏ hoàn hảo các vùng đất bị bao quanh.
+    'Assam': 'Assam', 'Assam': 'Assam', 'Arunachal': 'Assam', 'Arunachal Pradesh': 'Assam', 'Nagaland': 'Assam', 'Nagaland': 'Assam', 'Manipur': 'Assam', 'Manipur': 'Assam', 'Mizoram': 'Assam', 'Mizoram': 'Assam', 'Tripura': 'Assam', 'Tripura': 'Assam', 'Meghalaya': 'Assam', 'Meghalaya': 'Assam',
+    'Odisha': 'Odisha', 'Odisha': 'Odisha', 'Orissa': 'Odisha',
+    'Madhya Pradesh': 'Madhya Pradesh', 'Madhya Pradesh': 'Madhya Pradesh', 'Chhattisgarh': 'Madhya Pradesh', 'Chhattisgarh': 'Madhya Pradesh',
+    'Rajasthan': 'Rajasthan', 'Rajasthan': 'Rajasthan',
+    'Gujarat': 'Gujarat', 'Gujarat': 'Gujarat', 'Daman': 'Gujarat', 'Daman': 'Gujarat', 'Dadra': 'Gujarat', 'Dadra': 'Gujarat',
+    'Maharashtra': 'Maharashtra', 'Maharashtra': 'Maharashtra', 'Goa': 'Maharashtra', 'Goa': 'Maharashtra',
+    'Telangana': 'Telangana', 'Telangana': 'Telangana', 'Andhra Pradesh': 'Telangana', 'Andhra Pradesh': 'Telangana',
+    'Karnataka': 'Karnataka', 'Karnataka': 'Karnataka',
+    'Tamil Nadu': 'Madurai', 'Tamil Nadu': 'Madurai', 'Kerala': 'Madurai', 'Kerala': 'Madurai', 'Puducherry': 'Madurai', 'Puducherry': 'Madurai', 'Lakshadweep': 'Madurai',
+    'Jammu': 'Kashmir', 'Jammu': 'Kashmir', 'Kashmir': 'Kashmir', 'Kashmir': 'Kashmir', 'Ladakh': 'Kashmir', 'Ladakh': 'Kashmir', 'Gilgit': 'Kashmir', 'Azad Kashmir': 'Kashmir'
 };
 
 const mughalCountyToFuMap = {
-    '旁遮普': '拉合尔', '信德': '穆尔坦', '俾路支': '穆尔坦', '开伯尔': '喀布尔', '喀什米尔': '喀布尔',
-    '德里': '德里', '阿瓦德': '德里', '拉贾斯坦': '阿杰梅尔', '古吉拉特': '古吉拉特', '中央邦': '摩尔瓦',
-    '比哈尔': '比哈尔', '奥里萨': '比哈尔', '孟加拉西': '孟加拉', '孟加拉东': '孟加拉', '阿萨姆': '阿萨姆',
-    '马哈拉施特拉': '德干', '特伦甘纳': '德干', '卡纳塔克': '德干', '马杜赖': '南印度'
+    'Punjab': 'Lahore', 'Sindh': 'Multan', 'Balochistan': 'Multan', 'Khyber': 'Kabul', 'Kashmir': 'Kabul',
+    'Delhi': 'Delhi', 'Awadh': 'Delhi', 'Rajasthan': 'Ajmer', 'Gujarat': 'Gujarat', 'Madhya Pradesh': 'Malwa',
+    'Bihar': 'Bihar', 'Odisha': 'Bihar', 'Tây Bengal': 'Bengal', 'Đông Bengal': 'Bengal', 'Assam': 'Assam',
+    'Maharashtra': 'Deccan', 'Telangana': 'Deccan', 'Karnataka': 'Deccan', 'Madurai': 'Nam Ấn Độ'
 };
 
 
 const mingProvinceColors = {
-    '北直隶':'#c0392b','南直隶':'#d4a017','山东':'#e67e22','山西':'#8e6b3e','河南':'#b8860b',
-    '陕西':'#a0522d','湖广':'#2e7d32','江西':'#558b2f','浙江':'#00796b','福建':'#1565c0',
-    '广东':'#6a1b9a','广西':'#4a148c','云南':'#c62828','贵州':'#ad1457','四川':'#d84315',
-    '辽东':'#5d4037','宁夏':'#8d6e63', '后金':'#4a6fa5', '野人女真':'#78909c',
-    '察哈尔':'#b8953a', '土默特':'#b8953a', '朵颜三卫':'#b8953a', '喀尔喀':'#8d6e63',
-    '西域':'#9e9e9e','乌思藏':'#795548','青海':'#a1887f','东番':'#546e7a',
-    '日本':'#6a4c52', '琉球':'#2e8b57', '朝鲜':'#666666', '安南':'#445544', '莫卧儿':'#554433', // 日本改为古典暗绯色
-    '暹罗':'#556644', '不丹':'#665544', '尼婆罗':'#554455', '吕宋':'#445566',
-    '爪哇':'#444455', '澳洲':'#444444', '澜沧':'#555544'
+    'Bắc Trực Lệ':'#c0392b','Nam Trực Lệ':'#d4a017','Sơn Đông':'#e67e22','Sơn Tây':'#8e6b3e','Hà Nam':'#b8860b',
+    'Thiểm Tây':'#a0522d','Hồ Quảng':'#2e7d32','Giang Tây':'#558b2f','Chiết Giang':'#00796b','Phúc Kiến':'#1565c0',
+    'Quảng Đông':'#6a1b9a','Quảng Tây':'#4a148c','Vân Nam':'#c62828','Quý Châu':'#ad1457','Tứ Xuyên':'#d84315',
+    'Liêu Đông':'#5d4037','Ninh Hạ':'#8d6e63', 'Hậu Kim':'#4a6fa5', 'Dã Nhân Nữ Chân':'#78909c',
+    'Sát Cáp Nhĩ':'#b8953a', 'Thổ Mặc Đặc':'#b8953a', 'Đóa Nhan Tam Vệ':'#b8953a', 'Khách Nhĩ Khách (Khalkha)':'#8d6e63',
+    'Tây Vực':'#9e9e9e','Ô Tư Tạng':'#795548','Thanh Hải':'#a1887f','Đông Phiên':'#546e7a',
+    'Nhật Bản':'#6a4c52', 'Lưu Cầu':'#2e8b57', 'Triều Tiên':'#666666', 'An Nam':'#445544', 'Mughal':'#554433', // Nhật Bản đổi thành màu đỏ sẫm cổ điển
+    'Xiêm La':'#556644', 'Bhutan':'#665544', 'Nepal':'#554455', 'Luzon':'#445566',
+    'Java':'#444455', 'Úc':'#444444', 'Lạn Thương':'#555544'
 };
 
 const mingLegendNames = [
-    '北直隶','南直隶','山东','山西','河南','陕西','湖广','江西','浙江','福建',
-    '广东','广西','云南','贵州','四川','辽东','宁夏','后金','野人女真',
-    '察哈尔', '土默特', '朵颜三卫', '喀尔喀', '西域','乌思藏','青海','东番', '琉球' // 图例增加琉球
+    'Bắc Trực Lệ','Nam Trực Lệ','Sơn Đông','Sơn Tây','Hà Nam','Thiểm Tây','Hồ Quảng','Giang Tây','Chiết Giang','Phúc Kiến',
+    'Quảng Đông','Quảng Tây','Vân Nam','Quý Châu','Tứ Xuyên','Liêu Đông','Ninh Hạ','Hậu Kim','Dã Nhân Nữ Chân',
+    'Sát Cáp Nhĩ', 'Thổ Mặc Đặc', 'Đóa Nhan Tam Vệ', 'Khách Nhĩ Khách', 'Tây Vực','Ô Tư Tạng','Thanh Hải','Đông Phiên', 'Lưu Cầu' // Chú giải thêm Lưu Cầu
 ];
 
 const mingProvinceCenters = {
-    '北直隶':[116.40,39.90], '南直隶':[118.78,32.04], '山东':[117.00,36.65],
-    '山西':[112.55,37.87], '河南':[114.30,34.80], '陕西':[108.94,34.26],
-    '湖广':[112.94,28.23], '江西':[115.86,28.68], '浙江':[120.15,30.28],
-    '福建':[119.30,26.08], '广东':[113.26,23.13], '广西':[108.33,22.82],
-    '云南':[102.68,25.04], '贵州':[106.63,26.65], '四川':[104.07,30.57],
-    '辽东':[123.00,41.50], '宁夏':[106.27,38.47], '后金':[125.00,43.00],
-    '野人女真':[130.00,46.00], '察哈尔':[115.00,43.00], '土默特':[111.00,41.00],
-    '朵颜三卫':[120.00,41.00], '喀尔喀':[105.00,46.00], '西域':[85.00,40.00],
-    '乌思藏':[90.00,30.00], '青海':[95.00,35.00], '东番':[121.00,23.50],
-    '日本':[138.00,36.00], '琉球':[127.67, 26.21], '朝鲜':[127.00,39.00], '安南':[105.00,19.00], // 增加琉球中心点
-    '莫卧儿':[78.00,22.00], '暹罗':[100.00,15.00], '不丹':[90.00,27.50],
-    '尼婆罗':[84.00,28.00], '吕宋':[121.00,15.00], '爪哇':[110.00,-7.00],
-    '澳洲':[133.00,-25.00], '澜沧':[102.00,18.00]
+    'Bắc Trực Lệ':[116.40,39.90], 'Nam Trực Lệ':[118.78,32.04], 'Sơn Đông':[117.00,36.65],
+    'Sơn Tây':[112.55,37.87], 'Hà Nam':[114.30,34.80], 'Thiểm Tây':[108.94,34.26],
+    'Hồ Quảng':[112.94,28.23], 'Giang Tây':[115.86,28.68], 'Chiết Giang':[120.15,30.28],
+    'Phúc Kiến':[119.30,26.08], 'Quảng Đông':[113.26,23.13], 'Quảng Tây':[108.33,22.82],
+    'Vân Nam':[102.68,25.04], 'Quý Châu':[106.63,26.65], 'Tứ Xuyên':[104.07,30.57],
+    'Liêu Đông':[123.00,41.50], 'Ninh Hạ':[106.27,38.47], 'Hậu Kim':[125.00,43.00],
+    'Dã Nhân Nữ Chân':[130.00,46.00], 'Sát Cáp Nhĩ':[115.00,43.00], 'Thổ Mặc Đặc':[111.00,41.00],
+    'Đóa Nhan Tam Vệ':[120.00,41.00], 'Khách Nhĩ Khách (Khalkha)':[105.00,46.00], 'Tây Vực':[85.00,40.00],
+    'Ô Tư Tạng':[90.00,30.00], 'Thanh Hải':[95.00,35.00], 'Đông Phiên':[121.00,23.50],
+    'Nhật Bản':[138.00,36.00], 'Lưu Cầu':[127.67, 26.21], 'Triều Tiên':[127.00,39.00], 'An Nam':[105.00,19.00], // Thêm tâm điểm Lưu Cầu
+    'Mughal':[78.00,22.00], 'Xiêm La':[100.00,15.00], 'Bhutan':[90.00,27.50],
+    'Nepal':[84.00,28.00], 'Luzon':[121.00,15.00], 'Java':[110.00,-7.00],
+    'Úc':[133.00,-25.00], 'Lạn Thương':[102.00,18.00]
 };
 
 
 const mingFuZhouCenters = {
-    '南直隶':[{name:'应天府',lng:118.78,lat:32.04},{name:'凤阳府',lng:117.57,lat:32.86},{name:'淮安府',lng:119.02,lat:33.61},{name:'扬州府',lng:119.42,lat:32.39},{name:'苏州府',lng:120.58,lat:31.30},{name:'松江府',lng:121.24,lat:31.03},{name:'常州府',lng:119.97,lat:31.81},{name:'镇江府',lng:119.44,lat:32.20},{name:'庐州府',lng:117.23,lat:31.82},{name:'安庆府',lng:117.06,lat:30.53},{name:'太平府',lng:118.51,lat:31.57},{name:'池州府',lng:117.49,lat:30.66},{name:'宁国府',lng:118.75,lat:30.94},{name:'徽州府',lng:118.34,lat:29.72},{name:'徐州',lng:117.28,lat:34.26},{name:'滁州',lng:118.33,lat:32.30},{name:'和州',lng:118.37,lat:31.74},{name:'广德州',lng:119.42,lat:30.89}],
-    '北直隶':[{name:'顺天府',lng:116.40,lat:39.90},{name:'保定府',lng:115.48,lat:38.87},{name:'河间府',lng:116.09,lat:38.44},{name:'真定府',lng:114.50,lat:38.14},{name:'顺德府',lng:114.50,lat:37.07},{name:'广平府',lng:114.50,lat:36.60},{name:'大名府',lng:115.15,lat:36.28},{name:'永平府',lng:118.68,lat:39.89},{name:'延庆州',lng:115.97,lat:40.47},{name:'保安州',lng:115.30,lat:40.35}],
-    '湖广':[{name:'武昌府',lng:114.30,lat:30.57},{name:'汉阳府',lng:114.15,lat:30.52},{name:'黄州府',lng:114.87,lat:30.45},{name:'承天府',lng:112.58,lat:31.17},{name:'德安府',lng:113.69,lat:31.26},{name:'荆州府',lng:112.24,lat:30.33},{name:'襄阳府',lng:112.14,lat:32.02},{name:'长沙府',lng:112.94,lat:28.23},{name:'衡州府',lng:112.57,lat:26.89},{name:'永州府',lng:111.61,lat:26.42},{name:'宝庆府',lng:111.47,lat:27.24},{name:'常德府',lng:111.70,lat:29.03},{name:'辰州府',lng:110.39,lat:28.46},{name:'郧阳府',lng:110.80,lat:32.63},{name:'岳州府',lng:113.09,lat:29.37},{name:'施州卫',lng:109.48,lat:30.27},{name:'大庸卫',lng:110.48,lat:29.13}, {name:'靖州',lng:109.68,lat:26.57}, {name:'郴州',lng:113.02,lat:25.79}],
-    '四川':[{name:'成都府',lng:104.07,lat:30.57},{name:'重庆府',lng:106.55,lat:29.57},{name:'遵义府',lng:106.90,lat:27.70},{name:'保宁府',lng:105.97,lat:31.58},{name:'顺庆府',lng:106.08,lat:30.80},{name:'叙州府',lng:104.63,lat:28.77},{name:'夔州府',lng:109.50,lat:31.05},{name:'松潘卫',lng:103.60,lat:32.65},{name:'建昌卫',lng:102.18,lat:27.90},{name:'龙安府',lng:104.53,lat:32.40},{name:'马湖府',lng:104.16,lat:28.64},{name:'潼川州',lng:105.09,lat:31.09},{name:'嘉定州',lng:103.76,lat:29.58},{name:'雅州',lng:102.99,lat:29.97},{name:'泸州',lng:105.44,lat:28.88}, {name:'乌蒙府',lng:103.71,lat:27.33}, {name:'乌撒卫',lng:104.28,lat:26.85}, {name:'东川府',lng:103.30,lat:26.41}, {name:'镇雄府',lng:104.87,lat:27.43}, {name:'眉州',lng:103.83,lat:30.04}, {name:'邛州',lng:103.46,lat:30.41}, {name:'朵甘(四川)',lng:100.00,lat:31.00}],
-    '江西':[{name:'南昌府',lng:115.86,lat:28.68},{name:'九江府',lng:115.99,lat:29.71},{name:'赣州府',lng:114.94,lat:25.83},{name:'吉安府',lng:114.99,lat:27.11},{name:'抚州府',lng:116.35,lat:27.95},{name:'建昌府',lng:116.63,lat:27.56},{name:'广信府',lng:117.94,lat:28.45}, {name:'饶州府',lng:116.68,lat:28.99}, {name:'瑞州府',lng:115.37,lat:28.41},{name:'袁州府',lng:114.38,lat:27.80}, {name:'临江府',lng:115.54,lat:28.05}, {name:'南康府',lng:116.04,lat:29.44},{name:'南安府',lng:114.36,lat:25.39}],
-    '浙江':[{name:'杭州府',lng:120.15,lat:30.28},{name:'嘉兴府',lng:120.75,lat:30.76},{name:'湖州府',lng:120.09,lat:30.87},{name:'宁波府',lng:121.55,lat:29.87},{name:'绍兴府',lng:120.58,lat:30.03},{name:'温州府',lng:120.70,lat:28.00},{name:'金华府',lng:119.65,lat:29.08},{name:'衢州府',lng:118.87,lat:28.93}, {name:'严州府',lng:119.28,lat:29.47},{name:'台州府',lng:121.12,lat:28.85}, {name:'处州府',lng:119.92,lat:28.46}],
-    '福建':[{name:'福州府',lng:119.30,lat:26.08},{name:'泉州府',lng:118.58,lat:24.90},{name:'漳州府',lng:117.65,lat:24.51},{name:'建宁府',lng:118.18,lat:27.03},{name:'汀州府',lng:116.35,lat:25.83},{name:'延平府',lng:118.17,lat:26.63},{name:'邵武府',lng:117.49,lat:27.34},{name:'兴化府',lng:119.00,lat:25.43}, {name:'福宁州',lng:120.00,lat:26.88}],
-    '广东':[{name:'广州府',lng:113.26,lat:23.13},{name:'潮州府',lng:116.63,lat:23.66},{name:'惠州府',lng:114.42,lat:23.08},{name:'肇庆府',lng:112.46,lat:23.05},{name:'高州府',lng:110.85,lat:21.92},{name:'琼州府',lng:110.35,lat:20.02},{name:'韶州府',lng:113.59,lat:24.80}, {name:'南雄府',lng:114.30,lat:25.11},{name:'雷州府',lng:110.09,lat:20.91},{name:'廉州府',lng:109.20,lat:21.66},{name:'罗定州',lng:111.56,lat:22.77}],
-    '广西':[{name:'桂林府',lng:110.28,lat:25.27},{name:'南宁府',lng:108.33,lat:22.82},{name:'柳州府',lng:109.40,lat:24.33},{name:'梧州府',lng:111.34,lat:23.48}, {name:'浔州府',lng:110.08,lat:23.39}, {name:'太平府',lng:107.35,lat:22.40}, {name:'镇安府',lng:106.62,lat:23.32}, {name:'思明府',lng:107.07,lat:22.13}, {name:'平乐府',lng:110.64,lat:24.63}, {name:'庆远府',lng:108.64,lat:24.48}, {name:'思恩府',lng:108.16,lat:23.43}, {name:'泗城州',lng:106.62,lat:24.34}],
-    '云南':[{name:'云南府',lng:102.68,lat:25.04},{name:'大理府',lng:100.23,lat:25.61},{name:'临安府',lng:102.82,lat:23.62},{name:'永昌府',lng:99.18,lat:25.11},{name:'广南府',lng:105.05,lat:24.05},{name:'顺宁府',lng:99.92,lat:24.60},{name:'车里宣慰司',lng:100.80,lat:22.00}, {name:'曲靖府',lng:103.79,lat:25.49}, {name:'澂江府',lng:102.91,lat:24.67}, {name:'武定府',lng:102.40,lat:25.53}, {name:'广西府',lng:103.76,lat:24.52}, {name:'元江府',lng:101.99,lat:23.59}, {name:'楚雄府',lng:101.54,lat:25.04}, {name:'姚安府',lng:101.24,lat:25.50}, {name:'鹤庆府',lng:100.17,lat:26.55}, {name:'丽江府',lng:100.23,lat:26.88}, {name:'景东府',lng:100.83,lat:24.45}, {name:'镇沅府',lng:100.89,lat:24.00}, {name:'蒙化府',lng:100.30,lat:25.23}],
-    '贵州':[{name:'贵阳府',lng:106.63,lat:26.65},{name:'安顺府',lng:105.95,lat:26.25},{name:'思南府',lng:108.25,lat:27.94},{name:'黎平府',lng:109.18,lat:26.23},{name:'都匀府',lng:107.52,lat:26.26}, {name:'平越府',lng:107.51,lat:26.70}, {name:'思州府',lng:108.73,lat:27.18}, {name:'铜仁府',lng:109.19,lat:27.71}, {name:'石阡府',lng:108.22,lat:27.52}, {name:'镇远府',lng:108.42,lat:27.05}, {name:'水西宣慰司',lng:105.61,lat:27.05}, {name:'普安州',lng:104.90,lat:25.09}],
-    '山西':[{name:'太原府',lng:112.55,lat:37.87},{name:'大同府',lng:113.30,lat:40.08},{name:'平阳府',lng:111.50,lat:36.08},{name:'潞安府',lng:113.12,lat:36.20},{name:'汾州府',lng:111.77,lat:37.17}, {name:'泽州',lng:112.85,lat:35.49}, {name:'辽州',lng:113.37,lat:37.08}, {name:'沁州',lng:112.69,lat:36.75}],
-    '陕西':[{name:'西安府',lng:108.94,lat:34.26},{name:'凤翔府',lng:107.38,lat:34.52},{name:'汉中府',lng:107.03,lat:33.07},{name:'延安府',lng:109.47,lat:36.60},{name:'庆阳府',lng:107.64,lat:35.73},{name:'平凉府',lng:106.68,lat:35.54},{name:'巩昌府',lng:104.63,lat:35.00},{name:'临洮府',lng:103.86,lat:35.38},{name:'兴安州',lng:109.02,lat:32.68},{name:'肃州卫',lng:98.50,lat:39.73}, {name:'甘州卫',lng:100.45,lat:38.93}, {name:'凉州卫',lng:102.63,lat:37.93}, {name:'兰州',lng:103.82,lat:36.05}, {name:'洮州卫',lng:103.53,lat:34.69}, {name:'西宁卫',lng:101.78,lat:36.62}],
-    '宁夏':[{name:'宁夏卫',lng:106.27,lat:38.47}],
-    '山东':[{name:'济南府',lng:117.00,lat:36.65},{name:'兖州府',lng:116.83,lat:35.55},{name:'东昌府',lng:115.97,lat:36.45},{name:'青州府',lng:118.48,lat:36.68},{name:'莱州府',lng:119.94,lat:37.18},{name:'登州府',lng:121.00,lat:37.80}],
-    '河南':[{name:'开封府',lng:114.30,lat:34.80},{name:'河南府',lng:112.44,lat:34.66},{name:'归德府',lng:115.65,lat:34.42},{name:'汝宁府',lng:114.03,lat:32.98},{name:'南阳府',lng:112.53,lat:33.00},{name:'彰德府',lng:114.35,lat:36.10},{name:'卫辉府',lng:114.06,lat:35.40},{name:'怀庆府',lng:113.08,lat:35.10}, {name:'汝州',lng:112.84,lat:34.16}],
-    '辽东':[{name:'沈阳中卫',lng:123.43,lat:41.80},{name:'辽阳卫',lng:123.17,lat:41.27},{name:'金州卫',lng:121.71,lat:39.10},{name:'复州卫',lng:122.00,lat:39.62},{name:'海州卫',lng:122.75,lat:40.88},{name:'广宁卫',lng:121.13,lat:41.53},{name:'广宁中屯卫',lng:121.13,lat:41.10},{name:'铁岭卫',lng:123.83,lat:42.28},{name:'宁远卫',lng:120.71,lat:40.75},{name:'广宁后屯卫',lng:121.65,lat:42.01},{name:'营州卫',lng:120.45,lat:41.57},{name:'盖州卫',lng:122.35,lat:40.40},{name:'抚顺千户所',lng:123.97,lat:41.87},{name:'凤凰堡',lng:124.06,lat:40.45},{name:'镇江堡',lng:124.37,lat:40.13},{name:'义州卫',lng:121.24,lat:41.53},{name:'广宁右屯卫',lng:121.36,lat:41.17},{name:'开原卫',lng:124.03,lat:42.53},{name:'广宁前屯卫',lng:120.33,lat:40.35}],
-    '后金': [
-        {name:'赫图阿拉',lng:124.82,lat:41.74}, {name:'长白山部',lng:128.18,lat:41.93}, 
-        {name:'瓦尔喀部',lng:129.50,lat:42.90}, {name:'宁古塔',lng:129.60,lat:44.35}, 
-        {name:'乌拉城',lng:126.55,lat:44.08}, {name:'伊通堡',lng:125.32,lat:43.88}, 
-        {name:'叶赫城',lng:124.28,lat:43.32}, {name:'哈达城',lng:125.14,lat:42.90}
+    'Nam Trực Lệ':[{name:'Ứng Thiên phủ',lng:118.78,lat:32.04},{name:'Phượng Dương phủ',lng:117.57,lat:32.86},{name:'Hoài An phủ',lng:119.02,lat:33.61},{name:'Dương Châu phủ',lng:119.42,lat:32.39},{name:'Tô Châu phủ',lng:120.58,lat:31.30},{name:'Tùng Giang phủ',lng:121.24,lat:31.03},{name:'Thường Châu phủ',lng:119.97,lat:31.81},{name:'Trấn Giang phủ',lng:119.44,lat:32.20},{name:'Lư Châu phủ',lng:117.23,lat:31.82},{name:'An Khánh phủ',lng:117.06,lat:30.53},{name:'Thái Bình phủ',lng:118.51,lat:31.57},{name:'Trì Châu phủ',lng:117.49,lat:30.66},{name:'Ninh Quốc phủ',lng:118.75,lat:30.94},{name:'Huy Châu phủ',lng:118.34,lat:29.72},{name:'Từ Châu',lng:117.28,lat:34.26},{name:'Trừ Châu',lng:118.33,lat:32.30},{name:'Hòa Châu',lng:118.37,lat:31.74},{name:'Quảng Đức châu',lng:119.42,lat:30.89}],
+    'Bắc Trực Lệ':[{name:'Thuận Thiên phủ',lng:116.40,lat:39.90},{name:'Bảo Định phủ',lng:115.48,lat:38.87},{name:'Hà Gian phủ',lng:116.09,lat:38.44},{name:'Chân Định phủ',lng:114.50,lat:38.14},{name:'Thuận Đức phủ',lng:114.50,lat:37.07},{name:'Quảng Bình phủ',lng:114.50,lat:36.60},{name:'Đại Danh phủ',lng:115.15,lat:36.28},{name:'Vĩnh Bình phủ',lng:118.68,lat:39.89},{name:'Diên Khánh châu',lng:115.97,lat:40.47},{name:'Bảo An châu',lng:115.30,lat:40.35}],
+    'Hồ Quảng':[{name:'Vũ Xương phủ',lng:114.30,lat:30.57},{name:'Hán Dương phủ',lng:114.15,lat:30.52},{name:'Hoàng Châu phủ',lng:114.87,lat:30.45},{name:'Thừa Thiên phủ',lng:112.58,lat:31.17},{name:'Đức An phủ',lng:113.69,lat:31.26},{name:'Kinh Châu phủ',lng:112.24,lat:30.33},{name:'Tương Dương phủ',lng:112.14,lat:32.02},{name:'Trường Sa phủ',lng:112.94,lat:28.23},{name:'Hành Châu phủ',lng:112.57,lat:26.89},{name:'Vĩnh Châu phủ',lng:111.61,lat:26.42},{name:'Bảo Khánh phủ',lng:111.47,lat:27.24},{name:'Thường Đức phủ',lng:111.70,lat:29.03},{name:'Thần Châu Phủ',lng:110.39,lat:28.46},{name:'Vẫn Dương Phủ',lng:110.80,lat:32.63},{name:'Nhạc Châu Phủ',lng:113.09,lat:29.37},{name:'Thi Châu Vệ',lng:109.48,lat:30.27},{name:'Đại Dung Vệ',lng:110.48,lat:29.13}, {name:'Tĩnh Châu',lng:109.68,lat:26.57}, {name:'Sâm Châu',lng:113.02,lat:25.79}],
+    'Tứ Xuyên':[{name:'Thành Đô Phủ',lng:104.07,lat:30.57},{name:'Trùng Khánh Phủ',lng:106.55,lat:29.57},{name:'Tuân Nghĩa Phủ',lng:106.90,lat:27.70},{name:'Bảo Ninh Phủ',lng:105.97,lat:31.58},{name:'Thuận Khánh Phủ',lng:106.08,lat:30.80},{name:'Tự Châu Phủ',lng:104.63,lat:28.77},{name:'Quỳ Châu Phủ',lng:109.50,lat:31.05},{name:'Tùng Phan Vệ',lng:103.60,lat:32.65},{name:'Kiến Xương Vệ',lng:102.18,lat:27.90},{name:'Long An Phủ',lng:104.53,lat:32.40},{name:'Mã Hồ Phủ',lng:104.16,lat:28.64},{name:'Đồng Xuyên Châu',lng:105.09,lat:31.09},{name:'Gia Định Châu',lng:103.76,lat:29.58},{name:'Nhã Châu',lng:102.99,lat:29.97},{name:'Lô Châu',lng:105.44,lat:28.88}, {name:'Ô Mông Phủ',lng:103.71,lat:27.33}, {name:'Ô Tát Vệ',lng:104.28,lat:26.85}, {name:'Đông Xuyên Phủ',lng:103.30,lat:26.41}, {name:'Trấn Hùng Phủ',lng:104.87,lat:27.43}, {name:'Mi Châu',lng:103.83,lat:30.04}, {name:'Cùng Châu',lng:103.46,lat:30.41}, {name:'Mdo Kham(Tứ Xuyên)',lng:100.00,lat:31.00}],
+    'Giang Tây':[{name:'Nam Xương Phủ',lng:115.86,lat:28.68},{name:'Cửu Giang Phủ',lng:115.99,lat:29.71},{name:'Cám Châu Phủ',lng:114.94,lat:25.83},{name:'Cát An Phủ',lng:114.99,lat:27.11},{name:'Phủ Châu Phủ',lng:116.35,lat:27.95},{name:'Kiến Xương Phủ',lng:116.63,lat:27.56},{name:'Quảng Tín Phủ',lng:117.94,lat:28.45}, {name:'Nhiêu Châu Phủ',lng:116.68,lat:28.99}, {name:'Thụy Châu Phủ',lng:115.37,lat:28.41},{name:'Viên Châu Phủ',lng:114.38,lat:27.80}, {name:'Lâm Giang Phủ',lng:115.54,lat:28.05}, {name:'Nam Khang Phủ',lng:116.04,lat:29.44},{name:'Nam An Phủ',lng:114.36,lat:25.39}],
+    'Chiết Giang':[{name:'Hàng Châu Phủ',lng:120.15,lat:30.28},{name:'Gia Hưng Phủ',lng:120.75,lat:30.76},{name:'Hồ Châu Phủ',lng:120.09,lat:30.87},{name:'Ninh Ba Phủ',lng:121.55,lat:29.87},{name:'Thiệu Hưng Phủ',lng:120.58,lat:30.03},{name:'Phủ Ôn Châu',lng:120.70,lat:28.00},{name:'Phủ Kim Hoa',lng:119.65,lat:29.08},{name:'Phủ Cù Châu',lng:118.87,lat:28.93}, {name:'Phủ Nghiêm Châu',lng:119.28,lat:29.47},{name:'Phủ Thai Châu',lng:121.12,lat:28.85}, {name:'Phủ Xử Châu',lng:119.92,lat:28.46}],
+    'Phúc Kiến':[{name:'Phủ Phúc Châu',lng:119.30,lat:26.08},{name:'Phủ Tuyền Châu',lng:118.58,lat:24.90},{name:'Phủ Chương Châu',lng:117.65,lat:24.51},{name:'Phủ Kiến Ninh',lng:118.18,lat:27.03},{name:'Phủ Đinh Châu',lng:116.35,lat:25.83},{name:'Phủ Diên Bình',lng:118.17,lat:26.63},{name:'Phủ Thiệu Vũ',lng:117.49,lat:27.34},{name:'Phủ Hưng Hóa',lng:119.00,lat:25.43}, {name:'Châu Phúc Ninh',lng:120.00,lat:26.88}],
+    'Quảng Đông':[{name:'Phủ Quảng Châu',lng:113.26,lat:23.13},{name:'Phủ Triều Châu',lng:116.63,lat:23.66},{name:'Phủ Huệ Châu',lng:114.42,lat:23.08},{name:'Phủ Triệu Khánh',lng:112.46,lat:23.05},{name:'Phủ Cao Châu',lng:110.85,lat:21.92},{name:'Phủ Quỳnh Châu',lng:110.35,lat:20.02},{name:'Phủ Thiều Châu',lng:113.59,lat:24.80}, {name:'Phủ Nam Hùng',lng:114.30,lat:25.11},{name:'Phủ Lôi Châu',lng:110.09,lat:20.91},{name:'Phủ Liêm Châu',lng:109.20,lat:21.66},{name:'Châu La Định',lng:111.56,lat:22.77}],
+    'Quảng Tây':[{name:'Phủ Quế Lâm',lng:110.28,lat:25.27},{name:'Phủ Nam Ninh',lng:108.33,lat:22.82},{name:'Phủ Liễu Châu',lng:109.40,lat:24.33},{name:'Phủ Ngô Châu',lng:111.34,lat:23.48}, {name:'Phủ Tầm Châu',lng:110.08,lat:23.39}, {name:'Phủ Thái Bình',lng:107.35,lat:22.40}, {name:'Phủ Trấn An',lng:106.62,lat:23.32}, {name:'Phủ Tư Minh',lng:107.07,lat:22.13}, {name:'Phủ Bình Lạc',lng:110.64,lat:24.63}, {name:'Phủ Khánh Viễn',lng:108.64,lat:24.48}, {name:'Phủ Tư Ân',lng:108.16,lat:23.43}, {name:'Châu Tứ Thành',lng:106.62,lat:24.34}],
+    'Vân Nam':[{name:'Phủ Vân Nam',lng:102.68,lat:25.04},{name:'Phủ Đại Lý',lng:100.23,lat:25.61},{name:'Lâm An phủ',lng:102.82,lat:23.62},{name:'Vĩnh Xương phủ',lng:99.18,lat:25.11},{name:'Quảng Nam phủ',lng:105.05,lat:24.05},{name:'Thuận Ninh phủ',lng:99.92,lat:24.60},{name:'Xa Lý Tuyên úy ty',lng:100.80,lat:22.00}, {name:'Khúc Tĩnh phủ',lng:103.79,lat:25.49}, {name:'Trừng Giang phủ',lng:102.91,lat:24.67}, {name:'Vũ Định phủ',lng:102.40,lat:25.53}, {name:'Quảng Tây phủ',lng:103.76,lat:24.52}, {name:'Nguyên Giang phủ',lng:101.99,lat:23.59}, {name:'Sở Hùng phủ',lng:101.54,lat:25.04}, {name:'Diêu An phủ',lng:101.24,lat:25.50}, {name:'Hạc Khánh phủ',lng:100.17,lat:26.55}, {name:'Lệ Giang phủ',lng:100.23,lat:26.88}, {name:'Cảnh Đông phủ',lng:100.83,lat:24.45}, {name:'Trấn Nguyên phủ',lng:100.89,lat:24.00}, {name:'Mông Hóa phủ',lng:100.30,lat:25.23}],
+    'Quý Châu':[{name:'Quý Dương phủ',lng:106.63,lat:26.65},{name:'An Thuận phủ',lng:105.95,lat:26.25},{name:'Tư Nam phủ',lng:108.25,lat:27.94},{name:'Lê Bình phủ',lng:109.18,lat:26.23},{name:'Đô Quân phủ',lng:107.52,lat:26.26}, {name:'Bình Việt phủ',lng:107.51,lat:26.70}, {name:'Tư Châu phủ',lng:108.73,lat:27.18}, {name:'Đồng Nhân phủ',lng:109.19,lat:27.71}, {name:'Thạch Thiên phủ',lng:108.22,lat:27.52}, {name:'Trấn Viễn phủ',lng:108.42,lat:27.05}, {name:'Thủy Tây Tuyên úy ty',lng:105.61,lat:27.05}, {name:'Phổ An châu',lng:104.90,lat:25.09}],
+    'Sơn Tây':[{name:'Thái Nguyên phủ',lng:112.55,lat:37.87},{name:'Đại Đồng phủ',lng:113.30,lat:40.08},{name:'Bình Dương phủ',lng:111.50,lat:36.08},{name:'Lộ An phủ',lng:113.12,lat:36.20},{name:'Phần Châu phủ',lng:111.77,lat:37.17}, {name:'Trạch Châu',lng:112.85,lat:35.49}, {name:'Liêu Châu',lng:113.37,lat:37.08}, {name:'Thấm Châu',lng:112.69,lat:36.75}],
+    'Thiểm Tây':[{name:'Tây An phủ',lng:108.94,lat:34.26},{name:'Phượng Tường phủ',lng:107.38,lat:34.52},{name:'Hán Trung phủ',lng:107.03,lat:33.07},{name:'Diên An phủ',lng:109.47,lat:36.60},{name:'Khánh Dương phủ',lng:107.64,lat:35.73},{name:'Bình Lương phủ',lng:106.68,lat:35.54},{name:'Củng Xương phủ',lng:104.63,lat:35.00},{name:'Lâm Thao phủ',lng:103.86,lat:35.38},{name:'Hưng Yên Châu',lng:109.02,lat:32.68},{name:'Túc Châu Vệ',lng:98.50,lat:39.73}, {name:'Cam Châu Vệ',lng:100.45,lat:38.93}, {name:'Lương Châu Vệ',lng:102.63,lat:37.93}, {name:'Lan Châu',lng:103.82,lat:36.05}, {name:'Thao Châu Vệ',lng:103.53,lat:34.69}, {name:'Tây Ninh Vệ',lng:101.78,lat:36.62}],
+    'Ninh Hạ':[{name:'Ninh Hạ Vệ',lng:106.27,lat:38.47}],
+    'Sơn Đông':[{name:'Tế Nam Phủ',lng:117.00,lat:36.65},{name:'Duyện Châu Phủ',lng:116.83,lat:35.55},{name:'Đông Xương Phủ',lng:115.97,lat:36.45},{name:'Thanh Châu Phủ',lng:118.48,lat:36.68},{name:'Lai Châu Phủ',lng:119.94,lat:37.18},{name:'Đăng Châu Phủ',lng:121.00,lat:37.80}],
+    'Hà Nam':[{name:'Khai Phong Phủ',lng:114.30,lat:34.80},{name:'Hà Nam Phủ',lng:112.44,lat:34.66},{name:'Quy Đức Phủ',lng:115.65,lat:34.42},{name:'Nhữ Ninh Phủ',lng:114.03,lat:32.98},{name:'Nam Dương Phủ',lng:112.53,lat:33.00},{name:'Chương Đức Phủ',lng:114.35,lat:36.10},{name:'Vệ Huy Phủ',lng:114.06,lat:35.40},{name:'Hoài Khánh Phủ',lng:113.08,lat:35.10}, {name:'Nhữ Châu',lng:112.84,lat:34.16}],
+    'Liêu Đông':[{name:'Thẩm Dương Trung Vệ',lng:123.43,lat:41.80},{name:'Liêu Dương Vệ',lng:123.17,lat:41.27},{name:'Kim Châu Vệ',lng:121.71,lat:39.10},{name:'Phục Châu Vệ',lng:122.00,lat:39.62},{name:'Hải Châu Vệ',lng:122.75,lat:40.88},{name:'Quảng Ninh Vệ',lng:121.13,lat:41.53},{name:'Quảng Ninh Trung đồn vệ',lng:121.13,lat:41.10},{name:'Thiết Lĩnh Vệ',lng:123.83,lat:42.28},{name:'Ninh Viễn Vệ',lng:120.71,lat:40.75},{name:'Quảng Ninh Hậu đồn vệ',lng:121.65,lat:42.01},{name:'Doanh Châu Vệ',lng:120.45,lat:41.57},{name:'Cái Châu Vệ',lng:122.35,lat:40.40},{name:'Phủ Thuận Thiên hộ sở',lng:123.97,lat:41.87},{name:'Phượng Hoàng Bảo',lng:124.06,lat:40.45},{name:'Trấn Giang Bảo',lng:124.37,lat:40.13},{name:'Nghĩa Châu Vệ',lng:121.24,lat:41.53},{name:'Quảng Ninh Hữu đồn vệ',lng:121.36,lat:41.17},{name:'Khai Nguyên Vệ',lng:124.03,lat:42.53},{name:'Quảng Ninh Tiền đồn vệ',lng:120.33,lat:40.35}],
+    'Hậu Kim': [
+        {name:'Hách Đồ A Lạp',lng:124.82,lat:41.74}, {name:'Bộ Trường Bạch Sơn',lng:128.18,lat:41.93}, 
+        {name:'Bộ Ngõa Nhĩ Khách',lng:129.50,lat:42.90}, {name:'Ninh Cổ Tháp',lng:129.60,lat:44.35}, 
+        {name:'Ô Lạp Thành',lng:126.55,lat:44.08}, {name:'Y Thông Bảo',lng:125.32,lat:43.88}, 
+        {name:'Diệp Hách Thành',lng:124.28,lat:43.32}, {name:'Haa Đạt Thành',lng:125.14,lat:42.90}
     ],
-    '野人女真': [
-        {name:'阿勒楚喀',lng:126.98,lat:45.54}, {name:'索伦部',lng:123.95,lat:47.33}, 
-        {name:'杜尔伯特部',lng:124.66,lat:46.50}, {name:'呼兰部',lng:126.98,lat:46.63}, 
-        {name:'忽尔哈部',lng:130.36,lat:46.80}, {name:'穆棱部',lng:130.96,lat:45.30}, 
-        {name:'赫哲部',lng:130.27,lat:47.33}, {name:'使犬部',lng:131.15,lat:46.64}, 
-        {name:'库尔喀部',lng:130.86,lat:45.77}, {name:'萨哈连部',lng:128.89,lat:47.72}, 
-        {name:'飞牙喀部',lng:127.53,lat:50.24}, {name:'使鹿部',lng:124.11,lat:52.33}, 
-        {name:'达斡尔部',lng:119.76,lat:49.21}
+    'Dã Nhân Nữ Chân': [
+        {name:'A Lặc Sở Khách',lng:126.98,lat:45.54}, {name:'Sách Luân Bộ',lng:123.95,lat:47.33}, 
+        {name:'Đỗ Nhĩ Bá Đặc bộ',lng:124.66,lat:46.50}, {name:'Hô Lan bộ',lng:126.98,lat:46.63}, 
+        {name:'Bộ Hốt Nhĩ Cáp',lng:130.36,lat:46.80}, {name:'Mục Lăng bộ',lng:130.96,lat:45.30}, 
+        {name:'Hách Triết bộ',lng:130.27,lat:47.33}, {name:'Sử Khuyển bộ',lng:131.15,lat:46.64}, 
+        {name:'Bộ Khố Nhĩ Khách',lng:130.86,lat:45.77}, {name:'Bộ Tát Cáp Liên',lng:128.89,lat:47.72}, 
+        {name:'Bộ Phi Nha Khách',lng:127.53,lat:50.24}, {name:'Sử Lộc bộ',lng:124.11,lat:52.33}, 
+        {name:'Bộ Đạt Oát Nhĩ',lng:119.76,lat:49.21}
     ],
-    '察哈尔': [
-        {name:'察哈尔部',lng:113.11,lat:41.03}, {name:'苏尼特部',lng:116.09,lat:43.93}
+    'Sát Cáp Nhĩ': [
+        {name:'Bộ Sát Cáp Nhĩ',lng:113.11,lat:41.03}, {name:'Bộ Tô Ni Đặc',lng:116.09,lat:43.93}
     ],
-    '土默特': [
-        {name:'土默特部',lng:109.84,lat:40.65}, {name:'鄂尔多斯部',lng:109.99,lat:39.81}, 
-        {name:'归化城',lng:111.67,lat:40.82}, {name:'乌拉特部',lng:107.41,lat:40.75}
+    'Thổ Mặc Đặc': [
+        {name:'Bộ Thổ Mặc Đặc',lng:109.84,lat:40.65}, {name:'Ngạc Nhĩ Đa Tư bộ',lng:109.99,lat:39.81}, 
+        {name:'Quy Hóa thành',lng:111.67,lat:40.82}, {name:'Bộ Ô Lạp Đặc',lng:107.41,lat:40.75}
     ],
-    '朵颜三卫': [
-        {name:'朵颜卫',lng:118.95,lat:42.26}, {name:'泰宁卫',lng:122.25,lat:43.61}, 
-        {name:'福余卫',lng:122.05,lat:46.07}, {name:'科尔沁部',lng:122.00,lat:44.00}
+    'Đóa Nhan Tam Vệ': [
+        {name:'Doyan vệ',lng:118.95,lat:42.26}, {name:'Thái Ninh vệ',lng:122.25,lat:43.61}, 
+        {name:'Phúc Dư vệ',lng:122.05,lat:46.07}, {name:'Bộ Khoa Nhĩ Thấm',lng:122.00,lat:44.00}
     ],
-    '青海': [{name:'和硕特部',lng:101.00,lat:38.00}, {name:'必里卫',lng:99.00,lat:35.00}, {name:'朵甘(青海)',lng:96.00,lat:33.00}],
-    '西域': [{name:'瓦剌',lng:85.00,lat:44.00}, {name:'叶尔羌',lng:77.00,lat:38.00}, {name:'吐鲁番',lng:89.00,lat:42.00}, {name:'哈密卫',lng:93.00,lat:42.00}],
-    '乌思藏': [{name:'乌思藏',lng:91.00,lat:29.00}, {name:'藏巴汗',lng:88.00,lat:29.00}, {name:'朵甘',lng:97.00,lat:31.00}, {name:'古格',lng:79.00,lat:31.00}],
-    '东番': [
-        {name:'鸡笼(西葡)',lng:121.74,lat:25.13}, 
-        {name:'大员(荷兰)',lng:120.16,lat:23.00}, 
-        {name:'东番诸部',lng:121.00,lat:23.50}, 
-        {name:'澎湖巡检司',lng:119.56,lat:23.56}
+    'Thanh Hải': [{name:'Bộ Hòa Thạc Đặc',lng:101.00,lat:38.00}, {name:'Tất Lý vệ',lng:99.00,lat:35.00}, {name:'Mdo Kham(Thanh Hải)',lng:96.00,lat:33.00}],
+    'Tây Vực': [{name:'Oirat',lng:85.00,lat:44.00}, {name:'Yarkent',lng:77.00,lat:38.00}, {name:'Turpan',lng:89.00,lat:42.00}, {name:'Hami vệ',lng:93.00,lat:42.00}],
+    'Ô Tư Tạng': [{name:'Ô Tư Tạng',lng:91.00,lat:29.00}, {name:'Tạng Ba Hãn',lng:88.00,lat:29.00}, {name:'Mdo Kham',lng:97.00,lat:31.00}, {name:'Cổ Cách',lng:79.00,lat:31.00}],
+    'Đông Phiên': [
+        {name:'Kê Lung(Tây Bồ)',lng:121.74,lat:25.13}, 
+        {name:'Đại Viên(Hà Lan)',lng:120.16,lat:23.00}, 
+        {name:'Các bộ Đông Phiên',lng:121.00,lat:23.50}, 
+        {name:'Bành Hồ Tuần kiểm ty',lng:119.56,lat:23.56}
     ],
-    '琉球': [{name:'琉球国', lng: 127.67, lat: 26.21}], // 添加独立的琉球府级属性
-    '日本': [
-        {name:'畿内', lng: 135.50, lat: 34.69}, {name:'东海道', lng: 138.00, lat: 35.00},
-        {name:'东山道', lng: 139.00, lat: 36.50}, {name:'北陆道', lng: 136.50, lat: 36.50},
-        {name:'山阴道', lng: 133.00, lat: 35.30}, {name:'山阳道', lng: 133.50, lat: 34.50},
-        {name:'南海道', lng: 133.50, lat: 33.50}, {name:'西海道', lng: 130.50, lat: 33.00},
-        {name:'虾夷', lng: 141.34, lat: 43.06} // 移除了原来的琉球
+    'Lưu Cầu': [{name:'Lưu Cầu quốc', lng: 127.67, lat: 26.21}], // Thêm thuộc tính cấp phủ độc lập của Lưu Cầu
+    'Nhật Bản': [
+        {name:'Kinai', lng: 135.50, lat: 34.69}, {name:'Tokaido', lng: 138.00, lat: 35.00},
+        {name:'Tosando', lng: 139.00, lat: 36.50}, {name:'Hokurikudo', lng: 136.50, lat: 36.50},
+        {name:'Sanindo', lng: 133.00, lat: 35.30}, {name:'Sanyodo', lng: 133.50, lat: 34.50},
+        {name:'Nankaido', lng: 133.50, lat: 33.50}, {name:'Saikaido', lng: 130.50, lat: 33.00},
+        {name:'Ezo', lng: 141.34, lat: 43.06} // Đã xóa Lưu Cầu ban đầu
     ],
-        '朝鲜': [
-        {name:'京畿道', lng: 126.97, lat: 37.56},
-        {name:'平安道', lng: 125.75, lat: 39.03},
-        {name:'咸镜道', lng: 127.53, lat: 39.91},
-        {name:'黄海道', lng: 125.71, lat: 38.03},
-        {name:'江原道', lng: 128.87, lat: 37.75},
-        {name:'忠清道', lng: 127.12, lat: 36.45},
-        {name:'庆尚道', lng: 128.60, lat: 35.85},
-        {name:'全罗道', lng: 126.95, lat: 35.16}
+        'Triều Tiên': [
+        {name:'Gyeonggi-do', lng: 126.97, lat: 37.56},
+        {name:'Pyongan-do', lng: 125.75, lat: 39.03},
+        {name:'Hamgyong-do', lng: 127.53, lat: 39.91},
+        {name:'Hwanghae-do', lng: 125.71, lat: 38.03},
+        {name:'Gangwon-do', lng: 128.87, lat: 37.75},
+        {name:'Chungcheong-do', lng: 127.12, lat: 36.45},
+        {name:'Gyeongsang-do', lng: 128.60, lat: 35.85},
+        {name:'Jeolla-do', lng: 126.95, lat: 35.16}
     ],
-        '喀尔喀': [
-        {name:'土谢图汗部', lng:106.90, lat:47.92}, 
-        {name:'车臣汗部', lng:114.50, lat:48.07}, 
-        {name:'扎萨克图汗部', lng:96.84, lat:47.74}, 
-        {name:'和托辉特部', lng:92.00, lat:49.00}
+        'Khách Nhĩ Khách (Khalkha)': [
+        {name:'Tusheet Hãn bộ', lng:106.90, lat:47.92}, 
+        {name:'Bộ Xa Thần Hãn', lng:114.50, lat:48.07}, 
+        {name:'Bộ Zasagt Khan', lng:96.84, lat:47.74}, 
+        {name:'Hòa Thác Huy Đặc bộ', lng:92.00, lat:49.00}
     ],
-    '尼婆罗': [
-        {name:'马拉王朝', lng:85.32, lat:27.71}, 
-        {name:'乔比西诸国', lng:83.98, lat:28.21}, 
-        {name:'拜塞诸国', lng:82.00, lat:29.00}, 
-        {name:'森王朝', lng:87.28, lat:26.81}
+    'Nepal': [
+        {name:'Vương triều Malla', lng:85.32, lat:27.71}, 
+        {name:'Kiều Tỉ Tây chư quốc', lng:83.98, lat:28.21}, 
+        {name:'Các quốc gia Baisé', lng:82.00, lat:29.00}, 
+        {name:'Vương triều Sen', lng:87.28, lat:26.81}
     ],
-    '不丹': [
-        {name:'西不丹', lng:89.41, lat:27.43}, 
-        {name:'中不丹', lng:89.87, lat:27.58}, 
-        {name:'东不丹', lng:90.50, lat:27.50}
+    'Bhutan': [
+        {name:'Tây Bhutan', lng:89.41, lat:27.43}, 
+        {name:'Trung Bhutan', lng:89.87, lat:27.58}, 
+        {name:'Đông Bhutan', lng:90.50, lat:27.50}
     ],
-        '澜沧': [{name:'琅勃拉邦', lng:102.14, lat:19.89}, {name:'万象', lng:102.60, lat:17.96}, {name:'占巴塞', lng:105.88, lat:15.11}, {name:'勐潘', lng:103.20, lat:19.30}],
-    '暹罗': [{name:'北部', lng:99.00, lat:18.80}, {name:'中部核心', lng:100.50, lat:14.30}, {name:'伊善地区', lng:102.80, lat:16.00}, {name:'马来半岛', lng:99.80, lat:8.40}],
-    '郑主': [{name:'交趾', lng:105.85, lat:21.02}, {name:'清华', lng:105.60, lat:19.30}],
-    '广南': [{name:'顺化', lng:107.59, lat:16.46}, {name:'广南', lng:108.20, lat:15.90}, {name:'占城', lng:109.10, lat:12.00}, {name:'水真腊', lng:106.60, lat:10.80}],
-    '莫卧儿': [{name:'德里', lng:77.20, lat:28.60}, {name:'拉合尔', lng:74.30, lat:31.50}, {name:'喀布尔', lng:69.10, lat:34.50}, {name:'孟加拉', lng:90.40, lat:23.80}, {name:'古吉拉特', lng:72.50, lat:22.30}, {name:'摩尔瓦', lng:77.40, lat:23.20}, {name:'德干', lng:75.30, lat:19.80}, {name:'比哈尔', lng:85.10, lat:25.60}, {name:'阿杰梅尔', lng:74.60, lat:26.40}, {name:'穆尔坦', lng:71.40, lat:30.20}, {name:'阿萨姆', lng:92.90, lat:26.10}, {name:'南印度', lng:78.10, lat:10.80}],
+        'Lạn Thương': [{name:'Luông Pha Băng', lng:102.14, lat:19.89}, {name:'Viêng Chăn', lng:102.60, lat:17.96}, {name:'Chăm Pa Sắc', lng:105.88, lat:15.11}, {name:'Mãnh Phan', lng:103.20, lat:19.30}],
+    'Xiêm La': [{name:'Bắc Bộ', lng:99.00, lat:18.80}, {name:'Vùng lõi trung tâm', lng:100.50, lat:14.30}, {name:'Vùng Isan', lng:102.80, lat:16.00}, {name:'Bán đảo Mã Lai', lng:99.80, lat:8.40}],
+    'Chúa Trịnh': [{name:'Giao Chỉ', lng:105.85, lat:21.02}, {name:'Thanh Hóa', lng:105.60, lat:19.30}],
+    'Quảng Nam': [{name:'Thuận Hóa', lng:107.59, lat:16.46}, {name:'Quảng Nam', lng:108.20, lat:15.90}, {name:'Chiêm Thành', lng:109.10, lat:12.00}, {name:'Thủy Chân Lạp', lng:106.60, lat:10.80}],
+    'Mughal': [{name:'Delhi', lng:77.20, lat:28.60}, {name:'Lahore', lng:74.30, lat:31.50}, {name:'Kabul', lng:69.10, lat:34.50}, {name:'Bengal', lng:90.40, lat:23.80}, {name:'Gujarat', lng:72.50, lat:22.30}, {name:'Malwa', lng:77.40, lat:23.20}, {name:'Deccan', lng:75.30, lat:19.80}, {name:'Bihar', lng:85.10, lat:25.60}, {name:'Ajmer', lng:74.60, lat:26.40}, {name:'Multan', lng:71.40, lat:30.20}, {name:'Assam', lng:92.90, lat:26.10}, {name:'Nam Ấn Độ', lng:78.10, lat:10.80}],
 };
 
 
 const modernCityToMingFu = {
-    '南京市':'应天府','无锡市':'常州府','徐州市':'徐州','常州市':'常州府','苏州市':'苏州府',
-    '南通市':'扬州府','连云港市':'淮安府','淮安市':'淮安府','盐城市':'淮安府','扬州市':'扬州府',
-    '镇江市':'镇江府','泰州市':'扬州府','宿迁市':'淮安府','合肥市':'庐州府','芜湖市':'太平府',
-    '蚌埠市':'凤阳府','淮南市':'凤阳府','马鞍山市':'太平府','淮北市':'凤阳府','铜陵市':'池州府',
-    '安庆市':'安庆府','黄山市':'徽州府','滁州市':'滁州','阜阳市':'凤阳府','宿州市':'凤阳府',
-    '六安市':'庐州府','亳州市':'凤阳府','池州市':'池州府','宣城市':'宁国府',
-    '石家庄市':'真定府','唐山市':'永平府','秦皇岛市':'永平府','邯郸市':'广平府','邢台市':'顺德府',
-    '保定市':'保定府','张家口市':'保安州','承德市':'朵颜卫','廊坊市':'顺天府','衡水市':'河间府','沧州市':'河间府',
-    '黄石市':'武昌府','十堰市':'郧阳府','宜昌市':'荆州府','襄阳市':'襄阳府',
-    '鄂州市':'武昌府','荆门市':'承天府','孝感市':'德安府','荆州市':'荆州府','黄冈市':'黄州府',
-    '咸宁市':'武昌府','随州市':'德安府','仙桃市':'承天府','天门市':'承天府','潜江市':'承天府','神农架林区':'郧阳府',
-    '恩施土家族苗族自治州':'施州卫','长沙市':'长沙府','株洲市':'长沙府','湘潭市':'长沙府','衡阳市':'衡州府','邵阳市':'宝庆府',
-    '岳阳市':'岳州府','常德市':'常德府','益阳市':'长沙府','郴州市':'郴州','永州市':'永州府',
-    '怀化市':'辰州府','娄底市':'宝庆府','湘西土家族苗族自治州':'辰州府','张家界市':'大庸卫',
-    '济南市':'济南府','青岛市':'莱州府','淄博市':'青州府','枣庄市':'兖州府','东营市':'青州府',
-    '烟台市':'登州府','潍坊市':'青州府','济宁市':'兖州府','泰安市':'济南府','威海市':'登州府',
-    '日照市':'青州府','临沂市':'兖州府','德州市':'济南府','聊城市':'东昌府','滨州市':'济南府','菏泽市':'兖州府',
-    '郑州市':'开封府','开封市':'开封府','洛阳市':'河南府','平顶山市':'汝州','安阳市':'彰德府',
-    '鹤壁市':'卫辉府','新乡市':'卫辉府','焦作市':'怀庆府','濮阳市':'大名府','许昌市':'开封府',
-    '漯河市':'开封府','三门峡市':'河南府','南阳市':'南阳府','商丘市':'归德府','信阳市':'汝宁府',
-    '周口市':'开封府','驻马店市':'汝宁府','济源市':'怀庆府',
-    '西安市':'西安府','铜川市':'西安府','宝鸡市':'凤翔府','咸阳市':'西安府','渭南市':'西安府',
-    '延安市':'延安府','汉中市':'汉中府','榆林市':'延安府','安康市':'兴安州','商洛市':'西安府',
-    '兰州市':'临洮府','天水市':'巩昌府','平凉市':'平凉府','庆阳市':'庆阳府','定西市':'巩昌府',
-    '陇南市':'巩昌府','临夏回族自治州':'临洮府','甘南藏族自治州':'洮州卫','嘉峪关市':'肃州卫',
-    '金昌市':'凉州卫','白银市':'兰州','武威市':'凉州卫','张掖市':'甘州卫','酒泉市':'肃州卫',
-    '银川市':'宁夏卫','石嘴山市':'宁夏卫','吴忠市':'宁夏卫','固原市':'平凉府','中卫市':'宁夏卫',
-    '成都市':'成都府','自贡市':'叙州府','泸州市':'泸州','德阳市':'成都府','绵阳市':'成都府',
-    '广元市':'保宁府','遂宁市':'潼川州','内江市':'成都府','乐山市':'嘉定州','南充市':'顺庆府',
-    '眉山市':'眉州','宜宾市':'叙州府','广安市':'顺庆府','达州市':'夔州府','雅安市':'雅州',
-    '巴中市':'保宁府','资阳市':'成都府','阿坝藏族羌族自治州':'松潘卫','甘孜藏族自治州':'朵甘(四川)','凉山彝族自治州':'建昌卫',
-    '攀枝花市':'建昌卫', 
-    '南昌市':'南昌府','景德镇市':'饶州府','萍乡市':'袁州府','九江市':'九江府',
-    '新余市':'临江府','鹰潭市':'广信府','赣州市':'赣州府','吉安市':'吉安府','宜春市':'袁州府',
-    '抚州市':'抚州府','上饶市':'广信府',
-    '杭州市':'杭州府','宁波市':'宁波府','温州市':'温州府','嘉兴市':'嘉兴府','湖州市':'湖州府',
-    '绍兴市':'绍兴府','金华市':'金华府','衢州市':'衢州府','舟山市':'宁波府','台州市':'台州府','丽水市':'处州府',
-    '福州市':'福州府','厦门市':'泉州府','莆田市':'兴化府','三明市':'延平府','泉州市':'泉州府',
-    '漳州市':'漳州府','南平市':'建宁府','龙岩市':'汀州府','宁德市':'福宁州',
-    '广州市':'广州府','韶关市':'韶州府','深圳市':'广州府','珠海市':'广州府','汕头市':'潮州府',
-    '佛山市':'广州府','江门市':'广州府','湛江市':'高州府','茂名市':'高州府','肇庆市':'肇庆府',
-    '惠州市':'惠州府','梅州市':'潮州府','汕尾市':'惠州府','河源市':'惠州府','阳江市':'肇庆府',
-    '清远市':'广州府','东莞市':'广州府','中山市':'广州府','潮州市':'潮州府','揭阳市':'潮州府','云浮市':'罗定州',
-    '南宁市':'南宁府','柳州市':'柳州府','桂林市':'桂林府','梧州市':'梧州府','北海市':'廉州府',
-    '防城港市':'廉州府','钦州市':'廉州府','贵港市':'浔州府','玉林市':'梧州府','百色市':'泗城州', 
-    '贺州市':'平乐府','河池市':'庆远府','来宾市':'柳州府','崇左市':'南宁府',
-    '昆明市':'云南府','曲靖市':'曲靖府','玉溪市':'澂江府','保山市':'永昌府','昭通市':'乌蒙府',
-    '丽江市':'丽江府','普洱市':'车里宣慰司','临沧市':'顺宁府','文山壮族苗族自治州':'广南府',
-    '红河哈尼族彝族自治州':'临安府','西双版纳傣族自治州':'车里宣慰司','楚雄彝族自治州':'楚雄府',
-    '大理白族自治州':'大理府','德宏傣族景颇族自治州':'永昌府','怒江傈僳族自治州':'永昌府','迪庆藏族自治州':'丽江府',
-    '贵阳市':'贵阳府','六盘水市':'安顺府','遵义市':'遵义府','安顺市':'安顺府','毕节市':'水西宣慰司',
-    '铜仁市':'思南府','黔西南布依族苗族自治州':'普安州','黔东南苗族侗族自治州':'黎平府','黔南布依族苗族自治州':'都匀府',
-    '太原市':'太原府','大同市':'大同府','阳泉市':'太原府','长治市':'潞安府','晋城市':'泽州',
-    '朔州市':'大同府','晋中市':'太原府','运城市':'平阳府','忻州市':'太原府','临汾市':'平阳府','吕梁市':'汾州府',
-    '沈阳市':'沈阳中卫','大连市':'金州卫','鞍山市':'辽阳卫','抚顺市':'抚顺千户所',
-    '本溪市':'辽阳卫','丹东市':'镇江堡','锦州市':'广宁中屯卫','营口市':'盖州卫',
-    '阜新市':'广宁后屯卫','辽阳市':'辽阳卫','盘锦市':'广宁卫','铁岭市':'铁岭卫',
-    '朝阳市':'营州卫','葫芦岛市':'宁远卫',
-    '长春市':'伊通堡', '吉林市':'乌拉城', '四平市':'叶赫城', '辽源市':'哈达城',
-    '通化市':'赫图阿拉', '白山市':'长白山部', '松原市':'科尔沁部', '白城市':'泰宁卫', '延边朝鲜族自治州':'瓦尔喀部',
-    '哈尔滨市':'阿勒楚喀', '牡丹江市':'宁古塔', '齐齐哈尔市':'索伦部',
-    '大庆市':'杜尔伯特部', '绥化市':'呼兰部', '佳木斯市':'忽尔哈部',
-    '鸡西市':'穆棱部', '鹤岗市':'赫哲部', '双鸭山市':'使犬部',
-    '七台河市':'库尔喀部', '伊春市':'萨哈连部', '黑河市':'飞牙喀部',
-    '大兴安岭地区':'使鹿部', '呼伦贝尔市':'达斡尔部', '兴安盟':'福余卫',
-    '呼和浩特市':'归化城', '包头市':'土默特部', '鄂尔多斯市':'鄂尔多斯部', '巴彦淖尔市':'乌拉特部',
-    '乌兰察布市':'察哈尔部', '锡林郭勒盟':'苏尼特部',
-    '赤峰市':'朵颜卫', '通辽市':'泰宁卫', '阿拉善盟':'宁夏卫', '乌海市':'宁夏卫',
-    '乌鲁木齐市':'瓦剌', '克拉玛依市':'瓦剌', '吐鲁番市':'吐鲁番', '哈密市':'哈密卫', '昌吉回族自治州':'瓦剌', '博尔塔拉蒙古自治州':'瓦剌', '巴音郭楞蒙古自治州':'叶尔羌', '阿克苏地区':'叶尔羌', '克孜勒苏柯尔克孜自治州':'叶尔羌', '喀什地区':'叶尔羌', '和田地区':'叶尔羌', '伊犁哈萨克自治州':'瓦剌', '塔城地区':'瓦剌', '阿勒泰地区':'瓦剌',
-    '拉萨市':'乌思藏', '日喀则市':'藏巴汗', '昌都市':'朵甘', '林芝市':'乌思藏', '山南市':'乌思藏', '那曲市':'乌思藏', '阿里地区':'古格',
-    '西宁市':'西宁卫', '海东市':'西宁卫', '海北藏族自治州':'和硕特部', '黄南藏族自治州':'必里卫', '海南藏族自治州':'必里卫', '果洛藏族自治州':'朵甘(青海)', '玉树藏族自治州':'朵甘(青海)', '海西蒙古族藏族自治州':'和硕特部', '唐古拉山镇':'朵甘(青海)',
-    '台北市':'鸡笼(西葡)', '臺北市':'鸡笼(西葡)', '新北市':'鸡笼(西葡)', '基隆市':'鸡笼(西葡)', '桃园市':'鸡笼(西葡)', '桃園市':'鸡笼(西葡)', '宜兰县':'鸡笼(西葡)', '宜蘭縣':'鸡笼(西葡)',
-    '台南市':'大员(荷兰)', '臺南市':'大员(荷兰)', '高雄市':'大员(荷兰)', '嘉义市':'大员(荷兰)', '嘉義市':'大员(荷兰)', '嘉义县':'大员(荷兰)', '嘉義縣':'大员(荷兰)', '屏东县':'大员(荷兰)', '屏東縣':'大员(荷兰)',
-    '澎湖县':'澎湖巡检司', '澎湖縣':'澎湖巡检司',
-    '台中市':'东番诸部', '臺中市':'东番诸部', '新竹市':'东番诸部', '新竹县':'东番诸部', '新竹縣':'东番诸部', '苗栗县':'东番诸部', '苗栗縣':'东番诸部', '彰化县':'东番诸部', '彰化縣':'东番诸部', '南投县':'东番诸部', '南投縣':'东番诸部', '云林县':'东番诸部', '雲林縣':'东番诸部', '花莲县':'东番诸部', '花蓮縣':'东番诸部', '台东县':'东番诸部', '臺東縣':'东番诸部'
+    'Thành phố Nam Kinh':'Ứng Thiên Phủ','Thành phố Vô Tích':'Thường Châu Phủ','Thành phố Từ Châu':'Từ Châu','Thành phố Thường Châu':'Thường Châu Phủ','Thành phố Tô Châu':'Tô Châu Phủ',
+    'Thành phố Nam Thông':'Dương Châu Phủ','Thành phố Liên Vân Cảng':'Hoài An Phủ','Thành phố Hoài An':'Hoài An Phủ','Thành phố Diêm Thành':'Hoài An Phủ','Thành phố Dương Châu':'Dương Châu Phủ',
+    'Thành phố Trấn Giang':'Trấn Giang Phủ','Thành phố Thái Châu':'Dương Châu Phủ','Thành phố Túc Thiên':'Hoài An Phủ','Thành phố Hợp Phì':'Lư Châu Phủ','Thành phố Vu Hồ':'Thái Bình Phủ',
+    'Thành phố Bạng Phụ':'Phượng Dương Phủ','Thành phố Hoài Nam':'Phượng Dương Phủ','Thành phố Mã An Sơn':'Thái Bình Phủ','Thành phố Hoài Bắc':'Phượng Dương Phủ','Thành phố Đồng Lăng':'Trì Châu Phủ',
+    'Thành phố An Khánh':'An Khánh Phủ','Thành phố Hoàng Sơn':'Huy Châu Phủ','Thành phố Trừ Châu':'Trừ Châu','Thành phố Phụ Dương':'Phượng Dương Phủ','Thành phố Túc Châu':'Phượng Dương Phủ',
+    'Thành phố Lục An':'Lư Châu Phủ','Thành phố Bạc Châu':'Phượng Dương Phủ','Thành phố Trì Châu':'Trì Châu Phủ','Thành phố Tuyên Thành':'Ninh Quốc Phủ',
+    'Thành phố Thạch Gia Trang':'Chân Định Phủ','Thành phố Đường Sơn':'Vĩnh Bình Phủ','Thành phố Tần Hoàng Đảo':'Vĩnh Bình Phủ','Thành phố Hàm Đan':'Quảng Bình Phủ','Thành phố Hình Đài':'Thuận Đức Phủ',
+    'Thành phố Bảo Định':'Bảo Định Phủ','Thành phố Trương Gia Khẩu':'Bảo An Châu','Thành phố Thừa Đức':'Doyan Vệ','Thành phố Lang Phường':'Thuận Thiên Phủ','Thành phố Hành Thủy':'Hà Gian Phủ','Thành phố Thương Châu':'Hà Gian Phủ',
+    'Thành phố Hoàng Thạch':'Vũ Xương Phủ','Thành phố Thập Yển':'Vẫn Dương Phủ','Thành phố Nghi Xương':'Kinh Châu Phủ','Thành phố Tương Dương':'Tương Dương Phủ',
+    'Thành phố Ngạc Châu':'Vũ Xương Phủ','Thành phố Kinh Môn':'Thừa Thiên Phủ','Thành phố Hiếu Cảm':'Đức An Phủ','Thành phố Kinh Châu':'Kinh Châu Phủ','Thành phố Hoàng Cương':'Hoàng Châu Phủ',
+    'Thành phố Hàm Ninh':'Vũ Xương Phủ','Thành phố Tùy Châu':'Đức An Phủ','Thành phố Tiên Đào':'Thừa Thiên Phủ','Thành phố Thiên Môn':'Thừa Thiên Phủ','Thành phố Tiềm Giang':'Thừa Thiên Phủ','Lâm khu Thần Nông Giá':'Vẫn Dương Phủ',
+    'Châu tự trị dân tộc Thổ Gia, Miêu Ân Thi':'Thi Châu Vệ','Thành phố Trường Sa':'Trường Sa Phủ','Thành phố Chu Châu':'Trường Sa Phủ','Thành phố Tương Đàm':'Trường Sa Phủ','Thành phố Hành Dương':'Hành Châu Phủ','Thành phố Thiệu Dương':'Bảo Khánh Phủ',
+    'Thành phố Nhạc Dương':'Nhạc Châu Phủ','Thành phố Thường Đức':'Thường Đức Phủ','Thành phố Ích Dương':'Trường Sa Phủ','Thành phố Sâm Châu':'Sâm Châu','Thành phố Vĩnh Châu':'Vĩnh Châu Phủ',
+    'Thành phố Hoài Hóa':'Thần Châu Phủ','Thành phố Lâu Để':'Bảo Khánh Phủ','Châu tự trị dân tộc Thổ Gia, Miêu Tương Tây':'Thần Châu Phủ','Thành phố Trương Gia Giới':'Đại Dung Vệ',
+    'Thành phố Tế Nam':'Tế Nam Phủ','Thành phố Thanh Đảo':'Lai Châu Phủ','Thành phố Truy Bác':'Thanh Châu Phủ','Thành phố Tảo Trang':'Duyện Châu Phủ','Thành phố Đông Dinh':'Thanh Châu Phủ',
+    'Thành phố Yên Đài':'Đăng Châu Phủ','Thành phố Duy Phường':'Thanh Châu Phủ','Thành phố Tế Ninh':'Duyện Châu Phủ','Thành phố Thái An':'Tế Nam Phủ','Thành phố Uy Hải':'Đăng Châu Phủ',
+    'Thành phố Nhật Chiếu':'Thanh Châu Phủ','Thành phố Lâm Nghi':'Duyện Châu Phủ','Thành phố Đức Châu':'Tế Nam Phủ','Thành phố Liêu Thành':'Đông Xương Phủ','Thành phố Tân Châu':'Tế Nam Phủ','Thành phố Hà Trạch':'Duyện Châu Phủ',
+    'Thành phố Trịnh Châu':'Khai Phong Phủ','Thành phố Khai Phong':'Khai Phong Phủ','Thành phố Lạc Dương':'Hà Nam Phủ','Thành phố Bình Đỉnh Sơn':'Nhữ Châu','Thành phố An Dương':'Chương Đức Phủ',
+    'Thành phố Hạc Bích':'Vệ Huy Phủ','Thành phố Tân Hương':'Vệ Huy Phủ','Thành phố Tiêu Tác':'Hoài Khánh Phủ','Thành phố Bộc Dương':'Đại Danh Phủ','Thành phố Hứa Xương':'Khai Phong Phủ',
+    'Thành phố Tháp Hà':'Khai Phong Phủ','Thành phố Tam Môn Hiệp':'Hà Nam Phủ','Thành phố Nam Dương':'Nam Dương Phủ','Thành phố Thương Khâu':'Quy Đức Phủ','Thành phố Tín Dương':'Nhữ Ninh Phủ',
+    'Thành phố Chu Khẩu':'Khai Phong Phủ','Thành phố Trú Mã Điếm':'Nhữ Ninh Phủ','Thành phố Tế Nguyên':'Hoài Khánh Phủ',
+    'Thành phố Tây An':'Tây An Phủ','Thành phố Đồng Xuyên':'Tây An Phủ','Thành phố Bảo Kê':'Phượng Tường Phủ','Thành phố Hàm Dương':'Tây An Phủ','Thành phố Vị Nam':'Tây An Phủ',
+    'Thành phố Diên An':'Diên An Phủ','Thành phố Hán Trung':'Hán Trung Phủ','Thành phố Du Lâm':'Diên An Phủ','Thành phố An Khang':'Hưng Yên Châu','Thành phố Thương Lạc':'Tây An Phủ',
+    'Thành phố Lan Châu':'Lâm Thao Phủ','Thành phố Thiên Thủy':'Củng Xương Phủ','Thành phố Bình Lương':'Bình Lương Phủ','Thành phố Khánh Dương':'Khánh Dương Phủ','Thành phố Định Tây':'Củng Xương Phủ',
+    'Thành phố Lũng Nam':'Củng Xương phủ','Châu tự trị dân tộc Hồi Lâm Hạ':'Lâm Thao phủ','Châu tự trị dân tộc Tạng Cam Nam':'Thao Châu vệ','Thành phố Gia Dục Quan':'Túc Châu vệ',
+    'Thành phố Kim Xương':'Lương Châu vệ','Thành phố Bạch Ngân':'Lan Châu','Thành phố Vũ Uy':'Lương Châu vệ','Thành phố Trương Dịch':'Cam Châu vệ','Thành phố Tửu Tuyền':'Túc Châu vệ',
+    'Thành phố Ngân Xuyên':'Ninh Hạ Vệ','Thành phố Thạch Chủy Sơn':'Ninh Hạ Vệ','Thành phố Ngô Trung':'Ninh Hạ Vệ','Thành phố Cố Nguyên':'Bình Lương phủ','Thành phố Trung Vệ':'Ninh Hạ Vệ',
+    'Thành phố Thành Đô':'Thành Đô phủ','Thành phố Tự Cống':'Tự Châu phủ','Thành phố Lư Châu':'Lô Châu','Thành phố Đức Dương':'Thành Đô phủ','Thành phố Miên Dương':'Thành Đô phủ',
+    'Thành phố Quảng Nguyên':'Bảo Ninh phủ','Thành phố Toại Ninh':'Đồng Xuyên châu','Thành phố Nội Giang':'Thành Đô phủ','Thành phố Lạc Sơn':'Gia Định châu','Thành phố Nam Sung':'Thuận Khánh phủ',
+    'Thành phố Mi Sơn':'Mi Châu','Thành phố Nghi Tân':'Tự Châu phủ','Thành phố Quảng An':'Thuận Khánh phủ','Thành phố Đạt Châu':'Quỳ Châu phủ','Thành phố Nhã An':'Nhã Châu',
+    'Thành phố Ba Trung':'Bảo Ninh phủ','Thành phố Tư Dương':'Thành Đô phủ','Châu tự trị dân tộc Tạng, Khương A Bá':'Tùng Phan vệ','Châu tự trị dân tộc Tạng Cam Tư':'Mdo Kham(Tứ Xuyên)','Châu tự trị dân tộc Di Lương Sơn':'Kiến Xương vệ',
+    'Thành phố Phàn Chi Hoa':'Kiến Xương vệ', 
+    'Thành phố Nam Xương':'Nam Xương phủ','Thành phố Cảnh Đức Trấn':'Nhiêu Châu phủ','Thành phố Bằng Hương':'Viên Châu phủ','Thành phố Cửu Giang':'Cửu Giang phủ',
+    'Thành phố Tân Dư':'Lâm Giang phủ','Thành phố Ưng Đàm':'Quảng Tín phủ','Thành phố Cám Châu':'Cám Châu phủ','Thành phố Cát An':'Cát An phủ','Thành phố Nghi Xuân':'Viên Châu phủ',
+    'Thành phố Phủ Châu':'Phủ Châu phủ','Thành phố Thượng Nhiêu':'Quảng Tín phủ',
+    'Thành phố Hàng Châu':'Hàng Châu phủ','Thành phố Ninh Ba':'Ninh Ba phủ','Thành phố Ôn Châu':'Ôn Châu phủ','Thành phố Gia Hưng':'Gia Hưng phủ','Thành phố Hồ Châu':'Hồ Châu phủ',
+    'Thành phố Thiệu Hưng':'Thiệu Hưng phủ','Thành phố Kim Hoa':'Kim Hoa phủ','Thành phố Cù Châu':'Cù Châu phủ','Thành phố Chu Sơn':'Ninh Ba phủ','Thành phố Thai Châu':'Thai Châu phủ','Thành phố Lệ Thủy':'Xử Châu phủ',
+    'Thành phố Phúc Châu':'Phúc Châu phủ','Thành phố Hạ Môn':'Tuyền Châu phủ','Thành phố Bồ Điền':'Hưng Hóa phủ','Thành phố Tam Minh':'Diên Bình phủ','Thành phố Tuyền Châu':'Tuyền Châu phủ',
+    'Thành phố Chương Châu':'Chương Châu phủ','Thành phố Nam Bình':'Kiến Ninh phủ','Thành phố Long Nham':'Đinh Châu phủ','Thành phố Ninh Đức':'Phúc Ninh châu',
+    'Thành phố Quảng Châu':'Quảng Châu phủ','Thành phố Thiều Quan':'Thiều Châu phủ','Thành phố Thâm Quyến':'Quảng Châu phủ','Thành phố Châu Hải':'Quảng Châu phủ','Thành phố Sán Đầu':'Triều Châu phủ',
+    'Thành phố Phật Sơn':'Quảng Châu phủ','Thành phố Giang Môn':'Quảng Châu phủ','Thành phố Trạm Giang':'Cao Châu phủ','Thành phố Mậu Danh':'Cao Châu phủ','Thành phố Triệu Khánh':'Triệu Khánh phủ',
+    'Thành phố Huệ Châu':'Huệ Châu phủ','Thành phố Mai Châu':'Triều Châu phủ','Thành phố Sán Vĩ':'Huệ Châu phủ','Thành phố Hà Nguyên':'Huệ Châu phủ','Thành phố Dương Giang':'Triệu Khánh phủ',
+    'Thành phố Thanh Viễn':'Quảng Châu phủ','Thành phố Đông Quản':'Quảng Châu phủ','Thành phố Trung Sơn':'Quảng Châu phủ','Thành phố Triều Châu':'Triều Châu phủ','Thành phố Yết Dương':'Triều Châu phủ','Thành phố Vân Phù':'La Định châu',
+    'Thành phố Nam Ninh':'Nam Ninh phủ','Thành phố Liễu Châu':'Liễu Châu phủ','Thành phố Quế Lâm':'Quế Lâm phủ','Thành phố Ngô Châu':'Ngô Châu phủ','Thành phố Bắc Hải':'Liêm Châu phủ',
+    'Thành phố Phòng Thành Cảng':'Liêm Châu phủ','Thành phố Khâm Châu':'Liêm Châu phủ','Thành phố Quý Cảng':'Tầm Châu phủ','Thành phố Ngọc Lâm':'Ngô Châu phủ','Thành phố Bách Sắc':'Tứ Thành châu', 
+    'Thành phố Hạ Châu':'Bình Lạc phủ','Thành phố Hà Trì':'Khánh Viễn phủ','Thành phố Lai Tân':'Liễu Châu phủ','Thành phố Sùng Tả':'Nam Ninh phủ',
+    'Thành phố Côn Minh':'Vân Nam phủ','Thành phố Khúc Tĩnh':'Khúc Tĩnh phủ','Thành phố Ngọc Khê':'Trừng Giang phủ','Thành phố Bảo Sơn':'Vĩnh Xương phủ','Thành phố Chiêu Thông':'Ô Mông phủ',
+    'Thành phố Lệ Giang':'Lệ Giang phủ','Thành phố Phổ Nhĩ':'Xa Lý Tuyên úy ty','Thành phố Lâm Thương':'Thuận Ninh phủ','Châu tự trị dân tộc Choang, Miêu Văn Sơn':'Quảng Nam phủ',
+    'Châu tự trị dân tộc Cáp Nê, Di Hồng Hà':'Lâm An phủ','Châu tự trị dân tộc Thái Tây Song Bản Nạp':'Xa Lý Tuyên úy ty','Châu tự trị dân tộc Di Sở Hùng':'Sở Hùng phủ',
+    'Châu tự trị dân tộc Bạch Đại Lý':'Đại Lý phủ','Châu tự trị dân tộc Thái, Cảnh Pha Đức Hoành':'Vĩnh Xương phủ','Châu tự trị dân tộc Lật Túc Nộ Giang':'Vĩnh Xương phủ','Châu tự trị dân tộc Tạng Địch Khánh':'Lệ Giang phủ',
+    'Thành phố Quý Dương':'Quý Dương phủ','Thành phố Lục Bàn Thủy':'An Thuận phủ','Thành phố Tuân Nghĩa':'Tuân Nghĩa phủ','Thành phố An Thuận':'An Thuận phủ','Thành phố Tất Tiết':'Thủy Tây Tuyên úy ty',
+    'Thành phố Đồng Nhân':'Tư Nam phủ','Châu tự trị dân tộc Bố Y, Miêu Kiềm Tây Nam':'Phổ An châu','Châu tự trị dân tộc Miêu, Đồng Kiềm Đông Nam':'Lê Bình phủ','Châu tự trị dân tộc Bố Y, Miêu Kiềm Nam':'Đô Quân phủ',
+    'Thành phố Thái Nguyên':'Thái Nguyên phủ','Thành phố Đại Đồng':'Đại Đồng phủ','Thành phố Dương Tuyền':'Thái Nguyên phủ','Thành phố Trường Trị':'Lộ An phủ','Thành phố Tấn Thành':'Trạch Châu',
+    'Thành phố Sóc Châu':'Đại Đồng phủ','Thành phố Tấn Trung':'Thái Nguyên phủ','Thành phố Vận Thành':'Bình Dương phủ','Thành phố Hãn Châu':'Thái Nguyên phủ','Thành phố Lâm Phần':'Bình Dương phủ','Thành phố Lữ Lương':'Phần Châu phủ',
+    'Thành phố Thẩm Dương':'Thẩm Dương Trung Vệ','Thành phố Đại Liên':'Kim Châu vệ','Thành phố An Sơn':'Liêu Dương vệ','Thành phố Phủ Thuận':'Phủ Thuận Thiên hộ sở',
+    'Thành phố Bản Khê':'Liêu Dương vệ','Thành phố Đan Đông':'Trấn Giang bảo','Thành phố Cẩm Châu':'Quảng Ninh Trung đồn vệ','Thành phố Dinh Khẩu':'Cái Châu vệ',
+    'Thành phố Phụ Tân':'Quảng Ninh Hậu đồn vệ','Thành phố Liêu Dương':'Liêu Dương vệ','Thành phố Bàn Cẩm':'Quảng Ninh vệ','Thành phố Thiết Lĩnh':'Thiết Lĩnh vệ',
+    'Thành phố Triều Dương':'Doanh Châu vệ','Thành phố Hồ Lô Đảo':'Ninh Viễn vệ',
+    'Thành phố Trường Xuân':'Y Thông bảo', 'Thành phố Cát Lâm':'Ô Lạp thành', 'Thành phố Tứ Bình':'Diệp Hách thành', 'Thành phố Liêu Nguyên':'Haa Đạt thành',
+    'Thành phố Thông Hóa':'Hách Đồ A Lạp', 'Thành phố Bạch Sơn':'Bộ Trường Bạch Sơn', 'Thành phố Tùng Nguyên':'Bộ Khoa Nhĩ Thấm', 'Thành phố Bạch Thành':'Thái Ninh vệ', 'Châu tự trị dân tộc Triều Tiên Diên Biên':'Bộ Ngõa Nhĩ Khách',
+    'Thành phố Cáp Nhĩ Tân':'A Lặc Sở Khách', 'Thành phố Mẫu Đơn Giang':'Ninh Cổ Tháp', 'Thành phố Tề Tề Cáp Nhĩ':'Tác Luân bộ',
+    'Thành phố Đại Khánh':'Đỗ Nhĩ Bá Đặc bộ', 'Thành phố Tuy Hóa':'Hô Lan bộ', 'Thành phố Giai Mộc Tư':'Bộ Hốt Nhĩ Haa',
+    'Thành phố Kê Tây':'Mục Lăng bộ', 'Thành phố Hạc Cương':'Hách Triết bộ', 'Thành phố Song Áp Sơn':'Sử Khuyển bộ',
+    'Thành phố Thất Đài Hà':'Bộ Khố Nhĩ Khách', 'Thành phố Y Xuân':'Bộ Tát Haa Liên', 'Thành phố Hắc Hà':'Bộ Phi Nha Khách',
+    'Địa khu Đại Hưng An Lĩnh':'Sử Lộc bộ', 'Thành phố Hô Luân Bối Nhĩ':'Bộ Đạt Oát Nhĩ', 'Minh Hưng An':'Phúc Dư vệ',
+    'Thành phố Hô Hòa Hạo Đặc':'Quy Hóa thành', 'Thành phố Bao Đầu':'Bộ Thổ Mặc Đặc', 'Thành phố Ngạc Nhĩ Đa Tư':'Ngạc Nhĩ Đa Tư bộ', 'Thành phố Ba Ngạn Náo Nhĩ':'Bộ Ô Lạp Đặc',
+    'Thành phố Ô Lan Sát Bố':'Bộ Sát Cáp Nhĩ', 'Minh Tích Lâm Quách Lặc':'Bộ Tô Ni Đặc',
+    'Thành phố Xích Phong':'Doyan vệ', 'Thành phố Thông Liêu':'Thái Ninh vệ', 'Minh A Lạp Thiện':'Ninh Hạ Vệ', 'Thành phố Ô Hải':'Ninh Hạ Vệ',
+    'Thành phố Ô Lỗ Mộc Tề':'Oirat', 'Thành phố Khắc Lạp Mã Y':'Oirat', 'Thành phố Thổ Lỗ Phồn':'Thổ Lỗ Phiên', 'Thành phố Cáp Mật':'Haa Mật vệ', 'Châu tự trị dân tộc Hồi Xương Cát':'Oirat', 'Châu tự trị dân tộc Mông Cổ Bác Nhĩ Tháp Lạp':'Oirat', 'Châu tự trị dân tộc Mông Cổ Ba Âm Quách Lăng':'Yarkent', 'Địa khu A Khắc Tô':'Yarkent', 'Châu tự trị dân tộc Kyrgyz Khắc Tư Lặc Tô':'Yarkent', 'Địa khu Khách Thập':'Yarkent', 'Địa khu Hòa Điền':'Yarkent', 'Châu tự trị dân tộc Kazakh Y Lê':'Oirat', 'Địa khu Tháp Thành':'Oirat', 'Địa khu A勒 Thái':'Oirat',
+    'Thành phố Lhasa (Lạp Tát)':'Ô Tư Tạng', 'Thành phố Nhật Khách Tắc':'Tạng Ba Hãn', 'Thành phố Xương Đô':'Mdo Kham', 'Thành phố Lâm Chi':'Ô Tư Tạng', 'Thành phố Sơn Nam':'Ô Tư Tạng', 'Thành phố Na Khúc':'Ô Tư Tạng', 'Địa khu A Lý':'Cổ Cách',
+    'Thành phố Tây Ninh':'Tây Ninh Vệ', 'Thành phố Hải Đông':'Tây Ninh Vệ', 'Châu tự trị dân tộc Tạng Hải Bắc':'Bộ Hòa Thạc Đặc', 'Châu tự trị dân tộc Tạng Hoàng Nam':'Tất Lý Vệ', 'Châu tự trị dân tộc Tạng Hải Nam':'Tất Lý Vệ', 'Châu tự trị dân tộc Tạng Quả Lạc':'Mdo Kham(Thanh Hải)', 'Châu tự trị dân tộc Tạng Ngọc Thụ':'Mdo Kham(Thanh Hải)', 'Châu tự trị dân tộc Mông Cổ, Tạng Hải Tây':'Bộ Hòa Thạc Đặc', 'Thị trấn Đường Cổ Lạp Sơn':'Mdo Kham(Thanh Hải)',
+    'Thành phố Đài Bắc':'Kê Lung(Tây Bồ)', 'Thành phố Đài Bắc':'Kê Lung(Tây Bồ)', 'Thành phố Tân Bắc':'Kê Lung(Tây Bồ)', 'Thành phố Cơ Long':'Kê Lung(Tây Bồ)', 'Thành phố Đào Viên':'Kê Lung(Tây Bồ)', 'Thành phố Đào Viên':'Kê Lung(Tây Bồ)', 'Huyện Nghi Lan':'Kê Lung(Tây Bồ)', 'Huyện Nghi Lan':'Kê Lung(Tây Bồ)',
+    'Thành phố Đài Nam':'Đại Viên(Hà Lan)', 'Thành phố Đài Nam':'Đại Viên(Hà Lan)', 'Thành phố Cao Hùng':'Đại Viên(Hà Lan)', 'Thành phố Gia Nghĩa':'Đại Viên(Hà Lan)', 'Thành phố Gia Nghĩa':'Đại Viên(Hà Lan)', 'Huyện Gia Nghĩa':'Đại Viên(Hà Lan)', 'Huyện Gia Nghĩa':'Đại Viên(Hà Lan)', 'Huyện Bình Đông':'Đại Viên(Hà Lan)', 'Huyện Bình Đông':'Đại Viên(Hà Lan)',
+    'Huyện Bành Hồ':'Bành Hồ Tuần kiểm ty', 'Huyện Bành Hồ':'Bành Hồ Tuần kiểm ty',
+    'Thành phố Đài Trung':'Các bộ Đông Phiên', 'Thành phố Đài Trung':'Các bộ Đông Phiên', 'Thành phố Tân Trúc':'Các bộ Đông Phiên', 'Huyện Tân Trúc':'Các bộ Đông Phiên', 'Huyện Tân Trúc':'Các bộ Đông Phiên', 'Huyện Miêu Lật':'Các bộ Đông Phiên', 'Huyện Miêu Lật':'Các bộ Đông Phiên', 'Huyện Chương Hóa':'Các bộ Đông Phiên', 'Huyện Chương Hóa':'Các bộ Đông Phiên', 'Huyện Nam Đầu':'Các bộ Đông Phiên', 'Huyện Nam Đầu':'Các bộ Đông Phiên', 'Huyện Vân Lâm':'Các bộ Đông Phiên', 'Huyện Vân Lâm':'Các bộ Đông Phiên', 'Huyện Hoa Liên':'Các bộ Đông Phiên', 'Huyện Hoa Liên':'Các bộ Đông Phiên', 'Huyện Đài Đông':'Các bộ Đông Phiên', 'Huyện Đài Đông':'Các bộ Đông Phiên'
 };
 
 
 
 // ==========================================
-// 地级市精细切分映射 (解决现代一个市包含明代多个府的情况)
+// Mapping phân chia chi tiết thành phố cấp địa khu (Giải quyết trường hợp một thành phố hiện đại bao gồm nhiều phủ thời Minh)
 // ==========================================
 const citySplitConfig = {
-    '北京市': { adcode: '110000', mapping: {'延庆区':'延庆州', 'default':'顺天府'} },
-    '上海市': { adcode: '310000', mapping: {'嘉定区':'苏州府', '宝山区':'苏州府', '崇明区':'苏州府', 'default':'松江府'} },
-    '宿州市': { adcode: '341300', mapping: {'萧县':'徐州', '砀山县':'徐州', 'default':'凤阳府'} },
-    '淮安市': { adcode: '320800', mapping: {'盱眙县':'凤阳府', 'default':'淮安府'} },
-    '宿迁市': { adcode: '321300', mapping: {'泗洪县':'凤阳府', 'default':'淮安府'} },
-    '海西蒙古族藏族自治州': { adcode: '632800', mapping: {'唐古拉山镇':'朵甘(青海)', 'default':'和硕特部'} },
-    '武汉市': { adcode: '420100', mapping: {'武昌区':'武昌府','青山区':'武昌府','洪山区':'武昌府','江夏区':'武昌府','汉阳区':'汉阳府','蔡甸区':'汉阳府','东西湖区':'汉阳府','汉南区':'汉阳府','江岸区':'汉阳府','江汉区':'汉阳府','硚口区':'汉阳府','黄陂区':'黄州府','新洲区':'黄州府', 'default':'武昌府'} },
-    '重庆市': { adcode: '500000', mapping: {'万州区':'夔州府','奉节县':'夔州府','巫山县':'夔州府','巫溪县':'夔州府','云阳县':'夔州府','开州区':'夔州府','城口县':'夔州府', 'default': '重庆府'} },
-    '九江市': { adcode: '360400', mapping: {'庐山市':'南康府', '都昌县':'南康府', '永修县':'南康府', 'default':'九江府'} },
-    '宜春市': { adcode: '360900', mapping: {'高安市':'瑞州府', '上高县':'瑞州府', '宜丰县':'瑞州府', '樟树市':'临江府', '丰城市':'南昌府', '靖安县':'南昌府', '奉新县':'南昌府', '铜鼓县':'南昌府', 'default':'袁州府'} },
-    '新余市': { adcode: '360500', mapping: {'分宜县':'袁州府', 'default':'临江府'} },
-    '赣州市': { adcode: '360700', mapping: {'大余县':'南安府', '南康区':'南安府', '上犹县':'南安府', '崇义县':'南安府', 'default':'赣州府'} },
-    '杭州市': { adcode: '330100', mapping: {'建德市':'严州府', '淳安县':'严州府', '桐庐县':'严州府', 'default':'杭州府'} },
-    '南昌市': { adcode: '360100', mapping: {'安义县':'南康府', 'default':'南昌府'} },
-    '鹰潭市': { adcode: '360600', mapping: {'余江区':'饶州府', 'default':'广信府'} },
-    '抚州市': { adcode: '361000', mapping: {'南城县':'建昌府', '黎川县':'建昌府', '南丰县':'建昌府', '资溪县':'建昌府', '广昌县':'建昌府', 'default':'抚州府'} },
-    '韶关市': { adcode: '440200', mapping: {'南雄市':'南雄府', '始兴县':'南雄府', 'default':'韶州府'} },
-    '湛江市': { adcode: '440800', mapping: {'雷州市':'雷州府', '徐闻县':'雷州府', '遂溪县':'雷州府', '麻章区':'雷州府', '赤坎区':'雷州府', '霞山区':'雷州府', 'default':'高州府'} },
-    '南平市': { adcode: '350700', mapping: {'邵武市':'邵武府', '光泽县':'邵武府', '延平区':'延平府', '顺昌县':'延平府', 'default':'建宁府'} },
-    '三明市': { adcode: '350400', mapping: {'泰宁县':'邵武府', '建宁县':'邵武府', '宁化县':'汀州府', '清流县':'汀州府', '明溪县':'汀州府', 'default':'延平府'} },
-    '宁德市': { adcode: '350900', mapping: {'古田县':'福州府', '屏南县':'福州府', '寿宁县':'建宁府', 'default':'福宁州'} },
-    '绵阳市': { adcode: '510700', mapping: {'平武县':'龙安府', '北川羌族自治县':'龙安府', '三台县':'潼川州', 'default':'成都府'} },
-    '宜宾市': { adcode: '511500', mapping: {'屏山县':'马湖府', 'default':'叙州府'} },
-    '凉山彝族自治州': { adcode: '513400', mapping: {'雷波县':'马湖府', '会理市':'建昌卫', '会东县':'建昌卫', '宁南县':'建昌卫', 'default':'建昌卫'} },
-    '攀枝花市': { adcode: '510400', mapping: {'仁和区':'姚安府', 'default':'建昌卫'} },
-    '阿坝藏族羌族自治州': { adcode: '513200', mapping: {'汶川县':'成都府', '理县':'成都府', '茂县':'成都府', 'default':'松潘卫'} },
+    'Thành phố Bắc Kinh': { adcode: '110000', mapping: {'Quận Diên Khánh':'Diên Khánh Châu', 'default':'Thuận Thiên Phủ'} },
+    'Thành phố Thượng Hải': { adcode: '310000', mapping: {'Quận Gia Định':'Tô Châu Phủ', 'Quận Bảo Sơn':'Tô Châu Phủ', 'Quận Sùng Minh':'Tô Châu Phủ', 'default':'Tùng Giang Phủ'} },
+    'Thành phố Túc Châu': { adcode: '341300', mapping: {'Huyện Tiêu':'Từ Châu', 'Huyện Nãng Sơn':'Từ Châu', 'default':'Phượng Dương Phủ'} },
+    'Thành phố Hoài An': { adcode: '320800', mapping: {'Huyện Hu Dị': 'Phượng Dương Phủ', 'default': 'Hoài An Phủ'} },
+    'Thành phố Túc Thiên': { adcode: '321300', mapping: {'Huyện Tứ Hồng':'Phượng Dương Phủ', 'default':'Hoài An Phủ'} },
+    'Châu tự trị dân tộc Mông Cổ, Tạng Hải Tây': { adcode: '632800', mapping: {'Thị trấn Đường Cổ Lạp Sơn':'Mdo Kham(Thanh Hải)', 'default':'Bộ Hòa Thạc Đặc'} },
+    'Thành phố Vũ Hán': { adcode: '420100', mapping: {'Quận Vũ Xương':'Vũ Xương Phủ','Quận Thanh Sơn':'Vũ Xương Phủ','Quận Hồng Sơn':'Vũ Xương Phủ','Quận Giang Hạ':'Vũ Xương Phủ','Quận Hán Dương':'Hán Dương Phủ','Quận Thái Điền':'Hán Dương Phủ','Quận Đông Tây Hồ':'Hán Dương Phủ','Quận Hán Nam':'Hán Dương Phủ','Quận Giang Ngạn':'Hán Dương Phủ','Quận Giang Hán':'Hán Dương Phủ','Quận Kiều Khẩu':'Hán Dương Phủ','Quận Hoàng Bi':'Hoàng Châu Phủ','Quận Tân Châu':'Hoàng Châu Phủ', 'default':'Vũ Xương Phủ'} },
+    'Thành phố Trùng Khánh': { adcode: '500000', mapping: {'Quận Vạn Châu':'Quỳ Châu Phủ','Huyện Phụng Tiết':'Quỳ Châu Phủ','Huyện Vu Sơn':'Quỳ Châu Phủ','Huyện Vu Khê':'Phủ Quỳ Châu','Huyện Vân Dương':'Phủ Quỳ Châu','Quận Khai Châu':'Phủ Quỳ Châu','Huyện Thành Khẩu':'Phủ Quỳ Châu', 'default': 'Phủ Trùng Khánh'} },
+    'Thành phố Cửu Giang': { adcode: '360400', mapping: {'Thành phố Lư Sơn':'Phủ Nam Khang', 'Huyện Đô Xương':'Phủ Nam Khang', 'Huyện Vĩnh Tu':'Phủ Nam Khang', 'default':'Phủ Cửu Giang'} },
+    'Thành phố Nghi Xuân': { adcode: '360900', mapping: {'Thành phố Cao An':'Phủ Thụy Châu', 'Huyện Thượng Cao':'Phủ Thụy Châu', 'Huyện Nghi Phong':'Phủ Thụy Châu', 'Thành phố Chương Thụ':'Phủ Lâm Giang', 'Thành phố Phong Thành':'Phủ Nam Xương', 'Huyện Tĩnh An':'Phủ Nam Xương', 'Huyện Phụng Tân':'Phủ Nam Xương', 'Huyện Đồng Cổ':'Phủ Nam Xương', 'default':'Phủ Viên Châu'} },
+    'Thành phố Tân Dư': { adcode: '360500', mapping: {'Huyện Phân Nghi':'Phủ Viên Châu', 'default':'Phủ Lâm Giang'} },
+    'Thành phố Cám Châu': { adcode: '360700', mapping: {'Huyện Đại Dư':'Phủ Nam An', 'Quận Nam Khang':'Phủ Nam An', 'Huyện Thượng Do':'Phủ Nam An', 'Huyện Sùng Nghĩa':'Phủ Nam An', 'default':'Phủ Cám Châu'} },
+    'Thành phố Hàng Châu': { adcode: '330100', mapping: {'Thành phố Kiến Đức':'Phủ Nghiêm Châu', 'Huyện Thuần An':'Phủ Nghiêm Châu', 'Huyện Đồng Lư':'Phủ Nghiêm Châu', 'default':'Phủ Hàng Châu'} },
+    'Thành phố Nam Xương': { adcode: '360100', mapping: {'Huyện An Nghĩa':'Phủ Nam Khang', 'default':'Phủ Nam Xương'} },
+    'Thành phố Ưng Đàm': { adcode: '360600', mapping: {'Quận Dư Giang':'Phủ Nhiêu Châu', 'default':'Phủ Quảng Tín'} },
+    'Thành phố Phủ Châu': { adcode: '361000', mapping: {'Huyện Nam Thành':'Phủ Kiến Xương', 'Huyện Lê Xuyên':'Phủ Kiến Xương', 'Huyện Nam Phong':'Phủ Kiến Xương', 'Huyện Tư Khê':'Phủ Kiến Xương', 'Huyện Quảng Xương':'Phủ Kiến Xương', 'default':'Phủ Phủ Châu'} },
+    'Thành phố Thiều Quan': { adcode: '440200', mapping: {'Thành phố Nam Hùng':'Phủ Nam Hùng', 'Huyện Thủy Hưng':'Nam Hùng Phủ', 'default':'Thiều Châu Phủ'} },
+    'Thành phố Trạm Giang': { adcode: '440800', mapping: {'Thành phố Lôi Châu':'Lôi Châu Phủ', 'Huyện Từ Văn':'Lôi Châu Phủ', 'Huyện Toại Khê':'Lôi Châu Phủ', 'Quận Ma Chương':'Lôi Châu Phủ', 'Quận Xích Khảm':'Lôi Châu Phủ', 'Quận Hà Sơn':'Lôi Châu Phủ', 'default':'Cao Châu Phủ'} },
+    'Thành phố Nam Bình': { adcode: '350700', mapping: {'Thành phố Thiệu Vũ':'Thiệu Vũ Phủ', 'Huyện Quang Trạch':'Thiệu Vũ Phủ', 'Quận Diên Bình':'Diên Bình Phủ', 'Huyện Thuận Xương':'Diên Bình Phủ', 'default':'Kiến Ninh Phủ'} },
+    'Thành phố Tam Minh': { adcode: '350400', mapping: {'Huyện Thái Ninh':'Thiệu Vũ Phủ', 'Huyện Kiến Ninh':'Thiệu Vũ Phủ', 'Huyện Ninh Hóa':'Đinh Châu Phủ', 'Huyện Thanh Lưu':'Đinh Châu Phủ', 'Huyện Minh Khê':'Đinh Châu Phủ', 'default':'Diên Bình Phủ'} },
+    'Thành phố Ninh Đức': { adcode: '350900', mapping: {'Huyện Cổ Điền':'Phúc Châu Phủ', 'Huyện Bình Nam':'Phúc Châu Phủ', 'Huyện Thọ Ninh':'Kiến Ninh Phủ', 'default':'Phúc Ninh Châu'} },
+    'Thành phố Miên Dương': { adcode: '510700', mapping: {'Huyện Bình Vũ':'Long An Phủ', 'Huyện tự trị dân tộc Khương Bắc Xuyên':'Long An Phủ', 'Huyện Tam Đài':'Đồng Xuyên Châu', 'default':'Thành Đô Phủ'} },
+    'Thành phố Nghi Tân': { adcode: '511500', mapping: {'Huyện Bình Sơn':'Mã Hồ Phủ', 'default':'Tự Châu Phủ'} },
+    'Châu tự trị dân tộc Di Lương Sơn': { adcode: '513400', mapping: {'Huyện Lôi Ba':'Mã Hồ Phủ', 'Thành phố Hội Lý':'Kiến Xương Vệ', 'Huyện Hội Đông':'Kiến Xương Vệ', 'Huyện Ninh Nam':'Kiến Xương Vệ', 'default':'Kiến Xương Vệ'} },
+    'Thành phố Phàn Chi Hoa': { adcode: '510400', mapping: {'Quận Nhân Hòa':'Diêu An Phủ', 'default':'Kiến Xương Vệ'} },
+    'Châu tự trị dân tộc Tạng, Khương A Bá': { adcode: '513200', mapping: {'Huyện Mân Xuyên':'Thành Đô Phủ', 'Huyện Lý':'Thành Đô Phủ', 'Huyện Mậu':'Thành Đô Phủ', 'default':'Tùng Phan Vệ'} },
 
-    '马鞍山市': { adcode: '340500', mapping: {'和县':'和州', '含山县':'和州', 'default':'太平府'} },
-    '宣城市': { adcode: '341800', mapping: {'广德市':'广德州', '郎溪县':'广德州', '绩溪县':'徽州府', 'default':'宁国府'} },
+    'Thành phố Mã An Sơn': { adcode: '340500', mapping: {'Huyện Hòa':'Hòa Châu', 'Huyện Hàm Sơn':'Hòa Châu', 'default':'Thái Bình Phủ'} },
+    'Thành phố Tuyên Thành': { adcode: '341800', mapping: {'Thành phố Quảng Đức':'Quảng Đức Châu', 'Huyện Lang Khê':'Quảng Đức Châu', 'Huyện Tích Khê':'Huy Châu Phủ', 'default':'Ninh Quốc Phủ'} },
     
-    '邯郸市': { adcode: '130400', mapping: {'大名县':'大名府', '魏县':'大名府', '馆陶县':'大名府', '大名区':'大名府', '峰峰矿区':'彰德府', '磁县':'彰德府', '涉县':'彰德府', 'default':'广平府'} },
-    '邢台市': { adcode: '130500', mapping: {'清河县':'广平府', '南宫市':'真定府', '新河县':'真定府', '临西县':'东昌府', 'default':'顺德府'} },
-    '平顶山市': { adcode: '410400', mapping: {'叶县':'南阳府', '舞钢市':'南阳府', 'default':'汝州'} },
-    '张家口市': { adcode: '130700', mapping: {'张北县':'察哈尔部', '康保县':'察哈尔部', '沽源县':'察哈尔部', '尚义县':'察哈尔部', 'default':'保安州'} },
-    '承德市': { adcode: '130800', mapping: {'丰宁满族自治县':'察哈尔部', '围场满族蒙古族自治县':'朵颜卫', '隆化县':'朵颜卫', '平泉市':'朵颜卫', '滦平县':'朵颜卫', 'default':'朵颜卫'} },
+    'Thành phố Hàm Đan': { adcode: '130400', mapping: {'Huyện Đại Danh':'Đại Danh Phủ', 'Huyện Ngụy':'Đại Danh Phủ', 'Huyện Quán Đào':'Đại Danh Phủ', 'Quận Đại Danh':'Đại Danh Phủ', 'Khu mỏ Phong Phong':'Chương Đức Phủ', 'Huyện Từ':'Chương Đức Phủ', 'Huyện Thiệp':'Chương Đức Phủ', 'default':'Quảng Bình Phủ'} },
+    'Thành phố Hình Đài': { adcode: '130500', mapping: {'Huyện Thanh Hà':'Quảng Bình Phủ', 'Thành phố Nam Cung':'Chân Định Phủ', 'Huyện Tân Hà':'Chân Định Phủ', 'Huyện Lâm Tây':'Đông Xương Phủ', 'default':'Thuận Đức Phủ'} },
+    'Thành phố Bình Đỉnh Sơn': { adcode: '410400', mapping: {'Huyện Diệp':'Nam Dương Phủ', 'Thành phố Vũ Cương':'Nam Dương Phủ', 'default':'Nhữ Châu'} },
+    'Thành phố Trương Gia Khẩu': { adcode: '130700', mapping: {'Huyện Trương Bắc':'Bộ Sát Cáp Nhĩ', 'Huyện Khang Bảo':'Bộ Sát Cáp Nhĩ', 'Huyện Cô Nguyên':'Bộ Sát Cáp Nhĩ', 'Huyện Thượng Nghĩa':'Bộ Sát Cáp Nhĩ', 'default':'Bảo An Châu'} },
+    'Thành phố Thừa Đức': { adcode: '130800', mapping: {'Huyện tự trị dân tộc Mãn Phong Ninh':'Bộ Sát Cáp Nhĩ', 'Huyện tự trị dân tộc Mãn, Mông Cổ Vi Trường':'Doyan Vệ', 'Huyện Long Hóa':'Doyan Vệ', 'Thành phố Bình Tuyền':'Doyan Vệ', 'Huyện Loan Bình':'Doyan Vệ', 'default':'Doyan Vệ'} },
     
-    '晋中市': { adcode: '140700', mapping: {'左权县':'辽州', '和顺县':'辽州', '榆社县':'辽州', '介休市':'汾州府', '平遥县':'汾州府', '灵石县':'汾州府', 'default':'太原府'} },
-    '长治市': { adcode: '140400', mapping: {'沁县':'沁州', '武乡县':'沁州', '沁源县':'沁州', 'default':'潞安府'} },
-    '吕梁市': { adcode: '141100', mapping: {'交城县':'太原府', '文水县':'太原府', '兴县':'太原府', '临县':'太原府', '岚县':'太原府', '交口县':'平阳府', 'default':'汾州府'} },
+    'Thành phố Tấn Trung': { adcode: '140700', mapping: {'Huyện Tả Quyền':'Liêu Châu', 'Huyện Hòa Thuận':'Liêu Châu', 'Huyện Du Xã':'Liêu Châu', 'Thành phố Giới Hưu':'Phần Châu Phủ', 'Huyện Bình Dao':'Phần Châu Phủ', 'Huyện Linh Thạch':'Phần Châu Phủ', 'default':'Thái Nguyên Phủ'} },
+    'Thành phố Trường Trị': { adcode: '140400', mapping: {'Huyện Thấm':'Thấm Châu', 'Huyện Vũ Hương':'Thấm Châu', 'Huyện Thấm Nguyên':'Thấm Châu', 'default':'Lộ An Phủ'} },
+    'Thành phố Lữ Lương': { adcode: '141100', mapping: {'Huyện Giao Thành':'Thái Nguyên Phủ', 'Huyện Văn Thủy':'Thái Nguyên Phủ', 'Huyện Hưng':'Thái Nguyên Phủ', 'Huyện Lâm':'Thái Nguyên Phủ', 'Huyện Lam':'Thái Nguyên Phủ', 'Huyện Giao Khẩu':'Bình Dương Phủ', 'default':'Phần Châu Phủ'} },
     
-    '德阳市': { adcode: '510600', mapping: {'中江县':'潼川州', '罗江区':'成都府', 'default':'成都府'} },
-    '资阳市': { adcode: '512000', mapping: {'安岳县':'潼川州', '乐至县':'潼川州', 'default':'成都府'} },
-    '毕节市': { adcode: '520500', mapping: {'威宁彝族回族苗族自治县':'乌撒卫', '赫章县':'乌撒卫', '织金县':'水西宣慰司', 'default':'水西宣慰司'} },
-    '昆明市': { adcode: '530100', mapping: {'东川区':'东川府', '禄劝彝族苗族自治县':'武定府', '寻甸回族彝族自治县':'云南府', 'default':'云南府'} },
-    '昭通市': { adcode: '530600', mapping: {'镇雄县':'镇雄府', '威信县':'镇雄府', '巧家县':'东川府', '水富市':'叙州府', 'default':'乌蒙府'} },
-    '六盘水市': { adcode: '520200', mapping: {'盘州市':'普安州', '钟山区':'水西宣慰司', '水城区':'水西宣慰司', 'default':'安顺府'} },
+    'Thành phố Đức Dương': { adcode: '510600', mapping: {'Huyện Trung Giang':'Đồng Xuyên Châu', 'Quận La Giang':'Thành Đô phủ', 'default':'Thành Đô phủ'} },
+    'Thành phố Tư Dương': { adcode: '512000', mapping: {'Huyện An Nhạc':'Đồng Xuyên châu', 'Huyện Nhạc Chí':'Đồng Xuyên châu', 'default':'Thành Đô phủ'} },
+    'Thành phố Tất Tiết': { adcode: '520500', mapping: {'Huyện tự trị dân tộc Di, Hồi, Miêu Uy Ninh':'Ô Tát vệ', 'Huyện Hách Chương':'Ô Tát vệ', 'Huyện Chức Kim':'Thủy Tây Tuyên úy ty', 'default':'Thủy Tây Tuyên úy ty'} },
+    'Thành phố Côn Minh': { adcode: '530100', mapping: {'Quận Đông Xuyên':'Đông Xuyên phủ', 'Huyện tự trị dân tộc Di, Miêu Lộc Khuyến':'Vũ Định phủ', 'Huyện tự trị dân tộc Hồi, Di Tầm Điện':'Vân Nam phủ', 'default':'Vân Nam phủ'} },
+    'Thành phố Chiêu Thông': { adcode: '530600', mapping: {'Huyện Trấn Hùng':'Trấn Hùng phủ', 'Huyện Uy Tín':'Trấn Hùng phủ', 'Huyện Xảo Gia':'Đông Xuyên phủ', 'Thành phố Thủy Phú':'Tự Châu phủ', 'default':'Ô Mông phủ'} },
+    'Thành phố Lục Bàn Thủy': { adcode: '520200', mapping: {'Thành phố Bàn Châu':'Phổ An châu', 'Quận Chung Sơn':'Thủy Tây Tuyên úy ty', 'Quận Thủy Thành':'Thủy Tây Tuyên úy ty', 'default':'An Thuận phủ'} },
     
-    '怀化市': { adcode: '431200', mapping: {'靖州苗族侗族自治县':'靖州', '通道侗族自治县':'靖州', '会同县':'靖州', '新晃侗族自治县':'辰州府', 'default':'辰州府'} },
-    '娄底市': { adcode: '431300', mapping: {'新化县':'宝庆府', '冷水江市':'宝庆府', 'default':'长沙府'} },
+    'Thành phố Hoài Hóa': { adcode: '431200', mapping: {'Huyện tự trị dân tộc Miêu, Đồng Tĩnh Châu':'Tĩnh Châu', 'Huyện tự trị dân tộc Đồng Thông Đạo':'Tĩnh Châu', 'Huyện Hội Đồng':'Tĩnh Châu', 'Huyện tự trị dân tộc Đồng Tân Hoảng':'Thần Châu phủ', 'default':'Thần Châu phủ'} },
+    'Thành phố Lâu Để': { adcode: '431300', mapping: {'Huyện Tân Hóa':'Bảo Khánh phủ', 'Thành phố Lãnh Thủy Giang':'Bảo Khánh phủ', 'default':'Trường Sa phủ'} },
     
-    '崇左市': { adcode: '451400', mapping: {'宁明县':'思明府', '凭祥市':'思明府', '扶绥县':'南宁府', 'default':'太平府'} },
-    '百色市': { adcode: '451000', mapping: {'德保县':'镇安府', '那坡县':'镇安府', '靖西市':'镇安府', '平果市':'思恩府', 'default':'泗城州'} },
-    '防城港市': { adcode: '450600', mapping: {'上思县':'南宁府', 'default':'廉州府'} },
+    'Thành phố Sùng Tả': { adcode: '451400', mapping: {'Huyện Ninh Minh':'Tư Minh phủ', 'Thành phố Bằng Tường':'Tư Minh phủ', 'Huyện Phù Tuy':'Nam Ninh phủ', 'default':'Thái Bình phủ'} },
+    'Thành phố Bách Sắc': { adcode: '451000', mapping: {'Huyện Đức Bảo':'Trấn An phủ', 'Huyện Na Pha':'Trấn An phủ', 'Thành phố Tĩnh Tây':'Trấn An phủ', 'Thành phố Bình Quả':'Tư Ân phủ', 'default':'Tứ Thành châu'} },
+    'Thành phố Phòng Thành Cảng': { adcode: '450600', mapping: {'Huyện Thượng Tư':'Nam Ninh phủ', 'default':'Liêm Châu phủ'} },
     
-    '楚雄彝族自治州': { adcode: '532300', mapping: {'武定县':'武定府', '元谋县':'武定府', '禄丰市':'云南府', '姚安县':'姚安府', '大姚县':'姚安府', '永仁县':'姚安府', 'default':'楚雄府'} },
-    '玉溪市': { adcode: '530400', mapping: {'元江哈尼族彝族傣族自治县':'元江府', '新平彝族傣族自治县':'元江府', '易门县':'云南府', 'default':'澂江府'} },
-    '红河哈尼族彝族自治州': { adcode: '532500', mapping: {'泸西县':'广西府', '弥勒市':'广西府', 'default':'临安府'} },
-    '大理白族自治州': { adcode: '532900', mapping: {'鹤庆县':'鹤庆府', '剑川县':'鹤庆府', '巍山彝族回族自治县':'蒙化府', '南涧彝族自治县':'蒙化府', '漾濞彝族自治县':'蒙化府', '宾川县':'大理府', '祥云县':'大理府', 'default':'大理府'} },
-    '普洱市': { adcode: '530800', mapping: {'景东彝族自治县':'景东府', '镇沅彝族哈尼族拉祜族自治县':'镇沅府', '墨江哈尼族自治县':'元江府', '景谷傣族彝族自治县':'镇沅府', 'default':'车里宣慰司'} },
+    'Châu tự trị dân tộc Di Sở Hùng': { adcode: '532300', mapping: {'Huyện Vũ Định':'Vũ Định phủ', 'Huyện Nguyên Mưu':'Vũ Định phủ', 'Thành phố Lộc Phong':'Vân Nam phủ', 'Huyện Diêu An':'Diêu An phủ', 'Huyện Đại Diêu':'Diêu An phủ', 'Huyện Vĩnh Nhân':'Diêu An phủ', 'default':'Phủ Sở Hùng'} },
+    'Thành phố Ngọc Khê': { adcode: '530400', mapping: {'Huyện tự trị dân tộc Cáp Nê, Di, Thái Nguyên Giang':'Phủ Nguyên Giang', 'Huyện tự trị dân tộc Di, Thái Tân Bình':'Phủ Nguyên Giang', 'Huyện Dịch Môn':'Phủ Vân Nam', 'default':'Phủ Trừng Giang'} },
+    'Châu tự trị dân tộc Cáp Nê, Di Hồng Hà': { adcode: '532500', mapping: {'Huyện Lư Tây':'Phủ Quảng Tây', 'Thành phố Di Lặc':'Phủ Quảng Tây', 'default':'Phủ Lâm An'} },
+    'Châu tự trị dân tộc Bạch Đại Lý': { adcode: '532900', mapping: {'Huyện Hạc Khánh':'Phủ Hạc Khánh', 'Huyện Kiếm Xuyên':'Phủ Hạc Khánh', 'Huyện tự trị dân tộc Di, Hồi Nguy Sơn':'Phủ Mông Hóa', 'Huyện tự trị dân tộc Di Nam Giản':'Phủ Mông Hóa', 'Huyện tự trị dân tộc Di Dạng Tị':'Phủ Mông Hóa', 'Huyện Tân Xuyên':'Phủ Đại Lý', 'Huyện Tường Vân':'Phủ Đại Lý', 'default':'Phủ Đại Lý'} },
+    'Thành phố Phổ Nhĩ': { adcode: '530800', mapping: {'Huyện tự trị dân tộc Di Cảnh Đông':'Phủ Cảnh Đông', 'Huyện tự trị dân tộc Di, Cáp Nê, Lạp Hỗ Trấn Nguyên':'Phủ Trấn Nguyên', 'Huyện tự trị dân tộc Cáp Nê Mặc Giang':'Phủ Nguyên Giang', 'Huyện tự trị dân tộc Thái, Di Cảnh Cốc':'Phủ Trấn Nguyên', 'default':'Xa Lý Tuyên úy ty'} },
 
-    '大连市': { adcode: '210200', mapping: {'普兰店区':'复州卫', '瓦房店市':'复州卫', '庄河市':'凤凰堡', 'default':'金州卫'} },
-    '鞍山市': { adcode: '210300', mapping: {'台安县':'广宁卫', '岫岩满族自治县':'凤凰堡', '海城市':'海州卫', 'default':'辽阳卫'} },
-    '锦州市': { adcode: '210700', mapping: {'黑山县':'广宁卫', '义县':'义州卫', '凌海市':'广宁右屯卫', '北镇市':'广宁卫', 'default':'广宁中屯卫'} },
-    '营口市': { adcode: '210800', mapping: {'大石桥市':'海州卫', 'default':'盖州卫'} },
-    '铁岭市': { adcode: '211200', mapping: {'开原市':'开原卫', 'default':'铁岭卫'} },
-    '葫芦岛市': { adcode: '211400', mapping: {'绥中县':'广宁前屯卫', '建昌县':'营州卫', 'default':'宁远卫'} },
-    '上饶市': { adcode: '361100', mapping: {'婺源县':'徽州府', '鄱阳县':'饶州府', '余干县':'饶州府', '万年县':'饶州府', '德兴市':'饶州府', 'default':'广信府'} },
-    '景德镇市': { adcode: '360200', mapping: {'浮梁县':'饶州府', '珠山区':'饶州府', '昌江区':'饶州府', '乐平市':'饶州府', 'default':'饶州府'} },
-    '濮阳市': { adcode: '410900', mapping: {'范县':'兖州府', '台前县':'兖州府', 'default':'大名府'} },
-    '新乡市': { adcode: '410700', mapping: {'长垣市':'大名府', '原阳县':'开封府', '延津县':'开封府', '封丘县':'开封府', 'default':'卫辉府'} },
-    '鹤壁市': { adcode: '410600', mapping: {'浚县':'大名府', 'default':'卫辉府'} },
-    '安阳市': { adcode: '410500', mapping: {'滑县':'大名府', '内黄县':'大名府', 'default':'彰德府'} },
-    '菏泽市': { adcode: '371700', mapping: {'东明县':'大名府', 'default':'兖州府'} },
-    '肇庆市': { adcode: '441200', mapping: {'怀集县':'梧州府', 'default':'肇庆府'} },
-    '唐山市': { adcode: '130200', mapping: {'遵化市':'顺天府', '玉田县':'顺天府', '丰润区':'顺天府', '丰南区':'顺天府', 'default':'永平府'} },
-    '保定市': { adcode: '130600', mapping: {'涿州市':'顺天府', '定州市':'真定府', '曲阳县':'真定府', '安国市':'真定府', '博野县':'真定府', '蠡县':'真定府', 'default':'保定府'} },
-    '衡水市': { adcode: '131100', mapping: {'景县':'河间府', '阜城县':'河间府', '故城县':'河间府', '吴桥县':'河间府', 'default':'真定府'} },
+    'Thành phố Đại Liên': { adcode: '210200', mapping: {'Quận Phổ Lan Điếm':'Vệ Phục Châu', 'Thành phố Ngõa Phòng Điếm':'Vệ Phục Châu', 'Thành phố Trang Hà':'Bảo Phượng Hoàng', 'default':'Vệ Kim Châu'} },
+    'Thành phố An Sơn': { adcode: '210300', mapping: {'Huyện Thai An':'Vệ Quảng Ninh', 'Huyện tự trị dân tộc Mãn Tụ Nham':'Bảo Phượng Hoàng', 'Thành phố Hải Thành':'Vệ Hải Châu', 'default':'Vệ Liêu Dương'} },
+    'Thành phố Cẩm Châu': { adcode: '210700', mapping: {'Huyện Hắc Sơn':'Vệ Quảng Ninh', 'Huyện Nghĩa':'Vệ Nghĩa Châu', 'Thành phố Lăng Hải':'Quảng Ninh Hữu đồn vệ', 'Thành phố Bắc Trấn':'Vệ Quảng Ninh', 'default':'Quảng Ninh Trung đồn vệ'} },
+    'Thành phố Dinh Khẩu': { adcode: '210800', mapping: {'Thành phố Đại Thạch Kiều':'Vệ Hải Châu', 'default':'Vệ Cái Châu'} },
+    'Thành phố Thiết Lĩnh': { adcode: '211200', mapping: {'Thành phố Khai Nguyên':'Vệ Khai Nguyên', 'default':'Vệ Thiết Lĩnh'} },
+    'Thành phố Hồ Lô Đảo': { adcode: '211400', mapping: {'Huyện Tuy Trung':'Quảng Ninh Tiền đồn vệ', 'Huyện Kiến Xương':'Vệ Doanh Châu', 'default':'Vệ Ninh Viễn'} },
+    'Thành phố Thượng Nhiêu': { adcode: '361100', mapping: {'Huyện Vụ Nguyên':'Phủ Huy Châu', 'Huyện Bà Dương':'Phủ Nhiêu Châu', 'Huyện Dư Can':'Phủ Nhiêu Châu', 'Huyện Vạn Niên':'Phủ Nhiêu Châu', 'Thành phố Đức Hưng':'Phủ Nhiêu Châu', 'default':'Phủ Quảng Tín'} },
+    'Thành phố Cảnh Đức Trấn': { adcode: '360200', mapping: {'Huyện Phù Lương':'Phủ Nhiêu Châu', 'Quận Châu Sơn':'Phủ Nhiêu Châu', 'Quận Xương Giang':'Phủ Nhiêu Châu', 'Thành phố Nhạc Bình':'Phủ Nhiêu Châu', 'default':'Phủ Nhiêu Châu'} },
+    'Thành phố Bộc Dương': { adcode: '410900', mapping: {'Huyện Phạm':'Phủ Duyện Châu', 'Huyện Đài Tiền':'Phủ Duyện Châu', 'default':'Phủ Đại Danh'} },
+    'Thành phố Tân Hương': { adcode: '410700', mapping: {'Thành phố Trường Viên':'Phủ Đại Danh', 'Huyện Nguyên Dương':'Phủ Khai Phong', 'Huyện Diên Tân':'Phủ Khai Phong', 'Huyện Phong Khâu':'Phủ Khai Phong', 'default':'Phủ Vệ Huy'} },
+    'Thành phố Hạc Bích': { adcode: '410600', mapping: {'Huyện Tuấn':'Phủ Đại Danh', 'default':'Phủ Vệ Huy'} },
+    'Thành phố An Dương': { adcode: '410500', mapping: {'Huyện Hoạt':'Phủ Đại Danh', 'Huyện Nội Hoàng':'Phủ Đại Danh', 'default':'Phủ Chương Đức'} },
+    'Thành phố Hà Trạch': { adcode: '371700', mapping: {'Huyện Đông Minh':'Phủ Đại Danh', 'default':'Phủ Duyện Châu'} },
+    'Thành phố Triệu Khánh': { adcode: '441200', mapping: {'Huyện Hoài Tập':'Phủ Ngô Châu', 'default':'Phủ Triệu Khánh'} },
+    'Thành phố Đường Sơn': { adcode: '130200', mapping: {'Thành phố Tuân Hóa':'Phủ Thuận Thiên', 'Huyện Ngọc Điền':'Phủ Thuận Thiên', 'Quận Phong Nhuận':'Phủ Thuận Thiên', 'Quận Phong Nam':'Phủ Thuận Thiên', 'default':'Phủ Vĩnh Bình'} },
+    'Thành phố Bảo Định': { adcode: '130600', mapping: {'Thành phố Trác Châu':'Phủ Thuận Thiên', 'Thành phố Định Châu':'Phủ Chân Định', 'Huyện Khúc Dương':'Phủ Chân Định', 'Thành phố An Quốc':'Phủ Chân Định', 'Huyện Bác Dã':'Phủ Chân Định', 'Huyện Lễ':'Phủ Chân Định', 'default':'Phủ Bảo Định'} },
+    'Thành phố Hành Thủy': { adcode: '131100', mapping: {'Huyện Cảnh':'Phủ Hà Gian', 'Huyện Phụ Thành':'Phủ Hà Gian', 'Huyện Cố Thành':'Phủ Hà Gian', 'Huyện Ngô Kiều':'Phủ Hà Gian', 'default':'Phủ Chân Định'} },
     
-    '铜陵市': { adcode: '340700', mapping: {'枞阳县':'安庆府', 'default':'池州府'} },
-    '芜湖市': { adcode: '340200', mapping: {'无为市':'庐州府', 'default':'太平府'} },
-    '镇江市': { adcode: '321100', mapping: {'句容市':'应天府', 'default':'镇江府'} },
-    '徐州市': { adcode: '320300', mapping: {'新沂市':'淮安府', '邳州市':'淮安府', '睢宁县':'淮安府', 'default':'徐州'} },
-    '黄山市': { adcode: '341000', mapping: {'黄山区':'宁国府', 'default':'徽州府'} },
-    '六安市': { adcode: '341500', mapping: {'霍邱县':'凤阳府', '叶集区':'凤阳府', 'default':'庐州府'} },
+    'Thành phố Đồng Lăng': { adcode: '340700', mapping: {'Huyện Tung Dương':'Phủ An Khánh', 'default':'Phủ Trì Châu'} },
+    'Thành phố Vu Hồ': { adcode: '340200', mapping: {'Thành phố Vô Vi':'Phủ Lư Châu', 'default':'Phủ Thái Bình'} },
+    'Thành phố Trấn Giang': { adcode: '321100', mapping: {'Thành phố Cú Dung':'Phủ Ứng Thiên', 'default':'Phủ Trấn Giang'} },
+    'Thành phố Từ Châu': { adcode: '320300', mapping: {'Thành phố Tân Nghi':'Phủ Hoài An', 'Thành phố Phi Châu':'Phủ Hoài An', 'Huyện Tuy Ninh':'Phủ Hoài An', 'default':'Từ Châu'} },
+    'Thành phố Hoàng Sơn': { adcode: '341000', mapping: {'Quận Hoàng Sơn':'Phủ Ninh Quốc', 'default':'Phủ Huy Châu'} },
+    'Thành phố Lục An': { adcode: '341500', mapping: {'Huyện Hoắc Khâu':'Phủ Phượng Dương', 'Quận Diệp Tập':'Phủ Phượng Dương', 'default':'Phủ Lư Châu'} },
     
-    '济南市': { adcode: '370100', mapping: {'平阴县':'兖州府', 'default':'济南府'} },
-    '泰安市': { adcode: '370900', mapping: {'东平县':'兖州府', '宁阳县':'兖州府', 'default':'济南府'} },
-    '临沂市': { adcode: '371300', mapping: {'沂水县':'青州府', '沂南县':'青州府', '莒南县':'青州府', 'default':'兖州府'} },
-    '淄博市': { adcode: '370300', mapping: {'张店区':'济南府', '淄川区':'济南府', '周村区':'济南府', '桓台县':'济南府', '高青县':'济南府', 'default':'青州府'} },
-    '烟台市': { adcode: '370600', mapping: {'莱州市':'莱州府', '莱阳市':'莱州府', '海阳市':'莱州府', 'default':'登州府'} },
-    '潍坊市': { adcode: '370700', mapping: {'潍城区':'莱州府', '寒亭区':'莱州府', '坊子区':'莱州府', '奎文区':'莱州府', '昌邑市':'莱州府', '高密市':'莱州府', 'default':'青州府'} },
+    'Thành phố Tế Nam': { adcode: '370100', mapping: {'Huyện Bình Âm':'Phủ Duyện Châu', 'default':'Phủ Tế Nam'} },
+    'Thành phố Thái An': { adcode: '370900', mapping: {'Huyện Đông Bình':'Phủ Duyện Châu', 'Huyện Ninh Dương':'Phủ Duyện Châu', 'default':'Phủ Tế Nam'} },
+    'Thành phố Lâm Nghi': { adcode: '371300', mapping: {'Huyện Nghi Thủy':'Phủ Thanh Châu', 'Huyện Nghi Nam':'Phủ Thanh Châu', 'Huyện Cử Nam':'Phủ Thanh Châu', 'default':'Phủ Duyện Châu'} },
+    'Thành phố Truy Bác': { adcode: '370300', mapping: {'Quận Trương Điếm':'Phủ Tế Nam', 'Quận Truy Xuyên':'Phủ Tế Nam', 'Quận Chu Thôn':'Phủ Tế Nam', 'Huyện Hoàn Đài':'Phủ Tế Nam', 'Huyện Cao Thanh':'Phủ Tế Nam', 'default':'Phủ Thanh Châu'} },
+    'Thành phố Yên Đài': { adcode: '370600', mapping: {'Thành phố Lai Châu':'Phủ Lai Châu', 'Thành phố Lai Dương':'Phủ Lai Châu', 'Thành phố Hải Dương':'Phủ Lai Châu', 'default':'Phủ Đăng Châu'} },
+    'Thành phố Duy Phường': { adcode: '370700', mapping: {'Quận Duy Thành':'Phủ Lai Châu', 'Quận Hàn Đình':'Phủ Lai Châu', 'Quận Phường Tử':'Phủ Lai Châu', 'Quận Khuê Văn':'Phủ Lai Châu', 'Thành phố Xương Ấp':'Phủ Lai Châu', 'Thành phố Cao Mật':'Phủ Lai Châu', 'default':'Phủ Thanh Châu'} },
     
-    '黔南布依族苗族自治州': { adcode: '522700', mapping: {'荔波县':'庆远府', '瓮安县':'平越府', '贵定县':'平越府', '福泉市':'平越府', 'default':'都匀府'} },
-    '桂林市': { adcode: '450300', mapping: {'全州县':'永州府', '资源县':'永州府', '灌阳县':'永州府', 'default':'桂林府'} },
-    '黔东南苗族侗族自治州': { adcode: '522600', mapping: {'镇远县':'镇远府', '施秉县':'镇远府', '剑河县':'镇远府', '台江县':'镇远府', '三穗县':'镇远府', '岑巩县':'思州府', '黄平县':'平越府', '凯里市':'平越府', '麻江县':'平越府', '雷山县':'都匀府', '丹寨县':'都匀府', '天柱县':'靖州', '锦屏县':'靖州', 'default':'黎平府'} },
-    '遵义市': { adcode: '520300', mapping: {'务川仡佬族苗族自治县':'思南府', '凤冈县':'石阡府', '余庆县':'平越府', 'default':'遵义府'} },
-    '铜仁市': { adcode: '520600', mapping: {'碧江区':'铜仁府', '万山区':'铜仁府', '江口县':'铜仁府', '玉屏侗族自治县':'铜仁府', '松桃苗族自治县':'铜仁府', '石阡县':'石阡府', 'default':'思南府'} },
-    '恩施土家族苗族自治州': { adcode: '422800', mapping: {'巴东县':'荆州府', 'default':'施州卫'} },
-    '宝鸡市': { adcode: '610300', mapping: {'凤县':'汉中府', '太白县':'汉中府', 'default':'凤翔府'} },
-    '定西市': { adcode: '621100', mapping: {'临洮县':'临洮府', '渭源县':'临洮府', 'default':'巩昌府'} },
-    '甘南藏族自治州': { adcode: '623000', mapping: {'舟曲县':'巩昌府', '夏河县':'临洮府', 'default':'洮州卫'} },
-    '临沧市': { adcode: '530900', mapping: {'镇康县':'永昌府', '永德县':'永昌府', 'default':'顺宁府'} },
-    '文山壮族苗族自治州': { adcode: '532600', mapping: {'文山市':'临安府', '马关县':'临安府', '西畴县':'临安府', '麻栗坡县':'临安府', 'default':'广南府'} },
-    '德州市': { adcode: '371400', mapping: {'庆云县':'河间府', '宁津县':'河间府', 'default':'济南府'} }
+    'Châu tự trị dân tộc Bố Y, Miêu Kiềm Nam': { adcode: '522700', mapping: {'Huyện Lệ Ba':'Phủ Khánh Viễn', 'Huyện Úng An':'Phủ Bình Việt', 'Huyện Quý Định':'Phủ Bình Việt', 'Thành phố Phúc Tuyền':'Phủ Bình Việt', 'default':'Phủ Đô Quân'} },
+    'Thành phố Quế Lâm': { adcode: '450300', mapping: {'Huyện Toàn Châu':'Phủ Vĩnh Châu', 'Huyện Tư Nguyên':'Phủ Vĩnh Châu', 'Huyện Quán Dương':'Phủ Vĩnh Châu', 'default':'Phủ Quế Lâm'} },
+    'Châu tự trị dân tộc Miêu, Đồng Kiềm Đông Nam': { adcode: '522600', mapping: {'Huyện Trấn Viễn':'Phủ Trấn Viễn', 'Huyện Thi Bỉnh':'Phủ Trấn Viễn', 'Huyện Kiếm Hà':'Phủ Trấn Viễn', 'Huyện Thai Giang':'Phủ Trấn Viễn', 'Huyện Tam Tuệ':'Phủ Trấn Viễn', 'Huyện Sầm Củng':'Phủ Tư Châu', 'Huyện Hoàng Bình':'Phủ Bình Việt', 'Thành phố Khải Lý':'Phủ Bình Việt', 'Huyện Ma Giang':'Phủ Bình Việt', 'Huyện Lôi Sơn':'Phủ Đô Quân', 'Huyện Đan Trại':'Phủ Đô Quân', 'Huyện Thiên Trụ':'Tĩnh Châu', 'Huyện Cẩm Bình':'Tĩnh Châu', 'default':'Phủ Lê Bình'} },
+    'Thành phố Tuân Nghĩa': { adcode: '520300', mapping: {'Huyện tự trị dân tộc Cờ Lao, Miêu Vụ Xuyên':'Phủ Tư Nam', 'Huyện Phượng Cương':'Phủ Thạch Thiên', 'Huyện Dư Khánh':'Phủ Bình Việt', 'default':'Phủ Tuân Nghĩa'} },
+    'Thành phố Đồng Nhân': { adcode: '520600', mapping: {'Quận Bích Giang':'Phủ Đồng Nhân', 'Quận Vạn Sơn':'Phủ Đồng Nhân', 'Huyện Giang Khẩu':'Phủ Đồng Nhân', 'Huyện tự trị dân tộc Đồng Ngọc Bình':'Phủ Đồng Nhân', 'Huyện tự trị dân tộc Miêu Tùng Đào':'Phủ Đồng Nhân', 'Huyện Thạch Thiên':'Phủ Thạch Thiên', 'default':'Phủ Tư Nam'} },
+    'Châu tự trị dân tộc Thổ Gia, Miêu Ân Thi': { adcode: '422800', mapping: {'Huyện Ba Đông':'Phủ Kinh Châu', 'default':'Vệ Thi Châu'} },
+    'Thành phố Bảo Kê': { adcode: '610300', mapping: {'Huyện Phượng':'Phủ Hán Trung', 'Huyện Thái Bạch':'Phủ Hán Trung', 'default':'Phủ Phượng Tường'} },
+    'Thành phố Định Tây': { adcode: '621100', mapping: {'Huyện Lâm Thao':'Phủ Lâm Thao', 'Huyện Vị Nguyên':'Phủ Lâm Thao', 'default':'Phủ Củng Xương'} },
+    'Châu tự trị dân tộc Tạng Cam Nam': { adcode: '623000', mapping: {'Huyện Chu Khúc':'Phủ Củng Xương', 'Huyện Hạ Hà':'Phủ Lâm Thao', 'default':'Vệ Thao Châu'} },
+    'Thành phố Lâm Thương': { adcode: '530900', mapping: {'Huyện Trấn Khang':'Phủ Vĩnh Xương', 'Huyện Vĩnh Đức':'Phủ Vĩnh Xương', 'default':'Phủ Thuận Ninh'} },
+    'Châu tự trị dân tộc Choang, Miêu Văn Sơn': { adcode: '532600', mapping: {'Thành phố Văn Sơn':'Phủ Lâm An', 'Huyện Mã Quan':'Phủ Lâm An', 'Huyện Tây Trù':'Phủ Lâm An', 'Huyện Ma Lật Pha':'Phủ Lâm An', 'default':'Phủ Quảng Nam'} },
+    'Thành phố Đức Châu': { adcode: '371400', mapping: {'Huyện Khánh Vân':'Phủ Hà Gian', 'Huyện Ninh Tân':'Phủ Hà Gian', 'default':'Phủ Tế Nam'} }
 };
 
 
 
 
 const modernCountyToMingCounty = {
-  // ================== 北京市 ==================
-  // 明代属北直隶顺天府
-  '东城区': '大兴县', '西城区': '宛平县',
-  '朝阳区': '大兴县', '丰台区': '宛平县',
-  '石景山区': '宛平县', '海淀区': '宛平县',
-  '门头沟区': '宛平县', '房山区': '房山县',
-  '通州区': '通州', '顺义区': '顺义县',
-  '昌平区': '昌平州', '大兴区': '大兴县',
-  '怀柔区': '怀柔县', '平谷区': '平谷县',
-  '密云区': '密云县', '延庆区': '延庆州',
+  // ================== Thành phố Bắc Kinh ==================
+  // Thời Minh thuộc phủ Thuận Thiên, Bắc Trực Lệ
+  'Quận Đông Thành': 'Huyện Đại Hưng', 'Quận Tây Thành': 'Huyện Uyển Bình',
+  'Quận Triều Dương': 'Huyện Đại Hưng', 'Quận Phong Đài': 'Huyện Uyển Bình',
+  'Quận Thạch Cảnh Sơn': 'Huyện Uyển Bình', 'Quận Hải Điến': 'Huyện Uyển Bình',
+  'Quận Môn Đầu Câu': 'Huyện Uyển Bình', 'Quận Phòng Sơn': 'Huyện Phòng Sơn',
+  'Quận Thông Châu': 'Thông Châu', 'Quận Thuận Nghĩa': 'Huyện Thuận Nghĩa',
+  'Quận Xương Bình': 'Châu Xương Bình', 'Quận Đại Hưng': 'Huyện Đại Hưng',
+  'Quận Hoài Nhu': 'Huyện Hoài Nhu', 'Quận Bình Cốc': 'Huyện Bình Cốc',
+  'Quận Mật Vân': 'Huyện Mật Vân', 'Quận Diên Khánh': 'Châu Diên Khánh',
 
-  // ================== 天津市 ==================
-  // 明代属北直隶河间府、顺天府
-  '和平区': '静海县', '河东区': '静海县', '河西区': '静海县',
-  '南开区': '静海县', '河北区': '静海县', '红桥区': '静海县',
-  '东丽区': '静海县', '西青区': '静海县', '津南区': '静海县',
-  '北辰区': '武清县', '武清区': '武清县', '宝坻区': '宝坻县',
-  '滨海新区': '静海县', '宁河区': '宝坻县', '静海区': '静海县',
-  '蓟州区': '蓟州',
+  // ================== Thành phố Thiên Tân ==================
+  // Thời Minh thuộc phủ Hà Gian, phủ Thuận Thiên, Bắc Trực Lệ
+  'Quận Hòa Bình': 'Huyện Tĩnh Hải', 'Quận Hà Đông': 'Huyện Tĩnh Hải', 'Quận Hà Tây': 'Huyện Tĩnh Hải',
+  'Quận Nam Khai': 'Huyện Tĩnh Hải', 'Quận Hà Bắc': 'Huyện Tĩnh Hải', 'Quận Hồng Kiều': 'Huyện Tĩnh Hải',
+  'Quận Đông Lệ': 'Huyện Tĩnh Hải', 'Quận Tây Thanh': 'Huyện Tĩnh Hải', 'Quận Tân Nam': 'Huyện Tĩnh Hải',
+  'Quận Bắc Thần': 'Huyện Vũ Thanh', 'Quận Vũ Thanh': 'Huyện Vũ Thanh', 'Quận Bảo Trì': 'Huyện Bảo Để',
+  'Khu mới Tân Hải': 'Huyện Tĩnh Hải', 'Quận Ninh Hà': 'Huyện Bảo Để', 'Quận Tĩnh Hải': 'Huyện Tĩnh Hải',
+  'Quận Kế Châu': 'Kế Châu',
 
-  // ================== 河北省 ==================
-  '石家庄市': '真定县', '井陉矿区': '井陉县', '裕华区': '真定县',
-  '井陉县': '井陉县', '正定县': '真定县', '栾城区': '栾城县',
-  '鹿泉区': '获鹿县', '藁城区': '藁城县',
-  '行唐县': '行唐县', '灵寿县': '灵寿县', '高邑县': '高邑县',
-  '深泽县': '深泽县', '赞皇县': '赞皇县', '无极县': '无极县',
-  '平山县': '平山县', '元氏县': '元氏县', '赵县': '赵州',
-  '辛集市': '束鹿县', '晋州市': '晋州', '新乐市': '新乐县',
-  '唐山市': '滦州', '路南区': '滦州', '路北区': '滦州', '古冶区': '滦州',
-  '开平区': '滦州', '丰南区': '丰润县', '丰润区': '丰润县',
-  '曹妃甸区': '滦州', '滦州市': '滦州', '滦南县': '滦州',
-  '乐亭县': '乐亭县', '迁西县': '迁安县', '玉田县': '玉田县',
-  '遵化市': '遵化州', '迁安市': '迁安县',
-  '秦皇岛市': '永平府', '海港区': '卢龙县', '山海关区': '山海卫',
-  '北戴河区': '抚宁县', '抚宁区': '抚宁县', '青龙满族自治县': '抚宁县',
-  '昌黎县': '昌黎县', '卢龙县': '卢龙县',
-  '邯郸市': '邯郸县', '邯山区': '邯郸县', '丛台区': '邯郸县',
-  '复兴区': '邯郸县', '峰峰矿区': '磁州', '肥乡区': '肥乡县',
-  '永年区': '永年县', '临漳县': '临漳县', '成安县': '成安县',
-  '大名县': '大名县', '涉县': '涉县', '磁县': '磁州',
-  '邱县': '丘县', '鸡泽县': '鸡泽县', '广平县': '广平县',
-  '馆陶县': '馆陶县', '魏县': '魏县', '曲周县': '曲周县',
-  '武安市': '武安县',
-  '邢台市': '邢台县', '襄都区': '邢台县', '信都区': '邢台县',
-  '任泽区': '任县', '南和区': '南和县', '临城县': '临城县',
-  '内丘县': '内丘县', '柏乡县': '柏乡县', '隆尧县': '隆平县',
-  '宁晋县': '宁晋县', '巨鹿县': '巨鹿县', '新河县': '新河县',
-  '广宗县': '广宗县', '平乡县': '平乡县', '威县': '威县',
-  '清河县': '清河县', '临西县': '临清州', // 明代临西县属山东临清州，此处简并
-  '南宫市': '南宫县', '沙河市': '沙河县',
-  '保定市': '清苑县', '竞秀区': '清苑县', '莲池区': '清苑县',
-  '满城区': '满城县', '清苑区': '清苑县', '徐水区': '安肃县',
-  '涞水县': '涞水县', '阜平县': '阜平县', '定兴县': '定兴县',
-  '唐县': '唐县', '高阳县': '高阳县', '容城县': '容城县',
-  '涞源县': '广昌县', '望都县': '庆都县', '安新县': '新安县',
-  '易县': '易州', '曲阳县': '曲阳县', '蠡县': '蠡县',
-  '顺平县': '完县', '博野县': '博野县', '雄县': '雄县',
-  '涿州市': '涿州', '定州市': '定州', '安国市': '祁州',
-  '高碑店市': '新城县',
-  '张家口市': '宣府镇', '桥东区': '宣府镇', '桥西区': '宣府镇',
-  '宣化区': '宣府镇', '下花园区': '宣府镇', '万全区': '万全右卫',
-  '崇礼区': '宣府镇', '张北县': '兴和营', '康保县': '康保营',
-  '沽源县': '沽源营', '尚义县': '尚义营', '蔚县': '蔚州',
-  '阳原县': '蔚州', '怀安县': '怀安卫', '怀来县': '怀来卫',
-  '涿鹿县': '保安州', '赤城县': '龙门卫',
-  '承德市': '朵颜三卫', 
-  '双桥区': '朵颜中营', '双滦区': '朵颜西营', '鹰手营子矿区': '朵颜矿营',
-  '承德县': '朵颜大营', '兴隆县': '兴隆堡', '滦平县': '滦平堡',
-  '隆化县': '隆化堡', '丰宁满族自治县': '丰宁营', '宽城满族自治县': '宽城堡',
-  '围场满族蒙古族自治县': '围场营', '平泉市': '平泉营',
-  '沧州市': '沧州', '新华区': '沧州', '运河区': '沧州',
-  '沧县': '沧州', '青县': '青县', '东光县': '东光县',
-  '海兴县': '盐山县', '盐山县': '盐山县', '肃宁县': '肃宁县',
-  '南皮县': '南皮县', '吴桥县': '吴桥县', '献县': '献县',
-  '孟村回族自治县': '沧州', '泊头市': '交河县', '任丘市': '任丘县',
-  '黄骅市': '盐山县', '河间市': '河间县',
-  '廊坊市': '顺天府', '安次区': '东安县', '广阳区': '东安县',
-  '固安县': '固安县', '永清县': '永清县', '香河县': '香河县',
-  '大城县': '大城县', '文安县': '文安县', '大厂回族自治县': '三河县',
-  '霸州市': '霸州', '三河市': '三河县',
-  '衡水市': '冀州', '桃城区': '衡水县', '冀州区': '冀州',
-  '枣强县': '枣强县', '武邑县': '武邑县', '武强县': '武强县',
-  '饶阳县': '饶阳县', '安平县': '安平县', '故城县': '故城县',
-  '景县': '景州', '阜城县': '阜城县', '深州市': '深州',
+  // ================== Tỉnh Hà Bắc ==================
+  'Thành phố Thạch Gia Trang': 'Huyện Chân Định', 'Khu mỏ Tỉnh Hình': 'Huyện Tỉnh Hình', 'Quận Dụ Hoa': 'Huyện Chân Định',
+  'Huyện Tỉnh Hình': 'Huyện Tỉnh Hình', 'Huyện Chính Định': 'Huyện Chân Định', 'Quận Loan Thành': 'Huyện Loan Thành',
+  'Quận Lộc Tuyền': 'Huyện Hoạch Lộc', 'Quận Cảo Thành': 'Huyện Cảo Thành',
+  'Huyện Hành Đường': 'Huyện Hành Đường', 'Huyện Linh Thọ': 'Huyện Linh Thọ', 'Huyện Cao Ấp': 'Huyện Cao Ấp',
+  'Huyện Thâm Trạch': 'Huyện Thâm Trạch', 'Huyện Tán Hoàng': 'Huyện Tán Hoàng', 'Huyện Vô Cực': 'Huyện Vô Cực',
+  'Huyện Bình Sơn': 'Huyện Bình Sơn', 'Huyện Nguyên Thị': 'Huyện Nguyên Thị', 'Huyện Triệu': 'Triệu Châu',
+  'Thành phố Tân Tập': 'Huyện Thúc Lộc', 'Thành phố Tấn Châu': 'Tấn Châu', 'Thành phố Tân Nhạc': 'Huyện Tân Lạc',
+  'Thành phố Đường Sơn': 'Loan Châu', 'Quận Lộ Nam': 'Loan Châu', 'Quận Lộ Bắc': 'Loan Châu', 'Quận Cổ Dã': 'Loan Châu',
+  'Quận Khai Bình': 'Loan Châu', 'Quận Phong Nam': 'Huyện Phong Nhuận', 'Quận Phong Nhuận': 'Huyện Phong Nhuận',
+  'Quận Tào Phi Điện': 'Loan Châu', 'Thành phố Loan Châu': 'Loan Châu', 'Huyện Loan Nam': 'Loan Châu',
+  'Huyện Lạc Đình': 'Huyện Lạc Đình', 'Huyện Thiên Tây': 'Huyện Thiên An', 'Huyện Ngọc Điền': 'Huyện Ngọc Điền',
+  'Thành phố Tuân Hóa': 'Châu Tuân Hóa', 'Thành phố Thiên An': 'Huyện Thiên An',
+  'Thành phố Tần Hoàng Đảo': 'Phủ Vĩnh Bình', 'Quận Hải Cảng': 'Huyện Lư Long', 'Quận Sơn Hải Quan': 'Vệ Sơn Hải',
+  'Quận Bắc Đới Hà': 'Huyện Phủ Ninh', 'Quận Phủ Ninh': 'Huyện Phủ Ninh', 'Huyện tự trị dân tộc Mãn Thanh Long': 'Huyện Phủ Ninh',
+  'Huyện Xương Lê': 'Huyện Xương Lê', 'Huyện Lư Long': 'Huyện Lư Long',
+  'Thành phố Hàm Đan': 'Huyện Hàm Đan', 'Quận Hàm Sơn': 'Huyện Hàm Đan', 'Quận Tùng Đài': 'Huyện Hàm Đan',
+  'Quận Phục Hưng': 'Huyện Hàm Đan', 'Khu mỏ Phong Phong': 'Từ Châu', 'Quận Phì Hương': 'Huyện Phì Hương',
+  'Quận Vĩnh Niên': 'Huyện Vĩnh Niên', 'Huyện Lâm Chương': 'Huyện Lâm Chương', 'Huyện Thành An': 'Huyện Thành An',
+  'Huyện Đại Danh': 'Huyện Đại Danh', 'Huyện Thiệp': 'Huyện Thiệp', 'Huyện Từ': 'Từ Châu',
+  'Huyện Khâu': 'Huyện Khâu', 'Huyện Kê Trạch': 'Huyện Kê Trạch', 'Huyện Quảng Bình': 'Huyện Quảng Bình',
+  'Huyện Quán Đào': 'Huyện Quán Đào', 'Huyện Ngụy': 'Huyện Ngụy', 'Huyện Khúc Chu': 'Huyện Khúc Chu',
+  'Thành phố Vũ An': 'Huyện Vũ An',
+  'Thành phố Hình Đài': 'Huyện Hình Đài', 'Quận Tương Đô': 'Huyện Hình Đài', 'Quận Tín Đô': 'Huyện Hình Đài',
+  'Quận Nhâm Trạch': 'Huyện Nhâm', 'Quận Nam Hòa': 'Huyện Nam Hòa', 'Huyện Lâm Thành': 'Huyện Lâm Thành',
+  'Huyện Nội Khâu': 'Huyện Nội Khâu', 'Huyện Bách Hương': 'Huyện Bách Hương', 'Huyện Long Nghiêu': 'Huyện Long Bình',
+  'Huyện Ninh Tấn': 'Huyện Ninh Tấn', 'Huyện Cự Lộc': 'Huyện Cự Lộc', 'Huyện Tân Hà': 'Huyện Tân Hà',
+  'Huyện Quảng Tông': 'Huyện Quảng Tông', 'Huyện Bình Hương': 'Huyện Bình Hương', 'Huyện Uy': 'Huyện Uy',
+  'Huyện Thanh Hà': 'Huyện Thanh Hà', 'Huyện Lâm Tây': 'Châu Lâm Thanh', // Huyện Lâm Tây thời Minh thuộc châu Lâm Thanh, Sơn Đông, tại đây đã được gộp lại
+  'Thành phố Nam Cung': 'Huyện Nam Cung', 'Thành phố Sa Hà': 'Huyện Sa Hà',
+  'Thành phố Bảo Định': 'Huyện Thanh Uyển', 'Quận Cạnh Tú': 'Huyện Thanh Uyển', 'Quận Liên Trì': 'Huyện Thanh Uyển',
+  'Quận Mãn Thành': 'Huyện Mãn Thành', 'Quận Thanh Uyển': 'Huyện Thanh Uyển', 'Quận Từ Thủy': 'Huyện An Túc',
+  'Huyện Lai Thủy': 'Huyện Lai Thủy', 'Huyện Phụ Bình': 'Huyện Phụ Bình', 'Huyện Định Hưng': 'Huyện Định Hưng',
+  'Huyện Đường': 'Huyện Đường', 'Huyện Cao Dương': 'Huyện Cao Dương', 'Huyện Dung Thành': 'Huyện Dung Thành',
+  'Huyện Lai Nguyên': 'Huyện Quảng Xương', 'Huyện Vọng Đô': 'Huyện Khánh Đô', 'Huyện An Tân': 'Huyện Tân An',
+  'Huyện Dịch': 'Dịch Châu', 'Huyện Khúc Dương': 'Huyện Khúc Dương', 'Huyện Lễ': 'Huyện Lễ',
+  'Huyện Thuận Bình': 'Huyện Hoàn', 'Huyện Bác Dã': 'Huyện Bác Dã', 'Huyện Hùng': 'Huyện Hùng',
+  'Thành phố Trác Châu': 'Trác Châu', 'Thành phố Định Châu': 'Định Châu', 'Thành phố An Quốc': 'Kỳ Châu',
+  'Thành phố Cao Bi Điếm': 'Huyện Tân Thành',
+  'Thành phố Trương Gia Khẩu': 'Trấn Tuyên Phủ', 'Quận Kiều Đông': 'Trấn Tuyên Phủ', 'Quận Kiều Tây': 'Trấn Tuyên Phủ',
+  'Quận Tuyên Hóa': 'Trấn Tuyên Phủ', 'Quận Hạ Hoa Viên': 'Trấn Tuyên Phủ', 'Quận Vạn Toàn': 'Vạn Toàn Hữu Vệ',
+  'Quận Sùng Lễ': 'Trấn Tuyên Phủ', 'Huyện Trương Bắc': 'Doanh Hưng Hòa', 'Huyện Khang Bảo': 'Doanh Khang Bảo',
+  'Huyện Cô Nguyên': 'Doanh Cô Nguyên', 'Huyện Thượng Nghĩa': 'Doanh Thượng Nghĩa', 'Huyện Uất': 'Uất Châu',
+  'Huyện Dương Nguyên': 'Uất Châu', 'Huyện Hoài An': 'Vệ Hoài An', 'Huyện Hoài Lai': 'Vệ Hoài Lai',
+  'Huyện Trác Lộc': 'Châu Bảo An', 'Huyện Xích Thành': 'Vệ Long Môn',
+  'Thành phố Thừa Đức': 'Đóa Nhan Tam Vệ', 
+  'Quận Song Kiều': 'Trung doanh Doyan', 'Quận Song Loan': 'Tây doanh Doyan', 'Khu mỏ Ưng Thủ Doanh Tử': 'Khoáng doanh Doyan',
+  'Huyện Thừa Đức': 'Đại doanh Doyan', 'Huyện Hưng Long': 'Bảo Hưng Long', 'Huyện Loan Bình': 'Bảo Loan Bình',
+  'Huyện Long Hóa': 'Bảo Long Hóa', 'Huyện tự trị dân tộc Mãn Phong Ninh': 'Doanh Phong Ninh', 'Huyện tự trị dân tộc Mãn Khoan Thành': 'Bảo Khoan Thành',
+  'Huyện tự trị dân tộc Mãn, Mông Cổ Vi Trường': 'Doanh Vi Trường', 'Thành phố Bình Tuyền': 'Doanh Bình Tuyền',
+  'Thành phố Thương Châu': 'Thương Châu', 'Quận Tân Hoa': 'Thương Châu', 'Quận Vận Hà': 'Thương Châu',
+  'Huyện Thương': 'Thương Châu', 'Huyện Thanh': 'Huyện Thanh', 'Huyện Đông Quang': 'Huyện Đông Quang',
+  'Huyện Hải Hưng': 'Huyện Diêm Sơn', 'Huyện Diêm Sơn': 'Huyện Diêm Sơn', 'Huyện Túc Ninh': 'Huyện Túc Ninh',
+  'Huyện Nam Bì': 'Huyện Nam Bì', 'Huyện Ngô Kiều': 'Huyện Ngô Kiều', 'Huyện Hiến': 'Huyện Hiến',
+  'Huyện tự trị dân tộc Hồi Mạnh Thôn': 'Thương Châu', 'Thành phố Bạc Đầu': 'Huyện Giao Hà', 'Thành phố Nhâm Khâu': 'Huyện Nhậm Khâu',
+  'Thành phố Hoàng Hoa': 'Huyện Diêm Sơn', 'Thành phố Hà Gian': 'Huyện Hà Gian',
+  'Thành phố Lang Phường': 'Phủ Thuận Thiên', 'Quận An Thứ': 'Huyện Đông An', 'Quận Quảng Dương': 'Huyện Đông An',
+  'Huyện Cố An': 'Huyện Cố An', 'Huyện Vĩnh Thanh': 'Huyện Vĩnh Thanh', 'Huyện Hương Hà': 'Huyện Hương Hà',
+  'Huyện Đại Thành': 'Huyện Đại Thành', 'Huyện Văn An': 'Huyện Văn An', 'Huyện tự trị dân tộc Hồi Đại Xưởng': 'Huyện Tam Hà',
+  'Thành phố Bá Châu': 'Bá Châu', 'Thành phố Tam Hà': 'Huyện Tam Hà',
+  'Thành phố Hành Thủy': 'Ký Châu', 'Quận Đào Thành': 'Huyện Hành Thủy', 'Quận Ký Châu': 'Ký Châu',
+  'Huyện Tảo Cường': 'Huyện Tảo Cường', 'Huyện Vũ Ấp': 'Huyện Vũ Ấp', 'Huyện Vũ Cường': 'Huyện Vũ Cường',
+  'Huyện Nhiêu Dương': 'Huyện Nhiêu Dương', 'Huyện An Bình': 'Huyện An Bình', 'Huyện Cố Thành': 'Huyện Cố Thành',
+  'Huyện Cảnh': 'Cảnh Châu', 'Huyện Phụ Thành': 'Huyện Phụ Thành', 'Thành phố Thâm Châu': 'Thâm Châu',
 
-  // ================== 山西省 ==================
-  '太原市': '阳曲县', '小店区': '阳曲县', '迎泽区': '阳曲县',
-  '杏花岭区': '阳曲县', '尖草坪区': '阳曲县', '万柏林区': '阳曲县',
-  '晋源区': '太原县', '清徐县': '清源县', '阳曲县': '阳曲县',
-  '娄烦县': '静乐县', '古交市': '交城县',
-  '大同市': '大同县', '平城区': '大同县', '云冈区': '大同县',
-  '新荣区': '大同县', '云州区': '大同县', '阳高县': '阳和卫',
-  '天镇县': '天成卫', '广灵县': '广灵县', '灵丘县': '灵丘县',
-  '浑源县': '浑源州', '左云县': '左卫', '右玉县': '右卫',
-  '阳泉市': '平定州', '城区': '平定州', '矿区': '平定州', '郊区': '平定州',
-  '平定县': '平定州', '盂县': '盂县',
-  '长治市': '长治县', '潞州区': '长治县', '上党区': '长治县',
-  '屯留区': '屯留县', '潞城区': '潞城县', '襄垣县': '襄垣县',
-  '平顺县': '平顺县', '黎城县': '黎城县', '壶关县': '壶关县',
-  '长子县': '长子县', '武乡县': '武乡县', '沁县': '沁州',
-  '沁源县': '沁源县',
-  '晋城市': '泽州', '城区': '泽州', '沁水县': '沁水县',
-  '阳城县': '阳城县', '陵川县': '陵川县', '泽州县': '泽州',
-  '高平市': '高平县',
-  '朔州市': '朔州', '朔城区': '朔州', '平鲁区': '平鲁卫',
-  '山阴县': '山阴县', '应县': '应州', '右玉县': '右卫',
-  '怀仁市': '怀仁县',
-  '晋中市': '榆次县', '榆次区': '榆次县', '太谷区': '太谷县',
-  '榆社县': '榆社县', '左权县': '辽州', '和顺县': '和顺县',
-  '昔阳县': '乐平县', '寿阳县': '寿阳县', '祁县': '祁县',
-  '平遥县': '平遥县', '灵石县': '灵石县', '介休市': '介休县',
-  '运城市': '安邑县', '盐湖区': '安邑县', '临猗县': '临晋县',
-  '万荣县': '万泉县', '闻喜县': '闻喜县', '稷山县': '稷山县',
-  '新绛县': '绛州', '绛县': '绛县', '垣曲县': '垣曲县',
-  '夏县': '夏县', '平陆县': '平陆县', '芮城县': '芮城县',
-  '永济市': '蒲州', '河津市': '河津县',
-  '忻州市': '忻州', '忻府区': '忻州', '定襄县': '定襄县',
-  '五台县': '五台县', '代县': '代州', '繁峙县': '繁峙县',
-  '宁武县': '宁武关', '静乐县': '静乐县', '神池县': '神池堡',
-  '五寨县': '五寨堡', '岢岚县': '岢岚州', '河曲县': '河曲县',
-  '保德县': '保德州', '偏关县': '偏关所', '原平市': '崞县',
-  '临汾市': '临汾县', '尧都区': '临汾县', '曲沃县': '曲沃县',
-  '翼城县': '翼城县', '襄汾县': '太平县', '洪洞县': '洪洞县',
-  '古县': '岳阳县', '安泽县': '岳阳县', '浮山县': '浮山县',
-  '吉县': '吉州', '乡宁县': '乡宁县', '大宁县': '大宁县',
-  '隰县': '隰州', '永和县': '永和县', '蒲县': '蒲县',
-  '汾西县': '汾西县', '侯马市': '曲沃县', '霍州市': '霍州',
-  '吕梁市': '永宁州', '离石区': '永宁州', '文水县': '文水县',
-  '交城县': '交城县', '兴县': '兴县', '临县': '临县',
-  '柳林县': '永宁州', '石楼县': '石楼县', '岚县': '岚县',
-  '方山县': '永宁州', '中阳县': '宁乡县', '交口县': '隰州',
-  '孝义市': '孝义县', '汾阳市': '汾州',
+  // ================== Tỉnh Sơn Tây ==================
+  'Thành phố Thái Nguyên': 'Huyện Dương Khúc', 'Quận Tiểu Điếm': 'Huyện Dương Khúc', 'Quận Nghênh Trạch': 'Huyện Dương Khúc',
+  'Quận Hạnh Hoa Lĩnh': 'Huyện Dương Khúc', 'Quận Tiêm Thảo Bình': 'Huyện Dương Khúc', 'Quận Vạn Bách Lâm': 'Huyện Dương Khúc',
+  'Quận Tấn Nguyên': 'Huyện Thái Nguyên', 'Huyện Thanh Từ': 'Huyện Thanh Nguyên', 'Huyện Dương Khúc': 'Huyện Dương Khúc',
+  'Huyện Lâu Phiền': 'Huyện Tĩnh Nhạc', 'Thành phố Cổ Giao': 'Huyện Giao Thành',
+  'Thành phố Đại Đồng': 'Huyện Đại Đồng', 'Quận Bình Thành': 'Huyện Đại Đồng', 'Quận Vân Cương': 'Huyện Đại Đồng',
+  'Quận Tân Vinh': 'Huyện Đại Đồng', 'Quận Vân Châu': 'Huyện Đại Đồng', 'Huyện Dương Cao': 'Vệ Dương Hòa',
+  'Huyện Thiên Trấn': 'Vệ Thiên Thành', 'Huyện Quảng Linh': 'Huyện Quảng Linh', 'Huyện Linh Khâu': 'Huyện Linh Khâu',
+  'Huyện Hồn Nguyên': 'Châu Hồn Nguyên', 'Huyện Tả Vân': 'Tả Vệ', 'Huyện Hữu Ngọc': 'Hữu Vệ',
+  'Thành phố Dương Tuyền': 'Châu Bình Định', 'Quận Thành': 'Châu Bình Định', 'Khu mỏ': 'Châu Bình Định', 'Quận Ngoại ô': 'Châu Bình Định',
+  'Huyện Bình Định': 'Châu Bình Định', 'Huyện Vu': 'Huyện Vu',
+  'Thành phố Trường Trị': 'Huyện Trường Trị', 'Quận Lộ Châu': 'Huyện Trường Trị', 'Quận Thượng Đảng': 'Huyện Trường Trị',
+  'Quận Đồn Lưu': 'Huyện Đồn Lưu', 'Quận Lộ Thành': 'Huyện Lộ Thành', 'Huyện Tương Viên': 'Huyện Tương Viên',
+  'Huyện Bình Thuận': 'Huyện Bình Thuận', 'Huyện Lê Thành': 'Huyện Lê Thành', 'Huyện Hồ Quan': 'Huyện Hồ Quan',
+  'Huyện Trưởng Tử': 'Huyện Trưởng Tử', 'Huyện Vũ Hương': 'Huyện Vũ Hương', 'Huyện Thấm': 'Thấm Châu',
+  'Huyện Thấm Nguyên': 'Huyện Thấm Nguyên',
+  'Thành phố Tấn Thành': 'Trạch Châu', 'Quận Thành': 'Trạch Châu', 'Huyện Thấm Thủy': 'Huyện Thấm Thủy',
+  'Huyện Dương Thành': 'Huyện Dương Thành', 'Huyện Lăng Xuyên': 'Huyện Lăng Xuyên', 'Huyện Trạch Châu': 'Trạch Châu',
+  'Thành phố Cao Bình': 'Huyện Cao Bằng',
+  'Thành phố Sóc Châu': 'Sóc Châu', 'Quận Sóc Thành': 'Sóc Châu', 'Quận Bình Lỗ': 'Vệ Bình Lỗ',
+  'Huyện Sơn Âm': 'Huyện Sơn Âm', 'Huyện Ứng': 'Ứng Châu', 'Huyện Hữu Ngọc': 'Hữu Vệ',
+  'Thành phố Hoài Nhân': 'Huyện Hoài Nhân',
+  'Thành phố Tấn Trung': 'Huyện Du Thứ', 'Quận Du Thứ': 'Huyện Du Thứ', 'Quận Thái Cốc': 'Huyện Thái Cốc',
+  'Huyện Du Xã': 'Huyện Du Xã', 'Huyện Tả Quyền': 'Liêu Châu', 'Huyện Hòa Thuận': 'Huyện Hòa Thuận',
+  'Huyện Tích Dương': 'Huyện Lạc Bình', 'Huyện Thọ Dương': 'Huyện Thọ Dương', 'Huyện Kỳ': 'Huyện Kỳ',
+  'Huyện Bình Dao': 'Huyện Bình Dao', 'Huyện Linh Thạch': 'Huyện Linh Thạch', 'Thành phố Giới Hưu': 'Huyện Giới Hưu',
+  'Thành phố Vận Thành': 'Huyện An Ấp', 'Quận Diêm Hồ': 'Huyện An Ấp', 'Huyện Lâm Y': 'Huyện Lâm Tấn',
+  'Huyện Vạn Vinh': 'Huyện Vạn Tuyền', 'Huyện Văn Hỷ': 'Huyện Văn Hỷ', 'Huyện Tắc Sơn': 'Huyện Tắc Sơn',
+  'Huyện Tân Giáng': 'Giáng Châu', 'Huyện Giáng': 'Huyện Giáng', 'Huyện Viên Khúc': 'Huyện Viên Khúc',
+  'Huyện Hạ': 'Huyện Hạ', 'Huyện Bình Lục': 'Huyện Bình Lục', 'Huyện Nhuế Thành': 'Huyện Nhuế Thành',
+  'Thành phố Vĩnh Tế': 'Bồ Châu', 'Thành phố Hà Tân': 'Huyện Hà Tân',
+  'Thành phố Hãn Châu': 'Hân Châu', 'Quận Hãn Phủ': 'Hân Châu', 'Huyện Định Tương': 'Huyện Định Tương',
+  'Huyện Ngũ Đài': 'Huyện Ngũ Đài', 'Huyện Đại': 'Đại Châu', 'Huyện Phồn Trĩ': 'Huyện Phồn Trĩ',
+  'Huyện Ninh Vũ': 'Ninh Vũ Quan', 'Huyện Tĩnh Nhạc': 'Huyện Tĩnh Nhạc', 'Huyện Thần Trì': 'Thần Trì Bảo',
+  'Huyện Ngũ Trại': 'Ngũ Trại Bảo', 'Huyện Khả Lam': 'Khả Lam Châu', 'Huyện Hà Khúc': 'Huyện Hà Khúc',
+  'Huyện Bảo Đức': 'Bảo Đức Châu', 'Huyện Thiên Quan': 'Thiên Quan Sở', 'Thành phố Nguyên Bình': 'Huyện Quách',
+  'Thành phố Lâm Phần': 'Huyện Lâm Phần', 'Quận Nghiêu Đô': 'Huyện Lâm Phần', 'Huyện Khúc Ốc': 'Huyện Khúc Ốc',
+  'Huyện Dực Thành': 'Huyện Dực Thành', 'Huyện Tương Phần': 'Huyện Thái Bình', 'Huyện Hồng Đồng': 'Huyện Hồng Đồng',
+  'Huyện Cổ': 'Huyện Nhạc Dương', 'Huyện An Trạch': 'Huyện Nhạc Dương', 'Huyện Phù Sơn': 'Huyện Phù Sơn',
+  'Huyện Cát': 'Cát Châu', 'Huyện Hương Ninh': 'Huyện Hương Ninh', 'Huyện Đại Ninh': 'Huyện Đại Ninh',
+  'Huyện Thấp': 'Thấp Châu', 'Huyện Vĩnh Hòa': 'Huyện Vĩnh Hòa', 'Huyện Bồ': 'Huyện Bồ',
+  'Huyện Phần Tây': 'Huyện Phần Tây', 'Thành phố Hầu Mã': 'Huyện Khúc Ốc', 'Thành phố Hoắc Châu': 'Hoắc Châu',
+  'Thành phố Lữ Lương': 'Vĩnh Ninh Châu', 'Quận Ly Thạch': 'Vĩnh Ninh Châu', 'Huyện Văn Thủy': 'Huyện Văn Thủy',
+  'Huyện Giao Thành': 'Huyện Giao Thành', 'Huyện Hưng': 'Huyện Hưng', 'Huyện Lâm': 'Huyện Lâm',
+  'Huyện Liễu Lâm': 'Vĩnh Ninh Châu', 'Huyện Thạch Lâu': 'Huyện Thạch Lâu', 'Huyện Lam': 'Huyện Lam',
+  'Huyện Phương Sơn': 'Vĩnh Ninh Châu', 'Huyện Trung Dương': 'Huyện Ninh Hương', 'Huyện Giao Khẩu': 'Thấp Châu',
+  'Thành phố Hiếu Nghĩa': 'Huyện Hiếu Nghĩa', 'Thành phố Phần Dương': 'Phần Châu',
 
-   // ================== 内蒙古自治区 ==================
-  '呼和浩特市': '归化城', '回民区': '归化西营', '玉泉区': '归化南营',
-  '赛罕区': '归化东营', '土默特左旗': '土默特左翼',
-  '托克托县': '东胜右卫', '和林格尔县': '云川卫', '清水河县': '东胜左卫',
-  '武川县': '武川堡',
+   // ================== Khu tự trị Nội Mông Cổ ==================
+  'Thành phố Hô Hòa Hạo Đặc': 'Quy Hóa Thành', 'Quận Hồi Dân': 'Tây doanh Quy Hóa', 'Quận Ngọc Tuyền': 'Nam doanh Quy Hóa',
+  'Quận Tái Hãn': 'Đông doanh Quy Hóa', 'Kỳ Thổ Mặc Đặc Tả': 'Thổ Mặc Đặc Tả dực',
+  'Huyện Thác Khắc Thác': 'Đông Thắng Hữu Vệ', 'Huyện Hòa Lâm Cách Nhĩ': 'Vân Xuyên Vệ', 'Huyện Thanh Thủy Hà': 'Đông Thắng Tả Vệ',
+  'Huyện Vũ Xuyên': 'Vũ Xuyên Bảo',
   
-  '包头市': '土默特部', '东河区': '包克图东营', '昆都仑区': '包克图西营',
-  '青山区': '青山营', '石拐区': '喜桂图', '白云鄂博矿区': '白云鄂博',
-  '九原区': '包克图', '土默特右旗': '土默特右翼',
-  '固阳县': '固阳堡', '达尔罕茂明安联合旗': '茂明安部',
+  'Thành phố Bao Đầu': 'Bộ Thổ Mặc Đặc', 'Quận Đông Hà': 'Bao Khắc Đồ Đông doanh', 'Quận Côn Đô Luân': 'Bao Khắc Đồ Tây doanh',
+  'Quận Thanh Sơn': 'Thanh Sơn Doanh', 'Quận Thạch Quải': 'Hỉ Quế Đồ', 'Khu mỏ Bạch Vân Ngạc Bác': 'Bạch Vân Ngạc Bác',
+  'Quận Cửu Nguyên': 'Bao Khắc Đồ', 'Kỳ Thổ Mặc Đặc Hữu': 'Thổ Mặc Đặc Hữu dực',
+  'Huyện Cố Dương': 'Cố Dương Bảo', 'Kỳ Liên hợp Đạt Nhĩ Hãn Mậu Minh An': 'Bộ Mậu Minh An',
   
-  '乌海市': '宁夏卫', '海勃湾区': '宁夏中后卫', '海南区': '宁夏中卫', '乌达区': '宁夏前卫',
+  'Thành phố Ô Hải': 'Ninh Hạ Vệ', 'Quận Hải Bột Loan': 'Ninh Hạ Trung hậu vệ', 'Quận Hải Nam': 'Ninh Hạ Trung Vệ', 'Quận Ô Đạt': 'Ninh Hạ Tiền Vệ',
   
-  '赤峰市': '朵颜卫', '红山区': '乌兰哈达', '元宝山区': '元宝山',
-  '松山区': '翁牛特左翼', '阿鲁科尔沁旗': '阿鲁科尔沁部', '巴林左旗': '巴林左翼',
-  '巴林右旗': '巴林右翼', '林西县': '林西堡', '克什克腾旗': '克什克腾部',
-  '翁牛特旗': '翁牛特右翼', '喀喇沁旗': '喀喇沁部', '宁城县': '大宁卫',
-  '敖汉旗': '敖汉部',
+  'Thành phố Xích Phong': 'Doyan Vệ', 'Quận Hồng Sơn': 'Ô Lan Haa Đạt', 'Quận Nguyên Bảo Sơn': 'Nguyên Bảo Sơn',
+  'Quận Tùng Sơn': 'Ông Ngưu Đặc Tả dực', 'Kỳ A Lỗ Khoa Nhĩ Thấm': 'Bộ A Lỗ Khoa Nhĩ Thấm', 'Kỳ Ba Lâm Tả': 'Ba Lâm Tả Dực',
+  'Kỳ Ba Lâm Hữu': 'Ba Lâm Hữu Dực', 'Huyện Lâm Tây': 'Lâm Tây Bảo', 'Kỳ Khắc Thập Khắc Đằng': 'Khắc Thập Khắc Đằng bộ',
+  'Kỳ Ông Ngưu Đặc': 'Ông Ngưu Đặc Hữu Dực', 'Kỳ Khách Lạt Thấm': 'Bộ Khách Lạt Thấm', 'Huyện Ninh Thành': 'Đại Ninh Vệ',
+  'Kỳ Ngao Hán': 'Ngao Hán Bộ',
   
-  '通辽市': '泰宁卫', '科尔沁区': '科尔沁主营', '科尔沁左翼中旗': '科尔沁左翼中营',
-  '科尔沁左翼后旗': '科尔沁左翼后营', '开鲁县': '开鲁堡', '库伦旗': '库伦部',
-  '奈曼旗': '奈曼部', '扎鲁特旗': '扎鲁特部', '霍林郭勒市': '霍林河',
+  'Thành phố Thông Liêu': 'Thái Ninh Vệ', 'Quận Khoa Nhĩ Thấm': 'Chủ Doanh Khoa Nhĩ Thấm', 'Kỳ Khoa Nhĩ Thấm Tả Dực Trung': 'Khoa Nhĩ Thấm Tả dực Trung doanh',
+  'Kỳ Khoa Nhĩ Thấm Tả Dực Hậu': 'Khoa Nhĩ Thấm Tả dực Hậu doanh', 'Huyện Khai Lỗ': 'Khai Lỗ Bảo', 'Kỳ Khố Luân': 'Khüree Bộ',
+  'Kỳ Nại Mạn': 'Nại Mạn Bộ', 'Kỳ Trát Lỗ Đặc': 'Bộ Trát Lỗ Đặc', 'Thành phố Hoắc Lâm Quách Lặc': 'Hoắc Lâm Hà',
   
-  '鄂尔多斯市': '鄂尔多斯部', '东胜区': '东胜卫', '康巴什区': '鄂尔多斯主营',
-  '达拉特旗': '达拉特部', '准格尔旗': '准格尔部', '鄂托克前旗': '鄂托克前营',
-  '鄂托克旗': '鄂托克后营', '杭锦旗': '杭锦部', '乌审旗': '乌审部',
-  '伊金霍洛旗': '伊金霍洛',
+  'Thành phố Ngạc Nhĩ Đa Tư': 'Bộ Ngạc Nhĩ Đa Tư', 'Quận Đông Thắng': 'Đông Thắng Vệ', 'Quận Khang Ba Thập': 'Chủ doanh Ngạc Nhĩ Đa Tư',
+  'Kỳ Đạt Lạp Đặc': 'Bộ Đạt Lạt Đặc', 'Kỳ Chuẩn Cách Nhĩ': 'Bộ Chuẩn Cát Nhĩ', 'Kỳ Ngạc Thác Khắc Tiền': 'Tiền Doanh Ngạc Thác Khắc',
+  'Kỳ Ngạc Thác Khắc': 'Hậu Doanh Ngạc Thác Khắc', 'Kỳ Hàng Cẩm': 'Hàng Cẩm Bộ', 'Kỳ Ô Thẩm': 'Ô Thẩm Bộ',
+  'Kỳ Y Kim Hoắc Lạc': 'Y Kim Hoắc Lạc',
   
-  '呼伦贝尔市': '达斡尔部', '海拉尔区': '海拉尔', '扎赉诺尔区': '扎赉诺尔',
-  '阿荣旗': '阿荣部', '莫力达瓦达斡尔族自治旗': '达斡尔主营', '鄂伦春自治旗': '鄂伦春部',
-  '鄂温克族自治旗': '鄂温克部', '陈巴尔虎旗': '陈巴尔虎', '新巴尔虎左旗': '新巴尔虎左翼',
-  '新巴尔虎右旗': '新巴尔虎右翼', '满洲里市': '霍勒金', '牙克石市': '牙克石',
-  '扎兰屯市': '雅鲁卫', '额尔古纳市': '额尔古纳卫', '根河市': '根河堡',
+  'Thành phố Hô Luân Bối Nhĩ': 'Bộ Đạt Oát Nhĩ', 'Quận Hải Lạp Nhĩ': 'Hải Lạp Nhĩ', 'Quận Trát Lãi Nặc Nhĩ': 'Trát Lãi Nặc Nhĩ',
+  'Kỳ A Vinh': 'A Vinh Bộ', 'Kỳ tự trị dân tộc Daur Mạc Lực Đạt Ngõa': 'Chủ Doanh Đạt Oát Nhĩ', 'Kỳ tự trị Oroqen': 'Bộ Ngạc Luân Xuân',
+  'Kỳ tự trị dân tộc Ewenki': 'Bộ Ngạc Ôn Khắc', 'Kỳ Trần Ba Nhĩ Hổ': 'Trần Ba Nhĩ Hổ', 'Kỳ Tân Ba Nhĩ Hổ Tả': 'Tả dực Tân Ba Nhĩ Hổ',
+  'Kỳ Tân Ba Nhĩ Hổ Hữu': 'Hữu dực Tân Ba Nhĩ Hổ', 'Thành phố Mãn Châu Lý': 'Hoắc Lặc Kim', 'Thành phố Nha Khắc Thạch': 'Nha Khắc Thạch',
+  'Thành phố Trát Lan Đồn': 'Nhã Lỗ Vệ', 'Thành phố Ngạch Nhĩ Cổ Nạp': 'Vệ Ngạch Nhĩ Cổ Nạp', 'Thành phố Căn Hà': 'Căn Hà Bảo',
   
-  '巴彦淖尔市': '乌拉特部', '临河区': '临河堡', '五原县': '五原堡',
-  '磴口县': '磴口堡', '乌拉特前旗': '乌拉特前营', '乌拉特中旗': '乌拉特中营',
-  '乌拉特后旗': '乌拉特后营', '杭锦后旗': '杭锦后营',
+  'Thành phố Ba Ngạn Náo Nhĩ': 'Bộ Ô Lạt Đặc', 'Quận Lâm Hà': 'Lâm Hà Bảo', 'Huyện Ngũ Nguyên': 'Ngũ Nguyên Bảo',
+  'Huyện Đặng Khẩu': 'Đặng Khẩu Bảo', 'Kỳ Ô Lạp Đặc Tiền': 'Tiền Doanh Ô Lạp Đặc', 'Kỳ Ô Lạp Đặc Trung': 'Trung Doanh Ô Lạp Đặc',
+  'Kỳ Ô Lạp Đặc Hậu': 'Hậu Doanh Ô Lạp Đặc', 'Kỳ Hàng Cẩm Hậu': 'Hậu doanh Hàng Cẩm',
   
-  '乌兰察布市': '察哈尔部', '集宁区': '集宁堡', '卓资县': '卓资山',
-  '化德县': '化德堡', '商都县': '商都堡', '兴和县': '兴和守御千户所',
-  '凉城县': '凉城堡', '察哈尔右翼前旗': '察哈尔右前营', '察哈尔右翼中旗': '察哈尔右中营',
-  '察哈尔右翼后旗': '察哈尔右后营', '四子王旗': '四子部落', '丰镇市': '丰镇堡',
+  'Thành phố Ô Lan Sát Bố': 'Bộ Sát Cáp Nhĩ', 'Quận Tập Ninh': 'Tập Ninh Bảo', 'Huyện Trác Tư': 'Trác Tư Sơn',
+  'Huyện Hóa Đức': 'Hóa Đức Bảo', 'Huyện Thương Đô': 'Thương Đô Bảo', 'Huyện Hưng Hòa': 'Hưng Hòa Thủ ngự Thiên hộ sở',
+  'Huyện Lương Thành': 'Lương Thành Bảo', 'Kỳ Sát Cáp Nhĩ Hữu Dực Tiền': 'Sát Cáp Nhĩ hữu tiền doanh', 'Kỳ Sát Cáp Nhĩ Hữu Dực Trung': 'Sát Cáp Nhĩ hữu trung doanh',
+  'Kỳ Sát Cáp Nhĩ Hữu Dực Hậu': 'Sát Cáp Nhĩ hữu hậu doanh', 'Kỳ Tứ Tử Vương': 'Tứ Tử Bộ Lạc', 'Thành phố Phong Trấn': 'Phong Trấn Bảo',
   
-  '兴安盟': '福余卫', '乌兰浩特市': '王爷庙', '阿尔山市': '阿尔山',
-  '科尔沁右翼前旗': '科右前营', '科尔沁右翼中旗': '科右中营', '扎赉特旗': '扎赉特部',
-  '突泉县': '醴泉堡',
+  'Minh Hưng An': 'Phúc Dư Vệ', 'Thành phố Ô Lan Hạo Đặc': 'Vương Gia Miếu', 'Thành phố A Nhĩ Sơn': 'A Nhĩ Sơn',
+  'Kỳ Khoa Nhĩ Thấm Hữu Dực Tiền': 'Khoa Hữu Tiền doanh', 'Kỳ Khoa Nhĩ Thấm Hữu Dực Trung': 'Khoa Hữu Trung doanh', 'Kỳ Trát Lãi Đặc': 'Trát Lãi Đặc bộ',
+  'Huyện Đột Tuyền': 'Lễ Tuyền Bảo',
   
-  '锡林郭勒盟': '苏尼特部', '二连浩特市': '伊连堡', '锡林浩特市': '阿巴嘎左翼',
-  '阿巴嘎旗': '阿巴嘎部', '苏尼特左旗': '苏尼特左翼', '苏尼特右旗': '苏尼特右翼',
-  '东乌珠穆沁旗': '东乌珠穆沁', '西乌珠穆沁旗': '西乌珠穆沁', '太仆寺旗': '太仆寺',
-  '镶黄旗': '镶黄旗营', '正镶白旗': '正镶白旗营', '正蓝旗': '正蓝旗营',
-  '多伦县': '多伦诺尔',
+  'Minh Tích Lâm Quách Lặc': 'Tô Ni Đặc bộ', 'Thành phố Nhị Liên Hạo Đặc': 'Y Liên Bảo', 'Thành phố Tích Lâm Hạo Đặc': 'A Ba Cát Tả Dực',
+  'Kỳ A Ba Dát': 'A Ba Dát bộ', 'Kỳ Tô Ni Đặc Tả': 'Tô Ni Đặc Tả Dực', 'Kỳ Tô Ni Đặc Hữu': 'Tô Ni Đặc Hữu Dực',
+  'Kỳ Đông Ô Châu Mục Thấm': 'Đông Ô Châu Mục Thấm', 'Kỳ Tây Ô Châu Mục Thấm': 'Tây Ô Châu Mục Thấm', 'Kỳ Thái Bộc Tự': 'Thái Bộc Tự',
+  'Kỳ Tương Hoàng': 'Kỳ Tương Hoàng doanh', 'Kỳ Chính Tương Bạch': 'Doanh Kỳ Chính Tương Bạch', 'Kỳ Chính Lam': 'Kỳ Chính Lam doanh',
+  'Huyện Đa Luân': 'Đa Luân Nặc Nhĩ',
   
-  '阿拉善盟': '宁夏卫', '阿拉善左旗': '宁夏卫',
-  '阿拉善右旗': '宁夏卫', '额济纳旗': '宁夏卫',
+  'Minh A Lạp Thiện': 'Ninh Hạ Vệ', 'Kỳ A Lạp Thiện Tả': 'Ninh Hạ Vệ',
+  'Kỳ A Lạp Thiện Hữu': 'Ninh Hạ Vệ', 'Kỳ Ngạch Tế Nạp': 'Ninh Hạ Vệ',
 
-  // ================== 辽宁省 ==================
-  // 明代属辽东都司
-  '沈阳市': '沈阳中卫', '和平区': '沈阳中卫', '沈河区': '沈阳中卫',
-  '大东区': '沈阳中卫', '皇姑区': '沈阳中卫', '铁西区': '沈阳中卫',
-  '苏家屯区': '沈阳中卫', '浑南区': '沈阳中卫', '沈北新区': '沈阳中卫',
-  '于洪区': '沈阳中卫', '辽中区': '辽中县', '康平县': '辽海卫',
-  '法库县': '沈阳中卫', '新民市': '沈阳中卫',
-  '大连市': '金州卫', '中山区': '金州卫', '西岗区': '金州卫',
-  '沙河口区': '金州卫', '甘井子区': '金州卫', '旅顺口区': '金州卫',
-  '金州区': '金州卫', '普兰店区': '复州卫', '长海县': '金州卫',
-  '瓦房店市': '复州卫', '庄河市': '凤凰堡',
-  '鞍山市': '辽阳卫', '铁东区': '辽阳卫', '铁西区': '辽阳卫',
-  '立山区': '辽阳卫', '千山区': '辽阳卫', '台安县': '广宁卫',
-  '岫岩满族自治县': '凤凰堡', '海城市': '海州卫',
-  '抚顺市': '抚顺千户所', '新抚区': '抚顺千户所', '东洲区': '抚顺千户所',
-  '望花区': '抚顺千户所', '顺城区': '抚顺千户所', '抚顺县': '抚顺千户所',
-  '新宾满族自治县': '建州卫（后金）', '清原满族自治县': '抚顺千户所',
-  '本溪市': '辽东边墙内', '平山区': '辽阳卫', '溪湖区': '辽阳卫',
-  '明山区': '辽阳卫', '南芬区': '辽阳卫', '本溪满族自治县': '辽阳卫',
-  '桓仁满族自治县': '建州卫',
-  '丹东市': '镇江堡', '元宝区': '镇江堡', '振兴区': '镇江堡',
-  '振安区': '镇江堡', '宽甸满族自治县': '宽甸堡', '东港市': '镇江堡',
-  '凤城市': '凤凰堡',
-  '锦州市': '广宁中屯卫', '古塔区': '锦州', '凌河区': '锦州',
-  '太和区': '锦州', '黑山县': '广宁卫', '义县': '义州卫',
-  '凌海市': '广宁右屯卫', '北镇市': '广宁卫',
-  '营口市': '盖州卫', '站前区': '盖州卫', '西市区': '盖州卫',
-  '鲅鱼圈区': '盖州卫', '老边区': '盖州卫', '盖州市': '盖州卫',
-  '大石桥市': '海州卫',
-  '阜新市': '广宁后屯卫', '海州区': '广宁后屯卫', '新邱区': '广宁后屯卫',
-  '太平区': '广宁后屯卫', '清河门区': '广宁后屯卫', '细河区': '广宁后屯卫',
-  '阜新蒙古族自治县': '广宁后屯卫', '彰武县': '广宁后屯卫',
-  '辽阳市': '辽东都司/辽阳卫', '白塔区': '辽阳卫', '文圣区': '辽阳卫',
-  '宏伟区': '辽阳卫', '弓长岭区': '辽阳卫', '太子河区': '辽阳卫',
-  '辽阳县': '辽阳卫', '灯塔市': '辽阳卫',
-  '盘锦市': '广宁卫', '双台子区': '广宁卫', '兴隆台区': '广宁卫',
-  '大洼区': '广宁卫', '盘山县': '广宁卫',
-  '铁岭市': '铁岭卫', '银州区': '铁岭卫', '清河区': '铁岭卫',
-  '铁岭县': '铁岭卫', '西丰县': '铁岭卫', '昌图县': '铁岭卫',
-  '调兵山市': '铁岭卫', '开原市': '开原卫',
-  '朝阳市': '营州卫', '双塔区': '营州卫（废）', '龙城区': '营州卫',
-  '朝阳县': '营州卫', '建平县': '营州卫', '喀喇沁左翼蒙古族自治县': '营州卫',
-  '北票市': '营州卫', '凌源市': '营州卫',
-  '葫芦岛市': '宁远卫', '连山区': '宁远卫', '龙港区': '宁远卫',
-  '南票区': '宁远卫', '绥中县': '广宁前屯卫', '建昌县': '营州卫',
-  '兴城市': '宁远卫',
+  // ================== Tỉnh Liêu Ninh ==================
+  // Thời Minh thuộc Liêu Đông Đô ty
+  'Thành phố Thẩm Dương': 'Thẩm Dương Trung vệ', 'Quận Hòa Bình': 'Thẩm Dương Trung vệ', 'Quận Thẩm Hà': 'Thẩm Dương Trung vệ',
+  'Quận Đại Đông': 'Thẩm Dương Trung vệ', 'Quận Hoàng Cô': 'Thẩm Dương Trung vệ', 'Quận Thiết Tây': 'Thẩm Dương Trung vệ',
+  'Quận Tô Gia Đồn': 'Thẩm Dương Trung vệ', 'Quận Hồn Nam': 'Thẩm Dương Trung vệ', 'Khu mới Thẩm Bắc': 'Thẩm Dương Trung vệ',
+  'Quận Vu Hồng': 'Thẩm Dương Trung vệ', 'Quận Liêu Trung': 'Huyện Liêu Trung', 'Huyện Khang Bình': 'Liêu Hải Vệ',
+  'Huyện Pháp Khố': 'Thẩm Dương Trung vệ', 'Thành phố Tân Dân': 'Thẩm Dương Trung vệ',
+  'Thành phố Đại Liên': 'Kim Châu Vệ', 'Quận Trung Sơn': 'Kim Châu Vệ', 'Quận Tây Cương': 'Kim Châu Vệ',
+  'Quận Sa Hà Khẩu': 'Kim Châu Vệ', 'Quận Cam Tỉnh Tử': 'Kim Châu Vệ', 'Quận Lữ Thuận Khẩu': 'Kim Châu Vệ',
+  'Quận Kim Châu': 'Kim Châu Vệ', 'Quận Phổ Lan Điếm': 'Phục Châu Vệ', 'Huyện Trường Hải': 'Kim Châu Vệ',
+  'Thành phố Ngõa Phòng Điếm': 'Phục Châu Vệ', 'Thành phố Trang Hà': 'Phượng Hoàng Bảo',
+  'Thành phố An Sơn': 'Liêu Dương Vệ', 'Quận Thiết Đông': 'Liêu Dương Vệ', 'Quận Thiết Tây': 'Liêu Dương Vệ',
+  'Quận Lập Sơn': 'Liêu Dương Vệ', 'Quận Thiên Sơn': 'Liêu Dương Vệ', 'Huyện Thai An': 'Quảng Ninh Vệ',
+  'Huyện tự trị dân tộc Mãn Tụ Nham': 'Phượng Hoàng Bảo', 'Thành phố Hải Thành': 'Hải Châu Vệ',
+  'Thành phố Phủ Thuận': 'Thiên Hộ Sở Phủ Thuận', 'Quận Tân Phủ': 'Thiên Hộ Sở Phủ Thuận', 'Quận Đông Châu': 'Thiên Hộ Sở Phủ Thuận',
+  'Quận Vọng Hoa': 'Thiên Hộ Sở Phủ Thuận', 'Quận Thuận Thành': 'Thiên Hộ Sở Phủ Thuận', 'Huyện Phủ Thuận': 'Thiên Hộ Sở Phủ Thuận',
+  'Huyện tự trị dân tộc Mãn Tân Tân': 'Kiến Châu Vệ (Hậu Kim)', 'Huyện tự trị dân tộc Mãn Thanh Nguyên': 'Thiên Hộ Sở Phủ Thuận',
+  'Thành phố Bản Khê': 'Nội Biên Tường Liêu Đông', 'Quận Bình Sơn': 'Liêu Dương Vệ', 'Quận Khê Hồ': 'Liêu Dương Vệ',
+  'Quận Minh Sơn': 'Liêu Dương Vệ', 'Quận Nam Phân': 'Liêu Dương Vệ', 'Huyện tự trị dân tộc Mãn Bản Khê': 'Liêu Dương Vệ',
+  'Huyện tự trị dân tộc Mãn Hoàn Nhân': 'Kiến Châu Vệ',
+  'Thành phố Đan Đông': 'Trấn Giang Bảo', 'Quận Nguyên Bảo': 'Trấn Giang Bảo', 'Quận Chấn Hưng': 'Trấn Giang Bảo',
+  'Quận Chấn An': 'Trấn Giang Bảo', 'Huyện tự trị dân tộc Mãn Khoan Điện': 'Khoan Điện Bảo', 'Thành phố Đông Cảng': 'Trấn Giang Bảo',
+  'Thành phố Phượng Thành': 'Phượng Hoàng Bảo',
+  'Thành phố Cẩm Châu': 'Trung Đồn Vệ Quảng Ninh', 'Quận Cổ Tháp': 'Cẩm Châu', 'Quận Lăng Hà': 'Cẩm Châu',
+  'Quận Thái Hòa': 'Cẩm Châu', 'Huyện Hắc Sơn': 'Quảng Ninh Vệ', 'Huyện Nghĩa': 'Nghĩa Châu Vệ',
+  'Thành phố Lăng Hải': 'Hữu Đồn Vệ Quảng Ninh', 'Thành phố Bắc Trấn': 'Quảng Ninh Vệ',
+  'Thành phố Dinh Khẩu': 'Cái Châu Vệ', 'Quận Trạm Tiền': 'Cái Châu Vệ', 'Quận Tây Thị': 'Cái Châu Vệ',
+  'Quận Bạt Ngư Khuyên': 'Cái Châu Vệ', 'Quận Lão Biên': 'Cái Châu Vệ', 'Thành phố Cái Châu': 'Cái Châu Vệ',
+  'Thành phố Đại Thạch Kiều': 'Hải Châu Vệ',
+  'Thành phố Phụ Tân': 'Hậu Đồn Vệ Quảng Ninh', 'Quận Hải Châu': 'Hậu Đồn Vệ Quảng Ninh', 'Quận Tân Khâu': 'Hậu Đồn Vệ Quảng Ninh',
+  'Quận Thái Bình': 'Hậu Đồn Vệ Quảng Ninh', 'Quận Thanh Hà Môn': 'Hậu Đồn Vệ Quảng Ninh', 'Quận Tế Hà': 'Hậu Đồn Vệ Quảng Ninh',
+  'Huyện tự trị dân tộc Mông Cổ Phụ Tân': 'Hậu Đồn Vệ Quảng Ninh', 'Huyện Chương Vũ': 'Hậu Đồn Vệ Quảng Ninh',
+  'Thành phố Liêu Dương': 'Liêu Đông Đô ty/Liêu Dương Vệ', 'Quận Bạch Tháp': 'Liêu Dương Vệ', 'Quận Văn Thánh': 'Liêu Dương Vệ',
+  'Quận Hoành Vĩ': 'Liêu Dương Vệ', 'Quận Cung Trường Lĩnh': 'Liêu Dương Vệ', 'Quận Thái Tử Hà': 'Liêu Dương Vệ',
+  'Huyện Liêu Dương': 'Liêu Dương Vệ', 'Thành phố Đăng Tháp': 'Liêu Dương Vệ',
+  'Thành phố Bàn Cẩm': 'Quảng Ninh Vệ', 'Quận Song Đài Tử': 'Quảng Ninh Vệ', 'Quận Hưng Long Đài': 'Quảng Ninh Vệ',
+  'Quận Đại Oa': 'Quảng Ninh Vệ', 'Huyện Bàn Sơn': 'Quảng Ninh Vệ',
+  'Thành phố Thiết Lĩnh': 'Thiết Lĩnh Vệ', 'Quận Ngân Châu': 'Thiết Lĩnh Vệ', 'Quận Thanh Hà': 'Thiết Lĩnh Vệ',
+  'Huyện Thiết Lĩnh': 'Thiết Lĩnh Vệ', 'Huyện Tây Phong': 'Thiết Lĩnh Vệ', 'Huyện Xương Đồ': 'Thiết Lĩnh Vệ',
+  'Thành phố Điếu Binh Sơn': 'Thiết Lĩnh Vệ', 'Thành phố Khai Nguyên': 'Khai Nguyên Vệ',
+  'Thành phố Triều Dương': 'Doanh Châu Vệ', 'Quận Song Tháp': 'Doanh Châu Vệ (Phế)', 'Quận Long Thành': 'Doanh Châu Vệ',
+  'Huyện Triều Dương': 'Doanh Châu Vệ', 'Huyện Kiến Bình': 'Doanh Châu Vệ', 'Huyện tự trị dân tộc Mông Cổ Khách Lạt Thấm Tả Dực': 'Doanh Châu Vệ',
+  'Thành phố Bắc Phiếu': 'Doanh Châu Vệ', 'Thành phố Lăng Nguyên': 'Doanh Châu Vệ',
+  'Thành phố Hồ Lô Đảo': 'Ninh Viễn Vệ', 'Quận Liên Sơn': 'Ninh Viễn Vệ', 'Quận Long Cảng': 'Ninh Viễn Vệ',
+  'Quận Nam Phiếu': 'Ninh Viễn Vệ', 'Huyện Tuy Trung': 'Tiền Đồn Vệ Quảng Ninh', 'Huyện Kiến Xương': 'Dinh Châu Vệ',
+  'Thành phố Hưng Thành': 'Ninh Viễn Vệ',
 
-  // ================== 吉林省 ==================
-  '长春市': '伊通堡', '南关区': '南关堡', '宽城区': '宽城堡',
-  '二道区': '伊通河卫', '绿园区': '西营',
-  '双阳区': '苏瓦延部', '九台区': '九台堡', '农安县': '黄龙城',
-  '榆树市': '孤榆树', '德惠市': '沐扬卫', '公主岭市': '郭尔罗斯部',
-  '吉林市': '乌拉城', '昌邑区': '乌拉左营', '龙潭区': '龙潭山城',
-  '船营区': '船厂', '丰满区': '松花江卫', '永吉县': '永吉州',
-  '蛟河市': '额穆赫部', '桦甸市': '辉发城', '舒兰市': '舒兰堡',
-  '磐石市': '阿什喀达',
-  '四平市': '叶赫城', '铁西区': '叶赫西城', '铁东区': '叶赫东城', 
-  '梨树县': '偏脸城', '伊通满族自治县': '伊通堡', '双辽市': '打牲乌拉',
-  '辽源市': '哈达城', '龙山区': '哈达西营', '东丰县': '大尔扈部', '东辽县': '小尔扈部',
-  '通化市': '赫图阿拉', '东昌区': '佟佳部', '二道江区': '浑江卫',
-  '通化县': '建州右卫', '辉南县': '辉发南营', '柳河县': '柳条边',
-  '梅河口市': '海龙堡', '集安市': '董鄂部',
-  '白山市': '长白山部', '浑江区': '鸭绿江部', 
-  '抚松县': '讷殷部', '靖宇县': '珠舍里部', '长白朝鲜族自治县': '长白山部',
-  '临江市': '茂怜卫',
-  '松原市': '科尔沁部', '宁江区': '伯都讷', '前郭尔罗斯蒙古族自治县': '郭尔罗斯前营',
-  '长岭县': '长岭堡', '乾安县': '乾安堡', '扶余市': '扶余卫',
-  '白城市': '科尔沁部', '洮北区': '泰宁左翼', '镇赉县': '镇赉堡',
-  '通榆县': '扎萨克部', '洮南市': '洮南堡', '大安市': '大安堡',
-  '延边朝鲜族自治州': '瓦尔喀部', '延吉市': '局子街', '图们市': '灰幕东',
-  '敦化市': '阿克敦部', '珲春市': '温春部', '龙井市': '六道沟',
-  '和龙市': '和龙卫', '汪清县': '百草沟', '安图县': '安图堡',
+  // ================== Tỉnh Cát Lâm ==================
+  'Thành phố Trường Xuân': 'Y Thông Bảo', 'Quận Nam Quan': 'Nam Quan Bảo', 'Quận Khoan Thành': 'Khoan Thành Bảo',
+  'Quận Nhị Đạo': 'Y Thông Hà vệ', 'Quận Lục Viên': 'Tây Doanh',
+  'Quận Song Dương': 'Tô Ngõa Diên bộ', 'Quận Cửu Đài': 'Cửu Đài Bảo', 'Huyện Nông An': 'Hoàng Long Thành',
+  'Thành phố Du Thụ': 'Cô Du Thụ', 'Thành phố Đức Huệ': 'Mộc Dương Vệ', 'Thành phố Công Chúa Lĩnh': 'Bộ Quách Nhĩ La Tư',
+  'Thành phố Cát Lâm': 'Ô Lạp Thành', 'Quận Xương Ấp': 'Ô Lạp Tả doanh', 'Quận Long Đàm': 'Long Đàm Sơn thành',
+  'Quận Thuyền Doanh': 'Thuyền Xưởng', 'Quận Phong Mãn': 'Tùng Hoa Giang vệ', 'Huyện Vĩnh Cát': 'Vĩnh Cát Châu',
+  'Thành phố Giao Hà': 'Ngạch Mục Hách bộ', 'Thành phố Hoa Điện': 'Huy Phát Thành', 'Thành phố Thư Lan': 'Thư Lan Bảo',
+  'Thành phố Bàn Thạch': 'A Thập Khách Đạt',
+  'Thành phố Tứ Bình': 'Diệp Hách Thành', 'Quận Thiết Tây': 'Diệp Hách Tây thành', 'Quận Thiết Đông': 'Diệp Hách Đông thành', 
+  'Huyện Lê Thụ': 'Thiên Kiểm Thành', 'Huyện tự trị dân tộc Mãn Y Thông': 'Y Thông Bảo', 'Thành phố Song Liêu': 'Đả Sinh Ô Lạp',
+  'Thành phố Liêu Nguyên': 'Haa Đạt Thành', 'Quận Long Sơn': 'Cáp Đạt Tây doanh', 'Huyện Đông Phong': 'Đại Nhĩ Hỗ bộ', 'Huyện Đông Liêu': 'Tiểu Nhĩ Hỗ bộ',
+  'Thành phố Thông Hóa': 'Hách Đồ A Lạt', 'Quận Đông Xương': 'Đồng Giai Bộ', 'Quận Nhị Đạo Giang': 'Hồn Giang Vệ',
+  'Huyện Thông Hóa': 'Kiến Châu Hữu vệ', 'Huyện Huy Nam': 'Huy Phát Nam doanh', 'Huyện Liễu Hà': 'Liễu Điều Biên',
+  'Thành phố Mai Hà Khẩu': 'Hải Long Bảo', 'Thành phố Tập An': 'Đổng Ngạc Bộ',
+  'Thành phố Bạch Sơn': 'Trường Bạch Sơn bộ', 'Quận Hồn Giang': 'Áp Lục Giang bộ', 
+  'Huyện Phủ Tùng': 'Nột Ân Bộ', 'Huyện Tĩnh Vũ': 'Châu Xá Lý bộ', 'Huyện tự trị dân tộc Triều Tiên Trường Bạch': 'Bộ Trường Bạch Sơn',
+  'Thành phố Lâm Giang': 'Mậu Liên Vệ',
+  'Thành phố Tùng Nguyên': 'Bộ Khoa Nhĩ Thấm', 'Quận Ninh Giang': 'Bá Đô Nột', 'Huyện tự trị dân tộc Mông Cổ Tiền Quách Nhĩ La Tư': 'Quách Nhĩ La Tư tiền doanh',
+  'Huyện Trường Lĩnh': 'Trường Lĩnh Bảo', 'Huyện Càn An': 'Càn An Bảo', 'Thành phố Phù Dư': 'Phù Dư Vệ',
+  'Thành phố Bạch Thành': 'Bộ Khoa Nhĩ Thấm', 'Quận Thao Bắc': 'Thái Ninh Tả Dực', 'Huyện Trấn Lãi': 'Trấn Lãi Bảo',
+  'Huyện Thông Du': 'Bộ Trát Tát Khắc', 'Thành phố Thao Nam': 'Thao Nam Bảo', 'Thành phố Đại An': 'Đại An Bảo',
+  'Châu tự trị dân tộc Triều Tiên Diên Biên': 'Bộ Ngõa Nhĩ Khách', 'Thành phố Diên Cát': 'Cục Tử Nhai', 'Thành phố Đồ Môn': 'Khôi Mạc Đông',
+  'Thành phố Đôn Hóa': 'Bộ A Khắc Đôn', 'Thành phố Hồn Xuân': 'Ôn Xuân Bộ', 'Thành phố Long Tỉnh': 'Lục Đạo Câu',
+  'Thành phố Hòa Long': 'Hòa Long Vệ', 'Huyện Uông Thanh': 'Bách Thảo Câu', 'Huyện An Đồ': 'An Đồ Bảo',
 
- // ================== 黑龙江省 ==================
-  '哈尔滨市': '阿勒楚喀', '道里区': '松花江南营', '南岗区': '马家沟',
-  '道外区': '滨江堡', '平房区': '平房堡', '松北区': '松江营',
-  '香坊区': '香坊堡', '呼兰区': '呼兰卫', '阿城区': '阿勒楚喀',
-  '双城区': '拉林部', '依兰县': '三姓城', '方正县': '方正堡',
-  '宾县': '宾州堡', '巴彦县': '巴彦苏苏', '木兰县': '木兰堡',
-  '通河县': '洪肯部', '延寿县': '长寿堡', '尚志市': '珠河',
-  '五常市': '五常堡',
-  '齐齐哈尔市': '索伦部', '龙沙区': '卜鲁丹卫', '建华区': '者陈卫',
-  '铁锋区': '木忽河卫', '昂昂溪区': '昂昂溪', '富拉尔基区': '弗提卫',
-  '碾子山区': '碾子山', '梅里斯达斡尔族区': '达斡尔南营', '龙江县': '龙江堡',
-  '依安县': '依安堡', '泰来县': '塔子城', '甘南县': '甘南堡',
-  '富裕县': '富裕堡', '克山县': '克山堡', '克东县': '克东堡',
-  '拜泉县': '巴拜堡', '讷河市': '讷河卫',
-  '鸡西市': '穆棱部', '鸡冠区': '穆棱左营', '恒山区': '穆棱右营',
-  '滴道区': '滴道', '梨树区': '梨树沟', '城子河区': '城子河',
-  '麻山区': '麻山', '鸡东县': '鸡东堡', '虎林市': '忽林卫',
-  '密山市': '穆棱部',
-  '鹤岗市': '赫哲部', '萝北县': '萝北堡', '绥滨县': '绥滨堡', 
-  '工农区': '赫哲左营', '兴安区': '赫哲右营', '东山区': '鹤岗东营', '兴山区': '鹤岗西营',
-  '双鸭山市': '使犬部', '集贤县': '集贤堡', '友谊县': '友谊堡',
-  '宝清县': '宝清堡', '饶河县': '饶河卫', '尖山区': '尖山堡', '岭东区': '岭东堡', '四方台区': '四方台',
-  '大庆市': '杜尔伯特部', '萨尔图区': '萨尔图', '龙凤区': '龙凤堡',
-  '让胡路区': '让胡路', '红岗区': '红岗', '大同区': '大同堡',
-  '肇州县': '肇州堡', '肇源县': '肇源堡', '林甸县': '林甸堡',
-  '杜尔伯特蒙古族自治县': '杜尔伯特部',
-  '伊春市': '萨哈连部', '伊美区': '伊春堡', '乌翠区': '乌翠堡',
-  '友好区': '友好堡', '嘉荫县': '嘉荫堡', '汤旺县': '汤旺河卫',
-  '丰林县': '丰林堡', '大箐山县': '大箐山', '南岔县': '南岔',
-  '金林区': '金林堡', '铁力市': '铁骊卫',
-  '佳木斯市': '忽尔哈部', '前进区': '合江左营',
-  '东风区': '合江右营', '桦南县': '桦南堡',
-  '桦川县': '忽尔哈卫', '汤原县': '汤原堡', '同江市': '拉哈苏苏',
-  '富锦市': '富克锦', '抚远市': '伊力嘎',
-  '七台河市': '库尔喀部', '桃山区': '桃山堡',
-  '茄子河区': '茄子河', '勃利县': '勃利堡',
-  '牡丹江市': '宁古塔', '爱民区': '宁古塔北营', '林口县': '林口堡', '阳明区': '宁古塔东营',
-  '绥芬河市': '绥芬部', '海林市': '海兰泡', '宁安市': '宁古塔',
-  '穆棱市': '穆棱卫', '东宁市': '三岔口',
-  '黑河市': '飞牙喀部', '爱辉区': '忽鲁穆卫', '逊克县': '逊克堡',
-  '孙吴县': '孙吴堡', '北安市': '龙镇', '五大连池市': '墨尔根',
-  '嫩江市': '嫩江卫',
-  '绥化市': '呼兰部', '北林区': '呼兰北营', '望奎县': '望奎堡',
-  '兰西县': '呼兰西营', '青冈县': '青冈堡', '庆安县': '庆安堡',
-  '明水县': '明水堡', '绥棱县': '绥棱堡', '安达市': '安达堡',
-  '肇东市': '肇东堡', '海伦市': '海伦堡',
-  '大兴安岭地区': '使鹿部', '漠河市': '漠河堡', '呼玛县': '呼玛尔卫',
-  '塔河县': '塔河堡',
+ // ================== Tỉnh Hắc Long Giang ==================
+  'Thành phố Cáp Nhĩ Tân': 'A Lặc Sở Khách', 'Quận Đạo Lý': 'Nam Doanh Tùng Hoa Giang', 'Quận Nam Cương': 'Mã Gia Câu',
+  'Quận Đạo Ngoại': 'Tân Giang Bảo', 'Quận Bình Phường': 'Bình Phòng Bảo', 'Quận Tùng Bắc': 'Tùng Giang Doanh',
+  'Quận Hương Phường': 'Hương Phường Bảo', 'Quận Hô Lan': 'Hô Lan Vệ', 'Quận A Thành': 'A Lặc Sở Khách',
+  'Quận Song Thành': 'Lạp Lâm Bộ', 'Huyện Y Lan': 'Tam Tính Thành', 'Huyện Phương Chính': 'Phương Chính Bảo',
+  'Huyện Tân': 'Tân Châu Bảo', 'Huyện Ba Ngạn': 'Ba Ngạn Tô Tô', 'Huyện Mộc Lan': 'Mộc Lan Bảo',
+  'Huyện Thông Hà': 'Hồng Khẳng Bộ', 'Huyện Diên Thọ': 'Trường Thọ Bảo', 'Thành phố Thượng Chí': 'Châu Hà',
+  'Thành phố Ngũ Thường': 'Ngũ Thường Bảo',
+  'Thành phố Tề Tề Cáp Nhĩ': 'Tác Luân Bộ', 'Quận Long Sa': 'Vệ Bặc Lỗ Đan', 'Quận Kiến Hoa': 'Giả Trần Vệ',
+  'Quận Thiết Phong': 'Vệ Mộc Hốt Hà', 'Quận Ngang Ngang Khê': 'Ngang Ngang Khê', 'Quận Phú Lạp Nhĩ Cơ': 'Phất Đề Vệ',
+  'Quận Niễn Tử Sơn': 'Niễn Tử Sơn', 'Quận dân tộc Daur Mai Lý Tư': 'Nam Doanh Đạt Oát Nhĩ', 'Huyện Long Giang': 'Long Giang Bảo',
+  'Huyện Y An': 'Y An Bảo', 'Huyện Thái Lai': 'Tháp Tử Thành', 'Huyện Cam Nam': 'Cam Nam Bảo',
+  'Huyện Phú Dụ': 'Phú Dụ Bảo', 'Huyện Khắc Sơn': 'Khắc Sơn Bảo', 'Huyện Khắc Đông': 'Khắc Đông Bảo',
+  'Huyện Bái Tuyền': 'Ba Bái Bảo', 'Thành phố Nột Hà': 'Nột Hà Vệ',
+  'Thành phố Kê Tây': 'Mục Lăng Bộ', 'Quận Kê Quan': 'Mục Lăng Tả Dinh', 'Quận Hằng Sơn': 'Mục Lăng Hữu Dinh',
+  'Quận Tích Đạo': 'Tích Đạo', 'Quận Lê Thụ': 'Lê Thụ Câu', 'Quận Thành Tử Hà': 'Thành Tử Hà',
+  'Quận Ma Sơn': 'Ma Sơn', 'Huyện Kê Đông': 'Kê Đông Bảo', 'Thành phố Hổ Lâm': 'Hốt Lâm Vệ',
+  'Thành phố Mật Sơn': 'Mục Lăng Bộ',
+  'Thành phố Hạc Cương': 'Hách Triết Bộ', 'Huyện La Bắc': 'La Bắc Bảo', 'Huyện Tuy Tân': 'Tuy Tân Bảo', 
+  'Quận Công Nông': 'Hách Triết Tả Dinh', 'Quận Hưng An': 'Hách Triết Hữu Dinh', 'Quận Đông Sơn': 'Hạc Cương Đông Dinh', 'Quận Hưng Sơn': 'Hạc Cương Tây Dinh',
+  'Thành phố Song Áp Sơn': 'Sử Khuyển Bộ', 'Huyện Tập Hiền': 'Tập Hiền Bảo', 'Huyện Hữu Nghị': 'Hữu Nghị Bảo',
+  'Huyện Bảo Thanh': 'Bảo Thanh Bảo', 'Huyện Nhiêu Hà': 'Nhiêu Hà Vệ', 'Quận Tiêm Sơn': 'Tiêm Sơn Bảo', 'Quận Lĩnh Đông': 'Lĩnh Đông Bảo', 'Quận Tứ Phương Đài': 'Tứ Phương Đài',
+  'Thành phố Đại Khánh': 'Đỗ Nhĩ Bá Đặc', 'Quận Tát Nhĩ Đồ': 'Tát Nhĩ Đồ', 'Quận Long Phượng': 'Long Phượng Bảo',
+  'Quận Nhượng Hồ Lộ': 'Nhượng Hồ Lộ', 'Quận Hồng Cương': 'Hồng Cương', 'Quận Đại Đồng': 'Đại Đồng Bảo',
+  'Huyện Triệu Châu': 'Triệu Châu Bảo', 'Huyện Triệu Nguyên': 'Triệu Nguyên Bảo', 'Huyện Lâm Điện': 'Lâm Điện Bảo',
+  'Huyện tự trị dân tộc Mông Cổ Đỗ Nhĩ Bá Đặc': 'Đỗ Nhĩ Bá Đặc',
+  'Thành phố Y Xuân': 'Bộ Tát Cáp Liên', 'Quận Y Mỹ': 'Y Xuân Bảo', 'Quận Ô Thúy': 'Ô Thúy Bảo',
+  'Quận Hữu Hảo': 'Hữu Hảo Bảo', 'Huyện Gia Ấm': 'Gia Ấm Bảo', 'Huyện Thang Vượng': 'Vệ Thang Vượng Hà',
+  'Huyện Phong Lâm': 'Phong Lâm Bảo', 'Huyện Đại Tinh Sơn': 'Đại Tinh Sơn', 'Huyện Nam Xoát': 'Nam Xoa',
+  'Quận Kim Lâm': 'Kim Lâm Bảo', 'Thành phố Thiết Lực': 'Thiết Ly Vệ',
+  'Thành phố Giai Mộc Tư': 'Bộ Hốt Nhĩ Cáp', 'Quận Tiền Tiến': 'Hợp Giang Tả Dinh',
+  'Quận Đông Phong': 'Hợp Giang Hữu Dinh', 'Huyện Hoa Nam': 'Hoa Nam Bảo',
+  'Huyện Hoa Xuyên': 'Vệ Hốt Nhĩ Cáp', 'Huyện Thang Nguyên': 'Thang Nguyên Bảo', 'Thành phố Đồng Giang': 'Lạp Cáp Tô Tô',
+  'Thành phố Phú Cẩm': 'Phú Khắc Cẩm', 'Thành phố Phủ Viễn': 'Y Lực Ca',
+  'Thành phố Thất Đài Hà': 'Bộ Khố Nhĩ Khách', 'Quận Đào Sơn': 'Đào Sơn Bảo',
+  'Quận Gia Tử Hà': 'Gia Tử Hà', 'Huyện Bột Lợi': 'Bột Lợi Bảo',
+  'Thành phố Mẫu Đơn Giang': 'Ninh Cổ Tháp', 'Quận Ái Dân': 'Bắc doanh Ninh Cổ Tháp', 'Huyện Lâm Khẩu': 'Lâm Khẩu Bảo', 'Quận Dương Minh': 'Đông doanh Ninh Cổ Tháp',
+  'Thành phố Tuy Phân Hà': 'Tuy Phân Bộ', 'Thành phố Hải Lâm': 'Hải Lan Phao', 'Thành phố Ninh An': 'Ninh Cổ Tháp',
+  'Thành phố Mục Lăng': 'Mục Lăng Vệ', 'Thành phố Đông Ninh': 'Tam Xoa Khẩu',
+  'Thành phố Hắc Hà': 'Bộ Phi Nha Khách', 'Quận Ái Huy': 'Vệ Hốt Lỗ Mục', 'Huyện Tốn Khắc': 'Tốn Khắc Bảo',
+  'Huyện Tôn Ngô': 'Tôn Ngô Bảo', 'Thành phố Bắc An': 'Long Trấn', 'Thành phố Ngũ Đại Liên Trì': 'Mặc Nhĩ Căn',
+  'Thành phố Non Giang': 'Nộn Giang Vệ',
+  'Thành phố Tuy Hóa': 'Hô Lan Bộ', 'Quận Bắc Lâm': 'Hô Lan Bắc Dinh', 'Huyện Vọng Khuê': 'Vọng Khuê Bảo',
+  'Huyện Lan Tây': 'Hô Lan Tây Dinh', 'Huyện Thanh Cương': 'Thanh Cương Bảo', 'Huyện Khánh An': 'Khánh An Bảo',
+  'Huyện Minh Thủy': 'Minh Thủy Bảo', 'Huyện Tuy Lăng': 'Tuy Lăng Bảo', 'Thành phố An Đạt': 'An Đạt Bảo',
+  'Thành phố Triệu Đông': 'Triệu Đông Bảo', 'Thành phố Hải Luân': 'Hải Luân Bảo',
+  'Địa khu Đại Hưng An Lĩnh': 'Sử Lộc Bộ', 'Thành phố Mạc Hà': 'Mạc Hà Bảo', 'Huyện Hô Mã': 'Vệ Hô Mã Nhĩ',
+  'Huyện Tháp Hà': 'Tháp Hà Bảo',
 
-  // ================== 上海市 ==================
-  // 明代属南直隶松江府
-  '黄浦区': '上海县', '徐汇区': '上海县', '长宁区': '上海县',
-  '静安区': '上海县', '普陀区': '上海县', '虹口区': '上海县',
-  '杨浦区': '上海县', '闵行区': '上海县', '宝山区': '嘉定县',
-  '嘉定区': '嘉定县', '浦东新区': '上海县', '金山区': '华亭县',
-  '松江区': '华亭县', '青浦区': '青浦县', '奉贤区': '华亭县',
-  '崇明区': '崇明县',
+  // ================== Thành phố Thượng Hải ==================
+  // Thời Minh thuộc phủ Tùng Giang, Nam Trực Lệ
+  'Quận Hoàng Phố': 'Huyện Thượng Hải', 'Quận Từ Hối': 'Huyện Thượng Hải', 'Quận Trường Ninh': 'Huyện Thượng Hải',
+  'Quận Tĩnh An': 'Huyện Thượng Hải', 'Quận Phổ Đà': 'Huyện Thượng Hải', 'Quận Hồng Khẩu': 'Huyện Thượng Hải',
+  'Quận Dương Phố': 'Huyện Thượng Hải', 'Quận Mẫn Hành': 'Huyện Thượng Hải', 'Quận Bảo Sơn': 'Huyện Gia Định',
+  'Quận Gia Định': 'Huyện Gia Định', 'Khu mới Phố Đông': 'Huyện Thượng Hải', 'Quận Kim Sơn': 'Huyện Hoa Đình',
+  'Quận Tùng Giang': 'Huyện Hoa Đình', 'Quận Thanh Phố': 'Huyện Thanh Phố', 'Quận Phụng Hiền': 'Huyện Hoa Đình',
+  'Quận Sùng Minh': 'Huyện Sùng Minh',
 
-  // ================== 江苏省 ==================
-  '南京市': '上元县', '玄武区': '上元县', '秦淮区': '江宁县',
-  '建邺区': '江宁县', '鼓楼区': '上元县', '浦口区': '江浦县',
-  '栖霞区': '上元县', '雨花台区': '江宁县', '江宁区': '江宁县',
-  '六合区': '六合县', '溧水区': '溧水县', '高淳区': '高淳县',
-  '无锡市': '无锡县', '锡山区': '无锡县', '惠山区': '无锡县',
-  '滨湖区': '无锡县', '梁溪区': '无锡县', '新吴区': '无锡县',
-  '江阴市': '江阴县', '宜兴市': '宜兴县',
-  '徐州市': '徐州', '鼓楼区': '徐州', '云龙区': '徐州',
-  '贾汪区': '徐州', '泉山区': '徐州', '铜山区': '徐州',
-  '丰县': '丰县', '沛县': '沛县', '睢宁县': '睢宁县',
-  '新沂市': '邳州', '邳州市': '邳州',
-  '常州市': '武进县', '天宁区': '武进县', '钟楼区': '武进县',
-  '新北区': '武进县', '武进区': '武进县', '金坛区': '金坛县',
-  '溧阳市': '溧阳县',
-  '苏州市': '吴县', '虎丘区': '吴县', '吴中区': '吴县',
-  '相城区': '吴县', '姑苏区': '吴县', '吴江区': '吴江县',
-  '常熟市': '常熟县', '张家港市': '常熟县', '昆山市': '昆山县',
-  '太仓市': '太仓州',
-  '南通市': '通州', '崇川区': '通州', '通州区': '通州',
-  '海安市': '如皋县', '如东县': '如皋县', '启东市': '通州',
-  '如皋市': '如皋县', '海门区': '海门县',
-  '连云港市': '海州', '连云区': '海州', '海州区': '海州',
-  '赣榆区': '赣榆县', '东海县': '海州', '灌云县': '海州',
-  '灌南县': '安东县', // 明属淮安府
-  '淮安市': '山阳县', '淮安区': '山阳县', '淮阴区': '清河县',
-  '清江浦区': '山阳县', '洪泽区': '山阳县', '涟水县': '安东县',
-  '盱眙县': '盱眙县', '金湖县': '宝应县',
-  '盐城市': '盐城县', '亭湖区': '盐城县', '盐都区': '盐城县',
-  '大丰区': '兴化县', '响水县': '山阳县', '滨海县': '山阳县',
-  '阜宁县': '山阳县', '射阳县': '盐城县', '建湖县': '盐城县',
-  '东台市': '兴化县',
-  '扬州市': '江都县', '广陵区': '江都县', '邗江区': '江都县',
-  '江都区': '江都县', '宝应县': '宝应县', '仪征市': '仪真县',
-  '高邮市': '高邮州',
-  '镇江市': '丹徒县', '京口区': '丹徒县', '润州区': '丹徒县',
-  '丹徒区': '丹徒县', '丹阳市': '丹阳县', '扬中市': '太平洲（属丹徒）',
-  '句容市': '句容县',
-  '泰州市': '泰州', '海陵区': '泰州', '高港区': '泰州',
-  '姜堰区': '泰州', '兴化市': '兴化县', '靖江市': '靖江县',
-  '泰兴市': '泰兴县',
-  '宿迁市': '宿迁县', '宿城区': '宿迁县', '宿豫区': '宿迁县',
-  '沭阳县': '沭阳县', '泗阳县': '桃源县', '泗洪县': '泗州',
+  // ================== Tỉnh Giang Tô ==================
+  'Thành phố Nam Kinh': 'Huyện Thượng Nguyên', 'Quận Huyền Vũ': 'Huyện Thượng Nguyên', 'Quận Tần Hoài': 'Huyện Giang Ninh',
+  'Quận Kiến Nghiệp': 'Huyện Giang Ninh', 'Quận Cổ Lâu': 'Huyện Thượng Nguyên', 'Quận Phố Khẩu': 'Huyện Giang Phố',
+  'Quận Thê Hà': 'Huyện Thượng Nguyên', 'Quận Vũ Hoa Đài': 'Huyện Giang Ninh', 'Quận Giang Ninh': 'Huyện Giang Ninh',
+  'Quận Lục Hợp': 'Huyện Lục Hợp', 'Quận Lật Thủy': 'Huyện Lật Thủy', 'Quận Cao Thuần': 'Huyện Cao Thuần',
+  'Thành phố Vô Tích': 'Huyện Vô Tích', 'Quận Tích Sơn': 'Huyện Vô Tích', 'Quận Huệ Sơn': 'Huyện Vô Tích',
+  'Quận Tân Hồ': 'Huyện Vô Tích', 'Quận Lương Khê': 'Huyện Vô Tích', 'Quận Tân Ngô': 'Huyện Vô Tích',
+  'Thành phố Giang Âm': 'Huyện Giang Âm', 'Thành phố Nghi Hưng': 'Huyện Nghi Hưng',
+  'Thành phố Từ Châu': 'Từ Châu', 'Quận Cổ Lâu': 'Từ Châu', 'Quận Vân Long': 'Từ Châu',
+  'Quận Giả Uông': 'Từ Châu', 'Quận Tuyền Sơn': 'Từ Châu', 'Quận Đồng Sơn': 'Từ Châu',
+  'Huyện Phong': 'Huyện Phong', 'Huyện Bái': 'Huyện Bái', 'Huyện Tuy Ninh': 'Huyện Tuy Ninh',
+  'Thành phố Tân Nghi': 'Phi Châu', 'Thành phố Phi Châu': 'Phi Châu',
+  'Thành phố Thường Châu': 'Huyện Vũ Tiến', 'Quận Thiên Ninh': 'Huyện Vũ Tiến', 'Quận Chung Lâu': 'Huyện Vũ Tiến',
+  'Quận Tân Bắc': 'Huyện Vũ Tiến', 'Quận Vũ Tiến': 'Huyện Vũ Tiến', 'Quận Kim Đàn': 'Huyện Kim Đàn',
+  'Thành phố Lật Dương': 'Huyện Lật Dương',
+  'Thành phố Tô Châu': 'Huyện Ngô', 'Quận Hổ Khâu': 'Huyện Ngô', 'Quận Ngô Trung': 'Huyện Ngô',
+  'Quận Tương Thành': 'Huyện Ngô', 'Quận Cô Tô': 'Huyện Ngô', 'Quận Ngô Giang': 'Huyện Ngô Giang',
+  'Thành phố Thường Thục': 'Huyện Thường Thục', 'Thành phố Trương Gia Cảng': 'Huyện Thường Thục', 'Thành phố Côn Sơn': 'Huyện Côn Sơn',
+  'Thành phố Thái Thương': 'Châu Thái Thương',
+  'Thành phố Nam Thông': 'Thông Châu', 'Quận Sùng Xuyên': 'Thông Châu', 'Quận Thông Châu': 'Thông Châu',
+  'Thành phố Hải An': 'Huyện Như Cao', 'Huyện Như Đông': 'Huyện Như Cao', 'Thành phố Khải Đông': 'Thông Châu',
+  'Thành phố Như Cao': 'Huyện Như Cao', 'Quận Hải Môn': 'Huyện Hải Môn',
+  'Thành phố Liên Vân Cảng': 'Hải Châu', 'Quận Liên Vân': 'Hải Châu', 'Quận Hải Châu': 'Hải Châu',
+  'Quận Cám Du': 'Huyện Cống Du', 'Huyện Đông Hải': 'Hải Châu', 'Huyện Quán Vân': 'Hải Châu',
+  'Huyện Quán Nam': 'Huyện An Đông', // Phủ Hoài An thời Minh
+  'Thành phố Hoài An': 'Huyện Sơn Dương', 'Quận Hoài An': 'Huyện Sơn Dương', 'Quận Hoài Âm': 'Huyện Thanh Hà',
+  'Quận Thanh Giang Phố': 'Huyện Sơn Dương', 'Quận Hồng Trạch': 'Huyện Sơn Dương', 'Huyện Liên Thủy': 'Huyện An Đông',
+  'Huyện Hu Dị': 'Huyện Hu Dị', 'Huyện Kim Hồ': 'Huyện Bảo Ứng',
+  'Thành phố Diêm Thành': 'Huyện Diêm Thành', 'Quận Đình Hồ': 'Huyện Diêm Thành', 'Quận Diêm Đô': 'Huyện Diêm Thành',
+  'Quận Đại Phong': 'Huyện Hưng Hóa', 'Huyện Hưởng Thủy': 'Huyện Sơn Dương', 'Huyện Tân Hải': 'Huyện Sơn Dương',
+  'Huyện Phụ Ninh': 'Huyện Sơn Dương', 'Huyện Xạ Dương': 'Huyện Diêm Thành', 'Huyện Kiến Hồ': 'Huyện Diêm Thành',
+  'Thành phố Đông Đài': 'Huyện Hưng Hóa',
+  'Thành phố Dương Châu': 'Huyện Giang Đô', 'Quận Quảng Lăng': 'Huyện Giang Đô', 'Quận Hàn Giang': 'Huyện Giang Đô',
+  'Quận Giang Đô': 'Huyện Giang Đô', 'Huyện Bảo Ứng': 'Huyện Bảo Ứng', 'Thành phố Nghi Trưng': 'Huyện Nghi Chân',
+  'Thành phố Cao Bưu': 'Châu Cao Bưu',
+  'Thành phố Trấn Giang': 'Huyện Đan Đồ', 'Quận Kinh Khẩu': 'Huyện Đan Đồ', 'Quận Nhuận Châu': 'Huyện Đan Đồ',
+  'Quận Đan Đồ': 'Huyện Đan Đồ', 'Thành phố Đan Dương': 'Huyện Đan Dương', 'Thành phố Dương Trung': 'Châu Thái Bình (Thuộc Đan Đồ)',
+  'Thành phố Cú Dung': 'Huyện Câu Dung',
+  'Thành phố Thái Châu': 'Thái Châu', 'Quận Hải Lăng': 'Thái Châu', 'Quận Cao Cảng': 'Thái Châu',
+  'Quận Khương Yển': 'Thái Châu', 'Thành phố Hưng Hóa': 'Huyện Hưng Hóa', 'Thành phố Tĩnh Giang': 'Huyện Tĩnh Giang',
+  'Thành phố Thái Hưng': 'Huyện Thái Hưng',
+  'Thành phố Túc Thiên': 'Huyện Túc Thiên', 'Quận Túc Thành': 'Huyện Túc Thiên', 'Quận Túc Dự': 'Huyện Túc Thiên',
+  'Huyện Thuật Dương': 'Huyện Thuật Dương', 'Huyện Tứ Dương': 'Huyện Đào Nguyên', 'Huyện Tứ Hồng': 'Tứ Châu',
 
-  // ================== 浙江省 ==================
-  '杭州市': '钱塘县', '上城区': '钱塘县', '拱墅区': '仁和县',
-  '西湖区': '钱塘县', '滨江区': '仁和县', '萧山区': '萧山县',
-  '余杭区': '余杭县', '富阳区': '富阳县', '临安区': '临安县',
-  '桐庐县': '桐庐县', '淳安县': '淳安县', '建德市': '建德县',
-  '宁波市': '鄞县', '海曙区': '鄞县', '江北区': '鄞县',
-  '北仑区': '定海县', '镇海区': '定海县', '鄞州区': '鄞县',
-  '奉化区': '奉化县', '象山县': '象山县', '宁海县': '宁海县',
-  '余姚市': '余姚县', '慈溪市': '慈溪县',
-  '温州市': '永嘉县', '鹿城区': '永嘉县', '龙湾区': '永嘉县',
-  '瓯海区': '永嘉县', '洞头区': '永嘉县', '永嘉县': '永嘉县',
-  '平阳县': '平阳县', '苍南县': '平阳县', '文成县': '瑞安县',
-  '泰顺县': '瑞安县', '瑞安市': '瑞安县', '乐清市': '乐清县',
-  '嘉兴市': '嘉兴县', '南湖区': '嘉兴县', '秀洲区': '秀水县',
-  '嘉善县': '嘉善县', '海盐县': '海盐县', '海宁市': '海宁县',
-  '平湖市': '平湖县', '桐乡市': '崇德县',
-  '湖州市': '乌程县', '吴兴区': '乌程县', '南浔区': '乌程县',
-  '德清县': '德清县', '长兴县': '长兴县', '安吉县': '安吉州',
-  '绍兴市': '山阴县', '越城区': '山阴县', '柯桥区': '会稽县',
-  '上虞区': '上虞县', '新昌县': '新昌县', '诸暨市': '诸暨县',
-  '嵊州市': '嵊县',
-  '金华市': '金华县', '婺城区': '金华县', '金东区': '金华县',
-  '武义县': '武义县', '浦江县': '浦江县', '磐安县': '东阳县',
-  '兰溪市': '兰溪县', '义乌市': '义乌县', '东阳市': '东阳县',
-  '永康市': '永康县',
-  '衢州市': '西安县', '柯城区': '西安县', '衢江区': '西安县',
-  '常山县': '常山县', '开化县': '开化县', '龙游县': '龙游县',
-  '江山市': '江山县',
-  '舟山市': '鄞县', '定海区': '鄞县', '普陀区': '鄞县',
-  '岱山县': '鄞县', '嵊泗县': '鄞县',
-  '台州市': '临海县', '椒江区': '临海县', '黄岩区': '黄岩县',
-  '路桥区': '黄岩县', '三门县': '宁海县', '天台县': '天台县',
-  '仙居县': '仙居县', '温岭市': '太平县', '临海市': '临海县',
-  '玉环市': '太平县',
-  '丽水市': '丽水县', '莲都区': '丽水县', '青田县': '青田县',
-  '缙云县': '缙云县', '遂昌县': '遂昌县', '松阳县': '松阳县',
-  '云和县': '云和县', '庆元县': '庆元县', '景宁畲族自治县': '景宁县',
-  '龙泉市': '龙泉县',
+  // ================== Tỉnh Chiết Giang ==================
+  'Thành phố Hàng Châu': 'Huyện Tiền Đường', 'Quận Thượng Thành': 'Huyện Tiền Đường', 'Quận Củng Thự': 'Huyện Nhân Hòa',
+  'Quận Tây Hồ': 'Huyện Tiền Đường', 'Quận Tân Giang': 'Huyện Nhân Hòa', 'Quận Tiêu Sơn': 'Huyện Tiêu Sơn',
+  'Quận Dư Hàng': 'Huyện Dư Hàng', 'Quận Phú Dương': 'Huyện Phú Dương', 'Quận Lâm An': 'Huyện Lâm An',
+  'Huyện Đồng Lư': 'Huyện Đồng Lư', 'Huyện Thuần An': 'Huyện Thuần An', 'Thành phố Kiến Đức': 'Huyện Kiến Đức',
+  'Thành phố Ninh Ba': 'Huyện Ngân', 'Quận Hải Thự': 'Huyện Ngân', 'Quận Giang Bắc': 'Huyện Ngân',
+  'Quận Bắc Luân': 'Huyện Định Hải', 'Quận Trấn Hải': 'Huyện Định Hải', 'Quận Ngân Châu': 'Huyện Ngân',
+  'Quận Phụng Hóa': 'Huyện Phụng Hóa', 'Huyện Tượng Sơn': 'Huyện Tượng Sơn', 'Huyện Ninh Hải': 'Huyện Ninh Hải',
+  'Thành phố Dư Diêu': 'Huyện Dư Diêu', 'Thành phố Từ Khê': 'Huyện Từ Khê',
+  'Thành phố Ôn Châu': 'Huyện Vĩnh Gia', 'Quận Lộc Thành': 'Huyện Vĩnh Gia', 'Quận Long Loan': 'Huyện Vĩnh Gia',
+  'Quận Âu Hải': 'Huyện Vĩnh Gia', 'Quận Động Đầu': 'Huyện Vĩnh Gia', 'Huyện Vĩnh Gia': 'Huyện Vĩnh Gia',
+  'Huyện Bình Dương': 'Huyện Bình Dương', 'Huyện Thương Nam': 'Huyện Bình Dương', 'Huyện Văn Thành': 'Huyện Thụy An',
+  'Huyện Thái Thuận': 'Huyện Thụy An', 'Thành phố Thụy An': 'Huyện Thụy An', 'Thành phố Nhạc Thanh': 'Huyện Nhạc Thanh',
+  'Thành phố Gia Hưng': 'Huyện Gia Hưng', 'Quận Nam Hồ': 'Huyện Gia Hưng', 'Quận Tú Châu': 'Huyện Tú Thủy',
+  'Huyện Gia Thiện': 'Huyện Gia Thiện', 'Huyện Hải Diêm': 'Huyện Hải Diêm', 'Thành phố Hải Ninh': 'Huyện Hải Ninh',
+  'Thành phố Bình Hồ': 'Huyện Bình Hồ', 'Thành phố Đồng Hương': 'Huyện Sùng Đức',
+  'Thành phố Hồ Châu': 'Huyện Ô Trình', 'Quận Ngô Hưng': 'Huyện Ô Trình', 'Quận Nam Tầm': 'Huyện Ô Trình',
+  'Huyện Đức Thanh': 'Huyện Đức Thanh', 'Huyện Trường Hưng': 'Huyện Trường Hưng', 'Huyện An Cát': 'Châu An Cát',
+  'Thành phố Thiệu Hưng': 'Huyện Sơn Âm', 'Quận Việt Thành': 'Huyện Sơn Âm', 'Quận Kha Kiều': 'Huyện Hội Kê',
+  'Quận Thượng Ngu': 'Huyện Thượng Ngu', 'Huyện Tân Xương': 'Huyện Tân Xương', 'Thành phố Chư Kỵ': 'Huyện Chư Kỵ',
+  'Thành phố Thặng Châu': 'Huyện Thặng',
+  'Thành phố Kim Hoa': 'Huyện Kim Hoa', 'Quận Vụ Thành': 'Huyện Kim Hoa', 'Quận Kim Đông': 'Huyện Kim Hoa',
+  'Huyện Vũ Nghĩa': 'Huyện Vũ Nghĩa', 'Huyện Phố Giang': 'Huyện Phố Giang', 'Huyện Bàn An': 'Huyện Đông Dương',
+  'Thành phố Lan Khê': 'Huyện Lan Khê', 'Thành phố Nghĩa Ô': 'Huyện Nghĩa Ô', 'Thành phố Đông Dương': 'Huyện Đông Dương',
+  'Thành phố Vĩnh Khang': 'Huyện Vĩnh Khang',
+  'Thành phố Cù Châu': 'Huyện Tây An', 'Quận Kha Thành': 'Huyện Tây An', 'Quận Cù Giang': 'Huyện Tây An',
+  'Huyện Thường Sơn': 'Huyện Thường Sơn', 'Huyện Khai Hóa': 'Huyện Khai Hóa', 'Huyện Long Du': 'Huyện Long Du',
+  'Thành phố Giang Sơn': 'Huyện Giang Sơn',
+  'Thành phố Chu Sơn': 'Huyện Ngân', 'Quận Định Hải': 'Huyện Ngân', 'Quận Phổ Đà': 'Huyện Ngân',
+  'Huyện Đại Sơn': 'Huyện Ngân', 'Huyện Thặng Tứ': 'Huyện Ngân',
+  'Thành phố Thai Châu': 'Huyện Lâm Hải', 'Quận Tiêu Giang': 'Huyện Lâm Hải', 'Quận Hoàng Nham': 'Huyện Hoàng Nham',
+  'Quận Lộ Kiều': 'Huyện Hoàng Nham', 'Huyện Tam Môn': 'Huyện Ninh Hải', 'Huyện Thiên Thai': 'Huyện Thiên Thai',
+  'Huyện Tiên Cư': 'Huyện Tiên Cư', 'Thành phố Ôn Lĩnh': 'Huyện Thái Bình', 'Thành phố Lâm Hải': 'Huyện Lâm Hải',
+  'Thành phố Ngọc Hoàn': 'Huyện Thái Bình',
+  'Thành phố Lệ Thủy': 'Huyện Lệ Thủy', 'Quận Liên Đô': 'Huyện Lệ Thủy', 'Huyện Thanh Điền': 'Huyện Thanh Điền',
+  'Huyện Tấn Vân': 'Huyện Tấn Vân', 'Huyện Toại Xương': 'Huyện Toại Xương', 'Huyện Tùng Dương': 'Huyện Tùng Dương',
+  'Huyện Vân Hòa': 'Huyện Vân Hòa', 'Huyện Khánh Nguyên': 'Huyện Khánh Nguyên', 'Huyện tự trị dân tộc Xa Cảnh Ninh': 'Huyện Cảnh Ninh',
+  'Thành phố Long Tuyền': 'Huyện Long Tuyền',
 
-  // ================== 安徽省 ==================
-  '合肥市': '合肥县', '瑶海区': '合肥县', '庐阳区': '合肥县',
-  '蜀山区': '合肥县', '包河区': '合肥县', '长丰县': '合肥县',
-  '肥东县': '合肥县', '肥西县': '合肥县', '庐江县': '庐江县',
-  '巢湖市': '巢县',
-  '芜湖市': '芜湖县', '镜湖区': '芜湖县', '鸠江区': '芜湖县',
-  '弋江区': '芜湖县', '湾沚区': '芜湖县', '繁昌区': '繁昌县',
-  '南陵县': '南陵县', '无为市': '无为州',
-  '蚌埠市': '凤阳县', '龙子湖区': '凤阳县', '蚌山区': '凤阳县',
-  '禹会区': '凤阳县', '淮上区': '凤阳县', '怀远县': '怀远县',
-  '五河县': '五河县', '固镇县': '灵璧县',
-  '淮南市': '寿州', '大通区': '寿州', '田家庵区': '寿州',
-  '谢家集区': '寿州', '八公山区': '寿州', '潘集区': '寿州',
-  '凤台县': '寿州', '寿县': '寿州',
-  '马鞍山市': '当涂县', '花山区': '当涂县', '雨山区': '当涂县',
-  '博望区': '当涂县', '当涂县': '当涂县', '含山县': '含山县',
-  '和县': '和州',
-  '淮北市': '宿州', '杜集区': '宿州', '相山区': '宿州',
-  '烈山区': '宿州', '濉溪县': '宿州',
-  '铜陵市': '铜陵县', '铜官区': '铜陵县', '义安区': '铜陵县',
-  '郊区': '铜陵县', '枞阳县': '桐城县',
-  '安庆市': '怀宁县', '迎江区': '怀宁县', '大观区': '怀宁县',
-  '宜秀区': '怀宁县', '桐城市': '桐城县', '怀宁县': '怀宁县',
-  '潜山市': '潜山县', '太湖县': '太湖县', '宿松县': '宿松县',
-  '望江县': '望江县', '岳西县': '潜山县',
-  '黄山市': '歙县', '屯溪区': '休宁县', '黄山区': '太平县',
-  '徽州区': '歙县', '歙县': '歙县', '休宁县': '休宁县',
-  '黟县': '黟县', '祁门县': '祁门县',
-  '滁州市': '滁州', '琅琊区': '滁州', '南谯区': '滁州',
-  '来安县': '来安县', '全椒县': '全椒县', '定远县': '定远县',
-  '凤阳县': '凤阳县', '天长市': '天长县', '明光市': '盱眙县',
-  '阜阳市': '颍州', '颍州区': '颍州', '颍东区': '颍州',
-  '颍泉区': '颍州', '临泉县': '颍州', '太和县': '太和县',
-  '阜南县': '颍州', '颍上县': '颍上县', '界首市': '太和县',
-  '宿州市': '宿州', '埇桥区': '宿州', '砀山县': '砀山县',
-  '萧县': '萧县', '灵璧县': '灵璧县', '泗县': '泗州',
-  '六安市': '六安州', '金安区': '六安州', '裕安区': '六安州',
-  '叶集区': '霍邱县', '霍邱县': '霍邱县', '舒城县': '舒城县',
-  '金寨县': '六安州', '霍山县': '霍山县',
-  '亳州市': '亳州', '谯城区': '亳州', '涡阳县': '亳州',
-  '蒙城县': '蒙城县', '利辛县': '亳州',
-  '池州市': '贵池县', '贵池区': '贵池县', '东至县': '建德县',
-  '石台县': '石埭县', '青阳县': '青阳县',
-  '宣城市': '宣城县', '宣州区': '宣城县', '郎溪县': '建平县',
-  '广德市': '广德州', '泾县': '泾县', '绩溪县': '绩溪县',
-  '旌德县': '旌德县', '宁国市': '宁国县',
+  // ================== Tỉnh An Huy ==================
+  'Thành phố Hợp Phì': 'Huyện Hợp Phì', 'Quận Dao Hải': 'Huyện Hợp Phì', 'Quận Lư Dương': 'Huyện Hợp Phì',
+  'Quận Thục Sơn': 'Huyện Hợp Phì', 'Quận Bao Hà': 'Huyện Hợp Phì', 'Huyện Trường Phong': 'Huyện Hợp Phì',
+  'Huyện Phì Đông': 'Huyện Hợp Phì', 'Huyện Phì Tây': 'Huyện Hợp Phì', 'Huyện Lư Giang': 'Huyện Lư Giang',
+  'Thành phố Sào Hồ': 'Huyện Sào',
+  'Thành phố Vu Hồ': 'Huyện Vu Hồ', 'Quận Kính Hồ': 'Huyện Vu Hồ', 'Quận Cưu Giang': 'Huyện Vu Hồ',
+  'Quận Dặc Giang': 'Huyện Vu Hồ', 'Quận Loan Chỉ': 'Huyện Vu Hồ', 'Quận Phồn Xương': 'Huyện Phồn Xương',
+  'Huyện Nam Lăng': 'Huyện Nam Lăng', 'Thành phố Vô Vi': 'Châu Vô Vi',
+  'Thành phố Bạng Phụ': 'Huyện Phượng Dương', 'Quận Long Tử Hồ': 'Huyện Phượng Dương', 'Quận Bạng Sơn': 'Huyện Phượng Dương',
+  'Quận Vũ Hội': 'Huyện Phượng Dương', 'Quận Hoài Thượng': 'Huyện Phượng Dương', 'Huyện Hoài Viễn': 'Huyện Hoài Viễn',
+  'Huyện Ngũ Hà': 'Huyện Ngũ Hà', 'Huyện Cố Trấn': 'Huyện Linh Bích',
+  'Thành phố Hoài Nam': 'Thọ Châu', 'Quận Đại Thông': 'Thọ Châu', 'Quận Điền Gia Am': 'Thọ Châu',
+  'Quận Tạ Gia Tập': 'Thọ Châu', 'Quận Bát Công Sơn': 'Thọ Châu', 'Quận Phan Tập': 'Thọ Châu',
+  'Huyện Phượng Đài': 'Thọ Châu', 'Huyện Thọ': 'Thọ Châu',
+  'Thành phố Mã An Sơn': 'Huyện Đương Đồ', 'Quận Hoa Sơn': 'Huyện Đương Đồ', 'Quận Vũ Sơn': 'Huyện Đương Đồ',
+  'Quận Bác Vọng': 'Huyện Đương Đồ', 'Huyện Đương Đồ': 'Huyện Đương Đồ', 'Huyện Hàm Sơn': 'Huyện Hàm Sơn',
+  'Huyện Hòa': 'Hòa Châu',
+  'Thành phố Hoài Bắc': 'Túc Châu', 'Quận Đỗ Tập': 'Túc Châu', 'Quận Tương Sơn': 'Túc Châu',
+  'Quận Liệt Sơn': 'Túc Châu', 'Huyện Tuy Khê': 'Túc Châu',
+  'Thành phố Đồng Lăng': 'Huyện Đồng Lăng', 'Quận Đồng Quan': 'Huyện Đồng Lăng', 'Quận Nghĩa An': 'Huyện Đồng Lăng',
+  'Quận Ngoại ô': 'Huyện Đồng Lăng', 'Huyện Tung Dương': 'Huyện Đồng Thành',
+  'Thành phố An Khánh': 'Huyện Hoài Ninh', 'Quận Nghênh Giang': 'Huyện Hoài Ninh', 'Quận Đại Quan': 'Huyện Hoài Ninh',
+  'Quận Nghi Tú': 'Huyện Hoài Ninh', 'Thành phố Đồng Thành': 'Huyện Đồng Thành', 'Huyện Hoài Ninh': 'Huyện Hoài Ninh',
+  'Thành phố Tiềm Sơn': 'Huyện Tiềm Sơn', 'Huyện Thái Hồ': 'Huyện Thái Hồ', 'Huyện Túc Tùng': 'Huyện Túc Tùng',
+  'Huyện Vọng Giang': 'Huyện Vọng Giang', 'Huyện Nhạc Tây': 'Huyện Tiềm Sơn',
+  'Thành phố Hoàng Sơn': 'Huyện Hấp', 'Quận Đồn Khê': 'Huyện Hưu Ninh', 'Quận Hoàng Sơn': 'Huyện Thái Bình',
+  'Quận Huy Châu': 'Huyện Hấp', 'Huyện Hấp': 'Huyện Hấp', 'Huyện Hưu Ninh': 'Huyện Hưu Ninh',
+  'Huyện Y': 'Huyện Y', 'Huyện Kỳ Môn': 'Huyện Kỳ Môn',
+  'Thành phố Trừ Châu': 'Trừ Châu', 'Quận Lang Nha': 'Trừ Châu', 'Quận Nam Tiều': 'Trừ Châu',
+  'Huyện Lai An': 'Huyện Lai An', 'Huyện Toàn Tiêu': 'Huyện Toàn Tiêu', 'Huyện Định Viễn': 'Huyện Định Viễn',
+  'Huyện Phượng Dương': 'Huyện Phượng Dương', 'Thành phố Thiên Trường': 'Huyện Thiên Trường', 'Thành phố Minh Quang': 'Huyện Hu Dị',
+  'Thành phố Phụ Dương': 'Dĩnh Châu', 'Quận Dĩnh Châu': 'Dĩnh Châu', 'Quận Dĩnh Đông': 'Dĩnh Châu',
+  'Quận Dĩnh Tuyền': 'Dĩnh Châu', 'Huyện Lâm Tuyền': 'Dĩnh Châu', 'Huyện Thái Hòa': 'Huyện Thái Hòa',
+  'Huyện Phụ Nam': 'Dĩnh Châu', 'Huyện Dĩnh Thượng': 'Huyện Dĩnh Thượng', 'Thành phố Giới Thủ': 'Huyện Thái Hòa',
+  'Thành phố Túc Châu': 'Túc Châu', 'Quận Dũng Kiều': 'Túc Châu', 'Huyện Nãng Sơn': 'Huyện Nãng Sơn',
+  'Huyện Tiêu': 'Huyện Tiêu', 'Huyện Linh Bích': 'Huyện Linh Bích', 'Huyện Tứ': 'Tứ Châu',
+  'Thành phố Lục An': 'Châu Lục An', 'Quận Kim An': 'Châu Lục An', 'Quận Dụ An': 'Châu Lục An',
+  'Quận Diệp Tập': 'Huyện Hoắc Khâu', 'Huyện Hoắc Khâu': 'Huyện Hoắc Khâu', 'Huyện Thư Thành': 'Huyện Thư Thành',
+  'Huyện Kim Trại': 'Châu Lục An', 'Huyện Hoắc Sơn': 'Huyện Hoắc Sơn',
+  'Thành phố Bạc Châu': 'Bạc Châu', 'Quận Tiều Thành': 'Bạc Châu', 'Huyện Oa Dương': 'Bạc Châu',
+  'Huyện Mông Thành': 'Huyện Mông Thành', 'Huyện Lợi Tân': 'Bạc Châu',
+  'Thành phố Trì Châu': 'Huyện Quý Trì', 'Quận Quý Trì': 'Huyện Quý Trì', 'Huyện Đông Chí': 'Huyện Kiến Đức',
+  'Huyện Thạch Đài': 'Huyện Thạch Đãi', 'Huyện Thanh Dương': 'Huyện Thanh Dương',
+  'Thành phố Tuyên Thành': 'Huyện Tuyên Thành', 'Quận Tuyên Châu': 'Huyện Tuyên Thành', 'Huyện Lang Khê': 'Huyện Kiến Bình',
+  'Thành phố Quảng Đức': 'Châu Quảng Đức', 'Huyện Kính': 'Huyện Kính', 'Huyện Tích Khê': 'Huyện Tích Khê',
+  'Huyện Tinh Đức': 'Huyện Tinh Đức', 'Thành phố Ninh Quốc': 'Huyện Ninh Quốc',
 
-  // ================== 福建省 ==================
-  '福州市': '闽县', '鼓楼区': '闽县', '台江区': '侯官县',
-  '仓山区': '闽县', '马尾区': '闽县', '晋安区': '侯官县',
-  '长乐区': '长乐县', '闽侯县': '侯官县', '连江县': '连江县',
-  '罗源县': '罗源县', '闽清县': '闽清县', '永泰县': '永福县',
-  '平潭县': '福清县', '福清市': '福清县',
-  '厦门市': '同安县', '思明区': '同安县', '海沧区': '同安县',
-  '湖里区': '同安县', '集美区': '同安县', '同安区': '同安县',
-  '翔安区': '同安县',
-  '莆田市': '莆田县', '城厢区': '莆田县', '涵江区': '莆田县',
-  '荔城区': '莆田县', '秀屿区': '莆田县', '仙游县': '仙游县',
-  '三明市': '沙县', '三元区': '沙县', '沙县区': '沙县',
-  '明溪县': '归化县', '清流县': '清流县', '宁化县': '宁化县',
-  '大田县': '大田县', '尤溪县': '尤溪县', '将乐县': '将乐县',
-  '泰宁县': '泰宁县', '建宁县': '建宁县', '永安市': '永安县',
-  '泉州市': '晋江县', '鲤城区': '晋江县', '丰泽区': '晋江县',
-  '洛江区': '晋江县', '泉港区': '晋江县', '惠安县': '惠安县',
-  '安溪县': '安溪县', '永春县': '永春县', '德化县': '德化县',
-  '金门县': '金门守御千户所', '石狮市': '晋江县', '晋江市': '晋江县',
-  '南安市': '南安县',
-  '漳州市': '龙溪县', '芗城区': '龙溪县', '龙文区': '龙溪县',
-  '云霄县': '漳浦县', '漳浦县': '漳浦县', '诏安县': '诏安县',
-  '长泰县': '长泰县', '东山县': '诏安县', '南靖县': '南靖县',
-  '平和县': '平和县', '华安县': '龙溪县', '龙海区': '龙溪县',
-  '南平市': '建安县', '延平区': '南平县', '建阳区': '建阳县',
-  '顺昌县': '顺昌县', '浦城县': '浦城县', '光泽县': '光泽县',
-  '松溪县': '松溪县', '政和县': '政和县', '邵武市': '邵武县',
-  '武夷山市': '崇安县', '建瓯市': '建安县',
-  '龙岩市': '龙岩县', '新罗区': '龙岩县', '永定区': '永定县',
-  '长汀县': '长汀县', '上杭县': '上杭县', '武平县': '武平县',
-  '连城县': '连城县', '漳平市': '漳平县',
-  '宁德市': '宁德县', '蕉城区': '宁德县', '霞浦县': '霞浦县',
-  '古田县': '古田县', '屏南县': '古田县', '寿宁县': '寿宁县',
-  '周宁县': '宁德县', '柘荣县': '福安县', '福安市': '福安县',
-  '福鼎市': '福宁州',
+  // ================== Tỉnh Phúc Kiến ==================
+  'Thành phố Phúc Châu': 'Huyện Mân', 'Quận Cổ Lâu': 'Huyện Mân', 'Quận Thai Giang': 'Huyện Hầu Quan',
+  'Quận Thương Sơn': 'Huyện Mân', 'Quận Mã Vĩ': 'Huyện Mân', 'Quận Tấn An': 'Huyện Hầu Quan',
+  'Quận Trường Lạc': 'Huyện Trường Lạc', 'Huyện Mân Hầu': 'Huyện Hầu Quan', 'Huyện Liên Giang': 'Huyện Liên Giang',
+  'Huyện La Nguyên': 'Huyện La Nguyên', 'Huyện Mân Thanh': 'Huyện Mân Thanh', 'Huyện Vĩnh Thái': 'Huyện Vĩnh Phúc',
+  'Huyện Bình Đàm': 'Huyện Phúc Thanh', 'Thành phố Phúc Thanh': 'Huyện Phúc Thanh',
+  'Thành phố Hạ Môn': 'Huyện Đồng An', 'Quận Tư Minh': 'Huyện Đồng An', 'Quận Hải Thương': 'Huyện Đồng An',
+  'Quận Hồ Lý': 'Huyện Đồng An', 'Quận Tập Mỹ': 'Huyện Đồng An', 'Quận Đồng An': 'Huyện Đồng An',
+  'Quận Tường An': 'Huyện Đồng An',
+  'Thành phố Bồ Điền': 'Huyện Bồ Điền', 'Quận Thành Sương': 'Huyện Bồ Điền', 'Quận Hàm Giang': 'Huyện Bồ Điền',
+  'Quận Lệ Thành': 'Huyện Bồ Điền', 'Quận Tú Dữ': 'Huyện Bồ Điền', 'Huyện Tiên Du': 'Huyện Tiên Du',
+  'Thành phố Tam Minh': 'Huyện Sa', 'Quận Tam Nguyên': 'Huyện Sa', 'Quận Sa Huyện': 'Huyện Sa',
+  'Huyện Minh Khê': 'Huyện Quy Hóa', 'Huyện Thanh Lưu': 'Huyện Thanh Lưu', 'Huyện Ninh Hóa': 'Huyện Ninh Hóa',
+  'Huyện Đại Điền': 'Huyện Đại Điền', 'Huyện Vưu Khê': 'Huyện Vưu Khê', 'Huyện Tương Nhạc': 'Huyện Tương Nhạc',
+  'Huyện Thái Ninh': 'Huyện Thái Ninh', 'Huyện Kiến Ninh': 'Huyện Kiến Ninh', 'Thành phố Vĩnh An': 'Huyện Vĩnh An',
+  'Thành phố Tuyền Châu': 'Huyện Tấn Giang', 'Quận Lý Thành': 'Huyện Tấn Giang', 'Quận Phong Trạch': 'Huyện Tấn Giang',
+  'Quận Lạc Giang': 'Huyện Tấn Giang', 'Quận Tuyền Cảng': 'Huyện Tấn Giang', 'Huyện Huệ An': 'Huyện Huệ An',
+  'Huyện An Khê': 'Huyện An Khê', 'Huyện Vĩnh Xuân': 'Huyện Vĩnh Xuân', 'Huyện Đức Hóa': 'Huyện Đức Hóa',
+  'Huyện Kim Môn': 'Kim Môn Thủ ngự Thiên hộ sở', 'Thành phố Thạch Sư': 'Huyện Tấn Giang', 'Thành phố Tấn Giang': 'Huyện Tấn Giang',
+  'Thành phố Nam An': 'Huyện Nam An',
+  'Thành phố Chương Châu': 'Huyện Long Khê', 'Quận Hương Thành': 'Huyện Long Khê', 'Quận Long Văn': 'Huyện Long Khê',
+  'Huyện Vân Tiêu': 'Huyện Chương Phố', 'Huyện Chương Phố': 'Huyện Chương Phố', 'Huyện Chiếu An': 'Huyện Chiếu An',
+  'Huyện Trường Thái': 'Huyện Trường Thái', 'Huyện Đông Sơn': 'Huyện Chiếu An', 'Huyện Nam Tĩnh': 'Huyện Nam Tĩnh',
+  'Huyện Bình Hòa': 'Huyện Bình Hòa', 'Huyện Hoa An': 'Huyện Long Khê', 'Quận Long Hải': 'Huyện Long Khê',
+  'Thành phố Nam Bình': 'Huyện Kiến An', 'Quận Diên Bình': 'Huyện Nam Bình', 'Quận Kiến Dương': 'Huyện Kiến Dương',
+  'Huyện Thuận Xương': 'Huyện Thuận Xương', 'Huyện Phố Thành': 'Huyện Phố Thành', 'Huyện Quang Trạch': 'Huyện Quang Trạch',
+  'Huyện Tùng Khê': 'Huyện Tùng Khê', 'Huyện Chính Hòa': 'Huyện Chính Hòa', 'Thành phố Thiệu Vũ': 'Huyện Thiệu Vũ',
+  'Thành phố Vũ Di Sơn': 'Huyện Sùng An', 'Thành phố Kiến Âu': 'Huyện Kiến An',
+  'Thành phố Long Nham': 'Huyện Long Nham', 'Quận Tân La': 'Huyện Long Nham', 'Quận Vĩnh Định': 'Huyện Vĩnh Định',
+  'Huyện Trường Đinh': 'Huyện Trường Đinh', 'Huyện Thượng Hàng': 'Huyện Thượng Hàng', 'Huyện Vũ Bình': 'Huyện Vũ Bình',
+  'Huyện Liên Thành': 'Huyện Liên Thành', 'Thành phố Chương Bình': 'Huyện Chương Bình',
+  'Thành phố Ninh Đức': 'Huyện Ninh Đức', 'Quận Tiêu Thành': 'Huyện Ninh Đức', 'Huyện Hà Phố': 'Huyện Hà Phố',
+  'Huyện Cổ Điền': 'Huyện Cổ Điền', 'Huyện Bình Nam': 'Huyện Cổ Điền', 'Huyện Thọ Ninh': 'Huyện Thọ Ninh',
+  'Huyện Chu Ninh': 'Huyện Ninh Đức', 'Huyện Giá Vinh': 'Huyện Phúc An', 'Thành phố Phúc An': 'Huyện Phúc An',
+  'Thành phố Phúc Đỉnh': 'Châu Phúc Ninh',
 
-  // ================== 江西省 ==================
-  '南昌市': '南昌县', '东湖区': '南昌县', '西湖区': '新建县',
-  '青云谱区': '南昌县', '青山湖区': '新建县', '新建区': '新建县',
-  '红谷滩区': '新建县', '南昌县': '南昌县', '安义县': '安义县',
-  '进贤县': '进贤县',
-  '景德镇市': '浮梁县', '昌江区': '浮梁县', '珠山区': '浮梁县',
-  '浮梁县': '浮梁县', '乐平市': '乐平县',
-  '萍乡市': '萍乡县', '安源区': '萍乡县', '湘东区': '萍乡县',
-  '莲花县': '永新县', '上栗县': '萍乡县', '芦溪县': '萍乡县',
-  '九江市': '德化县', '濂溪区': '德化县', '浔阳区': '德化县',
-  '柴桑区': '德化县', '武宁县': '武宁县', '修水县': '宁州',
-  '永修县': '建昌县', '德安县': '德安县', '都昌县': '都昌县',
-  '湖口县': '湖口县', '彭泽县': '彭泽县', '瑞昌市': '瑞昌县',
-  '共青城市': '德安县', '庐山市': '星子县',
-  '新余市': '新喻县', '渝水区': '新喻县', '分宜县': '分宜县',
-  '鹰潭市': '贵溪县', '月湖区': '贵溪县', '余江区': '安仁县',
-  '贵溪市': '贵溪县',
-  '赣州市': '赣县', '章贡区': '赣县', '南康区': '南康县',
-  '赣县区': '赣县', '信丰县': '信丰县', '大余县': '大庾县',
-  '上犹县': '上犹县', '崇义县': '崇义县', '安远县': '安远县',
-  '定南县': '定南县', '全南县': '龙南县', '宁都县': '宁都县',
-  '于都县': '雩都县', '兴国县': '兴国县', '会昌县': '会昌县',
-  '寻乌县': '长宁县', '石城县': '石城县', '瑞金市': '瑞金县',
-  '龙南市': '龙南县',
-  '吉安市': '庐陵县', '吉州区': '庐陵县', '青原区': '庐陵县',
-  '吉安县': '庐陵县', '吉水县': '吉水县', '峡江县': '峡江县',
-  '新干县': '新淦县', '永丰县': '永丰县', '泰和县': '泰和县',
-  '遂川县': '龙泉县', '万安县': '万安县', '安福县': '安福县',
-  '永新县': '永新县', '井冈山市': '永宁县',
-  '宜春市': '宜春县', '袁州区': '宜春县', '奉新县': '奉新县',
-  '万载县': '万载县', '上高县': '上高县', '宜丰县': '新昌县',
-  '靖安县': '靖安县', '铜鼓县': '宁州', '丰城市': '丰城县',
-  '樟树市': '清江县', '高安市': '瑞州府',
-  '抚州市': '临川县', '临川区': '临川县', '东乡区': '东乡县',
-  '南城县': '南城县', '黎川县': '新城县', '南丰县': '南丰县',
-  '崇仁县': '崇仁县', '乐安县': '乐安县', '宜黄县': '宜黄县',
-  '金溪县': '金溪县', '资溪县': '泸溪县', '广昌县': '广昌县',
-  '上饶市': '上饶县', '信州区': '上饶县', '广丰区': '永丰县',
-  '广信区': '上饶县', '玉山县': '玉山县', '铅山县': '铅山县',
-  '横峰县': '兴安县', '弋阳县': '弋阳县', '余干县': '余干县',
-  '鄱阳县': '鄱阳县', '万年县': '万年县', '婺源县': '婺源县',
-  '德兴市': '德兴县',
+  // ================== Tỉnh Giang Tây ==================
+  'Thành phố Nam Xương': 'Huyện Nam Xương', 'Quận Đông Hồ': 'Huyện Nam Xương', 'Quận Tây Hồ': 'Huyện Tân Kiến',
+  'Quận Thanh Vân Phổ': 'Huyện Nam Xương', 'Quận Thanh Sơn Hồ': 'Huyện Tân Kiến', 'Quận Tân Kiến': 'Huyện Tân Kiến',
+  'Quận Hồng Cốc Than': 'Huyện Tân Kiến', 'Huyện Nam Xương': 'Huyện Nam Xương', 'Huyện An Nghĩa': 'Huyện An Nghĩa',
+  'Huyện Tiến Hiền': 'Huyện Tiến Hiền',
+  'Thành phố Cảnh Đức Trấn': 'Huyện Phù Lương', 'Quận Xương Giang': 'Huyện Phù Lương', 'Quận Châu Sơn': 'Huyện Phù Lương',
+  'Huyện Phù Lương': 'Huyện Phù Lương', 'Thành phố Nhạc Bình': 'Huyện Lạc Bình',
+  'Thành phố Bằng Hương': 'Huyện Bình Hương', 'Quận An Nguyên': 'Huyện Bình Hương', 'Quận Tương Đông': 'Huyện Bình Hương',
+  'Huyện Liên Hoa': 'Huyện Vĩnh Tân', 'Huyện Thượng Lật': 'Huyện Bình Hương', 'Huyện Lô Khê': 'Huyện Bình Hương',
+  'Thành phố Cửu Giang': 'Huyện Đức Hóa', 'Quận Liêm Khê': 'Huyện Đức Hóa', 'Quận Tầm Dương': 'Huyện Đức Hóa',
+  'Quận Sài Tang': 'Huyện Đức Hóa', 'Huyện Vũ Ninh': 'Huyện Vũ Ninh', 'Huyện Tu Thủy': 'Ninh Châu',
+  'Huyện Vĩnh Tu': 'Huyện Kiến Xương', 'Huyện Đức An': 'Huyện Đức An', 'Huyện Đô Xương': 'Huyện Đô Xương',
+  'Huyện Hồ Khẩu': 'Huyện Hồ Khẩu', 'Huyện Bành Trạch': 'Huyện Bành Trạch', 'Thành phố Thụy Xương': 'Huyện Thụy Xương',
+  'Thành phố Cộng Thanh Thành': 'Huyện Đức An', 'Thành phố Lư Sơn': 'Huyện Tinh Tử',
+  'Thành phố Tân Dư': 'Huyện Tân Dụ', 'Quận Du Thủy': 'Huyện Tân Dụ', 'Huyện Phân Nghi': 'Huyện Phân Nghi',
+  'Thành phố Ưng Đàm': 'Huyện Quý Khê', 'Quận Nguyệt Hồ': 'Huyện Quý Khê', 'Quận Dư Giang': 'Huyện An Nhân',
+  'Thành phố Quý Khê': 'Huyện Quý Khê',
+  'Thành phố Cám Châu': 'Huyện Cống', 'Quận Chương Cống': 'Huyện Cống', 'Quận Nam Khang': 'Huyện Nam Khang',
+  'Quận Cám Huyện': 'Huyện Cống', 'Huyện Tín Phong': 'Huyện Tín Phong', 'Huyện Đại Dư': 'Huyện Đại Dữu',
+  'Huyện Thượng Do': 'Huyện Thượng Do', 'Huyện Sùng Nghĩa': 'Huyện Sùng Nghĩa', 'Huyện An Viễn': 'Huyện An Viễn',
+  'Huyện Định Nam': 'Huyện Định Nam', 'Huyện Toàn Nam': 'Huyện Long Nam', 'Huyện Ninh Đô': 'Huyện Ninh Đô',
+  'Huyện Vu Đô': 'Huyện Vu Đô', 'Huyện Hưng Quốc': 'Huyện Hưng Quốc', 'Huyện Hội Xương': 'Huyện Hội Xương',
+  'Huyện Tầm Ô': 'Huyện Trường Ninh', 'Huyện Thạch Thành': 'Huyện Thạch Thành', 'Thành phố Thụy Kim': 'Huyện Thụy Kim',
+  'Thành phố Long Nam': 'Huyện Long Nam',
+  'Thành phố Cát An': 'Huyện Lư Lăng', 'Quận Cát Châu': 'Huyện Lư Lăng', 'Quận Thanh Nguyên': 'Huyện Lư Lăng',
+  'Huyện Cát An': 'Huyện Lư Lăng', 'Huyện Cát Thủy': 'Huyện Cát Thủy', 'Huyện Hiệp Giang': 'Huyện Hiệp Giang',
+  'Huyện Tân Cán': 'Huyện Tân Cám', 'Huyện Vĩnh Phong': 'Huyện Vĩnh Phong', 'Huyện Thái Hòa': 'Huyện Thái Hòa',
+  'Huyện Toại Xuyên': 'Huyện Long Tuyền', 'Huyện Vạn An': 'Huyện Vạn An', 'Huyện An Phúc': 'Huyện An Phúc',
+  'Huyện Vĩnh Tân': 'Huyện Vĩnh Tân', 'Thành phố Tỉnh Cương Sơn': 'Huyện Vĩnh Ninh',
+  'Thành phố Nghi Xuân': 'Huyện Nghi Xuân', 'Quận Viên Châu': 'Huyện Nghi Xuân', 'Huyện Phụng Tân': 'Huyện Phụng Tân',
+  'Huyện Vạn Tải': 'Huyện Vạn Tải', 'Huyện Thượng Cao': 'Huyện Thượng Cao', 'Huyện Nghi Phong': 'Huyện Tân Xương',
+  'Huyện Tĩnh An': 'Huyện Tĩnh An', 'Huyện Đồng Cổ': 'Ninh Châu', 'Thành phố Phong Thành': 'Huyện Phong Thành',
+  'Thành phố Chương Thụ': 'Huyện Thanh Giang', 'Thành phố Cao An': 'Phủ Thụy Châu',
+  'Thành phố Phủ Châu': 'Huyện Lâm Xuyên', 'Quận Lâm Xuyên': 'Huyện Lâm Xuyên', 'Quận Đông Hương': 'Huyện Đông Hương',
+  'Huyện Nam Thành': 'Huyện Nam Thành', 'Huyện Lê Xuyên': 'Huyện Tân Thành', 'Huyện Nam Phong': 'Huyện Nam Phong',
+  'Huyện Sùng Nhân': 'Huyện Sùng Nhân', 'Huyện Nhạc An': 'Huyện Nhạc An', 'Huyện Nghi Hoàng': 'Huyện Nghi Hoàng',
+  'Huyện Kim Khê': 'Huyện Kim Khê', 'Huyện Tư Khê': 'Huyện Lô Khê', 'Huyện Quảng Xương': 'Huyện Quảng Xương',
+  'Thành phố Thượng Nhiêu': 'Huyện Thượng Nhiêu', 'Quận Tín Châu': 'Huyện Thượng Nhiêu', 'Quận Quảng Phong': 'Huyện Vĩnh Phong',
+  'Quận Quảng Tín': 'Huyện Thượng Nhiêu', 'Huyện Ngọc Sơn': 'Huyện Ngọc Sơn', 'Huyện Duyên Sơn': 'Huyện Duyên Sơn',
+  'Huyện Hoành Phong': 'Huyện Hưng An', 'Huyện Dặc Dương': 'Huyện Dặc Dương', 'Huyện Dư Can': 'Huyện Dư Can',
+  'Huyện Bà Dương': 'Huyện Bà Dương', 'Huyện Vạn Niên': 'Huyện Vạn Niên', 'Huyện Vụ Nguyên': 'Huyện Vụ Nguyên',
+  'Thành phố Đức Hưng': 'Huyện Đức Hưng',
 
-  // ================== 山东省 ==================
-  '济南市': '历城县', '历下区': '历城县', '市中区': '历城县',
-  '槐荫区': '历城县', '天桥区': '历城县', '历城区': '历城县',
-  '长清区': '长清县', '章丘区': '章丘县', '济阳区': '济阳县',
-  '莱芜区': '莱芜县', '钢城区': '莱芜县', '平阴县': '平阴县',
-  '商河县': '商河县',
-  '青岛市': '即墨县', '市南区': '即墨县', '市北区': '即墨县',
-  '黄岛区': '胶州', '崂山区': '即墨县', '李沧区': '即墨县',
-  '城阳区': '即墨县', '即墨区': '即墨县', '胶州市': '胶州',
-  '平度市': '平度州', '莱西市': '莱阳县',
-  '淄博市': '淄川县', '淄川区': '淄川县', '张店区': '长山县',
-  '博山区': '益都县', '临淄区': '临淄县', '周村区': '长山县',
-  '桓台县': '新城县', '高青县': '高苑县', '沂源县': '沂水县',
-  '枣庄市': '峄县', '市中区': '峄县', '薛城区': '滕县',
-  '峄城区': '峄县', '台儿庄区': '峄县', '山亭区': '滕县',
-  '滕州市': '滕县',
-  '东营市': '乐安县', '东营区': '乐安县', '河口区': '利津县',
-  '垦利区': '利津县', '利津县': '利津县', '广饶县': '乐安县',
-  '烟台市': '福山县', '芝罘区': '福山县', '福山区': '福山县',
-  '牟平区': '宁海州', '莱山区': '宁海州', '蓬莱区': '蓬莱县',
-  '龙口市': '黄县', '莱阳市': '莱阳县', '莱州市': '掖县',
-  '招远市': '招远县', '栖霞市': '栖霞县', '海阳市': '莱阳县',
-  '潍坊市': '潍县', '潍城区': '潍县', '寒亭区': '潍县',
-  '坊子区': '潍县', '奎文区': '潍县', '临朐县': '临朐县',
-  '昌乐县': '昌乐县', '青州市': '益都县', '诸城市': '诸城县',
-  '寿光市': '寿光县', '安丘市': '安丘县', '高密市': '高密县',
-  '昌邑市': '昌邑县',
-  '济宁市': '济宁州', '任城区': '济宁州', '兖州区': '兖州府滋阳县',
-  '微山县': '鱼台县', '鱼台县': '鱼台县', '金乡县': '金乡县',
-  '嘉祥县': '嘉祥县', '汶上县': '汶上县', '泗水县': '泗水县',
-  '梁山县': '东平州', '曲阜市': '曲阜县', '邹城市': '邹县',
-  '泰安市': '泰安州', '泰山区': '泰安州', '岱岳区': '泰安州',
-  '宁阳县': '宁阳县', '东平县': '东平州', '新泰市': '新泰县',
-  '肥城市': '肥城县',
-  '威海市': '文登县', '环翠区': '文登县', '文登区': '文登县',
-  '荣成市': '成山卫', '乳山市': '宁海州',
-  '日照市': '日照县', '东港区': '日照县', '岚山区': '日照县',
-  '五莲县': '诸城县', '莒县': '莒州',
-  '临沂市': '沂州', '兰山区': '沂州', '罗庄区': '沂州',
-  '河东区': '沂州', '沂南县': '沂水县', '郯城县': '郯城县',
-  '沂水县': '沂水县', '兰陵县': '沂州', '费县': '费县',
-  '平邑县': '费县', '莒南县': '莒州', '蒙阴县': '蒙阴县',
-  '临沭县': '沂州',
-  '德州市': '德州', '德城区': '德州', '陵城区': '德州',
-  '宁津县': '宁津县', '庆云县': '庆云县', '临邑县': '临邑县',
-  '齐河县': '齐河县', '平原县': '平原县', '夏津县': '夏津县',
-  '武城县': '武城县', '乐陵市': '乐陵县', '禹城市': '禹城县',
-  '聊城市': '聊城县', '东昌府区': '聊城县', '茌平区': '茌平县',
-  '阳谷县': '阳谷县', '莘县': '莘县', '东阿县': '东阿县',
-  '冠县': '冠县', '高唐县': '高唐州', '临清市': '临清州',
-  '滨州市': '滨州', '滨城区': '滨州', '沾化区': '沾化县',
-  '惠民县': '武定州', '阳信县': '阳信县', '无棣县': '海丰县',
-  '博兴县': '博兴县', '邹平市': '邹平县',
-  '菏泽市': '曹州', '牡丹区': '曹州', '定陶区': '定陶县',
-  '曹县': '曹县', '单县': '单县', '成武县': '成武县',
-  '巨野县': '巨野县', '郓城县': '郓城县', '鄄城县': '鄄城县',
-  '东明县': '东明县',
+  // ================== Tỉnh Sơn Đông ==================
+  'Thành phố Tế Nam': 'Huyện Lịch Thành', 'Quận Lịch Hạ': 'Huyện Lịch Thành', 'Quận Thị Trung': 'Huyện Lịch Thành',
+  'Quận Hòe Ấm': 'Huyện Lịch Thành', 'Quận Thiên Kiều': 'Huyện Lịch Thành', 'Quận Lịch Thành': 'Huyện Lịch Thành',
+  'Quận Trường Thanh': 'Huyện Trường Thanh', 'Quận Chương Khâu': 'Huyện Chương Khâu', 'Quận Tế Dương': 'Huyện Tế Dương',
+  'Quận Lai Vu': 'Huyện Lai Vu', 'Quận Cương Thành': 'Huyện Lai Vu', 'Huyện Bình Âm': 'Huyện Bình Âm',
+  'Huyện Thương Hà': 'Huyện Thương Hà',
+  'Thành phố Thanh Đảo': 'Huyện Tức Mặc', 'Quận Thị Nam': 'Huyện Tức Mặc', 'Quận Thị Bắc': 'Huyện Tức Mặc',
+  'Quận Hoàng Đảo': 'Giao Châu', 'Quận Lao Sơn': 'Huyện Tức Mặc', 'Quận Lý Thương': 'Huyện Tức Mặc',
+  'Quận Thành Dương': 'Huyện Tức Mặc', 'Quận Tức Mặc': 'Huyện Tức Mặc', 'Thành phố Giao Châu': 'Giao Châu',
+  'Thành phố Bình Độ': 'Châu Bình Độ', 'Thành phố Lai Tây': 'Huyện Lai Dương',
+  'Thành phố Truy Bác': 'Huyện Truy Xuyên', 'Quận Truy Xuyên': 'Huyện Truy Xuyên', 'Quận Trương Điếm': 'Huyện Trường Sơn',
+  'Quận Bác Sơn': 'Huyện Ích Đô', 'Quận Lâm Tri': 'Huyện Lâm Truy', 'Quận Chu Thôn': 'Huyện Trường Sơn',
+  'Huyện Hoàn Đài': 'Huyện Tân Thành', 'Huyện Cao Thanh': 'Huyện Cao Uyển', 'Huyện Nghi Nguyên': 'Huyện Nghi Thủy',
+  'Thành phố Tảo Trang': 'Huyện Dịch', 'Quận Thị Trung': 'Huyện Dịch', 'Quận Tiết Thành': 'Huyện Đằng',
+  'Quận Dịch Thành': 'Huyện Dịch', 'Quận Đài Nhi Trang': 'Huyện Dịch', 'Quận Sơn Đình': 'Huyện Đằng',
+  'Thành phố Đằng Châu': 'Huyện Đằng',
+  'Thành phố Đông Dinh': 'Huyện Nhạc An', 'Quận Đông Dinh': 'Huyện Nhạc An', 'Quận Hà Khẩu': 'Huyện Lợi Tân',
+  'Quận Khẩn Lợi': 'Huyện Lợi Tân', 'Huyện Lợi Tân': 'Huyện Lợi Tân', 'Huyện Quảng Nhiêu': 'Huyện Nhạc An',
+  'Thành phố Yên Đài': 'Huyện Phúc Sơn', 'Quận Chi Phù': 'Huyện Phúc Sơn', 'Quận Phúc Sơn': 'Huyện Phúc Sơn',
+  'Quận Mâu Bình': 'Châu Ninh Hải', 'Quận Lai Sơn': 'Châu Ninh Hải', 'Quận Bồng Lai': 'Huyện Bồng Lai',
+  'Thành phố Long Khẩu': 'Huyện Hoàng', 'Thành phố Lai Dương': 'Huyện Lai Dương', 'Thành phố Lai Châu': 'Huyện Dịch',
+  'Thành phố Chiêu Viễn': 'Huyện Chiêu Viễn', 'Thành phố Thê Hà': 'Huyện Thê Hà', 'Thành phố Hải Dương': 'Huyện Lai Dương',
+  'Thành phố Duy Phường': 'Huyện Duy', 'Quận Duy Thành': 'Huyện Duy', 'Quận Hàn Đình': 'Huyện Duy',
+  'Quận Phường Tử': 'Huyện Duy', 'Quận Khuê Văn': 'Huyện Duy', 'Huyện Lâm Cù': 'Huyện Lâm Cù',
+  'Huyện Xương Nhạc': 'Huyện Xương Nhạc', 'Thành phố Thanh Châu': 'Huyện Ích Đô', 'Thành phố Chư Thành': 'Huyện Chư Thành',
+  'Thành phố Thọ Quang': 'Huyện Thọ Quang', 'Thành phố An Khâu': 'Huyện An Khâu', 'Thành phố Cao Mật': 'Huyện Cao Mật',
+  'Thành phố Xương Ấp': 'Huyện Xương Ấp',
+  'Thành phố Tế Ninh': 'Châu Tế Ninh', 'Quận Nhậm Thành': 'Châu Tế Ninh', 'Quận Duyện Châu': 'Phủ Yển Châu huyện Tư Dương',
+  'Huyện Vi Sơn': 'Huyện Ngư Đài', 'Huyện Ngư Đài': 'Huyện Ngư Đài', 'Huyện Kim Hương': 'Huyện Kim Hương',
+  'Huyện Gia Tường': 'Huyện Gia Tường', 'Huyện Vấn Thượng': 'Huyện Vấn Thượng', 'Huyện Tứ Thủy': 'Huyện Tứ Thủy',
+  'Huyện Lương Sơn': 'Châu Đông Bình', 'Thành phố Khúc Phụ': 'Huyện Khúc Phụ', 'Thành phố Trâu Thành': 'Huyện Trâu',
+  'Thành phố Thái An': 'Châu Thái An', 'Quận Thái Sơn': 'Châu Thái An', 'Quận Đại Nhạc': 'Châu Thái An',
+  'Huyện Ninh Dương': 'Huyện Ninh Dương', 'Huyện Đông Bình': 'Châu Đông Bình', 'Thành phố Tân Thái': 'Huyện Tân Thái',
+  'Thành phố Phì Thành': 'Huyện Phì Thành',
+  'Thành phố Uy Hải': 'Huyện Văn Đăng', 'Quận Hoàn Thúy': 'Huyện Văn Đăng', 'Quận Văn Đăng': 'Huyện Văn Đăng',
+  'Thành phố Vinh Thành': 'Vệ Thành Sơn', 'Thành phố Nhũ Sơn': 'Châu Ninh Hải',
+  'Thành phố Nhật Chiếu': 'Huyện Nhật Chiếu', 'Quận Đông Cảng': 'Huyện Nhật Chiếu', 'Quận Lam Sơn': 'Huyện Nhật Chiếu',
+  'Huyện Ngũ Liên': 'Huyện Chư Thành', 'Huyện Cử': 'Cử Châu',
+  'Thành phố Lâm Nghi': 'Nghi Châu', 'Quận Lan Sơn': 'Nghi Châu', 'Quận La Trang': 'Nghi Châu',
+  'Quận Hà Đông': 'Nghi Châu', 'Huyện Nghi Nam': 'Huyện Nghi Thủy', 'Huyện Đàm Thành': 'Huyện Đàm Thành',
+  'Huyện Nghi Thủy': 'Huyện Nghi Thủy', 'Huyện Lan Lăng': 'Nghi Châu', 'Huyện Phí': 'Huyện Phí',
+  'Huyện Bình Ấp': 'Huyện Phí', 'Huyện Cử Nam': 'Cử Châu', 'Huyện Mông Âm': 'Huyện Mông Âm',
+  'Huyện Lâm Thuật': 'Nghi Châu',
+  'Thành phố Đức Châu': 'Đức Châu', 'Quận Đức Thành': 'Đức Châu', 'Quận Lăng Thành': 'Đức Châu',
+  'Huyện Ninh Tân': 'Huyện Ninh Tân', 'Huyện Khánh Vân': 'Huyện Khánh Vân', 'Huyện Lâm Ấp': 'Huyện Lâm Ấp',
+  'Huyện Tề Hà': 'Huyện Tề Hà', 'Huyện Bình Nguyên': 'Huyện Bình Nguyên', 'Huyện Hạ Tân': 'Huyện Hạ Tân',
+  'Huyện Vũ Thành': 'Huyện Vũ Thành', 'Thành phố Nhạc Lăng': 'Huyện Lạc Lăng', 'Thành phố Vũ Thành': 'Huyện Vũ Thành',
+  'Thành phố Liêu Thành': 'Huyện Liêu Thành', 'Quận Đông Xương Phủ': 'Huyện Liêu Thành', 'Quận Trì Bình': 'Huyện Trì Bình',
+  'Huyện Dương Cốc': 'Huyện Dương Cốc', 'Huyện Sân': 'Huyện Sân', 'Huyện Đông A': 'Huyện Đông A',
+  'Huyện Quan': 'Huyện Quan', 'Huyện Cao Đường': 'Châu Cao Đường', 'Thành phố Lâm Thanh': 'Châu Lâm Thanh',
+  'Thành phố Tân Châu': 'Tân Châu', 'Quận Tân Thành': 'Tân Châu', 'Quận Triêm Hóa': 'Huyện Triêm Hóa',
+  'Huyện Huệ Dân': 'Châu Vũ Định', 'Huyện Dương Tín': 'Huyện Dương Tín', 'Huyện Vô Lệ': 'Huyện Hải Phong',
+  'Huyện Bác Hưng': 'Huyện Bác Hưng', 'Thành phố Trâu Bình': 'Huyện Trâu Bình',
+  'Thành phố Hà Trạch': 'Tào Châu', 'Quận Mẫu Đơn': 'Tào Châu', 'Quận Định Đào': 'Huyện Định Đào',
+  'Huyện Tào': 'Huyện Tào', 'Huyện Đan': 'Huyện Đan', 'Huyện Thành Vũ': 'Huyện Thành Vũ',
+  'Huyện Cự Dã': 'Huyện Cự Dã', 'Huyện Vận Thành': 'Huyện Vận Thành', 'Huyện Quyên Thành': 'Huyện Quyên Thành',
+  'Huyện Đông Minh': 'Huyện Đông Minh',
 
-  // ================== 河南省 ==================
-  '郑州市': '郑州', '中原区': '郑州', '二七区': '郑州',
-  '管城回族区': '郑州', '金水区': '郑州', '上街区': '郑州',
-  '惠济区': '郑州', '中牟县': '中牟县', '巩义市': '巩县',
-  '荥阳市': '荥阳县', '新密市': '密县', '新郑市': '新郑县',
-  '登封市': '登封县',
-  '开封市': '祥符县', '龙亭区': '祥符县', '顺河回族区': '祥符县',
-  '鼓楼区': '祥符县', '禹王台区': '祥符县', '祥符区': '祥符县',
-  '杞县': '杞县', '通许县': '通许县', '尉氏县': '尉氏县',
-  '兰考县': '兰阳县',
-  '洛阳市': '洛阳县', '老城区': '洛阳县', '西工区': '洛阳县',
-  '瀍河回族区': '洛阳县', '涧西区': '洛阳县', '偃师区': '偃师县',
-  '孟津区': '孟津县', '洛龙区': '洛阳县', '新安县': '新安县',
-  '栾川县': '卢氏县', '嵩县': '嵩县', '汝阳县': '伊阳县',
-  '宜阳县': '宜阳县', '洛宁县': '永宁县', '伊川县': '伊阳县',
-  '平顶山市': '汝州', '新华区': '汝州', '卫东区': '汝州',
-  '石龙区': '汝州', '湛河区': '汝州', '宝丰县': '宝丰县',
-  '叶县': '叶县', '鲁山县': '鲁山县', '郏县': '郏县',
-  '舞钢市': '舞阳县', '汝州市': '汝州',
-  '安阳市': '安阳县', '文峰区': '安阳县', '北关区': '安阳县',
-  '殷都区': '安阳县', '龙安区': '安阳县', '安阳县': '安阳县',
-  '汤阴县': '汤阴县', '滑县': '滑县', '内黄县': '内黄县',
-  '林州市': '林县',
-  '鹤壁市': '浚县', '鹤山区': '汤阴县', '山城区': '汤阴县',
-  '淇滨区': '汤阴县', '浚县': '浚县', '淇县': '淇县',
-  '新乡市': '新乡县', '红旗区': '新乡县', '卫滨区': '新乡县',
-  '凤泉区': '新乡县', '牧野区': '新乡县', '新乡县': '新乡县',
-  '获嘉县': '获嘉县', '原阳县': '原武县', '延津县': '延津县',
-  '封丘县': '封丘县', '卫辉市': '汲县', '辉县市': '辉县',
-  '长垣市': '长垣县',
-  '焦作市': '河内县', '解放区': '河内县', '中站区': '河内县',
-  '马村区': '河内县', '山阳区': '河内县', '修武县': '修武县',
-  '博爱县': '河内县', '武陟县': '武陟县', '温县': '温县',
-  '沁阳市': '河内县', '孟州市': '孟县',
-  '濮阳市': '开州', '华龙区': '开州', '清丰县': '清丰县',
-  '南乐县': '南乐县', '范县': '范县', '台前县': '寿张县',
-  '濮阳县': '开州',
-  '许昌市': '许州', '魏都区': '许州', '建安区': '许州',
-  '鄢陵县': '鄢陵县', '襄城县': '襄城县', '禹州市': '禹州',
-  '长葛市': '长葛县',
-  '漯河市': '郾城县', '源汇区': '郾城县', '郾城区': '郾城县',
-  '召陵区': '郾城县', '舞阳县': '舞阳县', '临颍县': '临颍县',
-  '三门峡市': '陕州', '湖滨区': '陕州', '陕州区': '陕州',
-  '渑池县': '渑池县', '卢氏县': '卢氏县', '义马市': '渑池县',
-  '灵宝市': '灵宝县',
-  '南阳市': '南阳县', '宛城区': '南阳县', '卧龙区': '南阳县',
-  '南召县': '南召县', '方城县': '裕州', '西峡县': '内乡县',
-  '镇平县': '镇平县', '内乡县': '内乡县', '淅川县': '淅川县',
-  '社旗县': '南阳县', '唐河县': '唐县', '新野县': '新野县',
-  '桐柏县': '桐柏县', '邓州市': '邓州',
-  '商丘市': '商丘县', '梁园区': '商丘县', '睢阳区': '商丘县',
-  '民权县': '睢州', '睢县': '睢州', '宁陵县': '宁陵县',
-  '柘城县': '柘城县', '虞城县': '虞城县', '夏邑县': '夏邑县',
-  '永城市': '永城县',
-  '信阳市': '信阳州', '浉河区': '信阳州', '平桥区': '信阳州',
-  '罗山县': '罗山县', '光山县': '光山县', '新县': '光山县',
-  '商城县': '商城县', '固始县': '固始县', '潢川县': '光州',
-  '淮滨县': '光州', '息县': '息县',
-  '周口市': '商水县', '川汇区': '商水县', '淮阳区': '陈州',
-  '扶沟县': '扶沟县', '西华县': '西华县', '商水县': '商水县',
-  '沈丘县': '沈丘县', '郸城县': '鹿邑县', '太康县': '太康县',
-  '鹿邑县': '鹿邑县', '项城市': '项城县',
-  '驻马店市': '汝阳县', '驿城区': '汝阳县', '西平县': '西平县',
-  '上蔡县': '上蔡县', '平舆县': '汝阳县', '正阳县': '真阳县',
-  '确山县': '确山县', '泌阳县': '泌阳县', '汝南县': '汝阳县',
-  '遂平县': '遂平县', '新蔡县': '新蔡县',
-  '济源市': '济源县',
+  // ================== Tỉnh Hà Nam ==================
+  'Thành phố Trịnh Châu': 'Trịnh Châu', 'Quận Trung Nguyên': 'Trịnh Châu', 'Quận Nhị Thất': 'Trịnh Châu',
+  'Quận Hồi tộc Quản Thành': 'Trịnh Châu', 'Quận Kim Thủy': 'Trịnh Châu', 'Quận Thượng Nhai': 'Trịnh Châu',
+  'Quận Huệ Tế': 'Trịnh Châu', 'Huyện Trung Mâu': 'Huyện Trung Mâu', 'Thành phố Củng Nghĩa': 'Huyện Củng',
+  'Thành phố Huỳnh Dương': 'Huyện Huỳnh Dương', 'Thành phố Tân Mật': 'Huyện Mật', 'Thành phố Tân Trịnh': 'Huyện Tân Trịnh',
+  'Thành phố Đăng Phong': 'Huyện Đăng Phong',
+  'Thành phố Khai Phong': 'Huyện Tường Phù', 'Quận Long Đình': 'Huyện Tường Phù', 'Quận Hồi tộc Thuận Hà': 'Huyện Tường Phù',
+  'Quận Cổ Lâu': 'Huyện Tường Phù', 'Quận Vũ Vương Đài': 'Huyện Tường Phù', 'Quận Tường Phù': 'Huyện Tường Phù',
+  'Huyện Khởi': 'Huyện Khởi', 'Huyện Thông Hứa': 'Huyện Thông Hứa', 'Huyện Úy Thị': 'Huyện Úy Thị',
+  'Huyện Lan Khảo': 'Huyện Lan Dương',
+  'Thành phố Lạc Dương': 'Huyện Lạc Dương', 'Quận Lão Thành': 'Huyện Lạc Dương', 'Quận Tây Công': 'Huyện Lạc Dương',
+  'Quận Hồi tộc Triền Hà': 'Huyện Lạc Dương', 'Quận Giản Tây': 'Huyện Lạc Dương', 'Quận Yển Sư': 'Huyện Yển Sư',
+  'Quận Mạnh Tân': 'Huyện Mạnh Tân', 'Quận Lạc Long': 'Huyện Lạc Dương', 'Huyện Tân An': 'Huyện Tân An',
+  'Huyện Loan Xuyên': 'Huyện Lư Thị', 'Huyện Tung': 'Huyện Tung', 'Huyện Nhữ Dương': 'Huyện Y Dương',
+  'Huyện Nghi Dương': 'Huyện Nghi Dương', 'Huyện Lạc Ninh': 'Huyện Vĩnh Ninh', 'Huyện Y Xuyên': 'Huyện Y Dương',
+  'Thành phố Bình Đỉnh Sơn': 'Nhữ Châu', 'Quận Tân Hoa': 'Nhữ Châu', 'Quận Vệ Đông': 'Nhữ Châu',
+  'Quận Thạch Long': 'Nhữ Châu', 'Quận Trạm Hà': 'Nhữ Châu', 'Huyện Bảo Phong': 'Huyện Bảo Phong',
+  'Huyện Diệp': 'Huyện Diệp', 'Huyện Lỗ Sơn': 'Huyện Lỗ Sơn', 'Huyện Giáp': 'Huyện Giáp',
+  'Thành phố Vũ Cương': 'Huyện Vũ Dương', 'Thành phố Nhữ Châu': 'Nhữ Châu',
+  'Thành phố An Dương': 'Huyện An Dương', 'Quận Văn Phong': 'Huyện An Dương', 'Quận Bắc Quan': 'Huyện An Dương',
+  'Quận Ân Đô': 'Huyện An Dương', 'Quận Long An': 'Huyện An Dương', 'Huyện An Dương': 'Huyện An Dương',
+  'Huyện Thang Âm': 'Huyện Thang Âm', 'Huyện Hoạt': 'Huyện Hoạt', 'Huyện Nội Hoàng': 'Huyện Nội Hoàng',
+  'Thành phố Lâm Châu': 'Huyện Lâm',
+  'Thành phố Hạc Bích': 'Huyện Tuấn', 'Quận Hạc Sơn': 'Huyện Thang Âm', 'Quận Sơn Thành': 'Huyện Thang Âm',
+  'Quận Kỳ Tân': 'Huyện Thang Âm', 'Huyện Tuấn': 'Huyện Tuấn', 'Huyện Kỳ': 'Huyện Kỳ',
+  'Thành phố Tân Hương': 'Huyện Tân Hương', 'Quận Hồng Kỳ': 'Huyện Tân Hương', 'Quận Vệ Tân': 'Huyện Tân Hương',
+  'Quận Phượng Tuyền': 'Huyện Tân Hương', 'Quận Mục Dã': 'Huyện Tân Hương', 'Huyện Tân Hương': 'Huyện Tân Hương',
+  'Huyện Hoạch Gia': 'Huyện Hoạch Gia', 'Huyện Nguyên Dương': 'Huyện Nguyên Vũ', 'Huyện Diên Tân': 'Huyện Diên Tân',
+  'Huyện Phong Khâu': 'Huyện Phong Khâu', 'Thành phố Vệ Huy': 'Huyện Cấp', 'Thành phố Huy Huyện': 'Huyện Huy',
+  'Thành phố Trường Viên': 'Huyện Trường Viên',
+  'Thành phố Tiêu Tác': 'Huyện Hà Nội', 'Quận Giải Phóng': 'Huyện Hà Nội', 'Quận Trung Trạm': 'Huyện Hà Nội',
+  'Quận Mã Thôn': 'Huyện Hà Nội', 'Quận Sơn Dương': 'Huyện Hà Nội', 'Huyện Tu Vũ': 'Huyện Tu Vũ',
+  'Huyện Bác Ái': 'Huyện Hà Nội', 'Huyện Vũ Trắc': 'Huyện Vũ Trắc', 'Huyện Ôn': 'Huyện Ôn',
+  'Thành phố Thấm Dương': 'Huyện Hà Nội', 'Thành phố Mạnh Châu': 'Huyện Mạnh',
+  'Thành phố Bộc Dương': 'Khai Châu', 'Quận Hoa Long': 'Khai Châu', 'Huyện Thanh Phong': 'Huyện Thanh Phong',
+  'Huyện Nam Nhạc': 'Huyện Nam Nhạc', 'Huyện Phạm': 'Huyện Phạm', 'Huyện Đài Tiền': 'Huyện Thọ Trương',
+  'Huyện Bộc Dương': 'Khai Châu',
+  'Thành phố Hứa Xương': 'Hứa Châu', 'Quận Ngụy Đô': 'Hứa Châu', 'Quận Kiến An': 'Hứa Châu',
+  'Huyện Yên Lăng': 'Huyện Yên Lăng', 'Huyện Tương Thành': 'Huyện Tương Thành', 'Thành phố Vũ Châu': 'Vũ Châu',
+  'Thành phố Trường Cát': 'Huyện Trường Cát',
+  'Thành phố Tháp Hà': 'Huyện Yển Thành', 'Quận Nguyên Hối': 'Huyện Yển Thành', 'Quận Yển Thành': 'Huyện Yển Thành',
+  'Quận Triệu Lăng': 'Huyện Yển Thành', 'Huyện Vũ Dương': 'Huyện Vũ Dương', 'Huyện Lâm Dĩnh': 'Huyện Lâm Dĩnh',
+  'Thành phố Tam Môn Hiệp': 'Thiểm Châu', 'Quận Hồ Tân': 'Thiểm Châu', 'Quận Thiểm Châu': 'Thiểm Châu',
+  'Huyện Thằng Trì': 'Huyện Thằng Trì', 'Huyện Lư Thị': 'Huyện Lư Thị', 'Thành phố Nghĩa Mã': 'Huyện Thằng Trì',
+  'Thành phố Linh Bảo': 'Huyện Linh Bảo',
+  'Thành phố Nam Dương': 'Huyện Nam Dương', 'Quận Uyển Thành': 'Huyện Nam Dương', 'Quận Ngọa Long': 'Huyện Nam Dương',
+  'Huyện Nam Triệu': 'Huyện Nam Triệu', 'Huyện Phương Thành': 'Dụ Châu', 'Huyện Tây Hiệp': 'Huyện Nội Hương',
+  'Huyện Trấn Bình': 'Huyện Trấn Bình', 'Huyện Nội Hương': 'Huyện Nội Hương', 'Huyện Tích Xuyên': 'Huyện Tích Xuyên',
+  'Huyện Xã Kỳ': 'Huyện Nam Dương', 'Huyện Đường Hà': 'Huyện Đường', 'Huyện Tân Dã': 'Huyện Tân Dã',
+  'Huyện Đồng Bách': 'Huyện Đồng Bách', 'Thành phố Đặng Châu': 'Đặng Châu',
+  'Thành phố Thương Khâu': 'Huyện Thương Khâu', 'Quận Lương Viên': 'Huyện Thương Khâu', 'Quận Tuy Dương': 'Huyện Thương Khâu',
+  'Huyện Dân Quyền': 'Tuy Châu', 'Huyện Tuy': 'Tuy Châu', 'Huyện Ninh Lăng': 'Huyện Ninh Lăng',
+  'Huyện Giá Thành': 'Huyện Giá Thành', 'Huyện Ngu Thành': 'Huyện Ngu Thành', 'Huyện Hạ Ấp': 'Huyện Hạ Ấp',
+  'Thành phố Vĩnh Thành': 'Huyện Vĩnh Thành',
+  'Thành phố Tín Dương': 'Châu Tín Dương', 'Quận Sư Hà': 'Châu Tín Dương', 'Quận Bình Kiều': 'Châu Tín Dương',
+  'Huyện La Sơn': 'Huyện La Sơn', 'Huyện Quang Sơn': 'Huyện Quang Sơn', 'Huyện Tân': 'Huyện Quang Sơn',
+  'Huyện Thương Thành': 'Huyện Thương Thành', 'Huyện Cố Thủy': 'Huyện Cố Thủy', 'Huyện Hoàng Xuyên': 'Gwangju',
+  'Huyện Hoài Tân': 'Gwangju', 'Huyện Tức': 'Huyện Tức',
+  'Thành phố Chu Khẩu': 'Huyện Thương Thủy', 'Quận Xuyên Hối': 'Huyện Thương Thủy', 'Quận Hoài Dương': 'Trần Châu',
+  'Huyện Phù Câu': 'Huyện Phù Câu', 'Huyện Tây Hoa': 'Huyện Tây Hoa', 'Huyện Thương Thủy': 'Huyện Thương Thủy',
+  'Huyện Thẩm Khâu': 'Huyện Thẩm Khâu', 'Huyện Đan Thành': 'Huyện Lộc Ấp', 'Huyện Thái Khang': 'Huyện Thái Khang',
+  'Huyện Lộc Ấp': 'Huyện Lộc Ấp', 'Thành phố Hạng Thành': 'Huyện Hạng Thành',
+  'Thành phố Trú Mã Điếm': 'Huyện Nhữ Dương', 'Quận Dịch Thành': 'Huyện Nhữ Dương', 'Huyện Tây Bình': 'Huyện Tây Bình',
+  'Huyện Thượng Thái': 'Huyện Thượng Thái', 'Huyện Bình Dư': 'Huyện Nhữ Dương', 'Huyện Chính Dương': 'Huyện Chân Dương',
+  'Huyện Xác Sơn': 'Huyện Xác Sơn', 'Huyện Bí Dương': 'Huyện Bí Dương', 'Huyện Nhữ Nam': 'Huyện Nhữ Dương',
+  'Huyện Toại Bình': 'Huyện Toại Bình', 'Huyện Tân Thái': 'Huyện Tân Thái',
+  'Thành phố Tế Nguyên': 'Huyện Tế Nguyên',
 
-  // ================== 湖北省 ==================
-  '武汉市': '江夏县', '江岸区': '汉阳县', '江汉区': '汉阳县',
-  '硚口区': '汉阳县', '汉阳区': '汉阳县', '武昌区': '江夏县',
-  '青山区': '江夏县', '洪山区': '江夏县', '东西湖区': '汉阳县',
-  '汉南区': '汉阳县', '蔡甸区': '汉阳县', '江夏区': '江夏县',
-  '黄陂区': '黄陂县', '新洲区': '黄冈县',
-  '黄石市': '大冶县', '黄石港区': '大冶县', '西塞山区': '大冶县',
-  '下陆区': '大冶县', '铁山区': '大冶县', '阳新县': '兴国州',
-  '大冶市': '大冶县',
-  '十堰市': '郧阳府', '茅箭区': '郧县', '张湾区': '郧县',
-  '郧阳区': '郧县', '郧西县': '郧西县', '竹山县': '竹山县',
-  '竹溪县': '竹溪县', '房县': '房县', '丹江口市': '均州',
-  '宜昌市': '夷陵州', '西陵区': '夷陵州', '伍家岗区': '夷陵州',
-  '点军区': '夷陵州', '猇亭区': '夷陵州', '夷陵区': '夷陵州',
-  '远安县': '远安县', '兴山县': '兴山县', '秭归县': '归州',
-  '长阳土家族自治县': '长阳县', '五峰土家族自治县': '长阳县',
-  '宜都市': '宜都县', '当阳市': '当阳县', '枝江市': '枝江县',
-  '襄阳市': '襄阳县', '襄城区': '襄阳县', '樊城区': '襄阳县',
-  '襄州区': '襄阳县', '南漳县': '南漳县', '谷城县': '谷城县',
-  '保康县': '保康县', '老河口市': '光化县', '枣阳市': '枣阳县',
-  '宜城市': '宜城县',
-  '鄂州市': '武昌县', '梁子湖区': '武昌县', '华容区': '武昌县',
-  '鄂城区': '武昌县',
-  '荆门市': '荆门州', '东宝区': '荆门州', '掇刀区': '荆门州',
-  '沙洋县': '荆门州', '钟祥市': '钟祥县', '京山市': '京山县',
-  '孝感市': '孝感县', '孝南区': '孝感县', '孝昌县': '孝感县',
-  '大悟县': '孝感县', '云梦县': '云梦县', '应城市': '应城县',
-  '安陆市': '安陆县', '汉川市': '汉川县',
-  '荆州市': '江陵县', '沙市区': '江陵县', '荆州区': '江陵县',
-  '公安县': '公安县', '监利市': '监利县', '江陵县': '江陵县',
-  '石首市': '石首县', '洪湖市': '沔阳州', '松滋市': '松滋县',
-  '黄冈市': '黄冈县', '黄州区': '黄冈县', '团风县': '黄冈县',
-  '红安县': '黄安县', '罗田县': '罗田县', '英山县': '英山县',
-  '浠水县': '蕲水县', '蕲春县': '蕲州', '黄梅县': '黄梅县',
-  '麻城市': '麻城县', '武穴市': '广济县',
-  '咸宁市': '咸宁县', '咸安区': '咸宁县', '嘉鱼县': '嘉鱼县',
-  '通城县': '通城县', '崇阳县': '崇阳县', '通山县': '通山县',
-  '赤壁市': '蒲圻县',
-  '随州市': '随州', '曾都区': '随州', '随县': '随州',
-  '广水市': '应山县',
-  '恩施土家族苗族自治州': '施州卫', '恩施市': '施州卫', '利川市': '施州卫',
-  '建始县': '施州卫', '巴东县': '归州', '宣恩县': '施州卫',
-  '咸丰县': '施州卫', '来凤县': '施州卫', '鹤峰县': '施州卫',
-  '仙桃市': '沔阳州', '潜江市': '潜江县', '天门市': '景陵县',
-  '神农架林区': '房县',
+  // ================== Tỉnh Hồ Bắc ==================
+  'Thành phố Vũ Hán': 'Huyện Giang Hạ', 'Quận Giang Ngạn': 'Huyện Hán Dương', 'Quận Giang Hán': 'Huyện Hán Dương',
+  'Quận Kiều Khẩu': 'Huyện Hán Dương', 'Quận Hán Dương': 'Huyện Hán Dương', 'Quận Vũ Xương': 'Huyện Giang Hạ',
+  'Quận Thanh Sơn': 'Huyện Giang Hạ', 'Quận Hồng Sơn': 'Huyện Giang Hạ', 'Quận Đông Tây Hồ': 'Huyện Hán Dương',
+  'Quận Hán Nam': 'Huyện Hán Dương', 'Quận Thái Điền': 'Huyện Hán Dương', 'Quận Giang Hạ': 'Huyện Giang Hạ',
+  'Quận Hoàng Bi': 'Huyện Hoàng Bì', 'Quận Tân Châu': 'Huyện Hoàng Cương',
+  'Thành phố Hoàng Thạch': 'Huyện Đại Dã', 'Quận Hoàng Thạch Cảng': 'Huyện Đại Dã', 'Quận Tây Tắc Sơn': 'Huyện Đại Dã',
+  'Quận Hạ Lục': 'Huyện Đại Dã', 'Quận Thiết Sơn': 'Huyện Đại Dã', 'Huyện Dương Tân': 'Châu Hưng Quốc',
+  'Thành phố Đại Dã': 'Huyện Đại Dã',
+  'Thành phố Thập Yển': 'Phủ Vẫn Dương', 'Quận Mao Tiễn': 'Huyện Vẫn', 'Quận Trương Loan': 'Huyện Vẫn',
+  'Quận Vẫn Dương': 'Huyện Vẫn', 'Huyện Vẫn Tây': 'Huyện Vẫn Tây', 'Huyện Trúc Sơn': 'Huyện Trúc Sơn',
+  'Huyện Trúc Khê': 'Huyện Trúc Khê', 'Huyện Phòng': 'Huyện Phòng', 'Thành phố Đan Giang Khẩu': 'Quân Châu',
+  'Thành phố Nghi Xương': 'Châu Di Lăng', 'Quận Tây Lăng': 'Châu Di Lăng', 'Quận Ngũ Gia Cương': 'Châu Di Lăng',
+  'Quận Điểm Quân': 'Châu Di Lăng', 'Quận Hao Đình': 'Châu Di Lăng', 'Quận Di Lăng': 'Châu Di Lăng',
+  'Huyện Viễn An': 'Huyện Viễn An', 'Huyện Hưng Sơn': 'Huyện Hưng Sơn', 'Huyện Tỷ Quy': 'Quy Châu',
+  'Huyện tự trị dân tộc Thổ Gia Trường Dương': 'Huyện Trường Dương', 'Huyện tự trị dân tộc Thổ Gia Ngũ Phong': 'Huyện Trường Dương',
+  'Thành phố Nghi Đô': 'Huyện Nghi Đô', 'Thành phố Đương Dương': 'Huyện Đương Dương', 'Thành phố Chi Giang': 'Huyện Chi Giang',
+  'Thành phố Tương Dương': 'Huyện Tương Dương', 'Quận Tương Thành': 'Huyện Tương Dương', 'Quận Phàn Thành': 'Huyện Tương Dương',
+  'Quận Tương Châu': 'Huyện Tương Dương', 'Huyện Nam Chương': 'Huyện Nam Chương', 'Huyện Cốc Thành': 'Huyện Cốc Thành',
+  'Huyện Bảo Khang': 'Huyện Bảo Khang', 'Thành phố Lão Hà Khẩu': 'Huyện Quang Hóa', 'Thành phố Tảo Dương': 'Huyện Tảo Dương',
+  'Thành phố Nghi Thành': 'Huyện Nghi Thành',
+  'Thành phố Ngạc Châu': 'Huyện Vũ Xương', 'Quận Lương Tử Hồ': 'Huyện Vũ Xương', 'Quận Hoa Dung': 'Huyện Vũ Xương',
+  'Quận Ngạc Thành': 'Huyện Vũ Xương',
+  'Thành phố Kinh Môn': 'Châu Kinh Môn', 'Quận Đông Bảo': 'Châu Kinh Môn', 'Quận Xuyết Đao': 'Châu Kinh Môn',
+  'Huyện Sa Dương': 'Châu Kinh Môn', 'Thành phố Chung Tường': 'Huyện Chung Tường', 'Thành phố Kinh Sơn': 'Huyện Kinh Sơn',
+  'Thành phố Hiếu Cảm': 'Huyện Hiếu Cảm', 'Quận Hiếu Nam': 'Huyện Hiếu Cảm', 'Huyện Hiếu Xương': 'Huyện Hiếu Cảm',
+  'Huyện Đại Ngộ': 'Huyện Hiếu Cảm', 'Huyện Vân Mộng': 'Huyện Vân Mộng', 'Thành phố Ứng Thành': 'Huyện Ứng Thành',
+  'Thành phố An Lục': 'Huyện An Lục', 'Thành phố Hán Xuyên': 'Huyện Hán Xuyên',
+  'Thành phố Kinh Châu': 'Huyện Giang Lăng', 'Quận Sa Thị': 'Huyện Giang Lăng', 'Quận Kinh Châu': 'Huyện Giang Lăng',
+  'Huyện Công An': 'Huyện Công An', 'Thành phố Giám Lợi': 'Huyện Giám Lợi', 'Huyện Giang Lăng': 'Huyện Giang Lăng',
+  'Thành phố Thạch Thủ': 'Huyện Thạch Thủ', 'Thành phố Hồng Hồ': 'Châu Miện Dương', 'Thành phố Tùng Tư': 'Huyện Tùng Tư',
+  'Thành phố Hoàng Cương': 'Huyện Hoàng Cương', 'Quận Hoàng Châu': 'Huyện Hoàng Cương', 'Huyện Đoàn Phong': 'Huyện Hoàng Cương',
+  'Huyện Hồng An': 'Huyện Hoàng An', 'Huyện La Điền': 'Huyện La Điền', 'Huyện Anh Sơn': 'Huyện Anh Sơn',
+  'Huyện Hy Thủy': 'Huyện Kỳ Thủy', 'Huyện Kỳ Xuân': 'Kỳ Châu', 'Huyện Hoàng Mai': 'Huyện Hoàng Mai',
+  'Thành phố Ma Thành': 'Huyện Ma Thành', 'Thành phố Vũ Huyệt': 'Huyện Quảng Tế',
+  'Thành phố Hàm Ninh': 'Huyện Hàm Ninh', 'Quận Hàm An': 'Huyện Hàm Ninh', 'Huyện Gia Ngư': 'Huyện Gia Ngư',
+  'Huyện Thông Thành': 'Huyện Thông Thành', 'Huyện Sùng Dương': 'Huyện Sùng Dương', 'Huyện Thông Sơn': 'Huyện Thông Sơn',
+  'Thành phố Xích Bích': 'Huyện Bồ Kỳ',
+  'Thành phố Tùy Châu': 'Tùy Châu', 'Quận Tằng Đô': 'Tùy Châu', 'Huyện Tùy': 'Tùy Châu',
+  'Thành phố Quảng Thủy': 'Huyện Ứng Sơn',
+  'Châu tự trị dân tộc Thổ Gia, Miêu Ân Thi': 'Thi Châu Vệ', 'Thành phố Ân Thi': 'Thi Châu Vệ', 'Thành phố Lợi Xuyên': 'Thi Châu Vệ',
+  'Huyện Kiến Thủy': 'Thi Châu Vệ', 'Huyện Ba Đông': 'Quy Châu', 'Huyện Tuyên Ân': 'Thi Châu Vệ',
+  'Huyện Hàm Phong': 'Thi Châu Vệ', 'Huyện Lai Phượng': 'Thi Châu Vệ', 'Huyện Hạc Phong': 'Thi Châu Vệ',
+  'Thành phố Tiên Đào': 'Châu Miện Dương', 'Thành phố Tiềm Giang': 'Huyện Tiềm Giang', 'Thành phố Thiên Môn': 'Huyện Cảnh Lăng',
+  'Lâm khu Thần Nông Giá': 'Huyện Phòng',
 
-  // ================== 湖南省 ==================
-  '长沙市': '长沙县', '芙蓉区': '长沙县', '天心区': '长沙县',
-  '岳麓区': '善化县', '开福区': '长沙县', '雨花区': '善化县',
-  '望城区': '长沙县', '长沙县': '长沙县', '浏阳市': '浏阳县',
-  '宁乡市': '宁乡县',
-  '株洲市': '湘潭县', '荷塘区': '湘潭县', '芦淞区': '湘潭县',
-  '石峰区': '湘潭县', '天元区': '湘潭县', '渌口区': '湘潭县',
-  '攸县': '攸县', '茶陵县': '茶陵州', '炎陵县': '酃县',
-  '醴陵市': '醴陵县',
-  '湘潭市': '湘潭县', '雨湖区': '湘潭县', '岳塘区': '湘潭县',
-  '湘潭县': '湘潭县', '湘乡市': '湘乡县', '韶山市': '湘潭县',
-  '衡阳市': '衡阳县', '珠晖区': '衡阳县', '雁峰区': '衡阳县',
-  '石鼓区': '衡阳县', '蒸湘区': '衡阳县', '南岳区': '衡山县',
-  '衡阳县': '衡阳县', '衡南县': '衡阳县', '衡山县': '衡山县',
-  '衡东县': '衡山县', '祁东县': '祁阳县', '耒阳市': '耒阳县',
-  '常宁市': '常宁县',
-  '邵阳市': '邵阳县', '双清区': '邵阳县', '大祥区': '邵阳县',
-  '北塔区': '邵阳县', '新邵县': '邵阳县', '邵阳县': '邵阳县',
-  '隆回县': '邵阳县', '洞口县': '武冈州', '绥宁县': '绥宁县',
-  '新宁县': '新宁县', '城步苗族自治县': '城步县', '武冈市': '武冈州',
-  '邵东市': '邵阳县',
-  '岳阳市': '巴陵县', '岳阳楼区': '巴陵县', '云溪区': '巴陵县',
-  '君山区': '巴陵县', '岳阳县': '巴陵县', '华容县': '华容县',
-  '湘阴县': '湘阴县', '平江县': '平江县', '汨罗市': '湘阴县',
-  '临湘市': '临湘县',
-  '常德市': '武陵县', '武陵区': '武陵县', '鼎城区': '武陵县',
-  '安乡县': '安乡县', '汉寿县': '龙阳县', '澧县': '澧州',
-  '临澧县': '澧州', '桃源县': '桃源县', '石门县': '石门县',
-  '津市市': '澧州',
-  '张家界市': '大庸卫', '永定区': '大庸卫', '武陵源区': '大庸卫',
-  '慈利县': '慈利县', '桑植县': '桑植安抚司',
-  '益阳市': '益阳县', '资阳区': '益阳县', '赫山区': '益阳县',
-  '南县': '华容县', '桃江县': '益阳县', '安化县': '安化县',
-  '沅江市': '沅江县',
-  '郴州市': '郴州', '北湖区': '郴州', '苏仙区': '郴州',
-  '桂阳县': '桂阳州', '宜章县': '宜章县', '永兴县': '永兴县',
-  '嘉禾县': '嘉禾县', '临武县': '临武县', '汝城县': '桂阳县',
-  '桂东县': '桂东县', '安仁县': '安仁县', '资兴市': '兴宁县',
-  '永州市': '零陵县', '零陵区': '零陵县', '冷水滩区': '零陵县',
-  '祁阳市': '祁阳县', '东安县': '东安县', '双牌县': '零陵县',
-  '道县': '道州', '江永县': '永明县', '宁远县': '宁远县',
-  '蓝山县': '蓝山县', '新田县': '新田县', '江华瑶族自治县': '江华县',
-  '怀化市': '沅州', '鹤城区': '沅州', '中方县': '沅州',
-  '沅陵县': '沅陵县', '辰溪县': '辰溪县', '溆浦县': '溆浦县',
-  '会同县': '会同县', '麻阳苗族自治县': '麻阳县', '新晃侗族自治县': '晃州',
-  '芷江侗族自治县': '沅州', '靖州苗族侗族自治县': '靖州', '通道侗族自治县': '靖州',
-  '洪江市': '黔阳县',
-  '娄底市': '湘乡县', '娄星区': '湘乡县', '双峰县': '湘乡县',
-  '新化县': '新化县', '冷水江市': '新化县', '涟源市': '湘乡县',
-  '湘西土家族苗族自治州': '永顺宣慰司', '吉首市': '镇溪千户所',
-  '泸溪县': '辰溪县', '凤凰县': '五寨长官司', '花垣县': '保靖州宣慰司',
-  '保靖县': '保靖州宣慰司', '古丈县': '永顺宣慰司', '永顺县': '永顺宣慰司',
-  '龙山县': '永顺宣慰司',
+  // ================== Tỉnh Hồ Nam ==================
+  'Thành phố Trường Sa': 'Huyện Trường Sa', 'Quận Phù Dung': 'Huyện Trường Sa', 'Quận Thiên Tâm': 'Huyện Trường Sa',
+  'Quận Nhạc Lộc': 'Huyện Thiện Hóa', 'Quận Khai Phúc': 'Huyện Trường Sa', 'Quận Vũ Hoa': 'Huyện Thiện Hóa',
+  'Quận Vọng Thành': 'Huyện Trường Sa', 'Huyện Trường Sa': 'Huyện Trường Sa', 'Thành phố Lưu Dương': 'Huyện Lưu Dương',
+  'Thành phố Ninh Hương': 'Huyện Ninh Hương',
+  'Thành phố Chu Châu': 'Huyện Tương Đàm', 'Quận Hà Đường': 'Huyện Tương Đàm', 'Quận Lô Tùng': 'Huyện Tương Đàm',
+  'Quận Thạch Phong': 'Huyện Tương Đàm', 'Quận Thiên Nguyên': 'Huyện Tương Đàm', 'Quận Lộc Khẩu': 'Huyện Tương Đàm',
+  'Huyện Du': 'Huyện Du', 'Huyện Trà Lăng': 'Châu Trà Lăng', 'Huyện Viêm Lăng': 'Huyện Linh',
+  'Thành phố Lễ Lăng': 'Huyện Lễ Lăng',
+  'Thành phố Tương Đàm': 'Huyện Tương Đàm', 'Quận Vũ Hồ': 'Huyện Tương Đàm', 'Quận Nhạc Đường': 'Huyện Tương Đàm',
+  'Huyện Tương Đàm': 'Huyện Tương Đàm', 'Thành phố Tương Hương': 'Huyện Tương Hương', 'Thành phố Thiều Sơn': 'Huyện Tương Đàm',
+  'Thành phố Hành Dương': 'Huyện Hành Dương', 'Quận Châu Huy': 'Huyện Hành Dương', 'Quận Nhạn Phong': 'Huyện Hành Dương',
+  'Quận Thạch Cổ': 'Huyện Hành Dương', 'Quận Chưng Tương': 'Huyện Hành Dương', 'Quận Nam Nhạc': 'Huyện Hành Sơn',
+  'Huyện Hành Dương': 'Huyện Hành Dương', 'Huyện Hành Nam': 'Huyện Hành Dương', 'Huyện Hành Sơn': 'Huyện Hành Sơn',
+  'Huyện Hành Đông': 'Huyện Hành Sơn', 'Huyện Kỳ Đông': 'Huyện Kỳ Dương', 'Thành phố Lỗi Dương': 'Huyện Lỗi Dương',
+  'Thành phố Thường Ninh': 'Huyện Thường Ninh',
+  'Thành phố Thiệu Dương': 'Huyện Thiệu Dương', 'Quận Song Thanh': 'Huyện Thiệu Dương', 'Quận Đại Tường': 'Huyện Thiệu Dương',
+  'Quận Bắc Tháp': 'Huyện Thiệu Dương', 'Huyện Tân Thiệu': 'Huyện Thiệu Dương', 'Huyện Thiệu Dương': 'Huyện Thiệu Dương',
+  'Huyện Long Hồi': 'Huyện Thiệu Dương', 'Huyện Động Khẩu': 'Châu Vũ Cương', 'Huyện Tuy Ninh': 'Huyện Tuy Ninh',
+  'Huyện Tân Ninh': 'Huyện Tân Ninh', 'Huyện tự trị dân tộc Miêu Thành Bộ': 'Huyện Thành Bộ', 'Thành phố Vũ Cương': 'Châu Vũ Cương',
+  'Thành phố Thiệu Đông': 'Huyện Thiệu Dương',
+  'Thành phố Nhạc Dương': 'Huyện Ba Lăng', 'Quận Nhạc Dương Lâu': 'Huyện Ba Lăng', 'Quận Vân Khê': 'Huyện Ba Lăng',
+  'Quận Quân Sơn': 'Huyện Ba Lăng', 'Huyện Nhạc Dương': 'Huyện Ba Lăng', 'Huyện Hoa Dung': 'Huyện Hoa Dung',
+  'Huyện Tương Âm': 'Huyện Tương Âm', 'Huyện Bình Giang': 'Huyện Bình Giang', 'Thành phố Mịch La': 'Huyện Tương Âm',
+  'Thành phố Lâm Tương': 'Huyện Lâm Tương',
+  'Thành phố Thường Đức': 'Huyện Vũ Lăng', 'Quận Vũ Lăng': 'Huyện Vũ Lăng', 'Quận Đỉnh Thành': 'Huyện Vũ Lăng',
+  'Huyện An Hương': 'Huyện An Hương', 'Huyện Hán Thọ': 'Huyện Long Dương', 'Huyện Lễ': 'Lễ Châu',
+  'Huyện Lâm Lễ': 'Lễ Châu', 'Huyện Đào Nguyên': 'Huyện Đào Nguyên', 'Huyện Thạch Môn': 'Huyện Thạch Môn',
+  'Thành phố Tân Thị': 'Lễ Châu',
+  'Thành phố Trương Gia Giới': 'Đại Dung Vệ', 'Quận Vĩnh Định': 'Đại Dung Vệ', 'Quận Vũ Lăng Nguyên': 'Đại Dung Vệ',
+  'Huyện Từ Lợi': 'Huyện Từ Lợi', 'Huyện Tang Thực': 'An phủ ty Tang Thực',
+  'Thành phố Ích Dương': 'Huyện Ích Dương', 'Quận Tư Dương': 'Huyện Ích Dương', 'Quận Hách Sơn': 'Huyện Ích Dương',
+  'Huyện Nam': 'Huyện Hoa Dung', 'Huyện Đào Giang': 'Huyện Ích Dương', 'Huyện An Hóa': 'Huyện An Hóa',
+  'Thành phố Nguyên Giang': 'Huyện Nguyên Giang',
+  'Thành phố Sâm Châu': 'Sâm Châu', 'Quận Bắc Hồ': 'Sâm Châu', 'Quận Tô Tiên': 'Sâm Châu',
+  'Huyện Quế Dương': 'Châu Quế Dương', 'Huyện Nghi Chương': 'Huyện Nghi Chương', 'Huyện Vĩnh Hưng': 'Huyện Vĩnh Hưng',
+  'Huyện Gia Hòa': 'Huyện Gia Hòa', 'Huyện Lâm Vũ': 'Huyện Lâm Vũ', 'Huyện Nhữ Thành': 'Huyện Quế Dương',
+  'Huyện Quế Đông': 'Huyện Quế Đông', 'Huyện An Nhân': 'Huyện An Nhân', 'Thành phố Tư Hưng': 'Huyện Hưng Ninh',
+  'Thành phố Vĩnh Châu': 'Huyện Linh Lăng', 'Quận Linh Lăng': 'Huyện Linh Lăng', 'Quận Lãnh Thủy Than': 'Huyện Linh Lăng',
+  'Thành phố Kỳ Dương': 'Huyện Kỳ Dương', 'Huyện Đông An': 'Huyện Đông An', 'Huyện Song Bài': 'Huyện Linh Lăng',
+  'Huyện Đạo': 'Đạo Châu', 'Huyện Giang Vĩnh': 'Huyện Vĩnh Minh', 'Huyện Ninh Viễn': 'Huyện Ninh Viễn',
+  'Huyện Lam Sơn': 'Huyện Lam Sơn', 'Huyện Tân Điền': 'Huyện Tân Điền', 'Huyện tự trị dân tộc Dao Giang Hoa': 'Huyện Giang Hoa',
+  'Thành phố Hoài Hóa': 'Nguyên Châu', 'Quận Hạc Thành': 'Nguyên Châu', 'Huyện Trung Phương': 'Nguyên Châu',
+  'Huyện Nguyên Lăng': 'Huyện Nguyên Lăng', 'Huyện Thần Khê': 'Huyện Thần Khê', 'Huyện Tự Phố': 'Huyện Tự Phố',
+  'Huyện Hội Đồng': 'Huyện Hội Đồng', 'Huyện tự trị dân tộc Miêu Ma Dương': 'Huyện Ma Dương', 'Huyện tự trị dân tộc Đồng Tân Hoảng': 'Hoảng Châu',
+  'Huyện tự trị dân tộc Đồng Chỉ Giang': 'Nguyên Châu', 'Huyện tự trị dân tộc Miêu, Đồng Tĩnh Châu': 'Tĩnh Châu', 'Huyện tự trị dân tộc Đồng Thông Đạo': 'Tĩnh Châu',
+  'Thành phố Hồng Giang': 'Huyện Kiềm Dương',
+  'Thành phố Lâu Để': 'Huyện Tương Hương', 'Quận Lâu Tinh': 'Huyện Tương Hương', 'Huyện Song Phong': 'Huyện Tương Hương',
+  'Huyện Tân Hóa': 'Huyện Tân Hóa', 'Thành phố Lãnh Thủy Giang': 'Huyện Tân Hóa', 'Thành phố Liên Nguyên': 'Huyện Tương Hương',
+  'Châu tự trị dân tộc Thổ Gia, Miêu Tương Tây': 'Tuyên úy ty Vĩnh Thuận', 'Thành phố Cát Thủ': 'Thiên hộ sở Trấn Khê',
+  'Huyện Lô Khê': 'Huyện Thần Khê', 'Huyện Phượng Hoàng': 'Trưởng quan ty Ngũ Trại', 'Huyện Hoa Viên': 'Bảo Tĩnh châu Tuyên úy ty',
+  'Huyện Bảo Tĩnh': 'Bảo Tĩnh châu Tuyên úy ty', 'Huyện Cổ Trượng': 'Tuyên úy ty Vĩnh Thuận', 'Huyện Vĩnh Thuận': 'Tuyên úy ty Vĩnh Thuận',
+  'Huyện Long Sơn': 'Tuyên úy ty Vĩnh Thuận',
 
-  // ================== 广东省 ==================
-  '广州市': '南海县', '荔湾区': '南海县', '越秀区': '番禺县',
-  '海珠区': '番禺县', '天河区': '番禺县', '白云区': '番禺县',
-  '黄埔区': '番禺县', '番禺区': '番禺县', '花都区': '番禺县',
-  '南沙区': '东莞县', '从化区': '从化县', '增城区': '增城县',
-  '韶关市': '曲江县', '武江区': '曲江县', '浈江区': '曲江县',
-  '曲江区': '曲江县', '始兴县': '始兴县', '仁化县': '仁化县',
-  '翁源县': '翁源县', '乳源瑶族自治县': '乳源县', '新丰县': '长宁县',
-  '乐昌市': '乐昌县', '南雄市': '保昌县',
-  '深圳市': '新安县', '罗湖区': '新安县', '福田区': '新安县',
-  '南山区': '新安县', '宝安区': '新安县', '龙岗区': '新安县',
-  '盐田区': '新安县', '龙华区': '新安县', '坪山区': '新安县',
-  '光明区': '新安县',
-  '珠海市': '香山县', '香洲区': '香山县', '斗门区': '新会县',
-  '金湾区': '香山县',
-  '汕头市': '澄海县', '龙湖区': '澄海县', '金平区': '澄海县',
-  '濠江区': '潮阳县', '潮阳区': '潮阳县', '潮南区': '潮阳县',
-  '澄海区': '澄海县', '南澳县': '饶平县',
-  '佛山市': '南海县', '禅城区': '南海县', '南海区': '南海县',
-  '顺德区': '顺德县', '三水区': '三水县', '高明区': '高明县',
-  '江门市': '新会县', '蓬江区': '新会县', '江海区': '新会县',
-  '新会区': '新会县', '台山市': '新宁县', '开平市': '恩平县',
-  '鹤山市': '新会县', '恩平市': '恩平县',
-  '湛江市': '遂溪县', '赤坎区': '遂溪县', '霞山区': '遂溪县',
-  '坡头区': '吴川县', '麻章区': '遂溪县', '遂溪县': '遂溪县',
-  '徐闻县': '徐闻县', '廉江市': '石城县', '雷州市': '海康县',
-  '吴川市': '吴川县',
-  '茂名市': '茂名县', '茂南区': '茂名县', '电白区': '电白县',
-  '高州市': '茂名县', '化州市': '化州', '信宜市': '信宜县',
-  '肇庆市': '高要县', '端州区': '高要县', '鼎湖区': '高要县',
-  '高要区': '高要县', '广宁县': '广宁县', '怀集县': '怀集县',
-  '封开县': '封川县', '德庆县': '德庆州', '四会市': '四会县',
-  '惠州市': '归善县', '惠城区': '归善县', '惠阳区': '归善县',
-  '博罗县': '博罗县', '惠东县': '归善县', '龙门县': '龙门县',
-  '梅州市': '程乡县', '梅江区': '程乡县', '梅县区': '程乡县',
-  '大埔县': '大埔县', '丰顺县': '海阳县', '五华县': '长乐县',
-  '平远县': '平远县', '蕉岭县': '镇平县', '兴宁市': '兴宁县',
-  '汕尾市': '海丰县', '城区': '海丰县', '海丰县': '海丰县',
-  '陆河县': '海丰县', '陆丰市': '海丰县',
-  '河源市': '河源县', '源城区': '河源县', '紫金县': '永安县',
-  '龙川县': '龙川县', '连平县': '连平州', '和平县': '和平县',
-  '东源县': '河源县',
-  '阳江市': '阳江县', '江城区': '阳江县', '阳东区': '阳江县',
-  '阳西县': '阳江县', '阳春市': '阳春县',
-  '清远市': '清远县', '清城区': '清远县', '清新区': '清远县',
-  '佛冈县': '清远县', '阳山县': '阳山县', '连山壮族瑶族自治县': '连山县',
-  '连南瑶族自治县': '连州', '英德市': '英德县', '连州市': '连州',
-  '东莞市': '东莞县', '中山市': '香山县', '潮州市': '海阳县',
-  '湘桥区': '海阳县', '潮安区': '海阳县', '饶平县': '饶平县',
-  '揭阳市': '揭阳县', '榕城区': '揭阳县', '揭东区': '揭阳县',
-  '揭西县': '揭阳县', '惠来县': '惠来县', '普宁市': '普宁县',
-  '云浮市': '东安县', '云城区': '东安县', '云安区': '东安县',
-  '新兴县': '新兴县', '郁南县': '西宁县', '罗定市': '罗定州',
+  // ================== Tỉnh Quảng Đông ==================
+  'Thành phố Quảng Châu': 'Huyện Nam Hải', 'Quận Lệ Loan': 'Huyện Nam Hải', 'Quận Việt Tú': 'Huyện Phiên Ngung',
+  'Quận Hải Châu': 'Huyện Phiên Ngung', 'Quận Thiên Hà': 'Huyện Phiên Ngung', 'Quận Bạch Vân': 'Huyện Phiên Ngung',
+  'Quận Hoàng Phố': 'Huyện Phiên Ngung', 'Quận Phiên Ngung': 'Huyện Phiên Ngung', 'Quận Hoa Đô': 'Huyện Phiên Ngung',
+  'Quận Nam Sa': 'Huyện Đông Quản', 'Quận Tùng Hóa': 'Huyện Tùng Hóa', 'Quận Tăng Thành': 'Huyện Tăng Thành',
+  'Thành phố Thiều Quan': 'Huyện Khúc Giang', 'Quận Vũ Giang': 'Huyện Khúc Giang', 'Quận Trinh Giang': 'Huyện Khúc Giang',
+  'Quận Khúc Giang': 'Huyện Khúc Giang', 'Huyện Thủy Hưng': 'Huyện Thủy Hưng', 'Huyện Nhân Hóa': 'Huyện Nhân Hóa',
+  'Huyện Ông Nguyên': 'Huyện Ông Nguyên', 'Huyện tự trị dân tộc Dao Nhũ Nguyên': 'Huyện Nhũ Nguyên', 'Huyện Tân Phong': 'Huyện Trường Ninh',
+  'Thành phố Nhạc Xương': 'Huyện Lạc Xương', 'Thành phố Nam Hùng': 'Huyện Bảo Xương',
+  'Thành phố Thâm Quyến': 'Huyện Tân An', 'Quận La Hồ': 'Huyện Tân An', 'Quận Phúc Điền': 'Huyện Tân An',
+  'Quận Nam Sơn': 'Huyện Tân An', 'Quận Bảo An': 'Huyện Tân An', 'Quận Long Cương': 'Huyện Tân An',
+  'Quận Diêm Điền': 'Huyện Tân An', 'Quận Long Hoa': 'Huyện Tân An', 'Quận Bình Sơn': 'Huyện Tân An',
+  'Quận Quang Minh': 'Huyện Tân An',
+  'Thành phố Châu Hải': 'Huyện Hương Sơn', 'Quận Hương Châu': 'Huyện Hương Sơn', 'Quận Đẩu Môn': 'Huyện Tân Hội',
+  'Quận Kim Loan': 'Huyện Hương Sơn',
+  'Thành phố Sán Đầu': 'Huyện Trừng Hải', 'Quận Long Hồ': 'Huyện Trừng Hải', 'Quận Kim Bình': 'Huyện Trừng Hải',
+  'Quận Hào Giang': 'Huyện Triều Dương', 'Quận Triều Dương': 'Huyện Triều Dương', 'Quận Triều Nam': 'Huyện Triều Dương',
+  'Quận Trừng Hải': 'Huyện Trừng Hải', 'Huyện Nam Áo': 'Huyện Nhiêu Bình',
+  'Thành phố Phật Sơn': 'Huyện Nam Hải', 'Quận Thiền Thành': 'Huyện Nam Hải', 'Quận Nam Hải': 'Huyện Nam Hải',
+  'Quận Thuận Đức': 'Huyện Thuận Đức', 'Quận Tam Thủy': 'Huyện Tam Thủy', 'Quận Cao Minh': 'Huyện Cao Minh',
+  'Thành phố Giang Môn': 'Huyện Tân Hội', 'Quận Bồng Giang': 'Huyện Tân Hội', 'Quận Giang Hải': 'Huyện Tân Hội',
+  'Quận Tân Hội': 'Huyện Tân Hội', 'Thành phố Đài Sơn': 'Huyện Tân Ninh', 'Thành phố Khai Bình': 'Huyện Ân Bình',
+  'Thành phố Hạc Sơn': 'Huyện Tân Hội', 'Thành phố Ân Bình': 'Huyện Ân Bình',
+  'Thành phố Trạm Giang': 'Huyện Toại Khê', 'Quận Xích Khảm': 'Huyện Toại Khê', 'Quận Hà Sơn': 'Huyện Toại Khê',
+  'Quận Pha Đầu': 'Huyện Ngô Xuyên', 'Quận Ma Chương': 'Huyện Toại Khê', 'Huyện Toại Khê': 'Huyện Toại Khê',
+  'Huyện Từ Văn': 'Huyện Từ Văn', 'Thành phố Liêm Giang': 'Huyện Thạch Thành', 'Thành phố Lôi Châu': 'Huyện Hải Khang',
+  'Thành phố Ngô Xuyên': 'Huyện Ngô Xuyên',
+  'Thành phố Mậu Danh': 'Huyện Mậu Danh', 'Quận Mậu Nam': 'Huyện Mậu Danh', 'Quận Điện Bạch': 'Huyện Điện Bạch',
+  'Thành phố Cao Châu': 'Huyện Mậu Danh', 'Thành phố Hóa Châu': 'Hóa Châu', 'Thành phố Tín Nghi': 'Huyện Tín Nghi',
+  'Thành phố Triệu Khánh': 'Huyện Cao Yếu', 'Quận Đoan Châu': 'Huyện Cao Yếu', 'Quận Đỉnh Hồ': 'Huyện Cao Yếu',
+  'Quận Cao Yếu': 'Huyện Cao Yếu', 'Huyện Quảng Ninh': 'Huyện Quảng Ninh', 'Huyện Hoài Tập': 'Huyện Hoài Tập',
+  'Huyện Phong Khai': 'Huyện Phong Xuyên', 'Huyện Đức Khánh': 'Châu Đức Khánh', 'Thành phố Tứ Hội': 'Huyện Tứ Hội',
+  'Thành phố Huệ Châu': 'Huyện Quy Thiện', 'Quận Huệ Thành': 'Huyện Quy Thiện', 'Quận Huệ Dương': 'Huyện Quy Thiện',
+  'Huyện Bác La': 'Huyện Bác La', 'Huyện Huệ Đông': 'Huyện Quy Thiện', 'Huyện Long Môn': 'Huyện Long Môn',
+  'Thành phố Mai Châu': 'Huyện Trình Hương', 'Quận Mai Giang': 'Huyện Trình Hương', 'Quận Mai Huyện': 'Huyện Trình Hương',
+  'Huyện Đại Bộ': 'Huyện Đại Bộ', 'Huyện Phong Thuận': 'Huyện Hải Dương', 'Huyện Ngũ Hoa': 'Huyện Trường Lạc',
+  'Huyện Bình Viễn': 'Huyện Bình Viễn', 'Huyện Tiêu Lĩnh': 'Huyện Trấn Bình', 'Thành phố Hưng Ninh': 'Huyện Hưng Ninh',
+  'Thành phố Sán Vĩ': 'Huyện Hải Phong', 'Quận Thành': 'Huyện Hải Phong', 'Huyện Hải Phong': 'Huyện Hải Phong',
+  'Huyện Lục Hà': 'Huyện Hải Phong', 'Thành phố Lục Phong': 'Huyện Hải Phong',
+  'Thành phố Hà Nguyên': 'Huyện Hà Nguyên', 'Quận Nguyên Thành': 'Huyện Hà Nguyên', 'Huyện Tử Kim': 'Huyện Vĩnh An',
+  'Huyện Long Xuyên': 'Huyện Long Xuyên', 'Huyện Liên Bình': 'Châu Liên Bình', 'Huyện Hòa Bình': 'Huyện Hòa Bình',
+  'Huyện Đông Nguyên': 'Huyện Hà Nguyên',
+  'Thành phố Dương Giang': 'Huyện Dương Giang', 'Quận Giang Thành': 'Huyện Dương Giang', 'Quận Dương Đông': 'Huyện Dương Giang',
+  'Huyện Dương Tây': 'Huyện Dương Giang', 'Thành phố Dương Xuân': 'Huyện Dương Xuân',
+  'Thành phố Thanh Viễn': 'Huyện Thanh Viễn', 'Quận Thanh Thành': 'Huyện Thanh Viễn', 'Quận Thanh Tân': 'Huyện Thanh Viễn',
+  'Huyện Phật Cương': 'Huyện Thanh Viễn', 'Huyện Dương Sơn': 'Huyện Dương Sơn', 'Huyện tự trị dân tộc Choang, Dao Liên Sơn': 'Huyện Liên Sơn',
+  'Huyện tự trị dân tộc Dao Liên Nam': 'Liên Châu', 'Thành phố Anh Đức': 'Huyện Anh Đức', 'Thành phố Liên Châu': 'Liên Châu',
+  'Thành phố Đông Quản': 'Huyện Đông Quản', 'Thành phố Trung Sơn': 'Huyện Hương Sơn', 'Thành phố Triều Châu': 'Huyện Hải Dương',
+  'Quận Tương Kiều': 'Huyện Hải Dương', 'Quận Triều An': 'Huyện Hải Dương', 'Huyện Nhiêu Bình': 'Huyện Nhiêu Bình',
+  'Thành phố Yết Dương': 'Huyện Yết Dương', 'Quận Dung Thành': 'Huyện Yết Dương', 'Quận Yết Đông': 'Huyện Yết Dương',
+  'Huyện Yết Tây': 'Huyện Yết Dương', 'Huyện Huệ Lai': 'Huyện Huệ Lai', 'Thành phố Phổ Ninh': 'Huyện Phổ Ninh',
+  'Thành phố Vân Phù': 'Huyện Đông An', 'Quận Vân Thành': 'Huyện Đông An', 'Quận Vân An': 'Huyện Đông An',
+  'Huyện Tân Hưng': 'Huyện Tân Hưng', 'Huyện Úc Nam': 'Huyện Tây Ninh', 'Thành phố La Định': 'Châu La Định',
 
-  // ================== 广西壮族自治区 ==================
-  '南宁市': '宣化县', '兴宁区': '宣化县', '青秀区': '宣化县',
-  '江南区': '宣化县', '西乡塘区': '宣化县', '良庆区': '宣化县',
-  '邕宁区': '宣化县', '武鸣区': '武缘县', '隆安县': '隆安县',
-  '马山县': '思恩', '上林县': '上林县', '宾阳县': '宾州',
-  '横州市': '横州',
-  '柳州市': '马平县', '城中区': '马平县', '鱼峰区': '马平县',
-  '柳南区': '马平县', '柳北区': '马平县', '柳江区': '马平县',
-  '柳城县': '柳城县', '鹿寨县': '洛容县', '融安县': '融县',
-  '融水苗族自治县': '融县', '三江侗族自治县': '怀远县',
-  '桂林市': '临桂县', '秀峰区': '临桂县', '叠彩区': '临桂县',
-  '象山区': '临桂县', '七星区': '临桂县', '雁山区': '临桂县',
-  '临桂区': '临桂县', '阳朔县': '阳朔县', '灵川县': '灵川县',
-  '全州县': '全州', '兴安县': '兴安县', '永福县': '永福县',
-  '灌阳县': '灌阳县', '龙胜各族自治县': '义宁县', '资源县': '全州',
-  '平乐县': '平乐县', '荔浦市': '荔浦县', '恭城瑶族自治县': '恭城县',
-  '梧州市': '苍梧县', '万秀区': '苍梧县', '长洲区': '苍梧县',
-  '龙圩区': '苍梧县', '苍梧县': '苍梧县', '藤县': '藤县',
-  '蒙山县': '永安州', '岑溪市': '岑溪县',
-  '北海市': '合浦县', '海城区': '合浦县', '银海区': '合浦县',
-  '铁山港区': '合浦县', '合浦县': '合浦县',
-  '防城港市': '钦州', '港口区': '钦州', '防城区': '钦州',
-  '上思县': '上思州', '东兴市': '钦州',
-  '钦州市': '钦州', '钦南区': '钦州', '钦北区': '钦州',
-  '灵山县': '灵山县', '浦北县': '合浦县',
-  '贵港市': '贵县', '港北区': '贵县', '港南区': '贵县',
-  '覃塘区': '贵县', '平南县': '平南县', '桂平市': '桂平县',
-  '玉林市': '郁林州', '玉州区': '郁林州', '福绵区': '郁林州',
-  '容县': '容县', '陆川县': '陆川县', '博白县': '博白县',
-  '兴业县': '兴业县', '北流市': '北流县',
-  '百色市': '田州', '右江区': '田州', '田阳区': '田州',
-  '田东县': '田州', '德保县': '镇安', '那坡县': '小镇安',
-  '凌云县': '泗城', '乐业县': '泗城', '田林县': '泗城',
-  '西林县': '上林长官司', '隆林各族自治县': '安隆长官司',
-  '靖西市': '归顺州', '平果市': '思恩',
-  '贺州市': '贺县', '八步区': '贺县', '平桂区': '贺县',
-  '昭平县': '昭平县', '钟山县': '富川县', '富川瑶族自治县': '富川县',
-  '河池市': '河池州', '金城江区': '河池州', '宜州区': '宜山县',
-  '南丹县': '南丹州', '天峨县': '那地州', '凤山县': '东兰州',
-  '东兰县': '东兰州', '罗城仫佬族自治县': '天河县', '环江毛南族自治县': '思恩县',
-  '巴马瑶族自治县': '东兰州', '都安瑶族自治县': '思恩府',
-  '大化瑶族自治县': '思恩府',
-  '来宾市': '来宾县', '兴宾区': '来宾县', '忻城县': '忻城县',
-  '象州县': '象州', '武宣县': '武宣县', '金秀瑶族自治县': '象州',
-  '合山市': '迁江县',
-  '崇左市': '崇善县', '江州区': '崇善县', '扶绥县': '新宁州',
-  '宁明县': '思明', '龙州县': '龙州', '大新县': '养利州',
-  '天等县': '向武州', '凭祥市': '凭祥州',
+  // ================== Khu tự trị dân tộc Choang Quảng Tây ==================
+  'Thành phố Nam Ninh': 'Huyện Tuyên Hóa', 'Quận Hưng Ninh': 'Huyện Tuyên Hóa', 'Quận Thanh Tú': 'Huyện Tuyên Hóa',
+  'Quận Giang Nam': 'Huyện Tuyên Hóa', 'Quận Tây Hương Đường': 'Huyện Tuyên Hóa', 'Quận Lương Khánh': 'Huyện Tuyên Hóa',
+  'Quận Ung Ninh': 'Huyện Tuyên Hóa', 'Quận Vũ Minh': 'Huyện Vũ Duyên', 'Huyện Long An': 'Huyện Long An',
+  'Huyện Mã Sơn': 'Tư Ân', 'Huyện Thượng Lâm': 'Huyện Thượng Lâm', 'Huyện Tân Dương': 'Tân Châu',
+  'Thành phố Hoành Châu': 'Hoành Châu',
+  'Thành phố Liễu Châu': 'Huyện Mã Bình', 'Quận Thành Trung': 'Huyện Mã Bình', 'Quận Ngư Phong': 'Huyện Mã Bình',
+  'Quận Liễu Nam': 'Huyện Mã Bình', 'Quận Liễu Bắc': 'Huyện Mã Bình', 'Quận Liễu Giang': 'Huyện Mã Bình',
+  'Huyện Liễu Thành': 'Huyện Liễu Thành', 'Huyện Lộc Trại': 'Huyện Lạc Dung', 'Huyện Dung An': 'Huyện Dung',
+  'Huyện tự trị dân tộc Miêu Dung Thủy': 'Huyện Dung', 'Huyện tự trị dân tộc Đồng Tam Giang': 'Huyện Hoài Viễn',
+  'Thành phố Quế Lâm': 'Huyện Lâm Quế', 'Quận Tú Phong': 'Huyện Lâm Quế', 'Quận Điệp Thải': 'Huyện Lâm Quế',
+  'Quận Tượng Sơn': 'Huyện Lâm Quế', 'Quận Thất Tinh': 'Huyện Lâm Quế', 'Quận Nhạn Sơn': 'Huyện Lâm Quế',
+  'Quận Lâm Quế': 'Huyện Lâm Quế', 'Huyện Dương Sóc': 'Huyện Dương Sóc', 'Huyện Linh Xuyên': 'Huyện Linh Xuyên',
+  'Huyện Toàn Châu': 'Toàn Châu', 'Huyện Hưng An': 'Huyện Hưng An', 'Huyện Vĩnh Phúc': 'Huyện Vĩnh Phúc',
+  'Huyện Quán Dương': 'Huyện Quán Dương', 'Huyện tự trị các dân tộc Long Thắng': 'Huyện Nghĩa Ninh', 'Huyện Tư Nguyên': 'Toàn Châu',
+  'Huyện Bình Nhạc': 'Huyện Bình Nhạc', 'Thành phố Lệ Phố': 'Huyện Lệ Phố', 'Huyện tự trị dân tộc Dao Cung Thành': 'Huyện Cung Thành',
+  'Thành phố Ngô Châu': 'Huyện Thương Ngô', 'Quận Vạn Tú': 'Huyện Thương Ngô', 'Quận Trường Châu': 'Huyện Thương Ngô',
+  'Quận Long Vu': 'Huyện Thương Ngô', 'Huyện Thương Ngô': 'Huyện Thương Ngô', 'Huyện Đằng': 'Huyện Đằng',
+  'Huyện Mông Sơn': 'Châu Vĩnh An', 'Thành phố Sầm Khê': 'Huyện Sầm Khê',
+  'Thành phố Bắc Hải': 'Huyện Hợp Phố', 'Quận Hải Thành': 'Huyện Hợp Phố', 'Quận Ngân Hải': 'Huyện Hợp Phố',
+  'Quận Thiết Sơn Cảng': 'Huyện Hợp Phố', 'Huyện Hợp Phố': 'Huyện Hợp Phố',
+  'Thành phố Phòng Thành Cảng': 'Khâm Châu', 'Quận Cảng Khẩu': 'Khâm Châu', 'Quận Phòng Thành': 'Khâm Châu',
+  'Huyện Thượng Tư': 'Châu Thượng Tư', 'Thành phố Đông Hưng': 'Khâm Châu',
+  'Thành phố Khâm Châu': 'Khâm Châu', 'Quận Khâm Nam': 'Khâm Châu', 'Quận Khâm Bắc': 'Khâm Châu',
+  'Huyện Linh Sơn': 'Huyện Linh Sơn', 'Huyện Phố Bắc': 'Huyện Hợp Phố',
+  'Thành phố Quý Cảng': 'Huyện Quý', 'Quận Cảng Bắc': 'Huyện Quý', 'Quận Cảng Nam': 'Huyện Quý',
+  'Quận Đàm Đường': 'Huyện Quý', 'Huyện Bình Nam': 'Huyện Bình Nam', 'Thành phố Quế Bình': 'Huyện Quế Bình',
+  'Thành phố Ngọc Lâm': 'Châu Uất Lâm', 'Quận Ngọc Châu': 'Châu Uất Lâm', 'Quận Phúc Miên': 'Châu Uất Lâm',
+  'Huyện Dung': 'Huyện Dung', 'Huyện Lục Xuyên': 'Huyện Lục Xuyên', 'Huyện Bác Bạch': 'Huyện Bác Bạch',
+  'Huyện Hưng Nghiệp': 'Huyện Hưng Nghiệp', 'Thành phố Bắc Lưu': 'Huyện Bắc Lưu',
+  'Thành phố Bách Sắc': 'Điền Châu', 'Quận Hữu Giang': 'Điền Châu', 'Quận Điền Dương': 'Điền Châu',
+  'Huyện Điền Đông': 'Điền Châu', 'Huyện Đức Bảo': 'Trấn An', 'Huyện Na Pha': 'Tiểu Trấn An',
+  'Huyện Lăng Vân': 'Tứ Thành', 'Huyện Nhạc Nghiệp': 'Tứ Thành', 'Huyện Điền Lâm': 'Tứ Thành',
+  'Huyện Tây Lâm': 'Trưởng quan ty Thượng Lâm', 'Huyện tự trị các dân tộc Long Lâm': 'Trưởng quan ty An Long',
+  'Thành phố Tĩnh Tây': 'Châu Quy Thuận', 'Thành phố Bình Quả': 'Tư Ân',
+  'Thành phố Hạ Châu': 'Huyện Hạ', 'Quận Bát Bộ': 'Huyện Hạ', 'Quận Bình Quế': 'Huyện Hạ',
+  'Huyện Chiêu Bình': 'Huyện Chiêu Bình', 'Huyện Chung Sơn': 'Huyện Phú Xuyên', 'Huyện tự trị dân tộc Dao Phú Xuyên': 'Huyện Phú Xuyên',
+  'Thành phố Hà Trì': 'Châu Hà Trì', 'Quận Kim Thành Giang': 'Châu Hà Trì', 'Quận Nghi Châu': 'Huyện Nghi Sơn',
+  'Huyện Nam Đan': 'Châu Nam Đan', 'Huyện Thiên Nga': 'Châu Na Địa', 'Huyện Phượng Sơn': 'Châu Đông Lan',
+  'Huyện Đông Lan': 'Châu Đông Lan', 'Huyện tự trị dân tộc Mục Lão La Thành': 'Huyện Thiên Hà', 'Huyện tự trị dân tộc Mao Nam Hoàn Giang': 'Huyện Tư Ân',
+  'Huyện tự trị dân tộc Dao Ba Mã': 'Châu Đông Lan', 'Huyện tự trị dân tộc Dao Đô An': 'Phủ Tư Ân',
+  'Huyện tự trị dân tộc Dao Đại Hóa': 'Phủ Tư Ân',
+  'Thành phố Lai Tân': 'Huyện Lai Tân', 'Quận Hưng Tân': 'Huyện Lai Tân', 'Huyện Hân Thành': 'Huyện Hân Thành',
+  'Huyện Tượng Châu': 'Tượng Châu', 'Huyện Vũ Tuyên': 'Huyện Vũ Tuyên', 'Huyện tự trị dân tộc Dao Kim Tú': 'Tượng Châu',
+  'Thành phố Hợp Sơn': 'Huyện Thiên Giang',
+  'Thành phố Sùng Tả': 'Huyện Sùng Thiện', 'Quận Giang Châu': 'Huyện Sùng Thiện', 'Huyện Phù Tuy': 'Châu Tân Ninh',
+  'Huyện Ninh Minh': 'Tư Minh', 'Huyện Long Châu': 'Long Châu', 'Huyện Đại Tân': 'Châu Dưỡng Lợi',
+  'Huyện Thiên Đẳng': 'Châu Hướng Vũ', 'Thành phố Bằng Tường': 'Châu Bằng Tường',
 
-  // ================== 海南省 ==================
-  '海口市': '琼山县', '秀英区': '琼山县', '龙华区': '琼山县',
-  '琼山区': '琼山县', '美兰区': '琼山县', '三亚市': '崖州',
-  '海棠区': '崖州', '吉阳区': '崖州', '天涯区': '崖州', '崖州区': '崖州',
-  '三沙市': '万州', '儋州市': '儋州', '五指山市': '崖州',
-  '琼海市': '会同县', '文昌市': '文昌县', '万宁市': '万州',
-  '东方市': '感恩县', '定安县': '定安县', '屯昌县': '定安县',
-  '澄迈县': '澄迈县', '临高县': '临高县', '白沙黎族自治县': '儋州',
-  '昌江黎族自治县': '昌化县', '乐东黎族自治县': '崖州',
-  '陵水黎族自治县': '陵水县', '保亭黎族苗族自治县': '陵水县',
-  '琼中黎族苗族自治县': '定安县',
+  // ================== Tỉnh Hải Nam ==================
+  'Thành phố Hải Khẩu': 'Huyện Quỳnh Sơn', 'Quận Tú Anh': 'Huyện Quỳnh Sơn', 'Quận Long Hoa': 'Huyện Quỳnh Sơn',
+  'Quận Quỳnh Sơn': 'Huyện Quỳnh Sơn', 'Quận Mỹ Lan': 'Huyện Quỳnh Sơn', 'Thành phố Tam Á': 'Nhai Châu',
+  'Quận Hải Đường': 'Nhai Châu', 'Quận Cát Dương': 'Nhai Châu', 'Quận Thiên Nhai': 'Nhai Châu', 'Quận Nhai Châu': 'Nhai Châu',
+  'Thành phố Tam Sa': 'Vạn Châu', 'Thành phố Đam Châu': 'Đam Châu', 'Thành phố Ngũ Chỉ Sơn': 'Nhai Châu',
+  'Thành phố Quỳnh Hải': 'Huyện Hội Đồng', 'Thành phố Văn Xương': 'Huyện Văn Xương', 'Thành phố Vạn Ninh': 'Vạn Châu',
+  'Thành phố Đông Phương': 'Huyện Cảm Ân', 'Huyện Định An': 'Huyện Định An', 'Huyện Đồn Xương': 'Huyện Định An',
+  'Huyện Trừng Mại': 'Huyện Trừng Mại', 'Huyện Lâm Cao': 'Huyện Lâm Cao', 'Huyện tự trị dân tộc Lê Bạch Sa': 'Đam Châu',
+  'Huyện tự trị dân tộc Lê Xương Giang': 'Huyện Xương Hóa', 'Huyện tự trị dân tộc Lê Nhạc Đông': 'Nhai Châu',
+  'Huyện tự trị dân tộc Lê Lăng Thủy': 'Huyện Lăng Thủy', 'Huyện tự trị dân tộc Lê, Miêu Bảo Đình': 'Huyện Lăng Thủy',
+  'Huyện tự trị dân tộc Lê, Miêu Quỳnh Trung': 'Huyện Định An',
 
-  // ================== 重庆市 ==================
-  '渝中区': '巴县', '万州区': '万县', '涪陵区': '涪州',
-  '大渡口区': '巴县', '江北区': '巴县', '沙坪坝区': '巴县',
-  '九龙坡区': '巴县', '南岸区': '巴县', '北碚区': '巴县',
-  '綦江区': '綦江县', '大足区': '大足县', '渝北区': '巴县',
-  '巴南区': '巴县', '黔江区': '黔江县', '长寿区': '长寿县',
-  '江津区': '江津县', '合川区': '合州', '永川区': '永川县',
-  '南川区': '南川县', '璧山区': '璧山县', '铜梁区': '铜梁县',
-  '潼南区': '遂宁县', '荣昌区': '荣昌县', '开州区': '开县',
-  '梁平区': '梁山县', '武隆区': '涪州', '城口县': '达州太平县',
-  '丰都县': '酆都县', '垫江县': '垫江县', '忠县': '忠州',
-  '云阳县': '云阳县', '奉节县': '奉节县', '巫山县': '巫山县',
-  '巫溪县': '大宁县', '石柱土家族自治县': '石砫宣抚司',
-  '秀山土家族苗族自治县': '酉阳宣慰司', '酉阳土家族苗族自治县': '酉阳宣慰司',
-  '彭水苗族土家族自治县': '彭水县',
+  // ================== Thành phố Trùng Khánh ==================
+  'Quận Du Trung': 'Huyện Ba', 'Quận Vạn Châu': 'Huyện Vạn', 'Quận Phù Lăng': 'Phù Châu',
+  'Quận Đại Độ Khẩu': 'Huyện Ba', 'Quận Giang Bắc': 'Huyện Ba', 'Quận Sa Bình Bá': 'Huyện Ba',
+  'Quận Cửu Long Pha': 'Huyện Ba', 'Quận Nam Ngạn': 'Huyện Ba', 'Quận Bắc Bội': 'Huyện Ba',
+  'Quận Kỳ Giang': 'Huyện Kỳ Giang', 'Quận Đại Túc': 'Huyện Đại Túc', 'Quận Du Bắc': 'Huyện Ba',
+  'Quận Ba Nam': 'Huyện Ba', 'Quận Kiềm Giang': 'Huyện Kiềm Giang', 'Quận Trường Thọ': 'Huyện Trường Thọ',
+  'Quận Giang Tân': 'Huyện Giang Tân', 'Quận Hợp Xuyên': 'Hợp Châu', 'Quận Vĩnh Xuyên': 'Huyện Vĩnh Xuyên',
+  'Quận Nam Xuyên': 'Huyện Nam Xuyên', 'Quận Bích Sơn': 'Huyện Bích Sơn', 'Quận Đồng Lương': 'Huyện Đồng Lương',
+  'Quận Đồng Nam': 'Huyện Toại Ninh', 'Quận Vinh Xương': 'Huyện Vinh Xương', 'Quận Khai Châu': 'Huyện Khai',
+  'Quận Lương Bình': 'Huyện Lương Sơn', 'Quận Vũ Long': 'Phù Châu', 'Huyện Thành Khẩu': 'Huyện Thái Bình, Đạt Châu',
+  'Huyện Phong Đô': 'Huyện Phong Đô', 'Huyện Điếm Giang': 'Huyện Điếm Giang', 'Huyện Trung': 'Trung Châu',
+  'Huyện Vân Dương': 'Huyện Vân Dương', 'Huyện Phụng Tiết': 'Huyện Phụng Tiết', 'Huyện Vu Sơn': 'Huyện Vu Sơn',
+  'Huyện Vu Khê': 'Huyện Đại Ninh', 'Huyện tự trị dân tộc Thổ Gia Thạch Trụ': 'Tuyên phủ ty Thạch Trụ',
+  'Huyện tự trị dân tộc Thổ Gia, Miêu Tú Sơn': 'Tuyên úy ty Dậu Dương', 'Huyện tự trị dân tộc Thổ Gia, Miêu Dậu Dương': 'Tuyên úy ty Dậu Dương',
+  'Huyện tự trị dân tộc Miêu, Thổ Gia Bành Thủy': 'Huyện Bành Thủy',
 
-  // ================== 四川省 ==================
-  '成都市': '成都县', '锦江区': '成都县', '青羊区': '成都县',
-  '金牛区': '成都县', '武侯区': '成都县', '成华区': '成都县',
-  '龙泉驿区': '简州', '青白江区': '新都县', '新都区': '新都县',
-  '温江区': '温江县', '双流区': '双流县', '郫都区': '郫县',
-  '新津区': '新津县', '金堂县': '金堂县', '大邑县': '大邑县',
-  '蒲江县': '蒲江县', '都江堰市': '灌县', '彭州市': '彭县',
-  '邛崃市': '邛州', '崇州市': '崇庆州', '简阳市': '简州',
-  '自贡市': '富顺县', '自流井区': '富顺县', '贡井区': '荣县',
-  '大安区': '富顺县', '沿滩区': '富顺县', '荣县': '荣县',
-  '富顺县': '富顺县',
-  '攀枝花市': '会川卫', '东区': '会川卫', '西区': '会川卫',
-  '仁和区': '大姚县', '米易县': '会川卫', '盐边县': '盐源县',
-  '泸州市': '泸州', '江阳区': '泸州', '纳溪区': '纳溪县',
-  '龙马潭区': '泸州', '泸县': '泸州', '合江县': '合江县',
-  '叙永县': '永宁宣抚司', '古蔺县': '永宁宣抚司',
-  '德阳市': '德阳县', '旌阳区': '德阳县', '罗江区': '罗江县',
-  '中江县': '中江县', '广汉市': '汉州', '什邡市': '什邡县',
-  '绵竹市': '绵竹县',
-  '绵阳市': '绵州', '涪城区': '绵州', '游仙区': '绵州',
-  '安州区': '安县', '三台县': '潼川州', '盐亭县': '盐亭县',
-  '梓潼县': '梓潼县', '北川羌族自治县': '石泉县', '平武县': '平武县',
-  '江油市': '江油县',
-  '广元市': '广元县', '利州区': '广元县', '昭化区': '昭化县',
-  '朝天区': '广元县', '旺苍县': '广元县', '青川县': '青川守御千户所',
-  '剑阁县': '剑州', '苍溪县': '苍溪县',
-  '遂宁市': '遂宁县', '船山区': '遂宁县', '安居区': '遂宁县',
-  '蓬溪县': '蓬溪县', '射洪市': '射洪县', '大英县': '遂宁县',
-  '内江市': '内江县', '市中区': '内江县', '东兴区': '内江县',
-  '威远县': '威远县', '资中县': '资县', '隆昌市': '隆昌县',
-  '乐山市': '乐山县', '市中区': '乐山县', '沙湾区': '乐山县',
-  '五通桥区': '犍为县', '金口河区': '峨边县', '犍为县': '犍为县',
-  '井研县': '井研县', '夹江县': '夹江县', '沐川县': '沐川长官司',
-  '峨边彝族自治县': '峨边县', '马边彝族自治县': '马边县',
-  '峨眉山市': '峨眉县',
-  '南充市': '南充县', '顺庆区': '南充县', '高坪区': '南充县',
-  '嘉陵区': '南充县', '南部县': '南部县', '营山县': '营山县',
-  '蓬安县': '蓬州', '仪陇县': '仪陇县', '西充县': '西充县',
-  '阆中市': '阆中县',
-  '眉山市': '眉州', '东坡区': '眉州', '彭山区': '彭山县',
-  '仁寿县': '仁寿县', '洪雅县': '洪雅县', '丹棱县': '丹棱县',
-  '青神县': '青神县',
-  '宜宾市': '宜宾县', '翠屏区': '宜宾县', '南溪区': '南溪县',
-  '叙州区': '宜宾县', '江安县': '江安县', '长宁县': '长宁县',
-  '高县': '高县', '珙县': '珙县', '筠连县': '筠连县',
-  '兴文县': '兴文县', '屏山县': '马湖府',
-  '广安市': '广安州', '广安区': '广安州', '前锋区': '广安州',
-  '岳池县': '岳池县', '武胜县': '定远县', '邻水县': '邻水县',
-  '华蓥市': '广安州',
-  '达州市': '达州', '通川区': '达州', '达川区': '达州',
-  '宣汉县': '东乡县', '开江县': '新宁县', '大竹县': '大竹县',
-  '渠县': '渠县', '万源市': '太平县',
-  '雅安市': '雅州', '雨城区': '雅州', '名山区': '名山县',
-  '荥经县': '荥经县', '汉源县': '黎州守御千户所', '石棉县': '黎州',
-  '天全县': '天全六番招讨司', '芦山县': '芦山县', '宝兴县': '天全',
-  '巴中市': '巴州', '巴州区': '巴州', '恩阳区': '巴州',
-  '通江县': '通江县', '南江县': '南江县', '平昌县': '巴州',
-  '资阳市': '资阳县', '雁江区': '资阳县', '安岳县': '安岳县',
-  '乐至县': '乐至县',
-  '阿坝藏族羌族自治州': '松潘卫', '马尔康市': '松潘卫', '汶川县': '威州',
-  '理县': '保县', '茂县': '茂州', '松潘县': '松潘卫',
-  '九寨沟县': '松潘卫', '金川县': '金川寺', '小金县': '金川寺',
-  '黑水县': '松潘卫', '壤塘县': '松潘卫', '阿坝县': '松潘卫',
-  '若尔盖县': '松潘卫', '红原县': '松潘卫',
-  '甘孜藏族自治州': '朵甘(四川)', '康定市': '朵甘(四川)', '泸定县': '朵甘(四川)',
-  '丹巴县': '朵甘(四川)', '九龙县': '朵甘(四川)', '雅江县': '朵甘(四川)',
-  '道孚县': '朵甘(四川)', '炉霍县': '朵甘(四川)', '甘孜县': '朵甘(四川)',
-  '新龙县': '朵甘(四川)', '德格县': '朵甘(四川)', '白玉县': '朵甘(四川)',
-  '石渠县': '朵甘(四川)', '色达县': '朵甘(四川)', '理塘县': '朵甘(四川)',
-  '巴塘县': '朵甘(四川)', '乡城县': '朵甘(四川)', '稻城县': '朵甘(四川)',
-  '得荣县': '朵甘(四川)',
-  '凉山彝族自治州': '建昌卫', '西昌市': '建昌卫', '会理市': '会川卫',
-  '木里藏族自治县': '盐井卫', '盐源县': '盐井卫', '德昌县': '建昌卫',
-  '会东县': '会川卫', '宁南县': '会川卫', '普格县': '建昌卫',
-  '布拖县': '建昌卫', '金阳县': '乌蒙府', '昭觉县': '建昌卫',
-  '喜德县': '建昌卫', '冕宁县': '宁番卫', '越西县': '越巂卫',
-  '甘洛县': '越巂卫', '美姑县': '建昌卫', '雷波县': '马湖府',
+  // ================== Tỉnh Tứ Xuyên ==================
+  'Thành phố Thành Đô': 'Huyện Thành Đô', 'Quận Cẩm Giang': 'Huyện Thành Đô', 'Quận Thanh Dương': 'Huyện Thành Đô',
+  'Quận Kim Ngưu': 'Huyện Thành Đô', 'Quận Vũ Hầu': 'Huyện Thành Đô', 'Quận Thành Hoa': 'Huyện Thành Đô',
+  'Quận Long Tuyền Dịch': 'Giản Châu', 'Quận Thanh Bạch Giang': 'Huyện Tân Đô', 'Quận Tân Đô': 'Huyện Tân Đô',
+  'Quận Ôn Giang': 'Huyện Ôn Giang', 'Quận Song Lưu': 'Huyện Song Lưu', 'Quận Tỳ Đô': 'Huyện Bì',
+  'Quận Tân Tân': 'Huyện Tân Tân', 'Huyện Kim Đường': 'Huyện Kim Đường', 'Huyện Đại Ấp': 'Huyện Đại Ấp',
+  'Huyện Bồ Giang': 'Huyện Bồ Giang', 'Thành phố Đô Giang Yển': 'Huyện Quán', 'Thành phố Bành Châu': 'Huyện Bành',
+  'Thành phố Cùng Lai': 'Cùng Châu', 'Thành phố Sùng Châu': 'Châu Sùng Khánh', 'Thành phố Giản Dương': 'Giản Châu',
+  'Thành phố Tự Cống': 'Huyện Phú Thuận', 'Quận Tự Lưu Tỉnh': 'Huyện Phú Thuận', 'Quận Cống Tỉnh': 'Huyện Vinh',
+  'Quận Đại An': 'Huyện Phú Thuận', 'Quận Duyên Than': 'Huyện Phú Thuận', 'Huyện Vinh': 'Huyện Vinh',
+  'Huyện Phú Thuận': 'Huyện Phú Thuận',
+  'Thành phố Phàn Chi Hoa': 'Hội Xuyên Vệ', 'Quận Đông': 'Hội Xuyên Vệ', 'Quận Tây': 'Hội Xuyên Vệ',
+  'Quận Nhân Hòa': 'Huyện Đại Diêu', 'Huyện Mễ Dịch': 'Hội Xuyên Vệ', 'Huyện Diêm Biên': 'Huyện Diêm Nguyên',
+  'Thành phố Lư Châu': 'Lô Châu', 'Quận Giang Dương': 'Lô Châu', 'Quận Nạp Khê': 'Huyện Nạp Khê',
+  'Quận Long Mã Đàm': 'Lô Châu', 'Huyện Lư': 'Lô Châu', 'Huyện Hợp Giang': 'Huyện Hợp Giang',
+  'Huyện Tự Vĩnh': 'Tuyên phủ ty Vĩnh Ninh', 'Huyện Cổ Lận': 'Tuyên phủ ty Vĩnh Ninh',
+  'Thành phố Đức Dương': 'Huyện Đức Dương', 'Quận Tinh Dương': 'Huyện Đức Dương', 'Quận La Giang': 'Huyện La Giang',
+  'Huyện Trung Giang': 'Huyện Trung Giang', 'Thành phố Quảng Hán': 'Hán Châu', 'Thành phố Thập Phương': 'Huyện Thập Phương',
+  'Thành phố Miên Trúc': 'Huyện Miên Trúc',
+  'Thành phố Miên Dương': 'Miên Châu', 'Quận Phù Thành': 'Miên Châu', 'Quận Du Tiên': 'Miên Châu',
+  'Quận An Châu': 'Huyện An', 'Huyện Tam Đài': 'Châu Đồng Xuyên', 'Huyện Diêm Đình': 'Huyện Diêm Đình',
+  'Huyện Tử Đồng': 'Huyện Tử Đồng', 'Huyện tự trị dân tộc Khương Bắc Xuyên': 'Huyện Thạch Tuyền', 'Huyện Bình Vũ': 'Huyện Bình Vũ',
+  'Thành phố Giang Du': 'Huyện Giang Du',
+  'Thành phố Quảng Nguyên': 'Huyện Quảng Nguyên', 'Quận Lợi Châu': 'Huyện Quảng Nguyên', 'Quận Chiêu Hóa': 'Huyện Chiêu Hóa',
+  'Quận Triều Thiên': 'Huyện Quảng Nguyên', 'Huyện Vượng Thương': 'Huyện Quảng Nguyên', 'Huyện Thanh Xuyên': 'Thanh Xuyên Thủ ngự Thiên hộ sở',
+  'Huyện Kiếm Các': 'Kiếm Châu', 'Huyện Thương Khê': 'Huyện Thương Khê',
+  'Thành phố Toại Ninh': 'Huyện Toại Ninh', 'Quận Thuyền Sơn': 'Huyện Toại Ninh', 'Quận An Cư': 'Huyện Toại Ninh',
+  'Huyện Bồng Khê': 'Huyện Bồng Khê', 'Thành phố Xạ Hồng': 'Huyện Xạ Hồng', 'Huyện Đại Anh': 'Huyện Toại Ninh',
+  'Thành phố Nội Giang': 'Huyện Nội Giang', 'Quận Thị Trung': 'Huyện Nội Giang', 'Quận Đông Hưng': 'Huyện Nội Giang',
+  'Huyện Uy Viễn': 'Huyện Uy Viễn', 'Huyện Tư Trung': 'Huyện Tư', 'Thành phố Long Xương': 'Huyện Long Xương',
+  'Thành phố Lạc Sơn': 'Huyện Lạc Sơn', 'Quận Thị Trung': 'Huyện Lạc Sơn', 'Quận Sa Loan': 'Huyện Lạc Sơn',
+  'Quận Ngũ Thông Kiều': 'Huyện Kiền Vi', 'Quận Kim Khẩu Hà': 'Huyện Nga Biên', 'Huyện Kiền Vi': 'Huyện Kiền Vi',
+  'Huyện Tỉnh Nghiên': 'Huyện Tỉnh Nghiên', 'Huyện Giáp Giang': 'Huyện Giáp Giang', 'Huyện Mộc Xuyên': 'Trưởng quan ty Mộc Xuyên',
+  'Huyện tự trị dân tộc Di Nga Biên': 'Huyện Nga Biên', 'Huyện tự trị dân tộc Di Mã Biên': 'Huyện Mã Biên',
+  'Thành phố Nga Mi Sơn': 'Huyện Nga Mi',
+  'Thành phố Nam Sung': 'Huyện Nam Sung', 'Quận Thuận Khánh': 'Huyện Nam Sung', 'Quận Cao Bình': 'Huyện Nam Sung',
+  'Quận Gia Lăng': 'Huyện Nam Sung', 'Huyện Nam Bộ': 'Huyện Nam Bộ', 'Huyện Doanh Sơn': 'Huyện Doanh Sơn',
+  'Huyện Bồng An': 'Bồng Châu', 'Huyện Nghi Lũng': 'Huyện Nghi Lũng', 'Huyện Tây Sung': 'Huyện Tây Sung',
+  'Thành phố Lãng Trung': 'Huyện Lãng Trung',
+  'Thành phố Mi Sơn': 'Mi Châu', 'Quận Đông Pha': 'Mi Châu', 'Quận Bành Sơn': 'Huyện Bành Sơn',
+  'Huyện Nhân Thọ': 'Huyện Nhân Thọ', 'Huyện Hồng Nhã': 'Huyện Hồng Nhã', 'Huyện Đan Lăng': 'Huyện Đan Lăng',
+  'Huyện Thanh Thần': 'Huyện Thanh Thần',
+  'Thành phố Nghi Tân': 'Huyện Nghi Tân', 'Quận Thúy Bình': 'Huyện Nghi Tân', 'Quận Nam Khê': 'Huyện Nam Khê',
+  'Quận Tự Châu': 'Huyện Nghi Tân', 'Huyện Giang An': 'Huyện Giang An', 'Huyện Trường Ninh': 'Huyện Trường Ninh',
+  'Huyện Cao': 'Huyện Cao', 'Huyện Củng': 'Huyện Củng', 'Huyện Quân Liên': 'Huyện Quân Liên',
+  'Huyện Hưng Văn': 'Huyện Hưng Văn', 'Huyện Bình Sơn': 'Phủ Mã Hồ',
+  'Thành phố Quảng An': 'Châu Quảng An', 'Quận Quảng An': 'Châu Quảng An', 'Quận Tiền Phong': 'Châu Quảng An',
+  'Huyện Nhạc Trì': 'Huyện Nhạc Trì', 'Huyện Vũ Thắng': 'Huyện Định Viễn', 'Huyện Lân Thủy': 'Huyện Lân Thủy',
+  'Thành phố Hoa Oánh': 'Châu Quảng An',
+  'Thành phố Đạt Châu': 'Đạt Châu', 'Quận Thông Xuyên': 'Đạt Châu', 'Quận Đạt Xuyên': 'Đạt Châu',
+  'Huyện Tuyên Hán': 'Huyện Đông Hương', 'Huyện Khai Giang': 'Huyện Tân Ninh', 'Huyện Đại Trúc': 'Huyện Đại Trúc',
+  'Huyện Cừ': 'Huyện Cừ', 'Thành phố Vạn Nguyên': 'Huyện Thái Bình',
+  'Thành phố Nhã An': 'Nhã Châu', 'Quận Vũ Thành': 'Nhã Châu', 'Quận Danh Sơn': 'Huyện Danh Sơn',
+  'Huyện Huỳnh Kinh': 'Huyện Huỳnh Kinh', 'Huyện Hán Nguyên': 'Lê Châu Thủ ngự Thiên hộ sở', 'Huyện Thạch Miên': 'Lê Châu',
+  'Huyện Thiên Toàn': 'Thiên Toàn Lục Phiên Chiêu thảo ty', 'Huyện Lô Sơn': 'Huyện Lô Sơn', 'Huyện Bảo Hưng': 'Thiên Toàn',
+  'Thành phố Ba Trung': 'Ba Châu', 'Quận Ba Châu': 'Ba Châu', 'Quận Ân Dương': 'Ba Châu',
+  'Huyện Thông Giang': 'Huyện Thông Giang', 'Huyện Nam Giang': 'Huyện Nam Giang', 'Huyện Bình Xương': 'Ba Châu',
+  'Thành phố Tư Dương': 'Huyện Tư Dương', 'Quận Nhạn Giang': 'Huyện Tư Dương', 'Huyện An Nhạc': 'Huyện An Nhạc',
+  'Huyện Nhạc Chí': 'Huyện Nhạc Chí',
+  'Châu tự trị dân tộc Tạng, Khương A Bá': 'Vệ Tùng Phan', 'Thành phố Mã Nhĩ Khang': 'Vệ Tùng Phan', 'Huyện Mân Xuyên': 'Uy Châu',
+  'Huyện Lý': 'Bảo Huyện', 'Huyện Mậu': 'Mậu Châu', 'Huyện Tùng Phan': 'Vệ Tùng Phan',
+  'Huyện Cửu Trại Câu': 'Vệ Tùng Phan', 'Huyện Kim Xuyên': 'Kim Xuyên Tự', 'Huyện Tiểu Kim': 'Kim Xuyên Tự',
+  'Huyện Hắc Thủy': 'Vệ Tùng Phan', 'Huyện Nhưỡng Đường': 'Vệ Tùng Phan', 'Huyện A Bá': 'Vệ Tùng Phan',
+  'Huyện Nhược Nhĩ Cái': 'Vệ Tùng Phan', 'Huyện Hồng Nguyên': 'Vệ Tùng Phan',
+  'Châu tự trị dân tộc Tạng Cam Tư': 'Mdo Kham(Tứ Xuyên)', 'Thành phố Khang Định': 'Mdo Kham(Tứ Xuyên)', 'Huyện Lô Định': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Đan Ba': 'Mdo Kham(Tứ Xuyên)', 'Huyện Cửu Long': 'Mdo Kham(Tứ Xuyên)', 'Huyện Nhã Giang': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Đạo Phu': 'Mdo Kham(Tứ Xuyên)', 'Huyện Lư Hoắc': 'Mdo Kham(Tứ Xuyên)', 'Huyện Cam Tư': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Tân Long': 'Mdo Kham(Tứ Xuyên)', 'Huyện Đức Cách': 'Mdo Kham(Tứ Xuyên)', 'Huyện Bạch Ngọc': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Thạch Cừ': 'Mdo Kham(Tứ Xuyên)', 'Huyện Sắc Đạt': 'Mdo Kham(Tứ Xuyên)', 'Huyện Lý Đường': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Ba Đường': 'Mdo Kham(Tứ Xuyên)', 'Huyện Hương Thành': 'Mdo Kham(Tứ Xuyên)', 'Huyện Đạo Thành': 'Mdo Kham(Tứ Xuyên)',
+  'Huyện Đắc Vinh': 'Mdo Kham(Tứ Xuyên)',
+  'Châu tự trị dân tộc Di Lương Sơn': 'Vệ Kiến Xương', 'Thành phố Tây Xương': 'Vệ Kiến Xương', 'Thành phố Hội Lý': 'Vệ Hội Xuyên',
+  'Huyện tự trị dân tộc Tạng Mộc Lý': 'Vệ Diêm Tỉnh', 'Huyện Diêm Nguyên': 'Vệ Diêm Tỉnh', 'Huyện Đức Xương': 'Vệ Kiến Xương',
+  'Huyện Hội Đông': 'Vệ Hội Xuyên', 'Huyện Ninh Nam': 'Vệ Hội Xuyên', 'Huyện Phổ Cách': 'Vệ Kiến Xương',
+  'Huyện Bố Tha': 'Vệ Kiến Xương', 'Huyện Kim Dương': 'Phủ Ô Mông', 'Huyện Chiêu Giác': 'Vệ Kiến Xương',
+  'Huyện Hỷ Đức': 'Vệ Kiến Xương', 'Huyện Miện Ninh': 'Vệ Ninh Phiên', 'Huyện Việt Tây': 'Vệ Việt Huề',
+  'Huyện Cam Lạc': 'Vệ Việt Huề', 'Huyện Mỹ Cô': 'Vệ Kiến Xương', 'Huyện Lôi Ba': 'Phủ Mã Hồ',
 
-  // ================== 贵州省 ==================
-  '贵阳市': '新贵县', '南明区': '新贵县', '云岩区': '新贵县',
-  '花溪区': '新贵县', '乌当区': '新贵县', '白云区': '新贵县',
-  '观山湖区': '新贵县', '开阳县': '开州', '息烽县': '敷勇卫',
-  '修文县': '敷勇卫', '清镇市': '镇西卫',
-  '六盘水市': '水西', '钟山区': '水西', '六枝特区': '普定卫',
-  '水城区': '水西', '盘州市': '普安州',
-  '遵义市': '遵义县', '红花岗区': '遵义县', '汇川区': '遵义县',
-  '播州区': '遵义县', '桐梓县': '桐梓县', '绥阳县': '绥阳县',
-  '正安县': '真安州', '道真仡佬族苗族自治县': '真安州',
-  '务川仡佬族苗族自治县': '务川县', '凤冈县': '龙泉县',
-  '湄潭县': '湄潭县', '余庆县': '余庆县', '习水县': '仁怀县',
-  '赤水市': '仁怀县', '仁怀市': '仁怀县',
-  '安顺市': '普定卫', '西秀区': '普定卫', '平坝区': '平坝卫',
-  '普定县': '普定卫', '镇宁布依族苗族自治县': '镇宁州',
-  '关岭布依族苗族自治县': '永宁州', '紫云苗族布依族自治县': '康佐长官司',
-  '毕节市': '毕节卫', '七星关区': '毕节卫', '大方县': '水西',
-  '金沙县': '遵义县', '织金县': '水西', '纳雍县': '水西',
-  '威宁彝族回族苗族自治县': '乌撒卫', '赫章县': '乌撒卫',
-  '铜仁市': '铜仁县', '碧江区': '铜仁县', '万山区': '铜仁县',
-  '江口县': '铜仁县', '玉屏侗族自治县': '平溪卫', '石阡县': '石阡',
-  '思南县': '安化县', '印江土家族苗族自治县': '印江长官司',
-  '德江县': '安化县', '沿河土家族自治县': '沿河司',
-  '松桃苗族自治县': '乌罗长官司',
-  '黔西南布依族苗族自治州': '安笼千户所', '兴义市': '普安州',
-  '兴仁市': '新城千户所', '普安县': '新兴所', '晴隆县': '安南卫',
-  '贞丰县': '普安州', '望谟县': '泗城州', '册亨县': '泗城州',
-  '安龙县': '安笼所',
-  '黔东南苗族侗族自治州': '凯里安抚司', '凯里市': '清平卫',
-  '黄平县': '黄平州', '施秉县': '偏桥卫', '三穗县': '邛水司',
-  '镇远县': '镇远县', '岑巩县': '思州', '天柱县': '天柱县',
-  '锦屏县': '铜鼓卫', '剑河县': '镇远县', '台江县': '镇远县',
-  '黎平县': '五开卫', '榕江县': '古州蛮夷长官司', '从江县': '永从县',
-  '雷山县': '都匀卫', '麻江县': '麻哈州', '丹寨县': '八寨长官司',
-  '黔南布依族苗族自治州': '都匀卫', '都匀市': '都匀卫', '福泉市': '平越卫',
-  '荔波县': '荔波县', '贵定县': '新添卫', '瓮安县': '瓮安县',
-  '独山县': '独山州', '平塘县': '平舟司', '罗甸县': '罗斛长官司',
-  '长顺县': '广顺州', '龙里县': '龙里卫', '惠水县': '定番州',
-  '三都水族自治县': '都匀卫',
+  // ================== Tỉnh Quý Châu ==================
+  'Thành phố Quý Dương': 'Huyện Tân Quý', 'Quận Nam Minh': 'Huyện Tân Quý', 'Quận Vân Nham': 'Huyện Tân Quý',
+  'Quận Hoa Khê': 'Huyện Tân Quý', 'Quận Ô Đương': 'Huyện Tân Quý', 'Quận Bạch Vân': 'Huyện Tân Quý',
+  'Quận Quan Sơn Hồ': 'Huyện Tân Quý', 'Huyện Khai Dương': 'Khai Châu', 'Huyện Tức Phong': 'Vệ Phu Dũng',
+  'Huyện Tu Văn': 'Vệ Phu Dũng', 'Thành phố Thanh Trấn': 'Vệ Trấn Tây',
+  'Thành phố Lục Bàn Thủy': 'Thủy Tây', 'Quận Chung Sơn': 'Thủy Tây', 'Đặc khu Lục Chi': 'Vệ Phổ Định',
+  'Quận Thủy Thành': 'Thủy Tây', 'Thành phố Bàn Châu': 'Châu Phổ An',
+  'Thành phố Tuân Nghĩa': 'Huyện Tuân Nghĩa', 'Quận Hồng Hoa Cương': 'Huyện Tuân Nghĩa', 'Quận Hối Xuyên': 'Huyện Tuân Nghĩa',
+  'Quận Bá Châu': 'Huyện Tuân Nghĩa', 'Huyện Đồng Tử': 'Huyện Đồng Tử', 'Huyện Tuy Dương': 'Huyện Tuy Dương',
+  'Huyện Chính An': 'Châu Chân An', 'Huyện tự trị dân tộc Ngật Lão, Miêu Đạo Chân': 'Châu Chân An',
+  'Huyện tự trị dân tộc Cờ Lao, Miêu Vụ Xuyên': 'Huyện Vụ Xuyên', 'Huyện Phượng Cương': 'Huyện Long Tuyền',
+  'Huyện Mi Đàm': 'Huyện Mi Đàm', 'Huyện Dư Khánh': 'Huyện Dư Khánh', 'Huyện Tập Thủy': 'Huyện Nhân Hoài',
+  'Thành phố Xích Thủy': 'Huyện Nhân Hoài', 'Thành phố Nhân Hoài': 'Huyện Nhân Hoài',
+  'Thành phố An Thuận': 'Vệ Phổ Định', 'Quận Tây Tú': 'Vệ Phổ Định', 'Quận Bình Bá': 'Vệ Bình Bá',
+  'Huyện Phổ Định': 'Vệ Phổ Định', 'Huyện tự trị dân tộc Bố Y, Miêu Trấn Ninh': 'Châu Trấn Ninh',
+  'Huyện tự trị dân tộc Bố Y, Miêu Quan Lĩnh': 'Châu Vĩnh Ninh', 'Huyện tự trị dân tộc Miêu, Bố Y Tử Vân': 'Trưởng quan ty Khang Tá',
+  'Thành phố Tất Tiết': 'Vệ Tất Tiết', 'Quận Thất Tinh Quan': 'Vệ Tất Tiết', 'Huyện Đại Phương': 'Thủy Tây',
+  'Huyện Kim Sa': 'Huyện Tuân Nghĩa', 'Huyện Chức Kim': 'Thủy Tây', 'Huyện Nạp Ung': 'Thủy Tây',
+  'Huyện tự trị dân tộc Di, Hồi, Miêu Uy Ninh': 'Vệ Ô Tát', 'Huyện Hách Chương': 'Vệ Ô Tát',
+  'Thành phố Đồng Nhân': 'Huyện Đồng Nhân', 'Quận Bích Giang': 'Huyện Đồng Nhân', 'Quận Vạn Sơn': 'Huyện Đồng Nhân',
+  'Huyện Giang Khẩu': 'Huyện Đồng Nhân', 'Huyện tự trị dân tộc Đồng Ngọc Bình': 'Vệ Bình Khê', 'Huyện Thạch Thiên': 'Thạch Thiên',
+  'Huyện Tư Nam': 'Huyện An Hóa', 'Huyện tự trị dân tộc Thổ Gia, Miêu Ấn Giang': 'Trưởng quan ty Ấn Giang',
+  'Huyện Đức Giang': 'Huyện An Hóa', 'Huyện tự trị dân tộc Thổ Gia Duyên Hà': 'Ty Duyên Hà',
+  'Huyện tự trị dân tộc Miêu Tùng Đào': 'Trưởng quan ty Ô La',
+  'Châu tự trị dân tộc Bố Y, Miêu Kiềm Tây Nam': 'Thiên hộ sở An Lung', 'Thành phố Hưng Nghĩa': 'Châu Phổ An',
+  'Thành phố Hưng Nhân': 'Thiên hộ sở Tân Thành', 'Huyện Phổ An': 'Sở Tân Hưng', 'Huyện Tình Long': 'Vệ An Nam',
+  'Huyện Trinh Phong': 'Châu Phổ An', 'Huyện Vọng Mô': 'Châu Tứ Thành', 'Huyện Sách Hanh': 'Châu Tứ Thành',
+  'Huyện An Long': 'Sở An Lũng',
+  'Châu tự trị dân tộc Miêu, Đồng Kiềm Đông Nam': 'An phủ ty Khải Lý', 'Thành phố Khải Lý': 'Vệ Thanh Bình',
+  'Huyện Hoàng Bình': 'Châu Hoàng Bình', 'Huyện Thi Bỉnh': 'Vệ Thiên Kiều', 'Huyện Tam Tuệ': 'Ty Cùng Thủy',
+  'Huyện Trấn Viễn': 'Huyện Trấn Viễn', 'Huyện Sầm Củng': 'Tư Châu', 'Huyện Thiên Trụ': 'Huyện Thiên Trụ',
+  'Huyện Cẩm Bình': 'Đồng Cổ Vệ', 'Huyện Kiếm Hà': 'Huyện Trấn Viễn', 'Huyện Thai Giang': 'Huyện Trấn Viễn',
+  'Huyện Lê Bình': 'Ngũ Khai Vệ', 'Huyện Dung Giang': 'Cổ Châu Man Di Trưởng quan ty', 'Huyện Tùng Giang': 'Huyện Vĩnh Tòng',
+  'Huyện Lôi Sơn': 'Đô Quân Vệ', 'Huyện Ma Giang': 'Châu Ma Haa', 'Huyện Đan Trại': 'Trưởng quan ty Bát Trại',
+  'Châu tự trị dân tộc Bố Y, Miêu Kiềm Nam': 'Đô Quân Vệ', 'Thành phố Đô Quân': 'Đô Quân Vệ', 'Thành phố Phúc Tuyền': 'Bình Việt Vệ',
+  'Huyện Lệ Ba': 'Huyện Lệ Ba', 'Huyện Quý Định': 'Tân Thiêm Vệ', 'Huyện Úng An': 'Huyện Úng An',
+  'Huyện Độc Sơn': 'Châu Độc Sơn', 'Huyện Bình Đường': 'Bình Chu Tư', 'Huyện La Điện': 'Trưởng quan ty La Hộc',
+  'Huyện Trường Thuận': 'Châu Quảng Thuận', 'Huyện Long Lý': 'Long Lý Vệ', 'Huyện Huệ Thủy': 'Châu Định Phiên',
+  'Huyện tự trị dân tộc Thủy Tam Đô': 'Đô Quân Vệ',
 
-  // ================== 云南省 ==================
-  '昆明市': '昆明县', '五华区': '昆明县', '盘龙区': '昆明县',
-  '官渡区': '昆明县', '西山区': '昆明县', '东川区': '东川',
-  '呈贡区': '呈贡县', '晋宁区': '晋宁州', '富民县': '富民县',
-  '宜良县': '宜良县', '石林彝族自治县': '路南州',
-  '嵩明县': '嵩明州', '禄劝彝族苗族自治县': '禄劝州',
-  '寻甸回族彝族自治县': '寻甸', '安宁市': '安宁州',
-  '曲靖市': '南宁县', '麒麟区': '南宁县', '沾益区': '沾益州',
-  '马龙区': '马龙州', '陆良县': '陆凉州', '师宗县': '师宗州',
-  '罗平县': '罗平州', '富源县': '平夷卫', '会泽县': '东川府',
-  '宣威市': '沾益州',
-  '玉溪市': '新兴州', '红塔区': '新兴州', '江川区': '江川县',
-  '通海县': '通海县', '华宁县': '宁州', '易门县': '易门县',
-  '峨山彝族自治县': '嶍峨县', '新平彝族傣族自治县': '新平县',
-  '元江哈尼族彝族傣族自治县': '元江', '澄江市': '河阳县',
-  '保山市': '保山县', '隆阳区': '保山县', '施甸县': '施甸长官司',
-  '龙陵县': '腾越州', '昌宁县': '顺宁府', '腾冲市': '腾越州',
-  '昭通市': '乌蒙府', '昭阳区': '乌蒙府', '鲁甸县': '乌蒙府',
-  '巧家县': '东川府', '盐津县': '乌蒙府', '大关县': '乌蒙府',
-  '永善县': '乌蒙府', '绥江县': '乌蒙府', '镇雄县': '镇雄府',
-  '彝良县': '乌蒙府', '威信县': '镇雄府', '水富市': '宜宾县',
-  '丽江市': '丽江', '古城区': '丽江', '玉龙纳西族自治县': '丽江',
-  '永胜县': '北胜州', '华坪县': '北胜州', '宁蒗彝族自治县': '永宁',
-  '普洱市': '车里宣慰司', '思茅区': '车里', '宁洱哈尼族彝族自治县': '车里',
-  '墨江哈尼族自治县': '元江', '景东彝族自治县': '景东',
-  '景谷傣族彝族自治县': '威远州', '镇沅彝族哈尼族拉祜族自治县': '镇沅',
-  '江城哈尼族彝族自治县': '车里', '孟连傣族拉祜族佤族自治县': '孟连长官司',
-  '澜沧拉祜族自治县': '孟连长官司', '西盟佤族自治县': '孟连长官司',
-  '临沧市': '顺宁', '临翔区': '顺宁', '凤庆县': '顺宁县',
-  '云县': '云州', '永德县': '镇康州', '镇康县': '镇康州',
-  '双江拉祜族佤族布朗族傣族自治县': '勐缅长官司',
-  '耿马傣族佤族自治县': '耿马安抚司', '沧源佤族自治县': '耿马安抚司',
-  '楚雄彝族自治州': '楚雄县', '楚雄市': '楚雄县', '禄丰市': '禄丰县',
-  '双柏县': '南安州', '牟定县': '定远县', '南华县': '镇南州',
-  '姚安县': '姚州', '大姚县': '大姚县', '永仁县': '姚州',
-  '元谋县': '元谋县', '武定县': '武定府',
-  '红河哈尼族彝族自治州': '建水州', '蒙自市': '蒙自县', '个旧市': '蒙自县',
-  '开远市': '阿迷州', '建水县': '建水州', '石屏县': '石屏州',
-  '弥勒市': '弥勒州', '泸西县': '广西府', '元阳县': '纳楼长官司',
-  '红河县': '亏容甸长官司', '绿春县': '纳楼', '屏边苗族自治县': '建水州',
-  '金平苗族瑶族傣族自治县': '纳楼', '河口瑶族自治县': '建水州',
-  '文山壮族苗族自治州': '广南', '文山市': '教化三部长官司',
-  '砚山县': '维摩州', '西畴县': '教化三部', '麻栗坡县': '教化三部',
-  '马关县': '八寨长官司', '丘北县': '维摩州', '广南县': '广南',
-  '富宁县': '富州',
-  '西双版纳傣族自治州': '车里宣慰司', '景洪市': '车里', '勐海县': '车里',
-  '勐腊县': '车里',
-  '大理白族自治州': '太和县', '大理市': '太和县', '漾濞彝族自治县': '蒙化府',
-  '祥云县': '云南县', '宾川县': '宾川州', '弥渡县': '赵州',
-  '南涧彝族自治县': '定边县', '巍山彝族回族自治县': '蒙化府',
-  '永平县': '永平县', '云龙县': '云龙州', '洱源县': '邓川州',
-  '剑川县': '剑川州', '鹤庆县': '鹤庆府',
-  '德宏傣族景颇族自治州': '麓川故地/陇川宣抚司', '芒市': '芒市御夷长官司',
-  '瑞丽市': '麓川', '梁河县': '南甸宣抚司', '盈江县': '干崖宣抚司',
-  '陇川县': '陇川宣抚司',
-  '怒江傈僳族自治州': '永昌府边外', '泸水市': '登埂土司',
-  '福贡县': '上帕', '贡山独龙族怒族自治县': '菖蒲桶',
-  '兰坪白族普米族自治县': '丽江府兰州',
-  '迪庆藏族自治州': '中甸', '香格里拉市': '中甸',
-  '德钦县': '阿墩子', '维西傈僳族自治县': '丽江',
+  // ================== Tỉnh Vân Nam ==================
+  'Thành phố Côn Minh': 'Huyện Côn Minh', 'Quận Ngũ Hoa': 'Huyện Côn Minh', 'Quận Bàn Long': 'Huyện Côn Minh',
+  'Quận Quan Độ': 'Huyện Côn Minh', 'Quận Tây Sơn': 'Huyện Côn Minh', 'Quận Đông Xuyên': 'Đông Xuyên',
+  'Quận Trình Cống': 'Huyện Trình Cống', 'Quận Tấn Ninh': 'Châu Tấn Ninh', 'Huyện Phú Dân': 'Huyện Phú Dân',
+  'Huyện Nghi Lương': 'Huyện Nghi Lương', 'Huyện tự trị dân tộc Di Thạch Lâm': 'Châu Lộ Nam',
+  'Huyện Tung Minh': 'Châu Tung Minh', 'Huyện tự trị dân tộc Di, Miêu Lộc Khuyến': 'Châu Lộc Khuyến',
+  'Huyện tự trị dân tộc Hồi, Di Tầm Điện': 'Tầm Điện', 'Thành phố An Ninh': 'Châu An Ninh',
+  'Thành phố Khúc Tĩnh': 'Huyện Nam Ninh', 'Quận Kỳ Lân': 'Huyện Nam Ninh', 'Quận Triêm Ích': 'Châu Triêm Ích',
+  'Quận Mã Long': 'Châu Mã Long', 'Huyện Lục Lương': 'Châu Lục Lương', 'Huyện Sư Tông': 'Châu Sư Tông',
+  'Huyện La Bình': 'Châu La Bình', 'Huyện Phú Nguyên': 'Vệ Bình Di', 'Huyện Hội Trạch': 'Phủ Đông Xuyên',
+  'Thành phố Tuyên Uy': 'Châu Triêm Ích',
+  'Thành phố Ngọc Khê': 'Châu Tân Hưng', 'Quận Hồng Tháp': 'Châu Tân Hưng', 'Quận Giang Xuyên': 'Huyện Giang Xuyên',
+  'Huyện Thông Hải': 'Huyện Thông Hải', 'Huyện Hoa Ninh': 'Ninh Châu', 'Huyện Dịch Môn': 'Huyện Dịch Môn',
+  'Huyện tự trị dân tộc Di Nga Sơn': 'Huyện Tập Nga', 'Huyện tự trị dân tộc Di, Thái Tân Bình': 'Huyện Tân Bình',
+  'Huyện tự trị dân tộc Cáp Nê, Di, Thái Nguyên Giang': 'Nguyên Giang', 'Thành phố Trừng Giang': 'Huyện Hà Dương',
+  'Thành phố Bảo Sơn': 'Huyện Bảo Sơn', 'Quận Long Dương': 'Huyện Bảo Sơn', 'Huyện Thi Điện': 'Trưởng quan ty Thi Điện',
+  'Huyện Long Lăng': 'Châu Đằng Việt', 'Huyện Xương Ninh': 'Phủ Thuận Ninh', 'Thành phố Đằng Xung': 'Châu Đằng Việt',
+  'Thành phố Chiêu Thông': 'Phủ Ô Mông', 'Quận Chiêu Dương': 'Phủ Ô Mông', 'Huyện Lỗ Điện': 'Phủ Ô Mông',
+  'Huyện Xảo Gia': 'Phủ Đông Xuyên', 'Huyện Diêm Tân': 'Phủ Ô Mông', 'Huyện Đại Quan': 'Phủ Ô Mông',
+  'Huyện Vĩnh Thiện': 'Phủ Ô Mông', 'Huyện Tuy Giang': 'Phủ Ô Mông', 'Huyện Trấn Hùng': 'Phủ Trấn Hùng',
+  'Huyện Di Lương': 'Phủ Ô Mông', 'Huyện Uy Tín': 'Phủ Trấn Hùng', 'Thành phố Thủy Phú': 'Huyện Nghi Tân',
+  'Thành phố Lệ Giang': 'Lệ Giang', 'Quận Cổ Thành': 'Lệ Giang', 'Huyện tự trị dân tộc Nạp Tây Ngọc Long': 'Lệ Giang',
+  'Huyện Vĩnh Thắng': 'Châu Bắc Thắng', 'Huyện Hoa Bình': 'Châu Bắc Thắng', 'Huyện tự trị dân tộc Di Ninh Lãng': 'Vĩnh Ninh',
+  'Thành phố Phổ Nhĩ': 'Tuyên úy ty Xa Lý', 'Quận Tư Mao': 'Xa Lý', 'Huyện tự trị dân tộc Cáp Nê, Di Ninh Nhĩ': 'Xa Lý',
+  'Huyện tự trị dân tộc Cáp Nê Mặc Giang': 'Nguyên Giang', 'Huyện tự trị dân tộc Di Cảnh Đông': 'Cảnh Đông',
+  'Huyện tự trị dân tộc Thái, Di Cảnh Cốc': 'Châu Uy Viễn', 'Huyện tự trị dân tộc Di, Cáp Nê, Lạp Hỗ Trấn Nguyên': 'Trấn Nguyên',
+  'Huyện tự trị dân tộc Cáp Nê, Di Giang Thành': 'Xa Lý', 'Huyện tự trị dân tộc Thái, Lạp Hỗ, Ngõa Mạnh Liên': 'Trưởng quan ty Mạnh Liên',
+  'Huyện tự trị dân tộc Lạp Hỗ Lạn Thương': 'Trưởng quan ty Mạnh Liên', 'Huyện tự trị dân tộc Ngõa Tây Minh': 'Trưởng quan ty Mạnh Liên',
+  'Thành phố Lâm Thương': 'Thuận Ninh', 'Quận Lâm Tường': 'Thuận Ninh', 'Huyện Phượng Khánh': 'Huyện Thuận Ninh',
+  'Huyện Vân': 'Vân Châu', 'Huyện Vĩnh Đức': 'Châu Trấn Khang', 'Huyện Trấn Khang': 'Châu Trấn Khang',
+  'Huyện tự trị dân tộc Lạp Hỗ, Ngõa, Bố Lãng, Thái Song Giang': 'Trưởng quan ty Mãnh Miến',
+  'Huyện tự trị dân tộc Thái, Ngõa Cảnh Mã': 'An phủ ty Cảnh Mã', 'Huyện tự trị dân tộc Ngõa Thương Nguyên': 'An phủ ty Cảnh Mã',
+  'Châu tự trị dân tộc Di Sở Hùng': 'Huyện Sở Hùng', 'Thành phố Sở Hùng': 'Huyện Sở Hùng', 'Thành phố Lộc Phong': 'Huyện Lộc Phong',
+  'Huyện Song Bách': 'Châu Nam An', 'Huyện Mâu Định': 'Huyện Định Viễn', 'Huyện Nam Hoa': 'Châu Trấn Nam',
+  'Huyện Diêu An': 'Diêu Châu', 'Huyện Đại Diêu': 'Huyện Đại Diêu', 'Huyện Vĩnh Nhân': 'Diêu Châu',
+  'Huyện Nguyên Mưu': 'Huyện Nguyên Mưu', 'Huyện Vũ Định': 'Phủ Vũ Định',
+  'Châu tự trị dân tộc Cáp Nê, Di Hồng Hà': 'Châu Kiến Thủy', 'Thành phố Mông Tự': 'Huyện Mông Tự', 'Thành phố Cá Cựu': 'Huyện Mông Tự',
+  'Thành phố Khai Viễn': 'Châu A Mê', 'Huyện Kiến Thủy': 'Châu Kiến Thủy', 'Huyện Thạch Bình': 'Châu Thạch Bình',
+  'Thành phố Di Lặc': 'Châu Di Lặc', 'Huyện Lư Tây': 'Phủ Quảng Tây', 'Huyện Nguyên Dương': 'Trưởng quan ty Nạp Lâu',
+  'Huyện Hồng Hà': 'Khuy Dung Điện Trưởng quan ty', 'Huyện Lục Xuân': 'Nạp Lâu', 'Huyện tự trị dân tộc Miêu Bình Biên': 'Châu Kiến Thủy',
+  'Huyện tự trị dân tộc Miêu, Dao, Thái Kim Bình': 'Nạp Lâu', 'Huyện tự trị dân tộc Dao Hà Khẩu': 'Châu Kiến Thủy',
+  'Châu tự trị dân tộc Choang, Miêu Văn Sơn': 'Quảng Nam', 'Thành phố Văn Sơn': 'Giáo Hóa Tam Bộ Trưởng quan ty',
+  'Huyện Nghiên Sơn': 'Châu Duy Ma', 'Huyện Tây Trù': 'Giáo Hóa Tam Bộ', 'Huyện Ma Lật Pha': 'Giáo Hóa Tam Bộ',
+  'Huyện Mã Quan': 'Trưởng quan ty Bát Trại', 'Huyện Khâu Bắc': 'Châu Duy Ma', 'Huyện Quảng Nam': 'Quảng Nam',
+  'Huyện Phú Ninh': 'Phú Châu',
+  'Châu tự trị dân tộc Thái Tây Song Bản Nạp': 'Tuyên úy ty Xa Lý', 'Thành phố Cảnh Hồng': 'Xa Lý', 'Huyện Mãnh Hải': 'Xa Lý',
+  'Huyện Mãnh Lạp': 'Xa Lý',
+  'Châu tự trị dân tộc Bạch Đại Lý': 'Huyện Thái Hòa', 'Thành phố Đại Lý': 'Huyện Thái Hòa', 'Huyện tự trị dân tộc Di Dạng Tị': 'Phủ Mông Hóa',
+  'Huyện Tường Vân': 'Huyện Vân Nam', 'Huyện Tân Xuyên': 'Châu Tân Xuyên', 'Huyện Di Độ': 'Triệu Châu',
+  'Huyện tự trị dân tộc Di Nam Giản': 'Huyện Định Biên', 'Huyện tự trị dân tộc Di, Hồi Nguy Sơn': 'Phủ Mông Hóa',
+  'Huyện Vĩnh Bình': 'Huyện Vĩnh Bình', 'Huyện Vân Long': 'Châu Vân Long', 'Huyện Nhĩ Nguyên': 'Châu Đặng Xuyên',
+  'Huyện Kiếm Xuyên': 'Châu Kiếm Xuyên', 'Huyện Hạc Khánh': 'Phủ Hạc Khánh',
+  'Châu tự trị dân tộc Thái, Cảnh Pha Đức Hoành': 'Lộc Xuyên Cố Địa/Tuyên phủ ty Lũng Xuyên', 'Thành phố Mang': 'Thành phố Mang Ngự Di Trưởng quan ty',
+  'Thành phố Thụy Lệ': 'Lộc Xuyên', 'Huyện Lương Hà': 'Tuyên phủ ty Nam Điện', 'Huyện Doanh Giang': 'Can Nhai tuyên phủ ty',
+  'Huyện Lũng Xuyên': 'Lũng Xuyên tuyên phủ ty',
+  'Châu tự trị dân tộc Lật Túc Nộ Giang': 'Ngoại biên phủ Vĩnh Xương', 'Thành phố Lô Thủy': 'Thổ ty Đăng Cảnh',
+  'Huyện Phúc Cống': 'Thượng Phạ', 'Huyện tự trị dân tộc Độc Long, Nộ Cống Sơn': 'Xương Bồ Thống',
+  'Huyện tự trị dân tộc Bạch, Phổ Mễ Lan Bình': 'Lệ Giang phủ Lan Châu',
+  'Châu tự trị dân tộc Tạng Địch Khánh': 'Trung Điện', 'Thành phố Shangri-La': 'Trung Điện',
+  'Huyện Đức Khâm': 'A Đôn Tử', 'Huyện tự trị dân tộc Lật Túc Duy Tây': 'Lệ Giang',
 
-  // ================== 西藏自治区 ==================
-  // 明代西藏为乌思藏都司、朵甘都司等地
-  '拉萨市': '乌思藏（拉萨）', '城关区': '拉萨',
-  '堆龙德庆区': '乌思藏', '达孜区': '乌思藏',
-  '林周县': '乌思藏', '当雄县': '乌思藏', '尼木县': '乌思藏',
-  '曲水县': '乌思藏', '墨竹工卡县': '乌思藏',
-  '日喀则市': '藏巴汗（日喀则）', '桑珠孜区': '日喀则',
-  '南木林县': '藏巴汗', '江孜县': '江孜', '定日县': '藏巴汗',
-  '萨迦县': '萨迦', '拉孜县': '藏巴汗', '昂仁县': '藏巴汗',
-  '谢通门县': '藏巴汗', '白朗县': '藏巴汗', '仁布县': '藏巴汗',
-  '康马县': '藏巴汗', '定结县': '藏巴汗', '仲巴县': '藏巴汗',
-  '亚东县': '藏巴汗', '吉隆县': '藏巴汗', '聂拉木县': '藏巴汗',
-  '萨嘎县': '藏巴汗', '岗巴县': '藏巴汗',
-  '昌都市': '朵甘都司', '卡若区': '朵甘', '江达县': '朵甘',
-  '贡觉县': '朵甘', '类乌齐县': '朵甘', '丁青县': '朵甘',
-  '察雅县': '朵甘', '八宿县': '朵甘', '左贡县': '朵甘',
-  '芒康县': '朵甘', '洛隆县': '朵甘', '边坝县': '朵甘',
-  '林芝市': '工布地区', '巴宜区': '工布', '米林县': '工布',
-  '墨脱县': '珞瑜', '察隅县': '杂瑜', '波密县': '波密',
-  '朗县': '工布', '工布江达县': '工布',
-  '山南市': '乌思藏', '乃东区': '泽当', '扎囊县': '乌思藏',
-  '贡嘎县': '乌思藏', '桑日县': '乌思藏', '琼结县': '乌思藏',
-  '曲松县': '乌思藏', '措美县': '乌思藏', '洛扎县': '乌思藏',
-  '加查县': '乌思藏', '隆子县': '乌思藏', '错那县': '乌思藏',
-  '浪卡子县': '乌思藏',
-  '那曲市': '乌思藏', '色尼区': '乌思藏',
-  '嘉黎县': '乌思藏', '比如县': '乌思藏', '聂荣县': '乌思藏',
-  '安多县': '乌思藏', '申扎县': '乌思藏', '索县': '乌思藏',
-  '班戈县': '乌思藏', '巴青县': '乌思藏', '尼玛县': '乌思藏',
-  '阿里地区': '古格', '普兰县': '古格', '札达县': '古格',
-  '噶尔县': '古格', '日土县': '古格', '革吉县': '古格',
-  '改则县': '古格', '措勤县': '古格', '唐古拉山镇': '朵甘(青海)',
+  // ================== Khu tự trị Tây Tạng ==================
+  // Tây Tạng thời Minh là Đô ty Ô Tư Tạng, Đô ty Mdo Kham cùng nhiều nơi khác
+  'Thành phố Lhasa (Lạp Tát)': 'Ô Tư Tạng (Lhasa)', 'Quận Thành Quan': 'Lhasa',
+  'Quận Đôi Long Đức Khánh': 'Ô Tư Tạng', 'Quận Đạt Tư': 'Ô Tư Tạng',
+  'Huyện Lâm Chu': 'Ô Tư Tạng', 'Huyện Đương Hùng': 'Ô Tư Tạng', 'Huyện Ni Mộc': 'Ô Tư Tạng',
+  'Huyện Khúc Thủy': 'Ô Tư Tạng', 'Huyện Mặc Trúc Công Thẻ': 'Ô Tư Tạng',
+  'Thành phố Nhật Khách Tắc': 'Tạng Ba Hãn (Nhật Khách Tắc)', 'Quận Tang Châu Tư': 'Nhật Khách Tắc',
+  'Huyện Nam Mộc Lâm': 'Tạng Ba Hãn', 'Huyện Giang Tư': 'Giang Tư', 'Huyện Định Nhật': 'Tạng Ba Hãn',
+  'Huyện Tát Ca': 'Tát Ca', 'Huyện Lạp Tư': 'Tạng Ba Hãn', 'Huyện Ngang Nhân': 'Tạng Ba Hãn',
+  'Huyện Tạ Thông Môn': 'Tạng Ba Hãn', 'Huyện Bạch Lãng': 'Tạng Ba Hãn', 'Huyện Nhân Bố': 'Tạng Ba Hãn',
+  'Huyện Khang Mã': 'Tạng Ba Hãn', 'Huyện Định Kết': 'Tạng Ba Hãn', 'Huyện Trọng Ba': 'Tạng Ba Hãn',
+  'Huyện Á Đông': 'Tạng Ba Hãn', 'Huyện Cát Long': 'Tạng Ba Hãn', 'Huyện Nhiếp Lạp Mộc': 'Tạng Ba Hãn',
+  'Huyện Tát Dát': 'Tạng Ba Hãn', 'Huyện Cương Ba': 'Tạng Ba Hãn',
+  'Thành phố Xương Đô': 'Đô ty Mdo Kham', 'Quận Tạp Nhược': 'Mdo Kham', 'Huyện Giang Đạt': 'Mdo Kham',
+  'Huyện Cống Giác': 'Mdo Kham', 'Huyện Loại Ô Tề': 'Mdo Kham', 'Huyện Đinh Thanh': 'Mdo Kham',
+  'Huyện Sát Nhã': 'Mdo Kham', 'Huyện Bát Túc': 'Mdo Kham', 'Huyện Tả Cống': 'Mdo Kham',
+  'Huyện Mang Khang': 'Mdo Kham', 'Huyện Lạc Long': 'Mdo Kham', 'Huyện Biên Bá': 'Mdo Kham',
+  'Thành phố Lâm Chi': 'Khu vực Công Bố', 'Quận Ba Nghi': 'Công Bố', 'Huyện Mễ Lâm': 'Công Bố',
+  'Huyện Mặc Thoát': 'Lạc Du', 'Huyện Sát Ngung': 'Tạp Du', 'Huyện Ba Mật': 'Ba Mật',
+  'Huyện Lãng': 'Công Bố', 'Huyện Công Bố Giang Đạt': 'Công Bố',
+  'Thành phố Sơn Nam': 'Ô Tư Tạng', 'Quận Nãi Đông': 'Trạch Đương', 'Huyện Trát Nang': 'Ô Tư Tạng',
+  'Huyện Cống Dát': 'Ô Tư Tạng', 'Huyện Tang Nhật': 'Ô Tư Tạng', 'Huyện Quỳnh Kết': 'Ô Tư Tạng',
+  'Huyện Khúc Tùng': 'Ô Tư Tạng', 'Huyện Thố Mỹ': 'Ô Tư Tạng', 'Huyện Lạc Trát': 'Ô Tư Tạng',
+  'Huyện Gia Tra': 'Ô Tư Tạng', 'Huyện Long Tử': 'Ô Tư Tạng', 'Huyện Thác Na': 'Ô Tư Tạng',
+  'Huyện Lãng Thẻ Tử': 'Ô Tư Tạng',
+  'Thành phố Na Khúc': 'Ô Tư Tạng', 'Quận Sắc Ni': 'Ô Tư Tạng',
+  'Huyện Gia Lê': 'Ô Tư Tạng', 'Huyện Tỉ Như': 'Ô Tư Tạng', 'Huyện Nhiếp Vinh': 'Ô Tư Tạng',
+  'Huyện An Đa': 'Ô Tư Tạng', 'Huyện Thân Trát': 'Ô Tư Tạng', 'Huyện Tác': 'Ô Tư Tạng',
+  'Huyện Ban Qua': 'Ô Tư Tạng', 'Huyện Ba Thanh': 'Ô Tư Tạng', 'Huyện Ni Mã': 'Ô Tư Tạng',
+  'Địa khu A Lý': 'Cổ Cách', 'Huyện Phổ Lan': 'Cổ Cách', 'Huyện Trát Đạt': 'Cổ Cách',
+  'Huyện Cát Nhĩ': 'Cổ Cách', 'Huyện Nhật Thổ': 'Cổ Cách', 'Huyện Cách Cát': 'Cổ Cách',
+  'Huyện Cải Tắc': 'Cổ Cách', 'Huyện Thố Cần': 'Cổ Cách', 'Thị trấn Đường Cổ Lạp Sơn': 'Mdo Kham(Thanh Hải)',
 
-  // ================== 陕西省 ==================
-  '西安市': '长安县', '新城区': '长安县', '碑林区': '咸宁县',
-  '莲湖区': '长安县', '灞桥区': '咸宁县', '未央区': '长安县',
-  '雁塔区': '咸宁县', '阎良区': '临潼县', '临潼区': '临潼县',
-  '长安区': '长安县', '高陵区': '高陵县', '鄠邑区': '鄠县',
-  '蓝田县': '蓝田县', '周至县': '盩厔县',
-  '铜川市': '同官县', '王益区': '同官县', '印台区': '同官县',
-  '耀州区': '耀州', '宜君县': '宜君县',
-  '宝鸡市': '宝鸡县', '渭滨区': '宝鸡县', '金台区': '宝鸡县',
-  '陈仓区': '宝鸡县', '凤翔区': '凤翔县', '岐山县': '岐山县',
-  '扶风县': '扶风县', '眉县': '郿县', '陇县': '陇州',
-  '千阳县': '汧阳县', '麟游县': '麟游县', '凤县': '凤县',
-  '太白县': '凤翔县',
-  '咸阳市': '咸阳县', '秦都区': '咸阳县', '杨陵区': '武功县',
-  '渭城区': '咸阳县', '三原县': '三原县', '泾阳县': '泾阳县',
-  '乾县': '乾州', '礼泉县': '醴泉县', '永寿县': '永寿县',
-  '长武县': '长武县', '旬邑县': '三水县', '淳化县': '淳化县',
-  '武功县': '武功县', '兴平市': '兴平县', '彬州市': '邠州',
-  '渭南市': '渭南县', '临渭区': '渭南县', '华州区': '华州',
-  '潼关县': '潼关卫', '大荔县': '大荔县', '合阳县': '郃阳县',
-  '澄城县': '澄城县', '蒲城县': '蒲城县', '白水县': '白水县',
-  '富平县': '富平县', '韩城市': '韩城县', '华阴市': '华阴县',
-  '延安市': '肤施县', '宝塔区': '肤施县', '安塞区': '安塞县',
-  '延长县': '延长县', '延川县': '延川县', '志丹县': '保安县',
-  '吴起县': '保安县', '甘泉县': '甘泉县', '富县': '鄜州',
-  '洛川县': '洛川县', '宜川县': '宜川县', '黄龙县': '宜川县',
-  '黄陵县': '中部县', '子长市': '安定县',
-  '汉中市': '南郑县', '汉台区': '南郑县', '南郑区': '南郑县',
-  '城固县': '城固县', '洋县': '洋县', '西乡县': '西乡县',
-  '勉县': '沔县', '宁强县': '宁羌州', '略阳县': '略阳县',
-  '镇巴县': '西乡县', '留坝县': '凤县', '佛坪县': '盩厔县',
-  '榆林市': '榆林卫', '榆阳区': '榆林卫', '横山区': '怀远堡',
-  '府谷县': '府谷县', '靖边县': '靖边营', '定边县': '定边营',
-  '绥德县': '绥德州', '米脂县': '米脂县', '佳县': '葭州',
-  '吴堡县': '吴堡县', '清涧县': '清涧县', '子洲县': '绥德州',
-  '神木市': '神木县',
-  '安康市': '兴安州', '汉滨区': '兴安州', '汉阴县': '汉阴县',
-  '石泉县': '石泉县', '宁陕县': '兴安州', '紫阳县': '紫阳县',
-  '岚皋县': '兴安州', '平利县': '平利县', '镇坪县': '平利县',
-  '旬阳市': '洵阳县', '白河县': '白河县',
-  '商洛市': '商州', '商州区': '商州', '洛南县': '洛南县',
-  '丹凤县': '商州', '商南县': '商南县', '山阳县': '山阳县',
-  '镇安县': '镇安县', '柞水县': '镇安县',
+  // ================== Tỉnh Thiểm Tây ==================
+  'Thành phố Tây An': 'Huyện Trường An', 'Quận Tân Thành': 'Huyện Trường An', 'Quận Bia Lâm': 'Huyện Hàm Ninh',
+  'Quận Liên Hồ': 'Huyện Trường An', 'Quận Bá Kiều': 'Huyện Hàm Ninh', 'Quận Vị Ương': 'Huyện Trường An',
+  'Quận Nhạn Tháp': 'Huyện Hàm Ninh', 'Quận Diêm Lương': 'Huyện Lâm Đồng', 'Quận Lâm Đồng': 'Huyện Lâm Đồng',
+  'Quận Trường An': 'Huyện Trường An', 'Quận Cao Lăng': 'Huyện Cao Lăng', 'Quận Hộ Ấp': 'Huyện Hỗ',
+  'Huyện Lam Điền': 'Huyện Lam Điền', 'Huyện Chu Chí': 'Huyện Chu Trất',
+  'Thành phố Đồng Xuyên': 'Huyện Đồng Quan', 'Quận Vương Ích': 'Huyện Đồng Quan', 'Quận Ấn Đài': 'Huyện Đồng Quan',
+  'Quận Diệu Châu': 'Diệu Châu', 'Huyện Nghi Quân': 'Huyện Nghi Quân',
+  'Thành phố Bảo Kê': 'Huyện Bảo Kê', 'Quận Vị Tân': 'Huyện Bảo Kê', 'Quận Kim Đài': 'Huyện Bảo Kê',
+  'Quận Trần Thương': 'Huyện Bảo Kê', 'Quận Phượng Tường': 'Huyện Phượng Tường', 'Huyện Kỳ Sơn': 'Huyện Kỳ Sơn',
+  'Huyện Phù Phong': 'Huyện Phù Phong', 'Huyện Mi': 'Huyện Mi', 'Huyện Lũng': 'Lũng Châu',
+  'Huyện Thiên Dương': 'Huyện Khiên Dương', 'Huyện Lân Du': 'Huyện Lân Du', 'Huyện Phượng': 'Huyện Phượng',
+  'Huyện Thái Bạch': 'Huyện Phượng Tường',
+  'Thành phố Hàm Dương': 'Huyện Hàm Dương', 'Quận Tần Đô': 'Huyện Hàm Dương', 'Quận Dương Lăng': 'Huyện Vũ Công',
+  'Quận Vị Thành': 'Huyện Hàm Dương', 'Huyện Tam Nguyên': 'Huyện Tam Nguyên', 'Huyện Kính Dương': 'Huyện Kính Dương',
+  'Huyện Càn': 'Càn Châu', 'Huyện Lễ Tuyền': 'Huyện Lễ Tuyền', 'Huyện Vĩnh Thọ': 'Huyện Vĩnh Thọ',
+  'Huyện Trường Vũ': 'Huyện Trường Vũ', 'Huyện Tuần Ấp': 'Huyện Tam Thủy', 'Huyện Thuần Hóa': 'Huyện Thuần Hóa',
+  'Huyện Vũ Công': 'Huyện Vũ Công', 'Thành phố Hưng Bình': 'Huyện Hưng Bình', 'Thành phố Bân Châu': 'Bân Châu',
+  'Thành phố Vị Nam': 'Huyện Vị Nam', 'Quận Lâm Vị': 'Huyện Vị Nam', 'Quận Hoa Châu': 'Hoa Châu',
+  'Huyện Đồng Quan': 'Vệ Đồng Quan', 'Huyện Đại Lệ': 'Huyện Đại Lệ', 'Huyện Hợp Dương': 'Huyện Hợp Dương',
+  'Huyện Trừng Thành': 'Huyện Trừng Thành', 'Huyện Bồ Thành': 'Huyện Bồ Thành', 'Huyện Bạch Thủy': 'Huyện Bạch Thủy',
+  'Huyện Phú Bình': 'Huyện Phú Bình', 'Thành phố Hàn Thành': 'Huyện Hàn Thành', 'Thành phố Hoa Âm': 'Huyện Hoa Âm',
+  'Thành phố Diên An': 'Huyện Phu Thi', 'Quận Bảo Tháp': 'Huyện Phu Thi', 'Quận An Tắc': 'Huyện An Tắc',
+  'Huyện Diên Trường': 'Huyện Diên Trường', 'Huyện Diên Xuyên': 'Huyện Diên Xuyên', 'Huyện Chí Đan': 'Huyện Bảo An',
+  'Huyện Ngô Khởi': 'Huyện Bảo An', 'Huyện Cam Tuyền': 'Huyện Cam Tuyền', 'Huyện Phú': 'Phu Châu',
+  'Huyện Lạc Xuyên': 'Huyện Lạc Xuyên', 'Huyện Nghi Xuyên': 'Huyện Nghi Xuyên', 'Huyện Hoàng Long': 'Huyện Nghi Xuyên',
+  'Huyện Hoàng Lăng': 'Huyện Trung Bộ', 'Thành phố Tử Trường': 'Huyện An Định',
+  'Thành phố Hán Trung': 'Huyện Nam Trịnh', 'Quận Hán Đài': 'Huyện Nam Trịnh', 'Quận Nam Trịnh': 'Huyện Nam Trịnh',
+  'Huyện Thành Cố': 'Huyện Thành Cố', 'Huyện Dương': 'Huyện Dương', 'Huyện Tây Hương': 'Huyện Tây Hương',
+  'Huyện Miễn': 'Huyện Miễn', 'Huyện Ninh Cường': 'Châu Ninh Khương', 'Huyện Lược Dương': 'Huyện Lược Dương',
+  'Huyện Trấn Ba': 'Huyện Tây Hương', 'Huyện Lưu Bá': 'Huyện Phượng', 'Huyện Phật Bình': 'Huyện Châu Trật',
+  'Thành phố Du Lâm': 'Vệ Du Lâm', 'Quận Du Dương': 'Vệ Du Lâm', 'Quận Hoành Sơn': 'Bảo Hoài Viễn',
+  'Huyện Phủ Cốc': 'Huyện Phủ Cốc', 'Huyện Tĩnh Biên': 'Doanh Tĩnh Biên', 'Huyện Định Biên': 'Doanh Định Biên',
+  'Huyện Tuy Đức': 'Châu Tuy Đức', 'Huyện Mễ Chi': 'Huyện Mễ Chi', 'Huyện Giai': 'Gia Châu',
+  'Huyện Ngô Bảo': 'Huyện Ngô Bảo', 'Huyện Thanh Giản': 'Huyện Thanh Giản', 'Huyện Tử Châu': 'Châu Tuy Đức',
+  'Thành phố Thần Mộc': 'Huyện Thần Mộc',
+  'Thành phố An Khang': 'Châu Hưng Yên', 'Quận Hán Tân': 'Châu Hưng Yên', 'Huyện Hán Âm': 'Huyện Hán Âm',
+  'Huyện Thạch Tuyền': 'Huyện Thạch Tuyền', 'Huyện Ninh Thiểm': 'Châu Hưng Yên', 'Huyện Tử Dương': 'Huyện Tử Dương',
+  'Huyện Lam Cao': 'Châu Hưng Yên', 'Huyện Bình Lợi': 'Huyện Bình Lợi', 'Huyện Trấn Bình': 'Huyện Bình Lợi',
+  'Thành phố Tuần Dương': 'Huyện Tuân Dương', 'Huyện Bạch Hà': 'Huyện Bạch Hà',
+  'Thành phố Thương Lạc': 'Thương Châu', 'Quận Thương Châu': 'Thương Châu', 'Huyện Lạc Nam': 'Huyện Lạc Nam',
+  'Huyện Đan Phượng': 'Thương Châu', 'Huyện Thương Nam': 'Huyện Thương Nam', 'Huyện Sơn Dương': 'Huyện Sơn Dương',
+  'Huyện Trấn An': 'Huyện Trấn An', 'Huyện Trá Thủy': 'Huyện Trấn An',
 
-  // ================== 甘肃省 ==================
-  '兰州市': '兰州', '城关区': '兰州', '七里河区': '兰州',
-  '西固区': '兰州', '安宁区': '兰州', '红古区': '兰州',
-  '永登县': '庄浪卫', '皋兰县': '兰州', '榆中县': '金县',
-  '嘉峪关市': '嘉峪关（肃州卫）',
-  '金昌市': '永昌卫', '金川区': '永昌卫', '永昌县': '永昌卫',
-  '白银市': '靖虏卫', '白银区': '靖虏卫', '平川区': '靖虏卫',
-  '靖远县': '靖虏卫', '会宁县': '会宁县', '景泰县': '宁夏卫',
-  '天水市': '秦州', '秦州区': '秦州', '麦积区': '秦州',
-  '清水县': '清水县', '秦安县': '秦安县', '甘谷县': '伏羌县',
-  '武山县': '宁远县', '张家川回族自治县': '秦州',
-  '武威市': '凉州卫', '凉州区': '凉州卫', '民勤县': '镇番卫',
-  '古浪县': '古浪守御千户所', '天祝藏族自治县': '庄浪卫',
-  '张掖市': '甘州卫', '甘州区': '甘州卫', '肃南裕固族自治县': '甘州卫',
-  '民乐县': '甘州卫', '临泽县': '甘州卫', '高台县': '高台守御千户所',
-  '山丹县': '山丹卫',
-  '平凉市': '平凉县', '崆峒区': '平凉县', '泾川县': '泾州',
-  '灵台县': '灵台县', '崇信县': '崇信县', '华亭市': '华亭县',
-  '庄浪县': '静宁州', '静宁县': '静宁州',
-  '酒泉市': '肃州卫', '肃州区': '肃州卫', '金塔县': '镇夷守御千户所',
-  '瓜州县': '安西卫', '肃北蒙古族自治县': '罕东卫',
-  '阿克塞哈萨克族自治县': '罕东卫', '玉门市': '赤斤蒙古卫',
-  '敦煌市': '沙州卫',
-  '庆阳市': '安化县', '西峰区': '安化县', '庆城县': '安化县',
-  '环县': '环县', '华池县': '安化县', '合水县': '合水县',
-  '正宁县': '正宁县', '宁县': '宁州', '镇原县': '镇原县',
-  '定西市': '安定县', '安定区': '安定县', '通渭县': '通渭县',
-  '陇西县': '巩昌府陇西县', '渭源县': '渭源县', '临洮县': '狄道县',
-  '漳县': '漳县', '岷县': '岷州',
-  '陇南市': '阶州', '武都区': '阶州', '成县': '成县',
-  '文县': '文县', '宕昌县': '西固守御千户所', '康县': '阶州',
-  '西和县': '西和县', '礼县': '礼县', '徽县': '徽州',
-  '两当县': '两当县',
-  '临夏回族自治州': '河州', '临夏市': '河州', '临夏县': '河州',
-  '康乐县': '河州', '永靖县': '河州', '广河县': '河州',
-  '和政县': '河州', '东乡族自治县': '河州',
-  '积石山保安族东乡族撒拉族自治县': '河州',
-  '甘南藏族自治州': '洮州卫', '合作市': '洮州', '临潭县': '洮州卫',
-  '卓尼县': '洮州', '舟曲县': '阶州', '迭部县': '洮州',
-  '玛曲县': '洮州', '碌曲县': '洮州', '夏河县': '河州',
+  // ================== Tỉnh Cam Túc ==================
+  'Thành phố Lan Châu': 'Lan Châu', 'Quận Thành Quan': 'Lan Châu', 'Quận Thất Lý Hà': 'Lan Châu',
+  'Quận Tây Cố': 'Lan Châu', 'Quận An Ninh': 'Lan Châu', 'Quận Hồng Cổ': 'Lan Châu',
+  'Huyện Vĩnh Đăng': 'Trang Lãng Vệ', 'Huyện Cáo Lan': 'Lan Châu', 'Huyện Du Trung': 'Huyện Kim',
+  'Thành phố Gia Dục Quan': 'Gia Dục Quan (Túc Châu Vệ)',
+  'Thành phố Kim Xương': 'Vĩnh Xương Vệ', 'Quận Kim Xuyên': 'Vĩnh Xương Vệ', 'Huyện Vĩnh Xương': 'Vĩnh Xương Vệ',
+  'Thành phố Bạch Ngân': 'Tĩnh Lỗ Vệ', 'Quận Bạch Ngân': 'Tĩnh Lỗ Vệ', 'Quận Bình Xuyên': 'Tĩnh Lỗ Vệ',
+  'Huyện Tĩnh Viễn': 'Tĩnh Lỗ Vệ', 'Huyện Hội Ninh': 'Huyện Hội Ninh', 'Huyện Cảnh Thái': 'Ninh Hạ Vệ',
+  'Thành phố Thiên Thủy': 'Tần Châu', 'Quận Tần Châu': 'Tần Châu', 'Quận Mạch Tích': 'Tần Châu',
+  'Huyện Thanh Thủy': 'Huyện Thanh Thủy', 'Huyện Tần An': 'Huyện Tần An', 'Huyện Cam Cốc': 'Huyện Phục Khương',
+  'Huyện Vũ Sơn': 'Huyện Ninh Viễn', 'Huyện tự trị dân tộc Hồi Trương Gia Xuyên': 'Tần Châu',
+  'Thành phố Vũ Uy': 'Lương Châu Vệ', 'Quận Lương Châu': 'Lương Châu Vệ', 'Huyện Dân Cần': 'Vệ Trấn Phiên',
+  'Huyện Cổ Lãng': 'Cổ Lãng Thủ ngự Thiên hộ sở', 'Huyện tự trị dân tộc Tạng Thiên Chúc': 'Vệ Trang Lãng',
+  'Thành phố Trương Dịch': 'Vệ Cam Châu', 'Quận Cam Châu': 'Vệ Cam Châu', 'Huyện tự trị dân tộc Dụ Cố Túc Nam': 'Vệ Cam Châu',
+  'Huyện Dân Nhạc': 'Vệ Cam Châu', 'Huyện Lâm Trạch': 'Vệ Cam Châu', 'Huyện Cao Đài': 'Cao Đài Thủ ngự Thiên hộ sở',
+  'Huyện Sơn Đan': 'Vệ Sơn Đan',
+  'Thành phố Bình Lương': 'Huyện Bình Lương', 'Quận Không Động': 'Huyện Bình Lương', 'Huyện Kính Xuyên': 'Kính Châu',
+  'Huyện Linh Đài': 'Huyện Linh Đài', 'Huyện Sùng Tín': 'Huyện Sùng Tín', 'Thành phố Hoa Đình': 'Huyện Hoa Đình',
+  'Huyện Trang Lãng': 'Châu Tĩnh Ninh', 'Huyện Tĩnh Ninh': 'Châu Tĩnh Ninh',
+  'Thành phố Tửu Tuyền': 'Vệ Túc Châu', 'Quận Túc Châu': 'Vệ Túc Châu', 'Huyện Kim Tháp': 'Trấn Di Thủ ngự Thiên hộ sở',
+  'Huyện Qua Châu': 'Vệ An Tây', 'Huyện tự trị dân tộc Mông Cổ Túc Bắc': 'Vệ Hãn Đông',
+  'Huyện tự trị dân tộc Kazakh A Khắc Tắc': 'Vệ Hãn Đông', 'Thành phố Ngọc Môn': 'Xích Cân Mông Cổ vệ',
+  'Thành phố Đôn Hoàng': 'Vệ Sa Châu',
+  'Thành phố Khánh Dương': 'Huyện An Hóa', 'Quận Tây Phong': 'Huyện An Hóa', 'Huyện Khánh Thành': 'Huyện An Hóa',
+  'Huyện Hoàn': 'Huyện Hoàn', 'Huyện Hoa Trì': 'Huyện An Hóa', 'Huyện Hợp Thủy': 'Huyện Hợp Thủy',
+  'Huyện Chính Ninh': 'Huyện Chính Ninh', 'Huyện Ninh': 'Ninh Châu', 'Huyện Trấn Nguyên': 'Huyện Trấn Nguyên',
+  'Thành phố Định Tây': 'Huyện An Định', 'Quận An Định': 'Huyện An Định', 'Huyện Thông Vị': 'Huyện Thông Vị',
+  'Huyện Lũng Tây': 'Phủ Củng Xương Huyện Lũng Tây', 'Huyện Vị Nguyên': 'Huyện Vị Nguyên', 'Huyện Lâm Thao': 'Huyện Địch Đạo',
+  'Huyện Chương': 'Huyện Chương', 'Huyện Mân': 'Mân Châu',
+  'Thành phố Lũng Nam': 'Giai Châu', 'Quận Vũ Đô': 'Giai Châu', 'Huyện Thành': 'Huyện Thành',
+  'Huyện Văn': 'Huyện Văn', 'Huyện Đãng Xương': 'Tây Cố thủ ngự thiên hộ sở', 'Huyện Khang': 'Giai Châu',
+  'Huyện Tây Hòa': 'Huyện Tây Hòa', 'Huyện Lễ': 'Huyện Lễ', 'Huyện Huy': 'Huy Châu',
+  'Huyện Lưỡng Đương': 'Huyện Lưỡng Đương',
+  'Châu tự trị dân tộc Hồi Lâm Hạ': 'Hà Châu', 'Thành phố Lâm Hạ': 'Hà Châu', 'Huyện Lâm Hạ': 'Hà Châu',
+  'Huyện Khang Nhạc': 'Hà Châu', 'Huyện Vĩnh Tĩnh': 'Hà Châu', 'Huyện Quảng Hà': 'Hà Châu',
+  'Huyện Hòa Chính': 'Hà Châu', 'Huyện tự trị dân tộc Đông Hương': 'Hà Châu',
+  'Huyện tự trị dân tộc Bảo An, Đông Hương, Tát Lạp Tích Thạch Sơn': 'Hà Châu',
+  'Châu tự trị dân tộc Tạng Cam Nam': 'Vệ Thao Châu', 'Thành phố Hợp Tác': 'Thao Châu', 'Huyện Lâm Đàm': 'Vệ Thao Châu',
+  'Huyện Trác Ni': 'Thao Châu', 'Huyện Chu Khúc': 'Giai Châu', 'Huyện Điệt Bộ': 'Thao Châu',
+  'Huyện Mã Khúc': 'Thao Châu', 'Huyện Lục Khúc': 'Thao Châu', 'Huyện Hạ Hà': 'Hà Châu',
 
-  // ================== 青海省 ==================
-  '西宁市': '西宁卫', '城东区': '西宁卫', '城中区': '西宁卫',
-  '城西区': '西宁卫', '城北区': '西宁卫', '湟中区': '西宁卫',
-  '大通回族土族自治县': '西宁卫', '湟源县': '西宁卫',
-  '海东市': '碾伯守御千户所', '乐都区': '碾伯所', '平安区': '西宁卫',
-  '民和回族土族自治县': '碾伯所', '互助土族自治县': '西宁卫',
-  '化隆回族自治县': '西宁卫', '循化撒拉族自治县': '河州',
-  '海北藏族自治州': '蒙古和硕特部', '门源回族自治县': '和硕特部',
-  '祁连县': '和硕特部', '海晏县': '和硕特部', '刚察县': '和硕特部',
-  '黄南藏族自治州': '必里卫', '同仁市': '必里卫', '尖扎县': '必里卫',
-  '泽库县': '必里卫', '河南蒙古族自治县': '和硕特部',
-  '海南藏族自治州': '必里卫/和硕特部', '共和县': '和硕特部',
-  '同德县': '必里卫', '贵德县': '归德守御千户所', '兴海县': '必里卫',
-  '贵南县': '必里卫',
-  '果洛藏族自治州': '朵甘(青海)', '玛沁县': '朵甘(青海)',
-  '班玛县': '朵甘(青海)', '甘德县': '朵甘(青海)', '达日县': '朵甘(青海)',
-  '久治县': '朵甘(青海)', '玛多县': '朵甘(青海)',
-  '玉树藏族自治州': '朵甘(青海)', '玉树市': '朵甘(青海)', '杂多县': '朵甘(青海)',
-  '称多县': '朵甘(青海)', '治多县': '朵甘(青海)', '囊谦县': '朵甘(青海)',
-  '曲麻莱县': '朵甘(青海)',
-  '海西蒙古族藏族自治州': '和硕特部', '格尔木市': '和硕特部',
-  '德令哈市': '和硕特部', '茫崖市': '和硕特部', '乌兰县': '和硕特部',
-  '都兰县': '和硕特部', '天峻县': '和硕特部',
+  // ================== Tỉnh Thanh Hải ==================
+  'Thành phố Tây Ninh': 'Vệ Tây Ninh', 'Quận Thành Đông': 'Vệ Tây Ninh', 'Quận Thành Trung': 'Tây Ninh Vệ',
+  'Quận Thành Tây': 'Tây Ninh Vệ', 'Quận Thành Bắc': 'Tây Ninh Vệ', 'Quận Hoàng Trung': 'Tây Ninh Vệ',
+  'Huyện tự trị dân tộc Hồi, Thổ Đại Thông': 'Tây Ninh Vệ', 'Huyện Hoàng Nguyên': 'Tây Ninh Vệ',
+  'Thành phố Hải Đông': 'Niễn Bá thủ ngự thiên hộ sở', 'Quận Nhạc Đô': 'Niễn Bá Sở', 'Quận Bình An': 'Tây Ninh Vệ',
+  'Huyện tự trị dân tộc Hồi, Thổ Dân Hòa': 'Niễn Bá Sở', 'Huyện tự trị dân tộc Thổ Hỗ Trợ': 'Tây Ninh Vệ',
+  'Huyện tự trị dân tộc Hồi Hóa Long': 'Tây Ninh Vệ', 'Huyện tự trị dân tộc Tát Lạp Tuần Hóa': 'Hà Châu',
+  'Châu tự trị dân tộc Tạng Hải Bắc': 'Bộ Hòa Thạc Đặc Mông Cổ', 'Huyện tự trị dân tộc Hồi Môn Nguyên': 'Bộ Hòa Thạc Đặc',
+  'Huyện Kỳ Liên': 'Bộ Hòa Thạc Đặc', 'Huyện Hải Yến': 'Bộ Hòa Thạc Đặc', 'Huyện Cương Sát': 'Bộ Hòa Thạc Đặc',
+  'Châu tự trị dân tộc Tạng Hoàng Nam': 'Tất Lý Vệ', 'Thành phố Đồng Nhân': 'Tất Lý Vệ', 'Huyện Tiêm Trát': 'Tất Lý Vệ',
+  'Huyện Trạch Khố': 'Tất Lý Vệ', 'Huyện tự trị dân tộc Mông Cổ Hà Nam': 'Bộ Hòa Thạc Đặc',
+  'Châu tự trị dân tộc Tạng Hải Nam': 'Tất Lý Vệ/Bộ Hòa Thạc Đặc', 'Huyện Cộng Hòa': 'Bộ Hòa Thạc Đặc',
+  'Huyện Đồng Đức': 'Tất Lý Vệ', 'Huyện Quý Đức': 'Quy Đức thủ ngự thiên hộ sở', 'Huyện Hưng Hải': 'Tất Lý Vệ',
+  'Huyện Quý Nam': 'Tất Lý Vệ',
+  'Châu tự trị dân tộc Tạng Quả Lạc': 'Mdo Kham(Thanh Hải)', 'Huyện Mã Thấm': 'Mdo Kham(Thanh Hải)',
+  'Huyện Ban Mã': 'Mdo Kham(Thanh Hải)', 'Huyện Cam Đức': 'Mdo Kham(Thanh Hải)', 'Huyện Đạt Nhật': 'Mdo Kham(Thanh Hải)',
+  'Huyện Cửu Trị': 'Mdo Kham(Thanh Hải)', 'Huyện Mã Đa': 'Mdo Kham(Thanh Hải)',
+  'Châu tự trị dân tộc Tạng Ngọc Thụ': 'Mdo Kham(Thanh Hải)', 'Thành phố Ngọc Thụ': 'Mdo Kham(Thanh Hải)', 'Huyện Tạp Đa': 'Mdo Kham(Thanh Hải)',
+  'Huyện Xưng Đa': 'Mdo Kham(Thanh Hải)', 'Huyện Trị Đa': 'Mdo Kham(Thanh Hải)', 'Huyện Nang Khiêm': 'Mdo Kham(Thanh Hải)',
+  'Huyện Khúc Ma Lai': 'Mdo Kham(Thanh Hải)',
+  'Châu tự trị dân tộc Mông Cổ, Tạng Hải Tây': 'Bộ Hòa Thạc Đặc', 'Thành phố Cách Nhĩ Mộc': 'Bộ Hòa Thạc Đặc',
+  'Thành phố Đức Lệnh Hà': 'Bộ Hòa Thạc Đặc', 'Thành phố Mang Nhai': 'Bộ Hòa Thạc Đặc', 'Huyện Ô Lan': 'Bộ Hòa Thạc Đặc',
+  'Huyện Đô Lan': 'Bộ Hòa Thạc Đặc', 'Huyện Thiên Tuấn': 'Bộ Hòa Thạc Đặc',
 
-  // ================== 宁夏回族自治区 ==================
-  '银川市': '宁夏卫', '兴庆区': '宁夏卫', '西夏区': '宁夏卫',
-  '金凤区': '宁夏卫', '永宁县': '宁夏卫', '贺兰县': '宁夏卫',
-  '灵武市': '灵州守御千户所',
-  '石嘴山市': '平虏守御千户所', '大武口区': '平虏所',
-  '惠农区': '平虏所', '平罗县': '平虏所',
-  '吴忠市': '宁夏卫/灵州', '利通区': '灵州', '红寺堡区': '宁夏卫',
-  '盐池县': '花马池守御千户所', '同心县': '宁夏卫',
-  '青铜峡市': '宁夏卫',
-  '固原市': '固原卫', '原州区': '固原卫', '西吉县': '固原卫',
-  '隆德县': '隆德县', '泾源县': '固原卫', '彭阳县': '固原卫',
-  '中卫市': '宁夏中卫', '沙坡头区': '宁夏中卫', '中宁县': '宁夏中卫',
-  '海原县': '海原堡',
+  // ================== Khu tự trị dân tộc Hồi Ninh Hạ ==================
+  'Thành phố Ngân Xuyên': 'Ninh Hạ Vệ', 'Quận Hưng Khánh': 'Ninh Hạ Vệ', 'Quận Tây Hạ': 'Ninh Hạ Vệ',
+  'Quận Kim Phượng': 'Ninh Hạ Vệ', 'Huyện Vĩnh Ninh': 'Ninh Hạ Vệ', 'Huyện Hạ Lan': 'Ninh Hạ Vệ',
+  'Thành phố Linh Vũ': 'Linh Châu thủ ngự thiên hộ sở',
+  'Thành phố Thạch Chủy Sơn': 'Bình Lỗ thủ ngự thiên hộ sở', 'Quận Đại Vũ Khẩu': 'Bình Lỗ Sở',
+  'Quận Huệ Nông': 'Bình Lỗ Sở', 'Huyện Bình La': 'Bình Lỗ Sở',
+  'Thành phố Ngô Trung': 'Ninh Hạ Vệ/Linh Châu', 'Quận Lợi Thông': 'Linh Châu', 'Quận Hồng Tự Bảo': 'Ninh Hạ Vệ',
+  'Huyện Diêm Trì': 'Hoa Mã Trì Thủ ngự Thiên hộ sở', 'Huyện Đồng Tâm': 'Ninh Hạ Vệ',
+  'Thành phố Thanh Đồng Hiệp': 'Ninh Hạ Vệ',
+  'Thành phố Cố Nguyên': 'Cố Nguyên Vệ', 'Quận Nguyên Châu': 'Cố Nguyên Vệ', 'Huyện Tây Cát': 'Cố Nguyên Vệ',
+  'Huyện Long Đức': 'Huyện Long Đức', 'Huyện Kính Nguyên': 'Cố Nguyên Vệ', 'Huyện Bành Dương': 'Cố Nguyên Vệ',
+  'Thành phố Trung Vệ': 'Ninh Hạ Trung Vệ', 'Quận Sa Pha Đầu': 'Ninh Hạ Trung Vệ', 'Huyện Trung Ninh': 'Ninh Hạ Trung Vệ',
+  'Huyện Hải Nguyên': 'Hải Nguyên Bảo',
 
-  // ================== 新疆维吾尔自治区 ==================
-  // 明代新疆属东察合台汗国/叶尔羌汗国，东部为哈密等卫
-  '乌鲁木齐市': '瓦剌（卫拉特）', '天山区': '瓦剌',
-  '沙依巴克区': '瓦剌', '新市区': '瓦剌', '水磨沟区': '瓦剌',
-  '头屯河区': '瓦剌', '达坂城区': '瓦剌', '米东区': '瓦剌',
-  '乌鲁木齐县': '瓦剌',
-  '克拉玛依市': '瓦剌', '独山子区': '瓦剌', '克拉玛依区': '瓦剌',
-  '白碱滩区': '瓦剌', '乌尔禾区': '瓦剌',
-  '吐鲁番市': '吐鲁番（东察合台）', '高昌区': '吐鲁番',
-  '鄯善县': '吐鲁番', '托克逊县': '吐鲁番',
-  '哈密市': '哈密卫', '伊州区': '哈密卫', '巴里坤哈萨克自治县': '哈密卫',
-  '伊吾县': '哈密卫',
-  '昌吉回族自治州': '瓦剌/东察合台', '昌吉市': '瓦剌',
-  '阜康市': '瓦剌', '呼图壁县': '瓦剌', '玛纳斯县': '瓦剌',
-  '奇台县': '瓦剌', '吉木萨尔县': '瓦剌', '木垒哈萨克自治县': '瓦剌',
-  '博尔塔拉蒙古自治州': '瓦剌', '博乐市': '瓦剌', '阿拉山口市': '瓦剌',
-  '精河县': '瓦剌', '温泉县': '瓦剌',
-  '巴音郭楞蒙古自治州': '叶尔羌汗国/瓦剌', '库尔勒市': '叶尔羌',
-  '轮台县': '叶尔羌', '尉犁县': '叶尔羌', '若羌县': '叶尔羌',
-  '且末县': '叶尔羌', '焉耆回族自治县': '叶尔羌', '和静县': '瓦剌',
-  '和硕县': '瓦剌', '博湖县': '叶尔羌',
-  '阿克苏地区': '叶尔羌汗国', '阿克苏市': '阿克苏', '库车市': '库车',
-  '温宿县': '阿克苏', '沙雅县': '库车', '新和县': '库车',
-  '拜城县': '拜城', '乌什县': '乌什', '阿瓦提县': '阿克苏',
-  '柯坪县': '阿克苏',
-  '克孜勒苏柯尔克孜自治州': '叶尔羌汗国', '阿图什市': '叶尔羌',
-  '阿克陶县': '叶尔羌', '阿合奇县': '叶尔羌', '乌恰县': '叶尔羌',
-  '喀什地区': '叶尔羌汗国（喀什噶尔）', '喀什市': '喀什噶尔',
-  '疏附县': '喀什噶尔', '疏勒县': '喀什噶尔', '英吉沙县': '英吉沙尔',
-  '泽普县': '叶尔羌', '莎车县': '叶尔羌', '叶城县': '叶尔羌',
-  '麦盖提县': '叶尔羌', '岳普湖县': '叶尔羌', '伽师县': '喀什噶尔',
-  '巴楚县': '叶尔羌', '塔什库尔干塔吉克自治县': '色勒库尔',
-  '和田地区': '叶尔羌汗国（于阗）', '和田市': '于阗',
-  '和田县': '于阗', '墨玉县': '于阗', '皮山县': '于阗',
-  '洛浦县': '于阗', '策勒县': '于阗', '于田县': '于阗',
-  '民丰县': '于阗',
-  '伊犁哈萨克自治州': '瓦剌/叶尔羌', '伊宁市': '瓦剌',
-  '奎屯市': '瓦剌', '霍尔果斯市': '瓦剌', '伊宁县': '瓦剌',
-  '察布查尔锡伯自治县': '瓦剌', '霍城县': '瓦剌',
-  '巩留县': '瓦剌', '新源县': '瓦剌', '昭苏县': '瓦剌',
-  '特克斯县': '瓦剌', '尼勒克县': '瓦剌',
-  '塔城地区': '瓦剌', '塔城市': '瓦剌', '乌苏市': '瓦剌',
-  '额敏县': '瓦剌', '沙湾市': '瓦剌', '托里县': '瓦剌',
-  '裕民县': '瓦剌', '和布克赛尔蒙古自治县': '瓦剌',
-  '阿勒泰地区': '瓦剌', '阿勒泰市': '瓦剌', '布尔津县': '瓦剌',
-  '富蕴县': '瓦剌', '福海县': '瓦剌', '哈巴河县': '瓦剌',
-  '青河县': '瓦剌', '吉木乃县': '瓦剌',
+  // ================== Khu tự trị dân tộc Duy Ngô Nhĩ Tân Cương ==================
+  // Tân Cương thời Minh thuộc Hãn quốc Đông Chagatai/Hãn quốc Yarkent, phía đông là các vệ Haa Mật
+  'Thành phố Ô Lỗ Mộc Tề': 'Oirat (Oirat)', 'Quận Thiên Sơn': 'Oirat',
+  'Quận Sa Y Ba Khắc': 'Oirat', 'Quận Tân Thị': 'Oirat', 'Quận Thủy Ma Câu': 'Oirat',
+  'Quận Đầu Đồn Hà': 'Oirat', 'Quận Đạt Phản Thành': 'Oirat', 'Quận Mễ Đông': 'Oirat',
+  'Huyện Ô Lỗ Mộc Tề': 'Oirat',
+  'Thành phố Khắc Lạp Mã Y': 'Oirat', 'Quận Độc Sơn Tử': 'Oirat', 'Quận Khắc Lạp Mã Y': 'Oirat',
+  'Quận Bạch Kiềm Than': 'Oirat', 'Quận Ô Nhĩ Hòa': 'Oirat',
+  'Thành phố Thổ Lỗ Phồn': 'Thổ Lỗ Phiên (Đông Sát Hợp Đài)', 'Quận Cao Xương': 'Thổ Lỗ Phiên',
+  'Huyện Thiện Thiện': 'Thổ Lỗ Phiên', 'Huyện Thác Khắc Tốn': 'Thổ Lỗ Phiên',
+  'Thành phố Cáp Mật': 'Cáp Mật Vệ', 'Quận Y Châu': 'Cáp Mật Vệ', 'Huyện tự trị dân tộc Kazakh Ba Lý Khôn': 'Cáp Mật Vệ',
+  'Huyện Y Ngô': 'Cáp Mật Vệ',
+  'Châu tự trị dân tộc Hồi Xương Cát': 'Oirat/Đông Sát Hợp Đài', 'Thành phố Xương Cát': 'Oirat',
+  'Thành phố Phụ Khang': 'Oirat', 'Huyện Hô Đồ Bích': 'Oirat', 'Huyện Mã Nạp Tư': 'Oirat',
+  'Huyện Kỳ Đài': 'Oirat', 'Huyện Cát Mộc Tát Nhĩ': 'Oirat', 'Huyện tự trị dân tộc Kazakh Mộc Lũy': 'Oirat',
+  'Châu tự trị dân tộc Mông Cổ Bác Nhĩ Tháp Lạp': 'Oirat', 'Thành phố Bác Nhạc': 'Oirat', 'Thành phố A Lạp Sơn Khẩu': 'Oirat',
+  'Huyện Tinh Hà': 'Oirat', 'Huyện Ôn Tuyền': 'Oirat',
+  'Châu tự trị dân tộc Mông Cổ Ba Âm Quách Lăng': 'Hãn quốc Yarkent/Oirat', 'Thành phố Khố Nhĩ Lặc': 'Yarkent',
+  'Huyện Luân Đài': 'Yarkent', 'Huyện Úy Lê': 'Yarkent', 'Huyện Nhược Khương': 'Yarkent',
+  'Huyện Thả Mạt': 'Yarkent', 'Huyện tự trị dân tộc Hồi Yên Kỳ': 'Yarkent', 'Huyện Hòa Tĩnh': 'Oirat',
+  'Huyện Hòa Thạc': 'Oirat', 'Huyện Bác Hồ': 'Yarkent',
+  'Địa khu A Khắc Tô': 'Hãn quốc Yarkent', 'Thành phố A Khắc Tô': 'A Khắc Tô', 'Thành phố Khố Xa': 'Khố Xa',
+  'Huyện Ôn Túc': 'A Khắc Tô', 'Huyện Sa Nhã': 'Khố Xa', 'Huyện Tân Hòa': 'Khố Xa',
+  'Huyện Bái Thành': 'Bái Thành', 'Huyện Ô Thập': 'Ô Thập', 'Huyện A Ngõa Đề': 'A Khắc Tô',
+  'Huyện Kha Bình': 'A Khắc Tô',
+  'Châu tự trị dân tộc Kyrgyz Khắc Tư Lặc Tô': 'Hãn quốc Yarkent', 'Thành phố A Đồ Thập': 'Yarkent',
+  'Huyện A Khắc Đào': 'Yarkent', 'Huyện A Hợp Kỳ': 'Yarkent', 'Huyện Ô Kháp': 'Yarkent',
+  'Địa khu Khách Thập': 'Hãn quốc Yarkent (Khách Thập Cát Nhĩ)', 'Thành phố Khách Thập': 'Khách Thập Cát Nhĩ',
+  'Huyện Sơ Phụ': 'Khách Thập Cát Nhĩ', 'Huyện Sơ Lặc': 'Khách Thập Cát Nhĩ', 'Huyện Anh Cát Sa': 'Anh Cát Sa Nhĩ',
+  'Huyện Trạch Phổ': 'Yarkent', 'Huyện Sa Xa': 'Yarkent', 'Huyện Diệp Thành': 'Yarkent',
+  'Huyện Mạch Cái Đề': 'Yarkent', 'Huyện Nhạc Phổ Hồ': 'Yarkent', 'Huyện Già Sư': 'Khách Thập Cát Nhĩ',
+  'Huyện Ba Sở': 'Yarkent', 'Huyện tự trị dân tộc Tajik Tháp Thập Khố Nhĩ Can': 'Sắc Lặc Khố Nhĩ',
+  'Địa khu Hòa Điền': 'Hãn quốc Yarkent (Vu Điền)', 'Thành phố Hòa Điền': 'Vu Điền',
+  'Huyện Hòa Điền': 'Vu Điền', 'Huyện Mặc Ngọc': 'Vu Điền', 'Huyện Bì Sơn': 'Vu Điền',
+  'Huyện Lạc Phố': 'Vu Điền', 'Huyện Sách Lặc': 'Vu Điền', 'Huyện Vu Điền': 'Vu Điền',
+  'Huyện Dân Phong': 'Vu Điền',
+  'Châu tự trị dân tộc Kazakh Y Lê': 'Oirat/Yarkent', 'Thành phố Y Ninh': 'Oirat',
+  'Thành phố Khuê Đồn': 'Oirat', 'Thành phố Hoắc Nhĩ Quả Tư': 'Oirat', 'Huyện Y Ninh': 'Oirat',
+  'Huyện tự trị dân tộc Tích Bá Sát Bố Tra Nhĩ': 'Oirat', 'Huyện Hoắc Thành': 'Oirat',
+  'Huyện Củng Lưu': 'Oirat', 'Huyện Tân Nguyên': 'Oirat', 'Huyện Chiêu Tô': 'Oirat',
+  'Huyện Đặc Khắc Tư': 'Oirat', 'Huyện Ni Lặc Khắc': 'Oirat',
+  'Địa khu Tháp Thành': 'Oirat', 'Thành phố Tháp Thành': 'Oirat', 'Thành phố Ô Tô': 'Oirat',
+  'Huyện Ngạch Mẫn': 'Oirat', 'Thành phố Sa Loan': 'Oirat', 'Huyện Thác Lý': 'Oirat',
+  'Huyện Dụ Dân': 'Oirat', 'Huyện tự trị dân tộc Mông Cổ Hòa Bố Khắc Tái Nhĩ': 'Oirat',
+  'Địa khu A Lặc Thái': 'Oirat', 'Thành phố A Lạp Thái': 'Oirat', 'Huyện Bố Nhĩ Tân': 'Oirat',
+  'Huyện Phú Uẩn': 'Oirat', 'Huyện Phúc Hải': 'Oirat', 'Huyện Cáp Ba Hà': 'Oirat',
+  'Huyện Thanh Hà': 'Oirat', 'Huyện Cát Mộc Nãi': 'Oirat',
 
-  // ================== 台湾省 ==================
-  // 1634年明代称东番，分属西葡、荷兰殖民地、大肚王国等原住民部落
-  '台北市': '淡水', '臺北市': '淡水', '新北市': '三貂', '基隆市': '鸡笼', '桃园市': '南崁', '桃園市': '南崁', '宜兰县': '噶玛兰', '宜蘭縣': '噶玛兰',
-  '台南市': '赤嵌', '臺南市': '赤嵌', '高雄市': '打狗', '嘉义市': '诸罗山', '嘉義市': '诸罗山', '嘉义县': '诸罗山', '嘉義縣': '诸罗山', '屏东县': '阿猴', '屏東縣': '阿猴',
-  '澎湖县': '澎湖巡检司', '澎湖縣': '澎湖巡检司',
-  '新竹市': '竹堑', '新竹县': '竹堑', '新竹縣': '竹堑', '苗栗县': '吞霄', '苗栗縣': '吞霄', '台中市': '大肚', '臺中市': '大肚', '彰化县': '半线', '彰化縣': '半线', '南投县': '水沙连', '南投縣': '水沙连', '云林县': '笨港', '雲林縣': '笨港', '花莲县': '奇莱', '花蓮縣': '奇莱', '台东县': '卑南', '臺東縣': '卑南',
+  // ================== Tỉnh Đài Loan ==================
+  // 1634 Thời nhà Minh gọi là Đông Phiên, phân thuộc thuộc địa của Tây Ban Nha - Bồ Đào Nha, Hà Lan, Vương quốc Đại Đỗ và các bộ lạc bản địa khác.
+  'Thành phố Đài Bắc': 'Đạm Thủy', 'Thành phố Đài Bắc': 'Đạm Thủy', 'Thành phố Tân Bắc': 'Tam Điêu', 'Thành phố Cơ Long': 'Kê Lung', 'Thành phố Đào Viên': 'Nam Khảm', 'Thành phố Đào Viên': 'Nam Khảm', 'Huyện Nghi Lan': 'Cát Mã Lan', 'Huyện Nghi Lan': 'Cát Mã Lan',
+  'Thành phố Đài Nam': 'Xích Khảm', 'Thành phố Đài Nam': 'Xích Khảm', 'Thành phố Cao Hùng': 'Đả Cẩu', 'Thành phố Gia Nghĩa': 'Chư La Sơn', 'Thành phố Gia Nghĩa': 'Chư La Sơn', 'Huyện Gia Nghĩa': 'Chư La Sơn', 'Huyện Gia Nghĩa': 'Chư La Sơn', 'Huyện Bình Đông': 'A Hầu', 'Huyện Bình Đông': 'A Hầu',
+  'Huyện Bành Hồ': 'Bành Hồ tuần kiểm ty', 'Huyện Bành Hồ': 'Bành Hồ tuần kiểm ty',
+  'Thành phố Tân Trúc': 'Trúc Tiệm', 'Huyện Tân Trúc': 'Trúc Tiệm', 'Huyện Tân Trúc': 'Trúc Tiệm', 'Huyện Miêu Lật': 'Thôn Tiêu', 'Huyện Miêu Lật': 'Thôn Tiêu', 'Thành phố Đài Trung': 'Đại Đỗ', 'Thành phố Đài Trung': 'Đại Đỗ', 'Huyện Chương Hóa': 'Bán Tuyến', 'Huyện Chương Hóa': 'Bán Tuyến', 'Huyện Nam Đầu': 'Thủy Sa Liên', 'Huyện Nam Đầu': 'Thủy Sa Liên', 'Huyện Vân Lâm': 'Bôn Cảng', 'Huyện Vân Lâm': 'Bôn Cảng', 'Huyện Hoa Liên': 'Kỳ Lai', 'Huyện Hoa Liên': 'Kỳ Lai', 'Huyện Đài Đông': 'Ty Nam', 'Huyện Đài Đông': 'Ty Nam',
 
-  // ================== 香港特别行政区 ==================
-  '中西区': '新安县', '湾仔区': '新安县', '东区': '新安县',
-  '南区': '新安县', '油尖旺区': '新安县', '深水埗区': '新安县',
-  '九龙城区': '新安县', '黄大仙区': '新安县', '观塘区': '新安县',
-  '荃湾区': '新安县', '屯门区': '新安县', '元朗区': '新安县',
-  '北区': '新安县', '大埔区': '新安县', '西贡区': '新安县',
-  '沙田区': '新安县', '葵青区': '新安县', '离岛区': '新安县',
+  // ================== Đặc khu hành chính Hồng Kông ==================
+  'Quận Trung Tây': 'Huyện Tân An', 'Quận Loan Tử': 'Huyện Tân An', 'Quận Đông': 'Huyện Tân An',
+  'Quận Nam': 'Huyện Tân An', 'Quận Du Tiêm Vượng': 'Huyện Tân An', 'Quận Thâm Thủy Bộ': 'Huyện Tân An',
+  'Quận Cửu Long Thành': 'Huyện Tân An', 'Quận Hoàng Đại Tiên': 'Huyện Tân An', 'Quận Quan Đường': 'Huyện Tân An',
+  'Quận Thuyên Loan': 'Huyện Tân An', 'Quận Đồn Môn': 'Huyện Tân An', 'Quận Nguyên Lãng': 'Huyện Tân An',
+  'Quận Bắc': 'Huyện Tân An', 'Quận Đại Bộ': 'Huyện Tân An', 'Quận Tây Cống': 'Huyện Tân An',
+  'Quận Sa Điền': 'Huyện Tân An', 'Quận Quỳ Thanh': 'Huyện Tân An', 'Quận Ly Đảo': 'Huyện Tân An',
 
-  // ================== 澳门特别行政区 ==================
-  '花地玛堂区': '香山县', '圣安多尼堂区': '香山县',
-  '大堂区': '香山县', '望德堂区': '香山县',
-  '风顺堂区': '香山县', '嘉模堂区（氹仔）': '香山县',
-  '圣方济各堂区（路环）': '香山县'
+  // ================== Đặc khu hành chính Ma Cao ==================
+  'Phường Hoa Địa Mã': 'Huyện Hương Sơn', 'Giáo xứ Thánh An Đa Ni': 'Huyện Hương Sơn',
+  'Giáo xứ Đại Đường': 'Huyện Hương Sơn', 'Giáo xứ Vọng Đức': 'Huyện Hương Sơn',
+  'Giáo xứ Phong Thuận': 'Huyện Hương Sơn', 'Giáo xứ Gia Mô (Đãng Tử)': 'Huyện Hương Sơn',
+  'Giáo xứ Thánh Phương Tế Các (Lộ Hoàn)': 'Huyện Hương Sơn'
 };
 
 
 const modernProvinceDefaultFu = {
-    '河北省':'真定府','江苏省':'应天府','安徽省':'庐州府','浙江省':'杭州府','福建省':'福州府',
-    '江西省':'南昌府','山东省':'济南府','河南省':'开封府','湖北省':'武昌府','湖南省':'长沙府',
-    '广东省':'广州府','广西壮族自治区':'桂林府','海南省':'琼州府','四川省':'成都府','贵州省':'贵阳府',
-    '云南省':'云南府','陕西省':'西安府','甘肃省':'临洮府','宁夏回族自治区':'宁夏卫','山西省':'太原府',
-    '香港特别行政区':'广州府', '澳门特别行政区':'广州府','吉林省':'乌拉城', '黑龙江省':'库尔喀部', '内蒙古自治区':'察哈尔部',
-    '青海省':'和硕特部', '西藏自治区':'乌思藏', '新疆维吾尔自治区':'叶尔羌', '台湾省':'东番诸部'
+    'Tỉnh Hà Bắc':'Phủ Chân Định','Tỉnh Giang Tô':'Phủ Ứng Thiên','Tỉnh An Huy':'Phủ Lư Châu','Tỉnh Chiết Giang':'Phủ Hàng Châu','Tỉnh Phúc Kiến':'Phủ Phúc Châu',
+    'Tỉnh Giang Tây':'Phủ Nam Xương','Tỉnh Sơn Đông':'Phủ Tế Nam','Tỉnh Hà Nam':'Phủ Khai Phong','Tỉnh Hồ Bắc':'Phủ Vũ Xương','Tỉnh Hồ Nam':'Phủ Trường Sa',
+    'Tỉnh Quảng Đông':'Phủ Quảng Châu','Khu tự trị dân tộc Choang Quảng Tây':'Phủ Quế Lâm','Tỉnh Hải Nam':'Phủ Quỳnh Châu','Tỉnh Tứ Xuyên':'Phủ Thành Đô','Tỉnh Quý Châu':'Phủ Quý Dương',
+    'Tỉnh Vân Nam':'Phủ Vân Nam','Tỉnh Thiểm Tây':'Phủ Tây An','Tỉnh Cam Túc':'Phủ Lâm Thao','Khu tự trị dân tộc Hồi Ninh Hạ':'Ninh Hạ Vệ','Tỉnh Sơn Tây':'Phủ Thái Nguyên',
+    'Đặc khu hành chính Hồng Kông':'Phủ Quảng Châu', 'Đặc khu hành chính Ma Cao':'Phủ Quảng Châu','Tỉnh Cát Lâm':'Thành Ô Lạp', 'Tỉnh Hắc Long Giang':'Bộ Khố Nhĩ Khách', 'Khu tự trị Nội Mông Cổ':'Bộ Sát Cáp Nhĩ',
+    'Tỉnh Thanh Hải':'Bộ Hòa Thạc Đặc', 'Khu tự trị Tây Tạng':'Ô Tư Tạng', 'Khu tự trị dân tộc Duy Ngô Nhĩ Tân Cương':'Yarkent', 'Tỉnh Đài Loan':'Các bộ Đông Phiên'
 };
 
 
 
 // ==========================================
-// 自定义特殊地点标记 (经纬度)
-// 在对应的府州下钻地图也会精确显示
+// Đánh dấu địa điểm đặc biệt tùy chỉnh (Kinh vĩ độ)
+// Bản đồ chi tiết cấp phủ châu tương ứng cũng sẽ hiển thị chính xác
 // ==========================================
 const customProvincePoints = {
-    '南直隶': [
-        { name: '桐城', value: [116.95, 31.05], fu: '安庆府' } // 增加 fu 属性用于第三层过滤
+    'Nam Trực Lệ': [
+        { name: 'Đồng Thành', value: [116.95, 31.05], fu: 'Phủ An Khánh' } // Tăng fu Thuộc tính dùng để lọc lớp thứ 3
     ]
 };
 
 // ==========================================
-// 数据请求缓存与状态管理
+// Bộ nhớ đệm yêu cầu dữ liệu và quản lý trạng thái
 // ==========================================
 const geoJsonCache = {};
-const geoJsonPromises = {}; // 增加 Promise 锁，防止瞬间并发请求同一文件
+const geoJsonPromises = {}; // Tăng Promise Khóa, ngăn chặn yêu cầu đồng thời cùng một tệp trong chớp mắt
 
 async function fetchGeoJSON(adcode) {
     if (geoJsonCache[adcode]) return geoJsonCache[adcode];
     
-    // 如果该请求正在进行中，直接等待其完成，不发起新请求
+    // Nếu yêu cầu đó đang được tiến hành, trực tiếp đợi nó hoàn thành, không tạo yêu cầu mới.
     if (geoJsonPromises[adcode]) return geoJsonPromises[adcode];
     
     geoJsonPromises[adcode] = (async () => {
@@ -2001,19 +2001,19 @@ async function fetchGeoJSON(adcode) {
             } else if (adcode === '710000') {
                 url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/tw.json'; 
             } else if (adcode === 'JPN_1') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/japan/JPN_1.json'; // 日本1级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/japan/JPN_1.json'; // Nhật Bản cấp 1
             } else if (adcode === 'JPN_2') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/japan/JPN_2.json'; // 日本2级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/japan/JPN_2.json'; // Nhật Bản cấp 2
             } else if (adcode === 'KOR_1') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/KOR_1.json'; // 南韩1级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/KOR_1.json'; // Nam Hàn cấp 1
             } else if (adcode === 'PRK_1') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/PRK_1.json'; // 北韩1级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/PRK_1.json'; // Bắc Hàn cấp 1
             } else if (adcode === 'KOR_2') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/KOR_2.json'; // 南韩2级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/KOR_2.json'; // Nam Hàn cấp 2
             } else if (adcode === 'PRK_2') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/PRK_2.json'; // 北韩2级
+                url = 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Korea/PRK_2.json'; // Bắc Hàn cấp 2
             } else {
-                // ================= 新增：匹配你提供的周边外国真实下载直链 =================
+                // ================= Mới: Khớp với liên kết tải xuống trực tiếp thực tế của các nước láng giềng mà bạn cung cấp =================
                 const foreignUrls = {
                     'MNG_1': 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Mongolia-Khalkha/MNG_1.json',
                     'MNG_2': 'https://cdn.jsdelivr.net/gh/fairta/map@main/map/Mongolia-Khalkha/MNG_2.json',
@@ -2038,7 +2038,7 @@ async function fetchGeoJSON(adcode) {
                 if (foreignUrls[adcode]) {
                     url = foreignUrls[adcode];
                 } else {
-                    // 国内的依然走阿里云默认路由
+                    // Trong nước vẫn đi qua route mặc định của Aliyun
                     url = `https://geo.datav.aliyun.com/areas_v3/bound/${adcode}_full.json`;
                 }
             }
@@ -2048,21 +2048,21 @@ async function fetchGeoJSON(adcode) {
             if (!resp.ok) return null;
             const data = await resp.json();
             
-            // 严格校验 features 防止脏数据导致崩溃
+            // Kiểm tra nghiêm ngặt features Ngăn dữ liệu rác gây crash
             if (!data || !Array.isArray(data.features)) return null; 
 
-            // --- 核心修复：在底层网络拦截阶段，完美切分唐古拉山飞地 ---
+            // --- Sửa lỗi cốt lõi: Ở giai đoạn đánh chặn mạng tầng dưới, phân tách hoàn hảo vùng đất tách rời Thị trấn Đường Cổ Lạp Sơn. ---
             let newFeatures = [];
             data.features.forEach(f => {
                 const name = f.properties.name || '';
-                // 拦截海西州和格尔木，运用递归精准劈开
-                if ((name.includes('海西') || name.includes('格尔木')) && f.geometry && f.geometry.type === 'MultiPolygon') {
+                // Chặn Châu Hải Tây và Golmud, sử dụng đệ quy để tách ra chính xác
+                if ((name.includes('Hải Tây') || name.includes('Cát Nhĩ Mộc')) && f.geometry && f.geometry.type === 'MultiPolygon') {
                     const mainCoords = [];
                     const enclaveCoords = [];
                     
                     f.geometry.coordinates.forEach(p => {
                         let isEnclave = false;
-                        // 只要外环任意一个点的纬度低于 35.5，必定是南部的唐古拉山镇飞地
+                        // Chỉ cần vĩ độ của bất kỳ điểm nào trên vòng ngoài thấp hơn 35.5, chắc chắn đó là vùng đất tách rời của Thị trấn Đường Cổ Lạp Sơn ở phía nam.
                         const checkLat = (arr) => {
                             if (isEnclave) return;
                             if (typeof arr[0] === 'number') {
@@ -2085,8 +2085,8 @@ async function fetchGeoJSON(adcode) {
                     }
                     if (enclaveCoords.length > 0) {
                         let enclaveF = JSON.parse(JSON.stringify(f));
-                        enclaveF.properties.name = '唐古拉山镇';
-                        delete enclaveF.properties.adcode; // 彻底剥离adcode防止死循环下钻
+                        enclaveF.properties.name = 'Thị trấn Đường Cổ Lạp Sơn';
+                        delete enclaveF.properties.adcode; // Tách rời triệt để adcode Ngăn chặn vòng lặp vô hạn khi đi sâu
                         enclaveF.geometry.type = enclaveCoords.length === 1 ? 'Polygon' : 'MultiPolygon';
                         enclaveF.geometry.coordinates = enclaveCoords.length === 1 ? enclaveCoords[0] : enclaveCoords;
                         newFeatures.push(enclaveF);
@@ -2103,7 +2103,7 @@ async function fetchGeoJSON(adcode) {
         } catch(e) { 
             return null; 
         } finally {
-            delete geoJsonPromises[adcode]; // 请求结束释放锁
+            delete geoJsonPromises[adcode]; // Yêu cầu kết thúc, giải phóng khóa
         }
     })();
     
@@ -2121,7 +2121,7 @@ let mingMapLampDragJustEnded = false;
 let mingMapChartInstance = null;
 let mingMapEchartsReady = false;
 
-// 记忆层级与视口状态
+// Ghi nhớ lớp và trạng thái viewport
 let mingMapCurrentLevel = 'nation'; 
 let mingMapCurrentProvince = null;
 let mingMapCurrentPrefecture = null;
@@ -2131,7 +2131,7 @@ let mingMapPrefectureGeoState = null;
 let mingMapSearchTarget = null; 
 
 // ==========================================
-// 主角位置状态
+// Trạng thái vị trí nhân vật chính
 // ==========================================
 let mingMapHeroLocation = null; 
 let mingMapLastRawLocation = null;
@@ -2143,11 +2143,11 @@ function getFeatureCenter(feature) {
     if (!feature || !feature.geometry) return null;
     
     try {
-        // 核心修复：重新计算全几何体的【绝对居中点(Bounding Box Center)】
-        // 避免明代区县由多个现代区县合并时，红点直接继承边缘碎片的中心（导致位置偏向右下角等）
+        // Sửa lỗi cốt lõi: Tính toán lại toàn bộ hình học của[Điểm chính giữa tuyệt đối(Bounding Box Center)]
+        // Tránh trường hợp khi các quận huyện thời Minh được hợp nhất từ nhiều quận huyện hiện đại, chấm đỏ sẽ kế thừa trực tiếp trung tâm của các mảnh vỡ rìa. (Gây ra lỗi lệch vị trí xuống góc dưới bên phải v.v.)
         let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
         
-        // 递归遍历所有多边形的边缘坐标，寻找最极端的上下左右边界
+        // Duyệt đệ quy qua ranh giới tọa độ của tất cả các đa giác, tìm kiếm các ranh giới cực đoan nhất ở trên, dưới, trái, phải.
         const findBounds = (coords) => {
             if (typeof coords[0] === 'number') {
                 if (coords[0] < minLng) minLng = coords[0];
@@ -2164,12 +2164,12 @@ function getFeatureCenter(feature) {
         findBounds(feature.geometry.coordinates);
         
         if (minLng !== 180 && maxLng !== -180) {
-            // 取边界的最中间值，保证视觉绝对居中
+            // Lấy giá trị chính giữa ranh giới để đảm bảo canh giữa tuyệt đối về mặt thị giác
             return [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
         }
     } catch(e) {}
 
-    // 如果几何体不存在或计算失败，回退到数据自带属性
+    // Nếu hình học không tồn tại hoặc tính toán thất bại, quay về thuộc tính có sẵn của dữ liệu
     if (feature.properties && feature.properties.center) return feature.properties.center;
     if (feature.properties && feature.properties.centroid) return feature.properties.centroid;
     return null;
@@ -2235,8 +2235,8 @@ function parseHeroLocation(locStr) {
 }
 
 async function mingMapSyncHeroLocation() {
-    // 【核心修复】：利用现有的 2.5 秒定时器，实时检测红点缓存状态
-    // 这样只要面板处于打开状态，红点就能跨页面实时刷新，无需重新开关地图
+    // [Sửa chữa cốt lõi]: Tận dụng bộ hẹn giờ 2.5 giây hiện có, để phát hiện trạng thái bộ đệm chấm đỏ theo thời gian thực.
+    // Như vậy chỉ cần bảng điều khiển đang mở, chấm đỏ có thể làm mới theo thời gian thực xuyên suốt các trang, không cần phải bật tắt lại bản đồ.
     if (mingMapFrameDocument) {
         const lastSeenVersion = loadMingStorage('last_seen_version', '');
         const updateRedDot = mingMapFrameDocument.getElementById('update-red-dot');
@@ -2250,12 +2250,12 @@ async function mingMapSyncHeroLocation() {
     if (!mvu?.getMvuData) return;
     try {
         const latest = mvu.getMvuData({ type: 'message', message_id: 'latest' });
-        const loc = latest?.stat_data?.['世界运转']?.['当前地点'];
+        const loc = latest?.stat_data?.['Thế giới vận hành']?.['Địa điểm hiện tại'];
         if (loc && loc !== mingMapLastRawLocation) {
             mingMapLastRawLocation = loc;
             let tempLoc = parseHeroLocation(loc);
             if (tempLoc) {
-                // 提前在后台算出最精确的县中心点，供给三层地图共用
+                // Tính toán trước tọa độ trung tâm huyện chính xác nhất ở chế độ nền để dùng chung cho bản đồ ba lớp
                 if (tempLoc.county) {
                     if (mingCountyCenterCache[tempLoc.county]) {
                         tempLoc.coord = mingCountyCenterCache[tempLoc.county];
@@ -2295,7 +2295,7 @@ window.updateMingMapHeroLocation = function(locStr) {
 
 
 // ==========================================
-// UI 构建 (Iframe内部)
+// UI Xây dựng (Iframe Nội bộ)
 // ==========================================
 function mingMapStyleText() {
     return `
@@ -2318,17 +2318,17 @@ function mingMapStyleText() {
     }
     .header-actions { pointer-events:auto; display:flex; gap: 10px; flex-shrink: 0; }
     
-    /* 统一顶部按键的高度，返回键为胶囊形 */
+    /* Đồng nhất chiều cao các nút ở trên cùng, nút quay lại có dạng hình viên nang */
     .header-btn {
         background:var(--btn-bg); border:1px solid var(--border); color:var(--text); 
         height: 36px; padding: 0 14px; border-radius: 18px; cursor:pointer; font-size:0.9rem; 
         transition:all 0.25s; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center;
     }
     .header-btn:hover { background:var(--btn-hover); color:#e8d5a3; border-color:var(--accent); }
-    /* 单独将关闭按钮强制为正圆形 */
+    /* Ép nút đóng thành hình tròn hoàn hảo */
     .header-btn.icon-btn { width: 36px; padding: 0; border-radius: 50%; font-size: 1.1rem; }
     
-    /* 日志按钮红点提示 */
+    /* Cảnh báo chấm đỏ ở nút nhật ký */
     .log-btn-wrapper { position: relative; display: inline-flex; align-items: center; }
     .red-dot {
         position: absolute; top: -2px; right: -8px; width: 8px; height: 8px;
@@ -2336,7 +2336,7 @@ function mingMapStyleText() {
         box-shadow: 0 0 6px rgba(231, 76, 60, 0.8);
     }
 
-    /* 面包屑导航及移动端防折行适配 */
+    /* Điều hướng breadcrumb và tối ưu chống xuống dòng trên thiết bị di động */
     #breadcrumb-wrapper {
         display:flex; align-items:center; gap:8px;
         background:rgba(17, 24, 39, 0.85); border:1px solid var(--border);
@@ -2351,7 +2351,7 @@ function mingMapStyleText() {
     .crumb.current { color:#e8d5a3; font-weight:bold; cursor:default; }
     .separator { flex-shrink: 0; }
 
-    /* 搜索框与下拉列表组合 */
+    /* Kết hợp hộp tìm kiếm và danh sách thả xuống */
     #top-bar {
         position:absolute; top:66px; left:24px; right:24px; z-index:100;
         display:flex; justify-content:flex-end; align-items:flex-start;
@@ -2359,7 +2359,7 @@ function mingMapStyleText() {
     }
     #search-wrapper { position: relative; margin-left: auto; pointer-events: auto; }
     
-    /* 搜索框高度与关闭按钮一致（36px），折叠时宽度也是36px呈正圆 */
+    /* Chiều cao hộp tìm kiếm bằng với nút đóng（36px），Chiều rộng khi thu gọn cũng là 36px Hình tròn đều */
     #search-box {
         display:flex; align-items:center; background:rgba(17, 24, 39, 0.85); 
         border:1px solid var(--border); border-radius: 18px; height: 36px; padding: 0 6px;
@@ -2445,7 +2445,7 @@ function mingMapStyleText() {
     #legend-list li:hover { background: rgba(212, 175, 55, 0.15); }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.4); }
 
-    /* 更新日志弹窗样式 */
+    /* Cập nhật giao diện cửa sổ nhật ký */
     #update-modal {
         display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.6); z-index: 300; justify-content: center; align-items: center;
@@ -2461,14 +2461,14 @@ function mingMapStyleText() {
     .update-content::-webkit-scrollbar { width: 4px; }
     .update-content::-webkit-scrollbar-thumb { background: #3a5070; border-radius: 2px; }
 
-    /* 移动端完美对齐适配 */
+    /* Tương thích căn chỉnh hoàn hảo trên di động */
     @media (max-width: 768px) {
         #header { padding: 10px 12px; }
         #breadcrumb-wrapper { padding: 6px 12px; font-size: 0.8rem; max-width: calc(100vw - 130px); }
         #breadcrumb { gap: 4px; }
         .header-actions { gap: 8px; }
         
-        /* 手机端统一下降至 34px 圆形 */
+        /* Giao diện di động đồng loạt hạ xuống mức 34px Hình tròn */
         .header-btn { height: 34px; padding: 0 12px; font-size: 0.85rem; border-radius: 17px; }
         .header-btn.icon-btn { width: 34px; font-size: 1rem; border-radius: 50%; }
         
@@ -2495,73 +2495,73 @@ function renderMingMapPanelHTML() {
         <div id="header">
             <div id="breadcrumb-wrapper">
                 <span class="log-btn-wrapper" style="margin-right:4px;">
-                    <span class="crumb" data-action="show-update" title="查看更新日志" style="cursor:pointer; color:var(--highlight);">日志</span>
+                    <span class="crumb" data-action="show-update" title="Xem nhật ký cập nhật" style="cursor:pointer; color:var(--highlight);">Nhật ký</span>
                     <span class="red-dot" id="update-red-dot"></span>
                 </span>
                 <span class="separator" style="color:var(--text-secondary); margin-right:4px;">|</span>
-                <div id="breadcrumb"><span class="crumb current" data-action="back-nation">🌏 天下</span></div>
+                <div id="breadcrumb"><span class="crumb current" data-action="back-nation">🌏 Thiên hạ</span></div>
             </div>
             <div class="header-actions">
-                <button class="header-btn" id="back-btn" data-action="back-nation" style="display:none;" title="返回上层">← 返回</button>
-                <!-- 这里增加了 icon-btn 强制正圆形 -->
-                <button class="header-btn icon-btn" data-action="close" title="收起地图">✖</button>
+                <button class="header-btn" id="back-btn" data-action="back-nation" style="display:none;" title="Trở về cấp trên">← Quay lại</button>
+                <!-- Ở đây đã thêm icon-btn Bắt buộc hình tròn hoàn hảo -->
+                <button class="header-btn icon-btn" data-action="close" title="Thu gọn bản đồ">✖</button>
             </div>
         </div>
         <div id="top-bar">
             <div id="search-wrapper">
                 <div id="search-box">
-                    <input type="text" id="map-search-input" placeholder="搜省份/府州/区县..." autocomplete="off">
-                    <button id="map-search-btn" data-action="search" data-mode="search" title="搜索">🔍</button>
+                    <input type="text" id="map-search-input" placeholder="Tìm tỉnh/Phủ Châu/Quận Huyện..." autocomplete="off">
+                    <button id="map-search-btn" data-action="search" data-mode="search" title="Tìm kiếm">🔍</button>
                 </div>
                 <ul id="search-suggestions"></ul>
             </div>
         </div>
         
         <div id="map-controls">
-            <div class="ctrl-btn" data-action="zoom-in" title="放大">＋</div>
-            <div class="ctrl-btn" data-action="reset" title="重置视野">↺</div>
-            <div class="ctrl-btn" data-action="zoom-out" title="缩小">－</div>
-            <div class="ctrl-btn locate-btn" data-action="locate-hero" title="定位主角">🎯</div>
-            <div class="ctrl-btn" id="mode-toggle-btn" data-action="toggle-mode" title="切换模式(当前:单层)" style="margin-top:10px; font-size:1.1rem; color:#8899aa;">🗺️</div>
+            <div class="ctrl-btn" data-action="zoom-in" title="Phóng to">＋</div>
+            <div class="ctrl-btn" data-action="reset" title="Đặt lại tầm nhìn">↺</div>
+            <div class="ctrl-btn" data-action="zoom-out" title="Thu nhỏ">－</div>
+            <div class="ctrl-btn locate-btn" data-action="locate-hero" title="Định vị nhân vật chính">🎯</div>
+            <div class="ctrl-btn" id="mode-toggle-btn" data-action="toggle-mode" title="Chuyển đổi chế độ(Hiện tại:Lớp đơn)" style="margin-top:10px; font-size:1.1rem; color:#8899aa;">🗺️</div>
         </div>
         
         <div id="map-container"><div id="map-chart"></div></div>
         <div id="legend-panel" class="collapsed">
             <div id="legend-header" data-action="toggle-legend">
-                <h4>📜 图 例</h4>
+                <h4>📜 Chú giải</h4>
                 <span id="legend-toggle-icon">▲</span>
             </div>
             <div id="legend-list-wrapper"><ul id="legend-list"></ul></div>
         </div>
         
-        <!-- 更新日志弹窗 -->
+        <!-- Cửa sổ nhật ký cập nhật -->
         <div id="update-modal">
             <div class="update-panel">
                 <button class="header-btn icon-btn" data-action="close-update" style="position:absolute; top:12px; right:12px;">✖</button>
-                <h3>📢 更新日志</h3>
+                <h3>📢 Nhật ký cập nhật</h3>
                 <div class="update-content">
                     <!-- ================================== -->
-                    <!-- 👇由你在此处修改更新日志内容👇 -->
-                    <p><b>[7.24更新] ：</b></p>
-                    <p>1、添加全景地图，右侧按钮切换，首次使用会有一定的加载时间，双击区域可返回</p>
-                    <p>2、新增国外地图</p>
-                    <p>3、彩石佬的新地图暂时没适配<img src="https://cdn.jsdelivr.net/gh/fairta/pic@main/img/2026/07/20260724203844218-39c93f.webp" alt="" width="20" height="20"></p>
+                    <!-- 👇Bạn có thể sửa nội dung nhật ký cập nhật tại đây👇 -->
+                    <p><b>[7.24 Cập nhật] ：</b></p>
+                    <p>1、Thêm bản đồ toàn cảnh, chuyển đổi bằng nút bên phải, lần sử dụng đầu tiên sẽ mất một chút thời gian tải, nhấp đúp vào khu vực để quay lại.</p>
+                    <p>2、Thêm bản đồ nước ngoài</p>
+                    <p>3、Bản đồ mới của lão Thái Thạch tạm thời chưa tương thích<img src="https://cdn.jsdelivr.net/gh/fairta/pic@main/img/2026/07/20260724203844218-39c93f.webp" alt="" width="20" height="20"></p>
 
-                    <p><b>[7.22更新] ：</b></p>
-                    <p>1、云端在线地图，后续无需重复下载更新</p>
-                    <p>2、添加日本、朝鲜地图，其中朝鲜地图因与现在误差较大，仅供参考</p>
+                    <p><b>[7.22 Cập nhật] ：</b></p>
+                    <p>1、Bản đồ trực tuyến trên đám mây, sau này không cần tải lại để cập nhật</p>
+                    <p>2、Thêm bản đồ Nhật Bản, Triều Tiên, trong đó bản đồ Triều Tiên chỉ mang tính tham khảo do có sai lệch lớn so với hiện tại.</p>
 
-                    <p><b>[7.20更新] ：</b></p>
-                    <p>1、优化手机端使用</p>
-                    <p>2、添加个别地区第二层、第三层数据</p>
-                    <p>3、修复城市名称和已知bug</p>
-                    <p>4、优化搜索功能</p>  
+                    <p><b>[7.20 Cập nhật] ：</b></p>
+                    <p>1、Tối ưu hóa việc sử dụng trên thiết bị di động</p>
+                    <p>2、Thêm dữ liệu lớp thứ hai, lớp thứ ba của một số khu vực</p>
+                    <p>3、Sửa tên thành phố và các lỗi đã biết bug</p>
+                    <p>4、Tối ưu hóa chức năng tìm kiếm</p>  
 
-                    <p><b>[7.18更新] ：</b></p>
-                    <p>1、添加主角位置</p>
-                    <p>2、优化搜索功能，图例添加折叠</p>
-                    <p>3、去除重复城市名字</p>
-                    <p>4、三级地图，一层省份，二层州府卫，三层县 地图仅用于参考，用的现代地图修改，与实际明末地图有出入。</p>
+                    <p><b>[7.18 Cập nhật] ：</b></p>
+                    <p>1、Thêm vị trí nhân vật chính</p>
+                    <p>2、Tối ưu chức năng tìm kiếm, thêm tính năng gập chú giải</p>
+                    <p>3、Xóa tên thành phố bị trùng lặp</p>
+                    <p>4、Bản đồ 3 cấp: cấp 1 tỉnh, cấp 2 châu phủ vệ, cấp 3 huyện. Bản đồ chỉ mang tính chất tham khảo, được chỉnh sửa từ bản đồ hiện đại nên sẽ có sai lệch so với bản đồ cuối thời Minh thực tế.。</p>
 
                     <!-- ================================== -->
                 </div>
@@ -2582,70 +2582,70 @@ function writeMingMapFrameDocument() {
 
 
 // ==========================================
-// 【重名冲突修复补丁】：优先处理发生覆盖的市辖区
+// [Bản vá lỗi xung đột trùng tên]: Ưu tiên xử lý các khu vực nội thành bị chồng lấp
 // ==========================================
 const preciseCountyMap = {
-    '石家庄市': { '长安区': '真定县', '新华区': '真定县', '桥西区': '真定县' },
-    '济南市': { '市中区': '历城县' }, '枣庄市': { '市中区': '峄县', '薛城区': '滕县' },
-    '济宁市': { '市中区': '济宁州' }, '内江市': { '市中区': '内江县' }, '乐山市': { '市中区': '乐山县' },
-    '天津市': { '和平区': '静海县' }, '沈阳市': { '和平区': '沈阳中卫', '铁西区': '沈阳中卫' },
-    '北京市': { '朝阳区': '大兴县' }, '长春市': { '朝阳区': '宽城西营' },
-    '鞍山市': { '铁西区': '辽阳卫', '铁东区': '辽阳卫' }, '四平市': { '铁西区': '叶赫西城', '铁东区': '叶赫东城' },
-    '呼和浩特市': { '新城区': '归化北营' }, '西安市': { '新城区': '长安县', '长安区': '长安县' },
-    '兰州市': { '城关区': '兰州' }, '拉萨市': { '城关区': '拉萨' },
-    '南京市': { '鼓楼区': '上元县' }, '徐州市': { '鼓楼区': '徐州' },
-    '开封市': { '鼓楼区': '祥符县' }, '福州市': { '鼓楼区': '闽县' },
-    '广州市': { '白云区': '番禺县', '南沙区': '东莞县' }, '贵阳市': { '白云区': '新贵县' },
-    '三沙市': { '南沙区': '万州', '西沙区': '万州' }, '大连市': { '中山区': '金州卫' },
-    '深圳市': { '南山区': '新安县', '龙华区': '新安县' }, '鹤岗市': { '南山区': '鹤岗南营', '向阳区': '向阳堡' },
-    '佳木斯市': { '向阳区': '合江中营', '郊区': '佳木斯堡' }, '海口市': { '龙华区': '琼山县' },
-    '阳泉市': { '城区': '平定州', '矿区': '平定州', '郊区': '平定州' },
-    '晋城市': { '城区': '泽州' }, '汕尾市': { '城区': '海丰县' }, '铜陵市': { '郊区': '铜陵县' },
-    '连云港市': { '海州区': '海州', '连云区': '海州' }, '阜新市': { '海州区': '广宁后屯卫' },
-    '上海市': { '宝山区': '嘉定县', '普陀区': '上海县' }, '双鸭山市': { '宝山区': '宝山堡' },
-    '舟山市': { '普陀区': '定海县' }, '辽源市': { '西安区': '哈达东营' },
-    '牡丹江市': { '西安区': '宁古塔南营', '东安区': '宁古塔西营' },
-    '沧州市': { '新华区': '沧州' }, '平顶山市': { '新华区': '汝州' }, '安阳市': { '文峰区': '安阳县' },
-    '吉林市': { '龙潭区': '龙潭山城' }, '齐齐哈尔市': { '建华区': '者陈卫' }, '七台河市': { '新兴区': '新兴堡' },
-    '铁岭市': { '清河区': '铁岭卫' }, '张家口市': { '桥东区': '宣府镇', '桥西区': '宣府镇' },
-    '遂宁市': { '船山区': '遂宁县', '安居区': '遂宁县' }, '白山市': { '江源区': '长白山部' },
-    '许昌市': { '建安区': '许州' }, '南宁市': { '青秀区': '宣化县' }, '百色市': { '右江区': '田州' },
-    '河源市': { '源城区': '河源县' }, '马鞍山市': { '雨山区': '当涂县' },
-    '柳州市': { '城中区': '马平县' }, '西宁市': { '城东区': '西宁卫', '城中区': '西宁卫', '城西区': '西宁卫', '城北区': '西宁卫' }
+    'Thành phố Thạch Gia Trang': { 'Quận Trường An': 'Huyện Chân Định', 'Quận Tân Hoa': 'Huyện Chân Định', 'Quận Kiều Tây': 'Huyện Chân Định' },
+    'Thành phố Tế Nam': { 'Quận Thị Trung': 'Huyện Lịch Thành' }, 'Thành phố Tảo Trang': { 'Quận Thị Trung': 'Huyện Dịch', 'Quận Tiết Thành': 'Huyện Đằng' },
+    'Thành phố Tế Ninh': { 'Quận Thị Trung': 'Châu Tế Ninh' }, 'Thành phố Nội Giang': { 'Quận Thị Trung': 'Huyện Nội Giang' }, 'Thành phố Lạc Sơn': { 'Quận Thị Trung': 'Huyện Lạc Sơn' },
+    'Thành phố Thiên Tân': { 'Quận Hòa Bình': 'Huyện Tĩnh Hải' }, 'Thành phố Thẩm Dương': { 'Quận Hòa Bình': 'Thẩm Dương Trung Vệ', 'Quận Thiết Tây': 'Thẩm Dương Trung Vệ' },
+    'Thành phố Bắc Kinh': { 'Quận Triều Dương': 'Huyện Đại Hưng' }, 'Thành phố Trường Xuân': { 'Quận Triều Dương': 'Khoan Thành Tây Doanh' },
+    'Thành phố An Sơn': { 'Quận Thiết Tây': 'Liêu Dương Vệ', 'Quận Thiết Đông': 'Liêu Dương Vệ' }, 'Thành phố Tứ Bình': { 'Quận Thiết Tây': 'Diệp Hách Tây Thành', 'Quận Thiết Đông': 'Diệp Hách Đông Thành' },
+    'Thành phố Hô Hòa Hạo Đặc': { 'Quận Tân Thành': 'Quy Hóa Bắc Doanh' }, 'Thành phố Tây An': { 'Quận Tân Thành': 'Huyện Trường An', 'Quận Trường An': 'Huyện Trường An' },
+    'Thành phố Lan Châu': { 'Quận Thành Quan': 'Lan Châu' }, 'Thành phố Lhasa (Lạp Tát)': { 'Quận Thành Quan': 'Lạp Tát' },
+    'Thành phố Nam Kinh': { 'Quận Cổ Lâu': 'Huyện Thượng Nguyên' }, 'Thành phố Từ Châu': { 'Quận Cổ Lâu': 'Từ Châu' },
+    'Thành phố Khai Phong': { 'Quận Cổ Lâu': 'Huyện Tường Phù' }, 'Thành phố Phúc Châu': { 'Quận Cổ Lâu': 'Huyện Mân' },
+    'Thành phố Quảng Châu': { 'Quận Bạch Vân': 'Huyện Phiên Ngung', 'Quận Nam Sa': 'Huyện Đông Quản' }, 'Thành phố Quý Dương': { 'Quận Bạch Vân': 'Huyện Tân Quý' },
+    'Thành phố Tam Sa': { 'Quận Nam Sa': 'Vạn Châu', 'Quận Tây Sa': 'Vạn Châu' }, 'Thành phố Đại Liên': { 'Quận Trung Sơn': 'Kim Châu Vệ' },
+    'Thành phố Thâm Quyến': { 'Quận Nam Sơn': 'Huyện Tân An', 'Quận Long Hoa': 'Huyện Tân An' }, 'Thành phố Hạc Cương': { 'Quận Nam Sơn': 'Hạc Cương Nam Doanh', 'Quận Hướng Dương': 'Hướng Dương Bảo' },
+    'Thành phố Giai Mộc Tư': { 'Quận Hướng Dương': 'Hợp Giang Trung Doanh', 'Quận Ngoại ô': 'Giai Mộc Tư Bảo' }, 'Thành phố Hải Khẩu': { 'Quận Long Hoa': 'Huyện Quỳnh Sơn' },
+    'Thành phố Dương Tuyền': { 'Quận Thành': 'Châu Bình Định', 'Khu mỏ': 'Châu Bình Định', 'Quận Ngoại ô': 'Châu Bình Định' },
+    'Thành phố Tấn Thành': { 'Quận Thành': 'Trạch Châu' }, 'Thành phố Sán Vĩ': { 'Quận Thành': 'Huyện Hải Phong' }, 'Thành phố Đồng Lăng': { 'Quận Ngoại ô': 'Huyện Đồng Lăng' },
+    'Thành phố Liên Vân Cảng': { 'Quận Hải Châu': 'Hải Châu', 'Quận Liên Vân': 'Hải Châu' }, 'Thành phố Phụ Tân': { 'Quận Hải Châu': 'Quảng Ninh hậu đồn vệ' },
+    'Thành phố Thượng Hải': { 'Quận Bảo Sơn': 'Huyện Gia Định', 'Quận Phổ Đà': 'Huyện Thượng Hải' }, 'Thành phố Song Áp Sơn': { 'Quận Bảo Sơn': 'Bảo Bảo Sơn' },
+    'Thành phố Chu Sơn': { 'Quận Phổ Đà': 'Huyện Định Hải' }, 'Thành phố Liêu Nguyên': { 'Quận Tây An': 'Cáp Đạt Đông Doanh' },
+    'Thành phố Mẫu Đơn Giang': { 'Quận Tây An': 'Ninh Cổ Tháp nam doanh', 'Quận Đông An': 'Ninh Cổ Tháp tây doanh' },
+    'Thành phố Thương Châu': { 'Quận Tân Hoa': 'Thương Châu' }, 'Thành phố Bình Đỉnh Sơn': { 'Quận Tân Hoa': 'Nhữ Châu' }, 'Thành phố An Dương': { 'Quận Văn Phong': 'Huyện An Dương' },
+    'Thành phố Cát Lâm': { 'Quận Long Đàm': 'Long Đàm Yamashiro' }, 'Thành phố Tề Tề Cáp Nhĩ': { 'Quận Kiến Hoa': 'Vệ Giả Trần' }, 'Thành phố Thất Đài Hà': { 'Quận Tân Hưng': 'Bảo Tân Hưng' },
+    'Thành phố Thiết Lĩnh': { 'Quận Thanh Hà': 'Vệ Thiết Lĩnh' }, 'Thành phố Trương Gia Khẩu': { 'Quận Kiều Đông': 'Trấn Tuyên Phủ', 'Quận Kiều Tây': 'Trấn Tuyên Phủ' },
+    'Thành phố Toại Ninh': { 'Quận Thuyền Sơn': 'Huyện Toại Ninh', 'Quận An Cư': 'Huyện Toại Ninh' }, 'Thành phố Bạch Sơn': { 'Quận Giang Nguyên': 'Trường Bạch Sơn Bộ' },
+    'Thành phố Hứa Xương': { 'Quận Kiến An': 'Hứa Châu' }, 'Thành phố Nam Ninh': { 'Quận Thanh Tú': 'Huyện Tuyên Hóa' }, 'Thành phố Bách Sắc': { 'Quận Hữu Giang': 'Điền Châu' },
+    'Thành phố Hà Nguyên': { 'Quận Nguyên Thành': 'Huyện Hà Nguyên' }, 'Thành phố Mã An Sơn': { 'Quận Vũ Sơn': 'Huyện Đương Đồ' },
+    'Thành phố Liễu Châu': { 'Quận Thành Trung': 'Huyện Mã Bình' }, 'Thành phố Tây Ninh': { 'Quận Thành Đông': 'Vệ Tây Ninh', 'Quận Thành Trung': 'Vệ Tây Ninh', 'Quận Thành Tây': 'Vệ Tây Ninh', 'Quận Thành Bắc': 'Vệ Tây Ninh' }
 };
 
 
 
 
 // ==========================================
-// 搜索逻辑 (含三级下钻自动推导索引)
+// Logic tìm kiếm (Bao gồm chỉ mục suy luận tự động khi đi sâu ba cấp)
 // ==========================================
 let mingCountySearchIndex = null;
 
-// 带有市级前缀的安全查找函数，并增加防串台终极校验
+// Hàm tìm kiếm an toàn có tiền tố cấp thành phố, đồng thời thêm xác minh cuối cùng để chống lỗi sai lệch dữ liệu
 function getMingCountyName(modernCity, modernCounty, currentMingProv, currentMingFu) {
-    // 1. 优先使用精细切分映射（解决重名区县，如多个城市都有“长安区”、“新华区”）
+    // 1. Ưu tiên sử dụng mapping phân chia chi tiết (Giải quyết các quận huyện trùng tên, chẳng hạn như nhiều thành phố có "Quận Trường An",“Quận Tân Hoa”)
     if (preciseCountyMap[modernCity] && preciseCountyMap[modernCity][modernCounty]) {
         return preciseCountyMap[modernCity][modernCounty];
     }
     
-    // 2. 查全局普通映射字典
+    // 2. Tra cứu từ điển mapping chung toàn cục
     let mappedName = modernCountyToMingCounty[modernCounty];
     if (mappedName) {
-        // 废除原本可能导致误伤的防串台校验，只要字典里配了，就直接采用，确保是明代地名
+        // Loại bỏ kiểm tra chống chéo đài vốn có thể gây lỗi nhầm, chỉ cần có trong từ điển là dùng ngay, đảm bảo là địa danh thời Minh.
         return mappedName; 
     }
     
-    // 3. 【终极防泄露兜底】
-    // 对于任何未在字典中记录的现代区县（或新划分的区域），
-    // 绝对不返回其原本的现代名字（如xx区、深圳市等），而是将其强行降级并入当前的府/州直辖区域。
-    // 这将 100% 杜绝现代城市词汇出现在地图上。
+    // 3. [Biện pháp dự phòng chống rò rỉ cuối cùng]
+    // Đối với bất kỳ quận huyện hiện đại nào chưa được ghi trong từ điển (Hoặc khu vực mới được phân chia),
+    // Tuyệt đối không trả về tên hiện đại gốc (Như xx khu, Thành phố Thâm Quyến, v.v.), Mà là buộc hạ cấp và gộp vào phủ hiện tại/Khu vực trực thuộc châu.
+    // Điều này sẽ ngăn chặn 100% từ vựng thành phố hiện đại xuất hiện trên bản đồ.
     return currentMingFu; 
 }
 
 
 
-// 辅助函数：根据府名反查省名
+// Hàm phụ trợ: Tra cứu ngược tên tỉnh từ tên phủ
 function getMingProvOfFu(fuName) {
     for (let p in mingFuZhouCenters) {
         if (mingFuZhouCenters[p].some(f => f.name === fuName)) return p;
@@ -2653,37 +2653,37 @@ function getMingProvOfFu(fuName) {
     return null;
 }
 
-// 动态构建第三层（区县）反向索引（强化精准版 + 日韩琉球中文搜索支持）
+// Xây dựng động chỉ mục ngược của lớp thứ ba (quận huyện) (Phiên bản nâng cao độ chuẩn xác + Hỗ trợ tìm kiếm tiếng Nhật, Hàn, Lưu Cầu, Trung)
 function buildCountyIndex() {
     if (mingCountySearchIndex) return;
     mingCountySearchIndex = {};
     
-    // 关键：在构建索引前，剔除原字典中容易导致乱飞串台的重名市辖区键
-    const duplicateKeys = ['市中区','和平区','朝阳区','铁西区','铁东区','新城区','城关区','鼓楼区','白云区','南山区','南沙区','龙华区','城区','矿区','郊区','海州区','宝山区','普陀区','西安区','向阳区','新华区','桥东区','桥西区','文峰区','建华区','新兴区','清河区','龙潭区','长安区','东安区','江源区','连云区','建安区','船山区','安居区','源城区','右江区','青秀区','雨山区', '城中区', '城东区', '城西区', '城北区'];
+    // Quan trọng: Trước khi xây dựng chỉ mục, loại bỏ các khóa cấp quận huyện trùng tên trong từ điển gốc dễ dẫn đến bay loạn và chéo đài.
+    const duplicateKeys = ['Quận Thị Trung','Quận Hòa Bình','Quận Triều Dương','Quận Thiết Tây','Quận Thiết Đông','Quận Tân Thành','Quận Thành Quan','Quận Cổ Lâu','Quận Bạch Vân','Quận Nam Sơn','Quận Nam Sa','Quận Long Hoa','Quận Thành','Khu mỏ','Quận Ngoại ô','Quận Hải Châu','Quận Bảo Sơn','Quận Phổ Đà','Quận Tây An','Quận Hướng Dương','Quận Tân Hoa','Quận Kiều Đông','Quận Kiều Tây','Quận Văn Phong','Quận Kiến Hoa','Quận Tân Hưng','Quận Thanh Hà','Quận Long Đàm','Quận Trường An','Quận Đông An','Quận Giang Nguyên','Quận Liên Vân','Quận Kiến An','Quận Thuyền Sơn','Quận An Cư','Quận Nguyên Thành','Quận Hữu Giang','Quận Thanh Tú','Quận Vũ Sơn', 'Quận Thành Trung', 'Quận Thành Đông', 'Quận Thành Tây', 'Quận Thành Bắc'];
     duplicateKeys.forEach(k => delete modernCountyToMingCounty[k]);
     
     let currentProv = null;
     let currentFu = null;
 
     const anchorMap = {
-        '东城区': { prov: '北直隶', fu: '顺天府' }, '和平区': { prov: '北直隶', fu: '河间府' },
-        '北辰区': { prov: '北直隶', fu: '顺天府' }, '滨海新区': { prov: '北直隶', fu: '河间府' }, 
-        '宁河区': { prov: '北直隶', fu: '顺天府' }, '静海区': { prov: '北直隶', fu: '河间府' }, 
-        '蓟州区': { prov: '北直隶', fu: '顺天府' },
-        '石家庄市': { prov: '北直隶', fu: '真定府' }, '太原市': { prov: '山西', fu: '太原府' },
-        '沈阳市': { prov: '辽东', fu: '沈阳中卫' }, '黄浦区': { prov: '南直隶', fu: '松江府' },
-        '南京市': { prov: '南直隶', fu: '应天府' }, '杭州市': { prov: '浙江', fu: '杭州府' },
-        '合肥市': { prov: '南直隶', fu: '庐州府' }, '福州市': { prov: '福建', fu: '福州府' },
-        '南昌市': { prov: '江西', fu: '南昌府' }, '济南市': { prov: '山东', fu: '济南府' },
-        '郑州市': { prov: '河南', fu: '开封府' }, '武汉市': { prov: '湖广', fu: '武昌府' },
-        '长沙市': { prov: '湖广', fu: '长沙府' }, '广州市': { prov: '广东', fu: '广州府' },
-        '南宁市': { prov: '广西', fu: '南宁府' }, '海口市': { prov: '广东', fu: '琼州府' },
-        '渝中区': { prov: '四川', fu: '重庆府' }, '成都市': { prov: '四川', fu: '成都府' },
-        '贵阳市': { prov: '贵州', fu: '贵阳府' }, '昆明市': { prov: '云南', fu: '云南府' },
-        '拉萨市': { prov: '乌思藏', fu: '乌思藏' }, '西安市': { prov: '陕西', fu: '西安府' },
-        '兰州市': { prov: '陕西', fu: '临洮府' }, '西宁市': { prov: '陕西', fu: '西宁卫' },
-        '银川市': { prov: '宁夏', fu: '宁夏卫' }, '中西区': { prov: '广东', fu: '广州府' },
-        '花地玛堂区': { prov: '广东', fu: '广州府' }
+        'Quận Đông Thành': { prov: 'Bắc Trực Lệ', fu: 'Thuận Thiên Phủ' }, 'Quận Hòa Bình': { prov: 'Bắc Trực Lệ', fu: 'Hà Gian Phủ' },
+        'Quận Bắc Thần': { prov: 'Bắc Trực Lệ', fu: 'Thuận Thiên Phủ' }, 'Khu mới Tân Hải': { prov: 'Bắc Trực Lệ', fu: 'Hà Gian Phủ' }, 
+        'Quận Ninh Hà': { prov: 'Bắc Trực Lệ', fu: 'Thuận Thiên Phủ' }, 'Quận Tĩnh Hải': { prov: 'Bắc Trực Lệ', fu: 'Hà Gian Phủ' }, 
+        'Quận Kế Châu': { prov: 'Bắc Trực Lệ', fu: 'Thuận Thiên Phủ' },
+        'Thành phố Thạch Gia Trang': { prov: 'Bắc Trực Lệ', fu: 'Chân Định Phủ' }, 'Thành phố Thái Nguyên': { prov: 'Sơn Tây', fu: 'Phủ Thái Nguyên' },
+        'Thành phố Thẩm Dương': { prov: 'Liêu Đông', fu: 'Thẩm Dương Trung Vệ' }, 'Quận Hoàng Phố': { prov: 'Nam Trực Lệ', fu: 'Phủ Tùng Giang' },
+        'Thành phố Nam Kinh': { prov: 'Nam Trực Lệ', fu: 'Phủ Ứng Thiên' }, 'Thành phố Hàng Châu': { prov: 'Chiết Giang', fu: 'Phủ Hàng Châu' },
+        'Thành phố Hợp Phì': { prov: 'Nam Trực Lệ', fu: 'Phủ Lư Châu' }, 'Thành phố Phúc Châu': { prov: 'Phúc Kiến', fu: 'Phủ Phúc Châu' },
+        'Thành phố Nam Xương': { prov: 'Giang Tây', fu: 'Phủ Nam Xương' }, 'Thành phố Tế Nam': { prov: 'Sơn Đông', fu: 'Phủ Tế Nam' },
+        'Thành phố Trịnh Châu': { prov: 'Hà Nam', fu: 'Phủ Khai Phong' }, 'Thành phố Vũ Hán': { prov: 'Hồ Quảng', fu: 'Phủ Vũ Xương' },
+        'Thành phố Trường Sa': { prov: 'Hồ Quảng', fu: 'Phủ Trường Sa' }, 'Thành phố Quảng Châu': { prov: 'Quảng Đông', fu: 'Phủ Quảng Châu' },
+        'Thành phố Nam Ninh': { prov: 'Quảng Tây', fu: 'Phủ Nam Ninh' }, 'Thành phố Hải Khẩu': { prov: 'Quảng Đông', fu: 'Phủ Quỳnh Châu' },
+        'Quận Du Trung': { prov: 'Tứ Xuyên', fu: 'Phủ Trùng Khánh' }, 'Thành phố Thành Đô': { prov: 'Tứ Xuyên', fu: 'Phủ Thành Đô' },
+        'Thành phố Quý Dương': { prov: 'Quý Châu', fu: 'Phủ Quý Dương' }, 'Thành phố Côn Minh': { prov: 'Vân Nam', fu: 'Phủ Vân Nam' },
+        'Thành phố Lhasa (Lạp Tát)': { prov: 'Ô Tư Tạng', fu: 'Ô Tư Tạng' }, 'Thành phố Tây An': { prov: 'Thiểm Tây', fu: 'Phủ Tây An' },
+        'Thành phố Lan Châu': { prov: 'Thiểm Tây', fu: 'Phủ Lâm Thao' }, 'Thành phố Tây Ninh': { prov: 'Thiểm Tây', fu: 'Tây Ninh Vệ' },
+        'Thành phố Ngân Xuyên': { prov: 'Ninh Hạ', fu: 'Ninh Hạ Vệ' }, 'Quận Trung Tây': { prov: 'Quảng Đông', fu: 'Phủ Quảng Châu' },
+        'Phường Hoa Địa Mã': { prov: 'Quảng Đông', fu: 'Phủ Quảng Châu' }
     };
 
     for (let modernName in modernCountyToMingCounty) {
@@ -2716,7 +2716,7 @@ function buildCountyIndex() {
         }
     }
     
-    // 补偿机制：将剔除的精确市辖区直接补偿回搜索索引中，确保其完美无漏
+    // Cơ chế bù đắp: Trực tiếp bù đắp lại các quận huyện chính xác đã loại bỏ vào chỉ mục tìm kiếm, đảm bảo sự hoàn hảo không bị thiếu sót.
     for (let city in preciseCountyMap) {
         let fuName = modernCityToMingFu[city] || modernProvinceDefaultFu[modernToMingProvince[city]];
         for (let modernName in preciseCountyMap[city]) {
@@ -2739,90 +2739,90 @@ function buildCountyIndex() {
     }
 
     // ==============================================================
-    // 【核心新增：日、韩、琉球 历史地名与现代中文搜索强力注入】
-    // 解决外国版图不能通过中文搜索定位的问题
+    // [Bổ sung cốt lõi: Mạnh mẽ thêm vào tìm kiếm tiếng Trung hiện đại các địa danh lịch sử Nhật Bản, Hàn Quốc, Lưu Cầu.]
+    // Khắc phục sự cố không thể định vị bản đồ nước ngoài qua tìm kiếm bằng tiếng Trung
     // ==============================================================
     const eastAsiaSearchData = [
-        // 日本历史令制国
-        { prov: '日本', fu: '畿内', counties: ['山城', '大和', '摄津', '河内', '和泉'] },
-        { prov: '日本', fu: '东海道', counties: ['伊贺', '伊势', '志摩', '尾张', '三河', '远江', '骏河', '伊豆', '甲斐', '相模', '武藏', '安房', '上总', '下总', '常陆'] },
-        { prov: '日本', fu: '东山道', counties: ['近江', '美浓', '飞驒', '信浓', '上野', '下野', '陆奥', '出羽'] },
-        { prov: '日本', fu: '北陆道', counties: ['若狭', '越前', '加贺', '能登', '越中', '越后', '佐渡'] },
-        { prov: '日本', fu: '山阴道', counties: ['丹波', '丹后', '但马', '因幡', '伯耆', '出云', '石见', '隐岐'] },
-        { prov: '日本', fu: '山阳道', counties: ['播磨', '美作', '备前', '备中', '备后', '安艺', '周防', '长门'] },
-        { prov: '日本', fu: '南海道', counties: ['纪伊', '淡路', '阿波', '赞岐', '伊予', '土佐'] },
-        { prov: '日本', fu: '西海道', counties: ['筑前', '筑后', '丰前', '丰后', '肥前', '肥后', '日向', '大隅', '萨摩', '壹岐', '对马'] },
-        { prov: '日本', fu: '虾夷', counties: ['虾夷'] },
+        // Lệnh chế quốc trong lịch sử Nhật Bản
+        { prov: 'Nhật Bản', fu: 'Kinai', counties: ['Yamashiro', 'Yamato', 'Settsu', 'Hà Nội', 'Izumi'] },
+        { prov: 'Nhật Bản', fu: 'Tokaido', counties: ['Iga', 'Ise', 'Shima', 'Owari', 'Mikawa', 'Totomi', 'Suruga', 'Izu', 'Kai', 'Sagami', 'Musashi', 'Awa', 'Kazusa', 'Shimosa', 'Hitachi'] },
+        { prov: 'Nhật Bản', fu: 'Tosando', counties: ['Omi', 'Mino', 'Hida', 'Shinano', 'Kozuke', 'Shimotsuke', 'Mutsu', 'Dewa'] },
+        { prov: 'Nhật Bản', fu: 'Hokurikudo', counties: ['Wakasa', 'Echizen', 'Kaga', 'Noto', 'Etchu', 'Echigo', 'Sado'] },
+        { prov: 'Nhật Bản', fu: 'Sanindo', counties: ['Tamba', 'Tango', 'Tajima', 'Inaba', 'Hoki', 'Izumo', 'Iwami', 'Oki'] },
+        { prov: 'Nhật Bản', fu: 'Sanyodo', counties: ['Harima', 'Mimasaka', 'Bizen', 'Bitchu', 'Bingo', 'Aki', 'Suo', 'Nagato'] },
+        { prov: 'Nhật Bản', fu: 'Nankaido', counties: ['Kii', 'Awaji', 'Awa', 'Sanuki', 'Iyo', 'Tosa'] },
+        { prov: 'Nhật Bản', fu: 'Saikaido', counties: ['Chikuzen', 'Chikugo', 'Buzen', 'Bungo', 'Hizen', 'Higo', 'Hyuga', 'Osumi', 'Satsuma', 'Iki', 'Tsushima'] },
+        { prov: 'Nhật Bản', fu: 'Ezo', counties: ['Ezo'] },
         
-        // 朝鲜八道各大都护府、牧、郡
-        { prov: '朝鲜', fu: '京畿道', counties: ['汉城府', '开城府', '仁川都护府', '金浦郡', '富平都护府', '衿川县', '安山郡', '果川县', '水原都护府', '南阳都护府', '广州府', '龙仁县', '利川都护府', '安城郡', '振威县', '高阳郡', '坡州牧', '杨州牧', '加平郡', '骊州牧', '杨根郡', '抱川郡', '涟川县', '江华都护府'] },
-        { prov: '朝鲜', fu: '江原道', counties: ['春川都护府', '华川县', '杨口县', '麟蹄县', '原州牧', '横城县', '平昌郡', '宁越郡', '旌善郡', '江陵大都护府', '三陟都护府', '襄阳都护府', '杆城郡', '洪川县', '铁原都护府', '安边都护府', '平康县', '通川郡', '高城郡', '伊川郡', '淮阳都护府', '金化县'] },
-        { prov: '朝鲜', fu: '忠清道', counties: ['清州牧', '忠州牧', '堤川县', '丹阳郡', '天安都护府', '公州牧', '保宁县', '牙山县', '瑞山郡', '泰安郡', '尼山县', '唐津县', '锦山郡', '扶余县', '舒川郡', '青阳县', '洪州牧', '礼山县', '怀德县', '燕岐县', '报恩县', '沃川郡', '永同县', '镇川县', '槐山郡', '阴城县'] },
-        { prov: '朝鲜', fu: '庆尚道', counties: ['大邱都护府', '庆山县', '漆谷都护府', '东莱都护府', '金海都护府', '梁山郡', '机张县', '蔚山都护府', '迎日县', '庆州府', '金山郡', '安东大都护府', '善山都护府', '荣川郡', '永川郡', '尚州牧', '闻庆县', '军威县', '义城县', '青松都护府', '英阳县', '盈德县', '清道郡', '高灵县', '星州牧', '醴泉郡', '奉化县', '蔚珍县', '平海郡', '昌原都护府', '晋州牧', '固城县', '泗川县', '密阳都护府', '巨济县', '宜宁县', '咸安郡', '昌宁县', '南海县', '河东县', '山阴县', '咸阳郡', '居昌郡', '陕川郡'] },
-        { prov: '朝鲜', fu: '全罗道', counties: ['全州府', '临陂县', '益山郡', '井邑县', '南原都护府', '金堤郡', '镇安县', '茂朱府', '长水县', '任实县', '淳昌郡', '高敞县', '扶安县', '光州牧', '务安县', '顺天都护府', '光阳县', '罗州牧', '潭阳都护府', '谷城县', '求礼县', '兴阳县', '宝城郡', '和顺县', '长兴都护府', '康津县', '海南县', '灵岩郡', '咸平县', '灵光郡', '长城都护府', '珍岛郡', '济州牧', '大静县'] },
-        { prov: '朝鲜', fu: '平安道', counties: ['平壤府', '江西县', '安州牧', '肃川都护府', '永柔县', '甑山县', '义州府', '阳德县', '顺川郡', '成川都护府', '殷山县', '北仓郡', '大同郡', '昌城都护府', '碧潼郡', '泰川县', '博川郡', '球场郡', '香山郡', '云山郡', '宁边大都护府', '龟城都护府', '大馆郡', '天摩郡', '枇岘郡', '盐州郡', '龙川郡', '薪岛郡', '东林郡', '铁山都护府', '定州牧', '郭山郡', '宣川郡', '江界都护府', '长江郡', '慈城郡', '厚昌郡', '理山郡', '时中郡', '渭原郡', '前川郡', '龙林郡', '楚山郡', '古丰郡', '雩山郡', '熙川郡', '松源郡', '东新郡', '狼林郡', '宁远郡', '孟山县', '价川郡', '德川郡'] },
-        { prov: '朝鲜', fu: '咸镜道', counties: ['镜城都护府', '渔郎郡', '富宁都护府', '茂山府', '会宁都护府', '稳城都护府', '钟城都护府', '庆源都护府', '庆兴都护府', '明川都护府', '吉州牧', '端川郡', '甲山都护府', '三水都护府', '咸兴府', '洪原郡', '定平都护府', '永兴大都护府', '北青都护府', '长津郡'] },
-        { prov: '朝鲜', fu: '黄海道', counties: ['海州牧', '凤山郡', '黄州牧', '瓮津都护府', '延安都护府', '康翎县', '长渊县', '安岳郡', '松禾县', '殷栗县', '丰川都护府', '信川郡', '载宁郡', '遂安郡', '中和都护府', '谷山都护府', '平山都护府', '金川郡', '新溪县', '白川郡'] },
+        // Các đại đô hộ phủ, mục, quận của Triều Tiên Bát Đạo
+        { prov: 'Triều Tiên', fu: 'Gyeonggi-do', counties: ['Phủ Hán Thành', 'Phủ Kaesong', 'Đô hộ phủ Incheon', 'Gimpo-gun', 'Đô hộ phủ Bupyeong', 'Huyện Geumcheon', 'Huyện Ansan', 'Huyện Gwacheon', 'Đô hộ phủ Suwon', 'Đô hộ phủ Namyang', 'Phủ Gwangju', 'Huyện Yongin', 'Đô hộ phủ Icheon', 'Huyện Anseong', 'Huyện Jinwi', 'Huyện Goyang', 'Mục Paju', 'Mục Yangju', 'Huyện Gapyeong', 'Mục Yeoju', 'Huyện Yanggeun', 'Huyện Pocheon', 'Huyện Yeoncheon', 'Đô hộ phủ Ganghwa'] },
+        { prov: 'Triều Tiên', fu: 'Gangwon-do', counties: ['Đô hộ phủ Chuncheon', 'Huyện Hwacheon', 'Huyện Yanggu', 'Huyện Inje', 'Mục Wonju', 'Huyện Hoengseong', 'Huyện Pyeongchang', 'Huyện Yeongwol', 'Huyện Jeongseon', 'Đại đô hộ phủ Gangneung', 'Đô hộ phủ Samcheok', 'Đô hộ phủ Yangyang', 'Huyện Ganseong', 'Huyện Hongcheon', 'Đô hộ phủ Cheorwon', 'Đô hộ phủ Anbyeon', 'Huyện Pyeonggang', 'Huyện Tongcheon', 'Huyện Goseong', 'Huyện Icheon', 'Đô hộ phủ Hoeyang', 'Huyện Gimhwa'] },
+        { prov: 'Triều Tiên', fu: 'Chungcheong-do', counties: ['Mục Cheongju', 'Mục Chungju', 'Huyện Jecheon', 'Huyện Danyang', 'Đô hộ phủ Cheonan', 'Mục Gongju', 'Huyện Boryeong', 'Huyện Asan', 'Huyện Seosan', 'Quận Taean', 'Huyện Nisan', 'Huyện Dangjin', 'Quận Geumsan', 'Huyện Buyeo', 'Quận Seocheon', 'Huyện Thanh Dương', 'Mục Hongju', 'Huyện Yesan', 'Huyện Hoedeok', 'Huyện Yeongi', 'Huyện Boeun', 'Quận Okcheon', 'Huyện Yeongdong', 'Huyện Jincheon', 'Quận Goesan', 'Huyện Eumseong'] },
+        { prov: 'Triều Tiên', fu: 'Gyeongsang-do', counties: ['Đô hộ phủ Daegu', 'Huyện Gyeongsan', 'Đô hộ phủ Chilgok', 'Đô hộ phủ Dongnae', 'Đô hộ phủ Gimhae', 'Quận Yangsan', 'Huyện Gijang', 'Đô hộ phủ Ulsan', 'Huyện Yeongil', 'Phủ Gyeongju', 'Quận Geumsan', 'Đại đô hộ phủ Andong', 'Đô hộ phủ Seonsan', 'Quận Yeongcheon', 'Quận Yeongcheon', 'Mục Sangju', 'Huyện Mungyeong', 'Huyện Gunwi', 'Huyện Uiseong', 'Đô hộ phủ Cheongsong', 'Huyện Yeongyang', 'Huyện Yeongdeok', 'Quận Cheongdo', 'Huyện Goryeong', 'Mục Seongju', 'Quận Yecheon', 'Huyện Bonghwa', 'Huyện Uljin', 'Quận Pyeonghae', 'Đô hộ phủ Changwon', 'Mục Jinju', 'Huyện Goseong', 'Huyện Sacheon', 'Đô hộ phủ Miryang', 'Huyện Geoje', 'Huyện Uiryeong', 'Quận Haman', 'Huyện Xương Ninh', 'Huyện Namhae', 'Huyện Hadong', 'Huyện Sơn Âm', 'Quận Hamyang', 'Quận Geochang', 'Quận Hapcheon'] },
+        { prov: 'Triều Tiên', fu: 'Jeolla-do', counties: ['Phủ Jeonju', 'Huyện Impi', 'Quận Iksan', 'Huyện Jeongeup', 'Đô hộ phủ Namwon', 'Quận Gimje', 'Huyện Trấn An', 'Phủ Muju', 'Huyện Jangsu', 'Huyện Imsil', 'Quận Sunchang', 'Huyện Gochang', 'Huyện Buan', 'Mục Gwangju', 'Huyện Muan', 'Đô hộ phủ Suncheon', 'Huyện Gwangyang', 'Mục Naju', 'Đô hộ phủ Damyang', 'Huyện Cốc Thành', 'Huyện Gurye', 'Huyện Heungyang', 'Quận Boseong', 'Huyện Hòa Thuận', 'Đô hộ phủ Jangheung', 'Huyện Gangjin', 'Huyện Haenam', 'Quận Yeongam', 'Huyện Hampyeong', 'Quận Yeonggwang', 'Đô hộ phủ Jangseong', 'Quận Jindo', 'Mục Jeju', 'Huyện Daejeong'] },
+        { prov: 'Triều Tiên', fu: 'Pyongan-do', counties: ['Phủ Bình Nhưỡng', 'Huyện Giang Tây', 'Mục Anju', 'Đô hộ phủ Sukcheon', 'Huyện Yeongyu', 'Huyện Jeungsan', 'Phủ Uiju', 'Huyện Yangdeok', 'Huyện Suncheon', 'Đô hộ phủ Seongcheon', 'Huyện Eunsan', 'Huyện Bukchang', 'Huyện Daedong', 'Đô hộ phủ Changseong', 'Huyện Byeokdong', 'Huyện Taecheon', 'Huyện Bakcheon', 'Huyện Gujang', 'Huyện Hyangsan', 'Huyện Unsan', 'Đại đô hộ phủ Yeongbyeon', 'Đô hộ phủ Guseong', 'Huyện Daegwan', 'Huyện Cheonma', 'Huyện Bihyeon', 'Huyện Yeomju', 'Huyện Yongcheon', 'Huyện Sindo', 'Huyện Dongnim', 'Đô hộ phủ Cheolsan', 'Mục Jeongju', 'Huyện Gwaksan', 'Huyện Seoncheon', 'Đô hộ phủ Ganggye', 'Huyện Janggang', 'Huyện Jaseong', 'Huyện Huchang', 'Huyện Isan', 'Huyện Sijung', 'Huyện Wiwon', 'Huyện Jeoncheon', 'Huyện Yongnim', 'Huyện Chosan', 'Huyện Gopung', 'Usan-gun', 'Huicheon-gun', 'Songwon-gun', 'Dongsin-gun', 'Nangnim-gun', 'Yeongwon-gun', 'Maengsan-hyeon', 'Gaecheon-gun', 'Deokcheon-gun'] },
+        { prov: 'Triều Tiên', fu: 'Hamgyong-do', counties: ['Đô hộ phủ Gyeongseong', 'Eorang-gun', 'Đô hộ phủ Buryeong', 'Musan-bu', 'Đô hộ phủ Hoeryeong', 'Đô hộ phủ Onseong', 'Đô hộ phủ Jongseong', 'Đô hộ phủ Gyeongwon', 'Đô hộ phủ Gyeongheung', 'Đô hộ phủ Myeongcheon', 'Gilju-mok', 'Dancheon-gun', 'Đô hộ phủ Gapsan', 'Đô hộ phủ Samsu', 'Hamheung-bu', 'Hongwon-gun', 'Đô hộ phủ Jeongpyeong', 'Đại đô hộ phủ Yeongheung', 'Đô hộ phủ Bukcheong', 'Jangjin-gun'] },
+        { prov: 'Triều Tiên', fu: 'Hwanghae-do', counties: ['Haeju-mok', 'Bongsan-gun', 'Hwangju-mok', 'Đô hộ phủ Ongjin', 'Đô hộ phủ Yeonan', 'Gangnyeong-hyeon', 'Jangyeon-hyeon', 'Anak-gun', 'Songhwa-hyeon', 'Eunyul-hyeon', 'Đô hộ phủ Pungcheon', 'Sincheon-gun', 'Jaeryeong-gun', 'Suan-gun', 'Đô hộ phủ Junghwa', 'Đô hộ phủ Goksan', 'Đô hộ phủ Pyeongsan', 'Geumcheon-gun', 'Singye-hyeon', 'Baekcheon-gun'] },
         
-        // 琉球
-        { prov: '琉球', fu: '琉球国', counties: ['中山'] },
+        // Lưu Cầu
+        { prov: 'Lưu Cầu', fu: 'Lưu Cầu Quốc', counties: ['Trung Sơn'] },
         
-        // 喀尔喀
-        { prov: '喀尔喀', fu: '土谢图汗部', counties: ['库伦', '土谢图中部', '土谢图北部', '土谢图南部', '戈壁诸部', '土谢图西部'] },
-        { prov: '喀尔喀', fu: '车臣汗部', counties: ['车臣汗中部', '车臣汗东部', '车臣汗南部', '车臣汗西南部'] },
-        { prov: '喀尔喀', fu: '扎萨克图汗部', counties: ['扎萨克图中部', '扎萨克图南部', '扎萨克图西部', '赛音诺颜部'] },
-        { prov: '喀尔喀', fu: '和托辉特部', counties: ['唐努乌梁海', '科布多', '杜尔伯特部', '阿尔泰乌梁海'] },
+        // Khách Nhĩ Khách (Khalkha)
+        { prov: 'Khách Nhĩ Khách (Khalkha)', fu: 'Tusheet Khan bộ', counties: ['Khüree', 'Tusheet Khan Trung bộ', 'Tusheet Khan Bắc bộ', 'Tusheet Khan Nam bộ', 'Các bộ Qua Bích', 'Tusheet Khan Tây bộ'] },
+        { prov: 'Khách Nhĩ Khách (Khalkha)', fu: 'Xa Thần Hãn Bộ', counties: ['Setsen Khan Trung bộ', 'Setsen Khan Đông bộ', 'Setsen Khan Nam bộ', 'Setsen Khan Tây Nam bộ'] },
+        { prov: 'Khách Nhĩ Khách (Khalkha)', fu: 'Bộ Zasagt Khan', counties: ['Zasagt Khan Trung bộ', 'Zasagt Khan Nam bộ', 'Zasagt Khan Tây bộ', 'Sain Noyon Khan'] },
+        { prov: 'Khách Nhĩ Khách (Khalkha)', fu: 'Bộ Khotogoid', counties: ['Tannu Uriankhai', 'Khovd', 'Bộ Đỗ Nhĩ Bá Đặc', 'Altai Uriankhai'] },
         
-        // 尼婆罗
-        { prov: '尼婆罗', fu: '拜塞诸国', counties: ['多提王国', '朱姆拉王国'] },
-        { prov: '尼婆罗', fu: '乔比西诸国', counties: ['帕尔帕王国', '卡斯基王国'] },
-        { prov: '尼婆罗', fu: '马拉王朝', counties: ['坎提普尔'] },
-        { prov: '尼婆罗', fu: '森王朝', counties: ['玛克万普尔', '维阇耶补罗'] },
+        // Nepal
+        { prov: 'Nepal', fu: 'Các nước Bái Tắc', counties: ['Vương quốc Doti', 'Vương quốc Jumla'] },
+        { prov: 'Nepal', fu: 'Các nước Chaubisi', counties: ['Vương quốc Palpa', 'Vương quốc Kaski'] },
+        { prov: 'Nepal', fu: 'Vương triều Malla', counties: ['Kantipur'] },
+        { prov: 'Nepal', fu: 'Vương triều Sen', counties: ['Makwanpur', 'Vijayapur'] },
         
-        // 不丹
-        { prov: '不丹', fu: '西不丹', counties: ['帕罗宗', '哈宗', '萨姆奇', '楚卡'] },
-        { prov: '不丹', fu: '中不丹', counties: ['廷布宗', '加萨宗', '普那卡宗', '旺杜波德朗', '达加纳', '奇朗'] },
-        { prov: '不丹', fu: '东不丹', counties: ['同萨宗', '布姆唐', '谢姆冈', '萨尔庞', '蒙加尔', '塔西冈宗', '伦奇', '塔西央奇', '佩马加策尔', '萨姆德鲁琼卡尔'] },
+        // Bhutan
+        { prov: 'Bhutan', fu: 'Tây Bhutan', counties: ['Paro Dzong', 'Haa Dzong', 'Samtse', 'Chukha'] },
+        { prov: 'Bhutan', fu: 'Trung Bhutan', counties: ['Thimphu Dzong', 'Gasa Dzong', 'Punakha Dzong', 'Wangdue Phodrang', 'Dagana', 'Tsirang'] },
+        { prov: 'Bhutan', fu: 'Đông Bhutan', counties: ['Trongsa Dzong', 'Bumthang', 'Zhemgang', 'Sarpang', 'Mongar', 'Trashigang Dzong', 'Lhuntse', 'Trashiyangtse', 'Pemagatshel', 'Samdrup Jongkhar'] },
 
-        // 澜沧
-        { prov: '澜沧', fu: '万象', counties: ['万象', '赛宋奔', '波里坎塞'] },
-        { prov: '澜沧', fu: '琅勃拉邦', counties: ['琅勃拉邦', '乌多姆塞', '丰沙里', '琅南塔', '博胶', '沙耶武里'] },
-        { prov: '澜沧', fu: '勐潘', counties: ['川圹', '华潘'] },
-        { prov: '澜沧', fu: '占巴塞', counties: ['占巴塞', '沙湾拿吉', '甘蒙', '沙拉湾', '塞贡', '阿速坡'] },
+        // Lạn Thương
+        { prov: 'Lạn Thương', fu: 'Viêng Chăn', counties: ['Viêng Chăn', 'Xaisomboun', 'Bolikhamsai'] },
+        { prov: 'Lạn Thương', fu: 'Luông Pha Băng', counties: ['Luông Pha Băng', 'Oudomxay', 'Phongsaly', 'Luông Nam Tha', 'Bokeo', 'Sainyabuli'] },
+        { prov: 'Lạn Thương', fu: 'Mường Phăn', counties: ['Xiêng Khoảng', 'Hủa Phăn'] },
+        { prov: 'Lạn Thương', fu: 'Chăm Pa Sắc', counties: ['Chăm Pa Sắc', 'Savannakhet', 'Khammouane', 'Salavan', 'Sekong', 'Attapeu'] },
 
-        // 暹罗
-        { prov: '暹罗', fu: '中部核心', counties: ['阿瑜陀耶', '叻丕', '尖竹汶'] },
-        { prov: '暹罗', fu: '兰纳', counties: ['清迈'] },
-        { prov: '暹罗', fu: '彭世洛', counties: ['彭世洛'] },
-        { prov: '暹罗', fu: '伊善地区', counties: ['呵叻'] },
-        { prov: '暹罗', fu: '马来半岛', counties: ['洛坤', '北大年'] },
+        // Xiêm La
+        { prov: 'Xiêm La', fu: 'Vùng lõi trung tâm', counties: ['Ayutthaya', 'Ratchaburi', 'Chanthaburi'] },
+        { prov: 'Xiêm La', fu: 'Lanna', counties: ['Chiang Mai'] },
+        { prov: 'Xiêm La', fu: 'Phitsanulok', counties: ['Phitsanulok'] },
+        { prov: 'Xiêm La', fu: 'Vùng Isan', counties: ['Nakhon Ratchasima (Khorat)'] },
+        { prov: 'Xiêm La', fu: 'Bán đảo Mã Lai', counties: ['Nakhon Si Thammarat', 'Pattani'] },
 
-        // 郑主 (北越)
-        { prov: '郑主', fu: '交趾', counties: ['升龙', '山南', '海阳', '山西', '兴化'] },
-        { prov: '郑主', fu: '清华', counties: ['清化', '乂安'] },
+        // Chúa Trịnh (Bắc Việt)
+        { prov: 'Chúa Trịnh', fu: 'Giao Chỉ', counties: ['Thăng Long', 'Sơn Nam', 'Hải Dương', 'Sơn Tây', 'Hưng Hóa'] },
+        { prov: 'Chúa Trịnh', fu: 'Thanh Hoa', counties: ['Thanh Hóa', 'Nghệ An'] },
 
-        // 广南 (南越)
-        { prov: '广南', fu: '顺化', counties: ['顺化'] },
-        { prov: '广南', fu: '广南', counties: ['广南'] },
-        { prov: '广南', fu: '占城', counties: ['归仁', '宾童龙'] },
-        { prov: '广南', fu: '水真腊', counties: ['水真腊'] },
+        // Quảng Nam (Nam Việt)
+        { prov: 'Quảng Nam', fu: 'Thuận Hóa', counties: ['Thuận Hóa'] },
+        { prov: 'Quảng Nam', fu: 'Quảng Nam', counties: ['Quảng Nam'] },
+        { prov: 'Quảng Nam', fu: 'Chiêm Thành', counties: ['Quy Nhơn', 'Panduranga'] },
+        { prov: 'Quảng Nam', fu: 'Thủy Chân Lạp', counties: ['Thủy Chân Lạp'] },
 
-        // 莫卧儿
-        { prov: '莫卧儿', fu: '拉合尔', counties: ['旁遮普'] },
-        { prov: '莫卧儿', fu: '穆尔坦', counties: ['信德', '俾路支'] },
-        { prov: '莫卧儿', fu: '喀布尔', counties: ['开伯尔', '喀什米尔'] },
-        { prov: '莫卧儿', fu: '德里', counties: ['德里', '阿瓦德'] },
-        { prov: '莫卧儿', fu: '阿杰梅尔', counties: ['拉贾斯坦'] },
-        { prov: '莫卧儿', fu: '古吉拉特', counties: ['古吉拉特'] },
-        { prov: '莫卧儿', fu: '摩尔瓦', counties: ['中央邦'] },
-        { prov: '莫卧儿', fu: '比哈尔', counties: ['比哈尔', '奥里萨'] },
-        { prov: '莫卧儿', fu: '孟加拉', counties: ['孟加拉东', '孟加拉西'] },
-        { prov: '莫卧儿', fu: '阿萨姆', counties: ['阿萨姆'] },
-        { prov: '莫卧儿', fu: '德干', counties: ['马哈拉施特拉', '特伦甘纳', '卡纳塔克'] },
-        { prov: '莫卧儿', fu: '南印度', counties: ['马杜赖'] }
+        // Mughal
+        { prov: 'Mughal', fu: 'Lahore', counties: ['Punjab'] },
+        { prov: 'Mughal', fu: 'Multan', counties: ['Sindh', 'Balochistan'] },
+        { prov: 'Mughal', fu: 'Kabul', counties: ['Khyber', 'Kashmir'] },
+        { prov: 'Mughal', fu: 'Delhi', counties: ['Delhi', 'Awadh'] },
+        { prov: 'Mughal', fu: 'Ajmer', counties: ['Rajasthan'] },
+        { prov: 'Mughal', fu: 'Gujarat', counties: ['Gujarat'] },
+        { prov: 'Mughal', fu: 'Malwa', counties: ['Madhya Pradesh'] },
+        { prov: 'Mughal', fu: 'Bihar', counties: ['Bihar', 'Odisha'] },
+        { prov: 'Mughal', fu: 'Bengal', counties: ['Đông Bengal', 'Tây Bengal'] },
+        { prov: 'Mughal', fu: 'Assam', counties: ['Assam'] },
+        { prov: 'Mughal', fu: 'Deccan', counties: ['Maharashtra', 'Telangana', 'Karnataka'] },
+        { prov: 'Mughal', fu: 'Nam Ấn Độ', counties: ['Madurai'] }
     ];
 
-    // 将外国历史地名正式写入大明搜索字典
+    // Chính thức ghi các địa danh lịch sử nước ngoài vào từ điển tìm kiếm Đại Minh
     eastAsiaSearchData.forEach(item => {
         item.counties.forEach(county => {
             if (!mingCountySearchIndex[county]) mingCountySearchIndex[county] = [];
@@ -2832,11 +2832,11 @@ function buildCountyIndex() {
         });
     });
 
-    // 为玩家提供极其方便的现代日韩名直搜功能
-    // 当玩家搜“首尔”时，底层自动匹配到“汉城府”，下钻定位体验和国内一模一样！
+    // Cung cấp tính năng tìm kiếm trực tiếp tên Nhật Bản và Hàn Quốc hiện đại tiện lợi cho người chơi
+    // Khi người chơi tìm kiếm "Seoul", hệ thống ngầm tự động khớp với "Hán Thành phủ", trải nghiệm định vị đào sâu giống hệt như trong nước.!
     const modernAsianTranslations = {
-        '首尔':'汉城府', '汉城':'汉城府', '釜山':'东莱都护府', '大邱':'大邱都护府', '仁川':'仁川都护府', '光州':'光州牧', '大田':'怀德县', '蔚山':'蔚山都护府', '世宗':'燕岐县', '平壤':'平壤府', '南浦':'江西县', '开城':'开城府', '罗先':'庆兴都护府', '济州':'济州牧', '水原':'水原都护府', '济州岛':'济州牧',
-        '东京':'武藏', '大阪':'摄津', '京都':'山城', '北海道':'虾夷', '横滨':'相模', '名古屋':'尾张', '神户':'播磨', '福冈':'筑前', '广岛':'安艺', '札幌':'虾夷', '鹿儿岛':'萨摩', '长崎':'肥前', '冲绳':'中山'
+        'Seoul':'Hán Thành Phủ', 'Hán Thành':'Hán Thành Phủ', 'Busan':'Dongnae Đô hộ phủ', 'Daegu':'Daegu Đô hộ phủ', 'Incheon':'Incheon Đô hộ phủ', 'Gwangju':'Gwangju Mục', 'Daejeon':'Hoedeok Huyện', 'Ulsan':'Ulsan Đô hộ phủ', 'Sejong':'Yeongi Huyện', 'Bình Nhưỡng':'Bình Nhưỡng Phủ', 'Nampho':'Giang Tây Huyện', 'Kaesong':'Kaesong Phủ', 'Rason':'Gyeongheung Đô hộ phủ', 'Jeju':'Jeju Mục', 'Suwon':'Suwon Đô hộ phủ', 'Đảo Jeju':'Jeju Mục',
+        'Tokyo':'Musashi', 'Osaka':'Settsu', 'Kyoto':'Yamashiro', 'Hokkaido':'Ezo', 'Yokohama':'Sagami', 'Nagoya':'Owari', 'Kobe':'Harima', 'Fukuoka':'Chikuzen', 'Hiroshima':'Aki', 'Sapporo':'Ezo', 'Kagoshima':'Satsuma', 'Nagasaki':'Hizen', 'Okinawa':'Nakayama'
     };
     for (let modernName in modernAsianTranslations) {
         modernCountyToMingCounty[modernName] = modernAsianTranslations[modernName];
@@ -2845,14 +2845,14 @@ function buildCountyIndex() {
 
 
 // ==========================================
-// 模糊搜索与下拉提示逻辑
+// Logic tìm kiếm mờ và gợi ý thả xuống
 // ==========================================
 function handleSearchInput(e) {
     const kw = e.target.value.trim();
     const suggEl = mingMapFrameDocument.getElementById('search-suggestions');
     const btn = mingMapFrameDocument.getElementById('map-search-btn');
 
-    btn.dataset.mode = 'search'; btn.innerText = '🔍'; btn.title = '搜索';
+    btn.dataset.mode = 'search'; btn.innerText = '🔍'; btn.title = 'Tìm kiếm';
 
     if (!kw) {
         suggEl.style.display = 'none';
@@ -2863,26 +2863,26 @@ function handleSearchInput(e) {
     const results = [];
     const seen = new Set(); 
 
-    // 1. 匹配大区省份
+    // 1. Khớp đại khu và tỉnh thành
     Object.keys(mingProvinceColors).forEach(prov => {
         if (prov.includes(kw)) {
-            results.push({ type: 'nation', name: prov, desc: '省份 / 大区', matchIdx: prov.indexOf(kw) });
+            results.push({ type: 'nation', name: prov, desc: 'Tỉnh / Khu vực', matchIdx: prov.indexOf(kw) });
             seen.add('nation:' + prov);
         }
     });
 
-    // 2. 匹配府州
+    // 2. Khớp phủ châu
     for (let prov in mingFuZhouCenters) {
         mingFuZhouCenters[prov].forEach(fu => {
             if (fu.name.includes(kw)) {
-                results.push({ type: 'province', name: fu.name, prov: prov, desc: `${prov} · 府州`, lng: fu.lng, lat: fu.lat, matchIdx: fu.name.indexOf(kw) });
+                results.push({ type: 'province', name: fu.name, prov: prov, desc: `${prov} · Phủ châu`, lng: fu.lng, lat: fu.lat, matchIdx: fu.name.indexOf(kw) });
                 seen.add('fu:' + fu.name);
             }
         });
     }
 
-    // 3. 匹配区县
-    // 去除了原本附加的 modernName 后缀，保持纯正的明代地名显示
+    // 3. Khớp quận huyện
+    // Đã xóa phần bổ sung ban đầu modernName Hậu tố, giữ nguyên hiển thị địa danh thời Minh thuần túy
     const addCountyResult = (mingCounty, info, matchStr) => {
         const key = 'county:' + mingCounty + '_' + info.prov;
         if (!seen.has(key)) {
@@ -2915,7 +2915,7 @@ function handleSearchInput(e) {
         }
     }
 
-    // 排序优先级：关键词位置靠前的优先，名字短的优先
+    // Ưu tiên sắp xếp: Từ khóa ở đầu ưu tiên trước, tên ngắn ưu tiên trước
     results.sort((a, b) => {
         if (a.matchIdx !== b.matchIdx) return a.matchIdx - b.matchIdx;
         return a.name.length - b.name.length;
@@ -2927,7 +2927,7 @@ function handleSearchInput(e) {
         return;
     }
 
-    // 渲染下拉列表
+    // Hiển thị danh sách thả xuống
     suggEl.innerHTML = topResults.map(r => {
         const dataStr = encodeURIComponent(JSON.stringify(r));
         return `<li data-sugg="${dataStr}"><span class="sugg-title">${r.name}</span><span class="sugg-desc">${r.desc}</span></li>`;
@@ -2943,7 +2943,7 @@ function jumpToSuggestion(dataObj) {
     
     suggEl.style.display = 'none';
     setSearchBtnToClear(btn);
-    input.value = dataObj.name; // 将选中名称反填入输入框
+    input.value = dataObj.name; // Tự động điền tên đã chọn vào hộp nhập liệu
 
     if (dataObj.type === 'nation') {
         mingMapSearchTarget = { level: 'nation', province: dataObj.name };
@@ -2968,7 +2968,7 @@ function jumpToSuggestion(dataObj) {
             const opt = mingMapChartInstance.getOption();
             if (opt && opt.geo && opt.geo[0]) mingMapPrefectureGeoState = { center: opt.geo[0].center, zoom: opt.geo[0].zoom };
         }
-        // 【新增传递 county】：记录区县的名称，交给绘图函数去寻找中心点
+        // [Thêm chuyển tiếp county]: Ghi lại tên quận huyện, giao cho hàm vẽ để tìm tọa độ trung tâm
         mingMapSearchTarget = { level: 'prefecture', county: dataObj.name };
         renderMingCountyMap(dataObj.prov, dataObj.fu);
     }
@@ -2982,42 +2982,42 @@ function doMingMapSearch(isKeyboardEnter = false) {
     const box = mingMapFrameDocument.getElementById('search-box');
     if(!input || !btn || !box) return;
 
-    // 1. 如果搜索框处于折叠状态，点击时将其展开并自动聚焦
+    // 1. Nếu hộp tìm kiếm đang thu gọn, khi nhấp vào sẽ mở rộng và tự động trỏ chuột vào
     if (!box.classList.contains('expanded')) {
         box.classList.add('expanded');
-        // 延迟聚焦，等展开动画差不多完成时再弹出键盘，体验更好
+        // Trì hoãn lấy tiêu điểm, đợi đến khi hoạt ảnh mở rộng gần xong mới hiển thị bàn phím, mang lại trải nghiệm tốt hơn.
         setTimeout(() => input.focus(), 250); 
         return;
     }
 
-    // 2. 如果当前是“清除”模式
+    // 2. Nếu hiện tại là chế độ "Xóa"
     if (btn.dataset.mode === 'clear') {
-        // 【修复】：如果是键盘按回车触发的，不要 return 中断，而是跳过清空环节，让代码继续往下跑
+        // [Sửa chữa]: Nếu được kích hoạt bằng phím Enter, đừng return gián đoạn, mà sẽ bỏ qua bước dọn dẹp để mã tiếp tục chạy
         if (!isKeyboardEnter) {
             input.value = '';
             btn.dataset.mode = 'search';
             btn.innerText = '🔍';
-            btn.title = '搜索';
+            btn.title = 'Tìm kiếm';
             if (suggEl) suggEl.style.display = 'none';
-            input.focus(); // 清除后继续保持聚焦
+            input.focus(); // Tiếp tục duy trì lấy nét sau khi xóa
             return;
         }
     }
 
-    // 3. 执行真正的搜索
+    // 3. Thực hiện tìm kiếm thực sự
     const kw = input.value.trim();
     if (!kw) {
-        // 如果输入框为空时再次点击了放大镜，则直接把搜索框重新折叠收起
+        // Nếu ô nhập liệu trống mà lại nhấp vào kính lúp một lần nữa, thì trực tiếp gập thu gọn lại ô tìm kiếm.
         box.classList.remove('expanded');
         return;
     }
 
-    // 【关键修复】：如果之前搜索完列表隐藏了，再次回车时强制重新拉取一次匹配列表，确保有目标可以跳转
+    // [Sửa lỗi quan trọng]: Nếu danh sách đã bị ẩn sau khi tìm kiếm trước đó, việc nhấn Enter lần nữa sẽ buộc tải lại danh sách khớp một lần, đảm bảo có mục tiêu để chuyển đến.
     if (suggEl.style.display === 'none' || !suggEl.querySelector('li[data-sugg]')) {
         handleSearchInput({ target: input });
     }
 
-    // 4. 回车或点击搜索键时，直接读取下拉列表的第一个选项并跳转
+    // 4. Khi nhấn Enter hoặc nhấp vào nút tìm kiếm, trực tiếp đọc tùy chọn đầu tiên trong danh sách thả xuống và chuyển hướng.
     const firstSugg = suggEl?.querySelector('li[data-sugg]');
     if (firstSugg && suggEl.style.display !== 'none') {
         const data = JSON.parse(decodeURIComponent(firstSugg.dataset.sugg));
@@ -3035,33 +3035,33 @@ function doMingMapSearch(isKeyboardEnter = false) {
 
 
 function setSearchBtnToClear(btn) {
-    btn.dataset.mode = 'clear'; btn.innerText = '✖'; btn.title = '清除';
+    btn.dataset.mode = 'clear'; btn.innerText = '✖'; btn.title = 'Xóa';
 }
 
 
 
 // ==========================================
-// 地图数据提取提取逻辑 (三层结构)
+// Logic trích xuất dữ liệu bản đồ (Cấu trúc ba lớp)
 // ==========================================
 function buildEastAsiaGeo() {
     const W = mingMapFrame.contentWindow?.WORLD_1629;
     if (!W || !W.features) return { type: 'FeatureCollection', features: [] };
     const TARGETS = new Set([
-        '北直隶', '山东布政使司', '山西布政使司', '河南布政使司',
-        '陕西布政使司', '陕西行都司', '四川布政使司', '江西布政使司',
-        '浙江布政使司', '福建布政使司', '广东布政使司', '广西布政使司',
-        '云南布政使司', '贵州布政使司',
-        '辽东都司', '宁夏卫',
-        '莫卧儿帝国', '阿瑜陀耶王朝(暹罗)',
-        '不丹竺巴', '尼泊尔马拉王朝', '西属菲律宾', '马打蓝苏丹国',
-        '藏巴汗', '叶尔羌汗国', '和硕特部', '康区土司', '澜沧·真腊',
-        '建州女真(后金)', '野人女真诸部',
-        '蒙古察哈尔部', '蒙古土默特部', '朵颜三卫',
-        '喀尔喀蒙古',
-        '南直隶(江南)', '南直隶(江北)',
-        '湖广布政使司(北)', '湖广布政使司(南)',
-        '后黎朝·郑主', '阮主(广南)',
-        '澳大利亚(原住民)',
+        'Bắc Trực Lệ', 'Sơn Đông Bố chính sứ ty', 'Sơn Tây Bố chính sứ ty', 'Hà Nam Bố chính sứ ty',
+        'Thiểm Tây Bố chính sứ ty', 'Thiểm Tây Hành đô ty', 'Tứ Xuyên Bố chính sứ ty', 'Giang Tây Bố chính sứ ty',
+        'Chiết Giang Bố chính sứ ty', 'Phúc Kiến Bố chính sứ ty', 'Quảng Đông Bố chính sứ ty', 'Quảng Tây Bố chính sứ ty',
+        'Vân Nam Bố chính sứ ty', 'Quý Châu Bố chính sứ ty',
+        'Liêu Đông Đô ty', 'Ninh Hạ Vệ',
+        'Đế quốc Mughal', 'Vương triều Ayutthaya(Xiêm La)',
+        'Bhutan Drukpa', 'Vương triều Malla Nepal', 'Philippines thuộc Tây Ban Nha', 'Vương quốc Hồi giáo Mataram',
+        'Tạng Ba Hãn', 'Hãn quốc Yarkent', 'Bộ Hòa Thạc Đặc', 'Khang Khu thổ ty', 'Lạn Thương·Chân Lạp',
+        'Kiến Châu Nữ Chân(Hậu Kim)', 'Các bộ Dã Nhân Nữ Chân',
+        'Bộ Sát Cáp Nhĩ Mông Cổ', 'Bộ Thổ Mặc Đặc Mông Cổ', 'Đóa Nhan Tam Vệ',
+        'Khách Nhĩ Khách Mông Cổ (Khalkha)',
+        'Nam Trực Lệ(Giang Nam)', 'Nam Trực Lệ(Giang Bắc)',
+        'Hồ Quảng Bố chính sứ ty(Bắc)', 'Hồ Quảng Bố chính sứ ty(Nam)',
+        'Nhà Hậu Lê·Chúa Trịnh', 'Chúa Nguyễn(Quảng Nam)',
+        'Úc(Thổ dân)',
     ]);
 
     let features = W.features.filter(f => TARGETS.has(f.properties.name)).map(f => {
@@ -3071,15 +3071,15 @@ function buildEastAsiaGeo() {
     });
 
 
-    const tokugawa = W.features.find(f => f.properties.name === '德川幕府');
+    const tokugawa = W.features.find(f => f.properties.name === 'Mạc phủ Tokugawa');
     if (tokugawa && tokugawa.geometry.type === 'MultiPolygon') {
         const coords = tokugawa.geometry.coordinates;
         let japanCoords = [];
         let ryukyuCoords = [];
-        let joseonCoords = []; // 新增：用来存放朝鲜半岛及济州岛碎片
+        let joseonCoords = []; // Thêm mới: Dùng để lưu trữ các mảnh của bán đảo Triều Tiên và Đảo Jeju
 
         coords.forEach((polygon, i) => {
-            // 实时计算每个碎片的几何中心点
+            // Tính toán trung tâm hình học của từng mảnh theo thời gian thực
             let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
             const findBounds = (arr) => {
                 if (typeof arr[0] === 'number') {
@@ -3096,39 +3096,39 @@ function buildEastAsiaGeo() {
             let centerLat = (minLat + maxLat) / 2;
 
             if (i === 1) {
-                // 认领原代码中硬编码的朝鲜半岛主体
+                // Nhận diện phần chính của bán đảo Triều Tiên được hardcode trong mã gốc
                 joseonCoords.push(polygon);
             } else if (i === 18) {
-                // 认领东番
-                features.push({ type: 'Feature', properties: { name: '东番' }, geometry: { type: 'MultiPolygon', coordinates: [polygon] } });
+                // Nhận lãnh Đông Phiên
+                features.push({ type: 'Feature', properties: { name: 'Đông Phiên' }, geometry: { type: 'MultiPolygon', coordinates: [polygon] } });
             } else if (centerLat < 29.0) {
-                // 北纬 29 度以南归为琉球
+                // Phía nam vĩ tuyến 29 độ Bắc thuộc về Lưu Cầu
                 ryukyuCoords.push(polygon);
             } else if (centerLng < 128.5 && centerLat > 31.0 && centerLat < 35.0) {
-                // 【核心修复】：雷达拦截济州岛等韩国南部离岛
-                // 济州岛在 (126.5E, 33.3N)，该条件精准包揽它，同时避开日本对马岛(129.2E)和五岛列岛(128.8E)
+                // [Sửa lỗi cốt lõi]: Radar chặn Đảo Jeju và các đảo xa phía nam Hàn Quốc
+                // Đảo Jeju ở (126.5E, 33.3N), Điều kiện này bao quát chính xác nó, đồng thời tránh đảo Tsushima của Nhật Bản(129.2E) và Quần đảo Gotō(128.8E)
                 joseonCoords.push(polygon);
             } else {
-                // 筛剩下的才是真正的日本本土
+                // Phần còn lại sau khi lọc mới là lãnh thổ Nhật Bản thực sự
                 japanCoords.push(polygon);
             }
         });
 
-        // 重新缝合朝鲜（包括半岛主体和找回的济州岛）
+        // Hợp nhất lại Triều Tiên (Bao gồm phần chính của bán đảo và Đảo Jeju đã thu hồi)
         if (joseonCoords.length > 0) {
-            features.push({ type: 'Feature', properties: { name: '朝鲜' }, geometry: { type: 'MultiPolygon', coordinates: joseonCoords } });
+            features.push({ type: 'Feature', properties: { name: 'Triều Tiên' }, geometry: { type: 'MultiPolygon', coordinates: joseonCoords } });
         }
 
-        // 提取并缓存琉球多边形，供第2和第3层下钻时复用
+        // Trích xuất và lưu vào bộ nhớ đệm đa giác Lưu Cầu để tái sử dụng khi thu phóng xuống lớp 2 và lớp 3
         if (ryukyuCoords.length > 0) {
-            const ryukyuFeature = { type: 'Feature', properties: { name: '琉球' }, geometry: { type: 'MultiPolygon', coordinates: ryukyuCoords } };
+            const ryukyuFeature = { type: 'Feature', properties: { name: 'Lưu Cầu' }, geometry: { type: 'MultiPolygon', coordinates: ryukyuCoords } };
             features.push(ryukyuFeature);
             window._cachedRyukyuFeature = ryukyuFeature; 
         }
         
-        // 生成纯净版日本
+        // Tạo bản Nhật Bản thuần túy
         if (japanCoords.length > 0) {
-            features.push({ type: 'Feature', properties: { name: '日本' }, geometry: { type: 'MultiPolygon', coordinates: japanCoords } });
+            features.push({ type: 'Feature', properties: { name: 'Nhật Bản' }, geometry: { type: 'MultiPolygon', coordinates: japanCoords } });
         }
     }
 
@@ -3137,12 +3137,12 @@ function buildEastAsiaGeo() {
 
 
 function getMingProvinceName(m) { return modernToMingProvince[m] || m; }
-// --- 新增：切除海西州/格尔木市的唐古拉山镇飞地 ---
+// --- Thêm mới: Cắt bỏ châu Hải Tây/Vùng lãnh thổ tách rời của Thị trấn Đường Cổ Lạp Sơn thuộc Thành phố Cách Nhĩ Mộc ---
 function removeTanggulaEnclave(feature) {
     if (!feature || !feature.geometry) return feature;
-    // 识别出海西州或格尔木，并且是多边形集合
-    if ((feature.properties.name === '海西蒙古族藏族自治州' || feature.properties.name === '格尔木市') && feature.geometry.type === 'MultiPolygon') {
-        // 唐古拉山镇在北纬33度左右，主体在北纬36度以上，直接切除南部的多边形
+    // Nhận dạng Châu Hải Tây hoặc Golmud, và đó là tập hợp đa giác
+    if ((feature.properties.name === 'Châu tự trị dân tộc Mông Cổ, Tạng Hải Tây' || feature.properties.name === 'Thành phố Cách Nhĩ Mộc') && feature.geometry.type === 'MultiPolygon') {
+        // Thị trấn Đường Cổ Lạp Sơn nằm ở khoảng vĩ độ 33 độ Bắc, phần chính nằm trên 36 độ Bắc, trực tiếp cắt bỏ đa giác ở phía nam.
         feature.geometry.coordinates = feature.geometry.coordinates.filter(p => p[0][0][1] > 34);
         if (feature.geometry.coordinates.length === 1) {
             feature.geometry.type = 'Polygon';
@@ -3151,16 +3151,16 @@ function removeTanggulaEnclave(feature) {
     }
     return feature;
 }
-// --- 新增：切除日本太平洋偏远离岛（防止东海道、西海道视角偏移） ---
+// --- Thêm mới: Cắt bỏ các đảo xa trên Thái Bình Dương của Nhật Bản (Ngăn chặn lệch góc nhìn Tokaido, Saikaido) ---
 function removeJapanIslands(feature) {
     if (!feature || !feature.geometry) return feature;
     let prefName = feature.properties.NL_NAME_1 || feature.properties.NAME_1 || '';
 
-    // 处理东京都（武藏）：切除北纬 35 度以南的伊豆群岛和小笠原群岛
-    if (prefName.includes('東京') || feature.properties.name === '武藏') {
+    // Xử lý Tokyo (Musashi): Cắt bỏ quần đảo Izu và quần đảo Ogasawara ở phía nam vĩ độ 35 độ Bắc.
+    if (prefName.includes('Đông Kinh') || feature.properties.name === 'Musashi') {
         if (feature.geometry.type === 'MultiPolygon') {
             feature.geometry.coordinates = feature.geometry.coordinates.filter(p => {
-                // 取多边形外环第一个点的纬度作为代表
+                // Lấy vĩ độ của điểm đầu tiên trên vòng ngoài đa giác làm đại diện
                 let lat = p[0][0][1];
                 return lat > 35.0; 
             });
@@ -3171,8 +3171,8 @@ function removeJapanIslands(feature) {
         }
     }
     
-    // 处理鹿儿岛（萨摩）：切除北纬 30.5 度以南的奄美大岛等离岛
-    if (prefName.includes('鹿児島') || feature.properties.name === '萨摩') {
+    // Xử lý Kagoshima (Satsuma): Cắt bỏ các đảo xa như đảo Amami Oshima ở phía nam vĩ độ 30.5 độ Bắc.
+    if (prefName.includes('Kagoshima') || feature.properties.name === 'Satsuma') {
         if (feature.geometry.type === 'MultiPolygon') {
             feature.geometry.coordinates = feature.geometry.coordinates.filter(p => {
                 let lat = p[0][0][1];
@@ -3189,7 +3189,7 @@ function removeJapanIslands(feature) {
 
 
 // ==========================================
-// 地图区域合并辅助函数 (增强版：彻底消除内部碎线/虚线)
+// Hàm hỗ trợ gộp khu vực bản đồ (Bản nâng cao: Loại bỏ triệt để các đường đứt nét bên trong/Đường nét đứt)
 // ==========================================
 async function mergeFeaturesWithTurf(feats, name) {
     if (feats.length === 1) {
@@ -3213,15 +3213,15 @@ async function mergeFeaturesWithTurf(feats, name) {
             merged = window.turf.union(merged, feats[i]);
         }
         
-        // 【核心修复】：清除多边形的“内环（孔洞）”
-        // 抹除合并时因微小缝隙产生的内部碎块，避免 Echarts 渲染出内部虚线
+        // [Sửa lỗi cốt lõi]: Xóa các đa giác“Vòng trong (Lỗ hổng) ”
+        // Xóa các mảnh vỡ bên trong sinh ra do những khoảng trống cực nhỏ khi hợp nhất, nhằm tránh Echarts Kết xuất đường nét đứt bên trong
         if (merged && merged.geometry) {
             if (merged.geometry.type === 'Polygon') {
-                // GeoJSON 的 Polygon 结构为 [外部轮廓, 内部孔洞1, 内部孔洞2...]
-                // 我们只保留 [0] 外部轮廓，丢弃所有内部孔洞
+                // GeoJSON Của Polygon Cấu trúc là [Đường viền ngoài, Lỗ hổng bên trong 1, Lỗ hổng bên trong 2...]
+                // Chúng tôi chỉ giữ lại [0] Đường viền ngoài, loại bỏ tất cả các lỗ hổng bên trong
                 merged.geometry.coordinates = [merged.geometry.coordinates[0]];
             } else if (merged.geometry.type === 'MultiPolygon') {
-                // 遍历每个子多边形，只保留外部轮廓
+                // Lặp qua từng đa giác con, chỉ giữ lại đường bao bên ngoài
                 merged.geometry.coordinates = merged.geometry.coordinates.map(poly => [poly[0]]);
             }
         }
@@ -3229,7 +3229,7 @@ async function mergeFeaturesWithTurf(feats, name) {
         merged.properties.name = name;
         return merged;
     } catch (e) {
-        // 如果合并失败则回退到简单拼接
+        // Nếu gộp thất bại thì quay lại ghép nối đơn giản
         const base = JSON.parse(JSON.stringify(feats[0]));
         base.properties.name = name;
         const all = [];
@@ -3243,51 +3243,51 @@ async function mergeFeaturesWithTurf(feats, name) {
 }
 
 
-// 获取第二层：府州边界
+// Lấy lớp thứ 2: Ranh giới Phủ/Châu
 async function buildMingPrefectureGeoJSON(mingName) {
 
-    // ================= 新增：独立处理琉球数据 =================
-    if (mingName === '琉球') {
+    // ================= Mới: Xử lý độc lập dữ liệu Lưu Cầu =================
+    if (mingName === 'Lưu Cầu') {
         if (window._cachedRyukyuFeature) {
             let f = JSON.parse(JSON.stringify(window._cachedRyukyuFeature));
-            f.properties.name = '琉球国'; // 第二层的名字
+            f.properties.name = 'Nước Lưu Cầu'; // Tên lớp thứ hai
             return { type: 'FeatureCollection', features: [f] };
         }
         return null;
     }
     // =========================================================
 
-    // ================= 统一周边外国高级数据映射 (渲染 Level 1) =================
+    // ================= Thống nhất ánh xạ dữ liệu cấp cao của các nước láng giềng (Kết xuất Level 1) =================
     const customForeignMap = {
-        '日本': { 
+        'Nhật Bản': { 
             codes: ['JPN'], 
             processFeature: (f) => {
                 let newF = removeJapanIslands(f);
                 if (!newF) return null;
                 let rawName = newF.properties.NL_NAME_1 || newF.properties.NAME_1 || '';
                 let cleanName = rawName.replace(/[都道府県]$/, '');
-                if (cleanName === '沖縄') return null;
+                if (cleanName === 'Okinawa') return null;
                 let edoName = japanToEdoMap[cleanName] || cleanName;
                 newF.properties.name = edoToRegionMap[edoName] || edoName;
                 return newF;
             }
         },
-        '朝鲜': { 
+        'Triều Tiên': { 
             codes: ['KOR', 'PRK'], 
             processFeature: (f) => {
                 let rawName = f.properties.NAME_1 || f.properties.NL_NAME_1 || '';
-                f.properties.name = koreaToJoseonMap[rawName] || '京畿道';
+                f.properties.name = koreaToJoseonMap[rawName] || 'Gyeonggi-do';
                 return f;
             }
         },
-        '喀尔喀': { codes: ['MNG'], map1: khalkhaToCountyMap, map2: khalkhaCountyToFuMap },
-        '尼婆罗': { codes: ['NPL'], map1: nepalToCountyMap, map2: nepalCountyToFuMap },
-        '不丹': { codes: ['BTN'], map1: bhutanToCountyMap, map2: bhutanCountyToFuMap },
-        '澜沧': { codes: ['LAO'], map1: lancangToCountyMap, map2: lancangCountyToFuMap },
-        '暹罗': { codes: ['THA'], map1: siamToCountyMap, map2: siamCountyToFuMap },
-        '郑主': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['交趾', '清华'] },
-        '广南': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['顺化', '广南', '占城', '水真腊'] },
-        '莫卧儿': { codes: ['IND', 'PAK', 'BGD'], map1: mughalToCountyMap, map2: mughalCountyToFuMap }
+        'Khách Nhĩ Khách (Khalkha)': { codes: ['MNG'], map1: khalkhaToCountyMap, map2: khalkhaCountyToFuMap },
+        'Nepal': { codes: ['NPL'], map1: nepalToCountyMap, map2: nepalCountyToFuMap },
+        'Bhutan': { codes: ['BTN'], map1: bhutanToCountyMap, map2: bhutanCountyToFuMap },
+        'Lạn Thương': { codes: ['LAO'], map1: lancangToCountyMap, map2: lancangCountyToFuMap },
+        'Xiêm La': { codes: ['THA'], map1: siamToCountyMap, map2: siamCountyToFuMap },
+        'Chúa Trịnh': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['Giao Chỉ', 'Thanh Hóa'] },
+        'Quảng Nam': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['Thuận Hóa', 'Quảng Nam', 'Chiêm Thành', 'Thủy Chân Lạp'] },
+        'Mughal': { codes: ['IND', 'PAK', 'BGD'], map1: mughalToCountyMap, map2: mughalCountyToFuMap }
     };
 
     if (customForeignMap[mingName]) {
@@ -3300,9 +3300,9 @@ async function buildMingPrefectureGeoJSON(mingName) {
 
             let currentFeatures = JSON.parse(JSON.stringify(geoData.features));
 
-            if (mingName === '郑主') {
+            if (mingName === 'Chúa Trịnh') {
                 currentFeatures = currentFeatures.filter(f => { let c = getFeatureCenter(f); return c && c[1] >= 17.5; });
-            } else if (mingName === '广南') {
+            } else if (mingName === 'Quảng Nam') {
                 currentFeatures = currentFeatures.filter(f => { let c = getFeatureCenter(f); return c && c[1] < 17.5; });
             }
 
@@ -3310,13 +3310,13 @@ async function buildMingPrefectureGeoJSON(mingName) {
             let unmappedFeatures = [];
 
             if (conf.processFeature) {
-                // 执行日韩等专属函数的精准映射
+                // Thực thi ánh xạ chính xác của các hàm chuyên biệt như Nhật Bản, Hàn Quốc
                 currentFeatures.forEach(f => {
                     let newF = conf.processFeature(f);
                     if (newF && newF.properties.name) mappedFeatures.push(newF);
                 });
             } else {
-                // 执行其他外国的模糊文本映射
+                // Thực thi ánh xạ văn bản mờ cho các nước ngoài khác
                 let sortedKeys = Object.keys(conf.map1).sort((a, b) => b.length - a.length);
                 currentFeatures.forEach(f => {
                     f.properties = f.properties || {}; 
@@ -3331,7 +3331,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
                     if (countyName) {
                         let fuName = conf.map2[countyName] || countyName;
                         if (conf.validFus && !conf.validFus.includes(fuName)) {
-                            fuName = mingName === '郑主' ? '清华' : (mingName === '广南' ? '顺化' : conf.validFus[0]);
+                            fuName = mingName === 'Chúa Trịnh' ? 'Thanh Hóa' : (mingName === 'Quảng Nam' ? 'Thuận Hóa' : conf.validFus[0]);
                         }
                         f.properties.name = fuName;
                         mappedFeatures.push(f);
@@ -3340,7 +3340,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
                     }
                 });
 
-                // 碎片物理吸附
+                // Hút dính vật lý mảnh vỡ
                 unmappedFeatures.forEach(uf => {
                     if (mappedFeatures.length > 0) {
                         let closestFu = mappedFeatures[0].properties.name;
@@ -3367,7 +3367,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
         }
 
         const features = [];
-        // 这里会自动调用增强版的 Turf.js 逻辑进行融合并去除虚线孔洞
+        // Tại đây sẽ tự động gọi bản nâng cao Turf.js Hợp nhất logic và loại bỏ các lỗ hổng nét đứt
         for (const fu of Object.keys(fuMap)) {
             const mergedFeat = await mergeFeaturesWithTurf(fuMap[fu], fu);
             features.push(mergedFeat);
@@ -3376,10 +3376,10 @@ async function buildMingPrefectureGeoJSON(mingName) {
     }
 
 
-    // 2. 普通外国国家（已移除在此重复的郑主和广南，防止逻辑冲突）
+    // 2. Quốc gia nước ngoài thông thường (Đã xóa Chúa Trịnh và Quảng Nam bị lặp lại ở đây, tránh xung đột logic)
     const genericForeignCodes = {
-        '莫卧儿': ['IND', 'PAK', 'BGD'], 
-        '澜沧': ['LAO'], '暹罗': ['THA']
+        'Mughal': ['IND', 'PAK', 'BGD'], 
+        'Lạn Thương': ['LAO'], 'Xiêm La': ['THA']
     };
 
     if (genericForeignCodes[mingName]) {
@@ -3390,7 +3390,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
             if (geoData && geoData.features) {
                 geoData.features.forEach(f => {
                     let newF = JSON.parse(JSON.stringify(f));
-                    let prefName = newF.properties.NL_NAME_1 || newF.properties.NAME_1 || '未知区域';
+                    let prefName = newF.properties.NL_NAME_1 || newF.properties.NAME_1 || 'Khu vực không xác định';
                     newF.properties.name = prefName;
                     features.push(newF);
                 });
@@ -3403,67 +3403,67 @@ async function buildMingPrefectureGeoJSON(mingName) {
 
 
     if (!mingMapNationGeoJSON) {
-        // 【核心修复】：删除内层的 showLoading 和 hideLoading
-        // 坚决防止内层提前关闭外层的大遮罩，让遮罩稳稳挡住屏幕直到数据处理完毕
-        // 这样玩家就不会误以为卡顿没点上而点第二次
+        // [Sửa lỗi cốt lõi]: Xóa lớp bên trong showLoading Và hideLoading
+        // Kiên quyết ngăn lớp bên trong đóng sớm lớp phủ lớn bên ngoài, để lớp phủ chắn ngang màn hình một cách ổn định cho đến khi dữ liệu được xử lý xong.
+        // Bằng cách này người chơi sẽ không hiểu lầm là bị lag chưa bấm được mà bấm thêm lần nữa
         mingMapNationGeoJSON = await fetchGeoJSON('100000');
         if (!mingMapNationGeoJSON) return null;
     }
     
     let modernProvs = Object.keys(modernToMingProvince).filter(k => modernToMingProvince[k] === mingName);
     
-    if (['察哈尔', '土默特', '朵颜三卫'].includes(mingName)) {
-        if (!modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
-        if (!modernProvs.includes('河北省')) modernProvs.push('河北省');
-        if (mingName === '朵颜三卫' && !modernProvs.includes('辽宁省')) modernProvs.push('辽宁省');
+    if (['Sát Cáp Nhĩ', 'Thổ Mặc Đặc', 'Đóa Nhan Tam Vệ'].includes(mingName)) {
+        if (!modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
+        if (!modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+        if (mingName === 'Đóa Nhan Tam Vệ' && !modernProvs.includes('Tỉnh Liêu Ninh')) modernProvs.push('Tỉnh Liêu Ninh');
     }
-    if (mingName === '青海' && !modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
+    if (mingName === 'Thanh Hải' && !modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
     
-    // 西南与两广跨省拉取：
-    if (mingName === '四川') {
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
-        if (!modernProvs.includes('云南省')) modernProvs.push('云南省');
+    // Kéo dữ liệu liên tỉnh Tây Nam và Lưỡng Quảng:
+    if (mingName === 'Tứ Xuyên') {
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
+        if (!modernProvs.includes('Tỉnh Vân Nam')) modernProvs.push('Tỉnh Vân Nam');
     }
-    if (mingName === '贵州') {
-        if (!modernProvs.includes('四川省')) modernProvs.push('四川省');
-        if (!modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-        if (!modernProvs.includes('湖南省')) modernProvs.push('湖南省');
+    if (mingName === 'Quý Châu') {
+        if (!modernProvs.includes('Tỉnh Tứ Xuyên')) modernProvs.push('Tỉnh Tứ Xuyên');
+        if (!modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+        if (!modernProvs.includes('Tỉnh Hồ Nam')) modernProvs.push('Tỉnh Hồ Nam');
     }
-    if (mingName === '云南' && !modernProvs.includes('四川省')) modernProvs.push('四川省');
-    if (mingName === '广东' && !modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-    if (mingName === '广西') {
-        if (!modernProvs.includes('广东省')) modernProvs.push('广东省');
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
-        if (!modernProvs.includes('湖南省')) modernProvs.push('湖南省');
+    if (mingName === 'Vân Nam' && !modernProvs.includes('Tỉnh Tứ Xuyên')) modernProvs.push('Tỉnh Tứ Xuyên');
+    if (mingName === 'Quảng Đông' && !modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+    if (mingName === 'Quảng Tây') {
+        if (!modernProvs.includes('Tỉnh Quảng Đông')) modernProvs.push('Tỉnh Quảng Đông');
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
+        if (!modernProvs.includes('Tỉnh Hồ Nam')) modernProvs.push('Tỉnh Hồ Nam');
     }
-    if (mingName === '湖广') {
-        if (!modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
+    if (mingName === 'Hồ Quảng') {
+        if (!modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
     }
     
-    // 华东/中原跨省飞地拉取：
-    if (mingName === '南直隶' && !modernProvs.includes('江西省')) modernProvs.push('江西省');
-    if (mingName === '北直隶') {
-        if (!modernProvs.includes('河南省')) modernProvs.push('河南省');
-        if (!modernProvs.includes('山东省')) modernProvs.push('山东省');
+    // Hoa Đông/Lấy dữ liệu vùng lãnh thổ tách rời liên tỉnh ở Trung Nguyên:
+    if (mingName === 'Nam Trực Lệ' && !modernProvs.includes('Tỉnh Giang Tây')) modernProvs.push('Tỉnh Giang Tây');
+    if (mingName === 'Bắc Trực Lệ') {
+        if (!modernProvs.includes('Tỉnh Hà Nam')) modernProvs.push('Tỉnh Hà Nam');
+        if (!modernProvs.includes('Tỉnh Sơn Đông')) modernProvs.push('Tỉnh Sơn Đông');
     }
-    if (mingName === '河南' && !modernProvs.includes('河北省')) modernProvs.push('河北省');
-    if (mingName === '山东') {
-        if (!modernProvs.includes('河北省')) modernProvs.push('河北省');
-        if (!modernProvs.includes('河南省')) modernProvs.push('河南省');
+    if (mingName === 'Hà Nam' && !modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+    if (mingName === 'Sơn Đông') {
+        if (!modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+        if (!modernProvs.includes('Tỉnh Hà Nam')) modernProvs.push('Tỉnh Hà Nam');
     }
 
-    // 西北与东北/边疆跨省拉取：
-    if (mingName === '陕西') {
-        if (!modernProvs.includes('青海省')) modernProvs.push('青海省');
-        if (!modernProvs.includes('宁夏回族自治区')) modernProvs.push('宁夏回族自治区');
+    // Tây Bắc và Đông Bắc/Kéo liên tỉnh vùng biên giới:
+    if (mingName === 'Thiểm Tây') {
+        if (!modernProvs.includes('Tỉnh Thanh Hải')) modernProvs.push('Tỉnh Thanh Hải');
+        if (!modernProvs.includes('Khu tự trị dân tộc Hồi Ninh Hạ')) modernProvs.push('Khu tự trị dân tộc Hồi Ninh Hạ');
     }
-    if (mingName === '朵颜三卫' && !modernProvs.includes('吉林省')) modernProvs.push('吉林省');
-    if (mingName === '野人女真' && !modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
+    if (mingName === 'Đóa Nhan Tam Vệ' && !modernProvs.includes('Tỉnh Cát Lâm')) modernProvs.push('Tỉnh Cát Lâm');
+    if (mingName === 'Dã Nhân Nữ Chân' && !modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
 
-        if (mingName === '宁夏') {
-        if (!modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
-        if (!modernProvs.includes('甘肃省')) modernProvs.push('甘肃省');
+        if (mingName === 'Ninh Hạ') {
+        if (!modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
+        if (!modernProvs.includes('Tỉnh Cam Túc')) modernProvs.push('Tỉnh Cam Túc');
     }
 
     
@@ -3478,16 +3478,16 @@ async function buildMingPrefectureGeoJSON(mingName) {
     }
 
     for (let mpName of modernProvs) {
-        if (mpName === '北京市' || mpName === '天津市') { 
-            if (mingName === '北直隶') {
-                const adcode = mpName === '北京市' ? '110000' : '120000';
+        if (mpName === 'Thành phố Bắc Kinh' || mpName === 'Thành phố Thiên Tân') { 
+            if (mingName === 'Bắc Trực Lệ') {
+                const adcode = mpName === 'Thành phố Bắc Kinh' ? '110000' : '120000';
                 const distGeo = await fetchGeoJSON(adcode);
                 if (distGeo && distGeo.features) {
                     if (!mingCountySearchIndex) buildCountyIndex();
                     distGeo.features.forEach(d => {
                         let modernName = d.properties.name;
                         let mCounty = (preciseCountyMap[mpName] && preciseCountyMap[mpName][modernName]) || modernCountyToMingCounty[modernName];
-                        let targetFu = '顺天府'; 
+                        let targetFu = 'Phủ Thuận Thiên'; 
                         if (mCounty && mingCountySearchIndex && mingCountySearchIndex[mCounty]) {
                             targetFu = mingCountySearchIndex[mCounty][0].fu;
                         }
@@ -3500,15 +3500,15 @@ async function buildMingPrefectureGeoJSON(mingName) {
             }
             continue; 
         }
-        if (mpName === '上海市') { 
-            if (mingName === '南直隶') {
+        if (mpName === 'Thành phố Thượng Hải') { 
+            if (mingName === 'Nam Trực Lệ') {
                 const distGeo = await fetchGeoJSON('310000');
                 if (distGeo && distGeo.features) {
                     if (!mingCountySearchIndex) buildCountyIndex();
                     distGeo.features.forEach(d => {
                         let modernName = d.properties.name;
                         let mCounty = (preciseCountyMap[mpName] && preciseCountyMap[mpName][modernName]) || modernCountyToMingCounty[modernName];
-                        let targetFu = '松江府'; 
+                        let targetFu = 'Phủ Tùng Giang'; 
                         if (mCounty && mingCountySearchIndex && mingCountySearchIndex[mCounty]) {
                             targetFu = mingCountySearchIndex[mCounty][0].fu;
                         }
@@ -3521,12 +3521,12 @@ async function buildMingPrefectureGeoJSON(mingName) {
             }
             continue; 
         }
-        if (mpName === '重庆市') {
+        if (mpName === 'Thành phố Trùng Khánh') {
             const districts = await fetchGeoJSON('500000');
             if (districts) {
                 districts.features.forEach(d => {
                     const distName = d.properties.name;
-                    const mapping = citySplitConfig['重庆市'].mapping;
+                    const mapping = citySplitConfig['Thành phố Trùng Khánh'].mapping;
                     const fu = mapping[distName] || mapping['default'];
                     const targetProv = getProvOfFu(fu) || modernToMingProvince[mpName];
                     if (targetProv === mingName) {
@@ -3545,7 +3545,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
         
         const defaultFu = modernProvinceDefaultFu[mpName] || modernToMingProvince[mpName];
         for (let cityFeat of cityGeo.features) {
-            cityFeat = removeTanggulaEnclave(cityFeat); // <-- 拦截并切除飞地
+            cityFeat = removeTanggulaEnclave(cityFeat); // <-- Chặn và cắt bỏ lãnh thổ tách rời
             const cityName = cityFeat.properties.name;
 
             
@@ -3580,7 +3580,7 @@ async function buildMingPrefectureGeoJSON(mingName) {
     if (!Object.keys(fuMap).length) return null;
     
     const features = [];
-    // 替换为 for...of 异步循环，调用 Turf 进行完美消除缝隙融合
+    // Thay bằng for...of Vòng lặp không đồng bộ, gọi Turf Tiến hành hợp nhất xóa khe hở hoàn hảo
     for (const fu of Object.keys(fuMap)) {
         const mergedFeat = await mergeFeaturesWithTurf(fuMap[fu], fu);
         features.push(mergedFeat);
@@ -3588,30 +3588,30 @@ async function buildMingPrefectureGeoJSON(mingName) {
     return {type:'FeatureCollection',features};
 }
 
-// 获取第三层：区县边界并转换合并为明代县域
-// 替换代码
+// Lấy lớp thứ 3: Ranh giới quận huyện, sau đó chuyển đổi và hợp nhất thành lãnh thổ cấp huyện thời Minh
+// Thay thế mã
 async function buildMingCountyGeoJSON(mingProv, mingFu) {
 
-    // ================= 新增：独立处理琉球区县数据 =================
-    if (mingProv === '琉球') {
+    // ================= Mới: Xử lý độc lập dữ liệu quận huyện Lưu Cầu =================
+    if (mingProv === 'Lưu Cầu') {
         if (window._cachedRyukyuFeature) {
             let f = JSON.parse(JSON.stringify(window._cachedRyukyuFeature));
-            f.properties.name = '中山'; // 第三层的名字（琉球国首都中山府）
+            f.properties.name = 'Trung Sơn'; // Tên lớp thứ ba (Phủ Trung Sơn, thủ phủ vương quốc Lưu Cầu)
             return { type: 'FeatureCollection', features: [f] };
         }
         return null;
     }
-    // ================= 统一周边外国高级区县数据 (渲染 Level 2) =================
+    // ================= Thống nhất dữ liệu quận huyện cấp cao của các nước láng giềng (Kết xuất Level 2) =================
     const customForeignMapCounty = {
-        '日本': { 
+        'Nhật Bản': { 
             codes: ['JPN'], 
-            fetchLevel: 1, // 日本第3层仍然使用 Level 1 切分
+            fetchLevel: 1, // Lớp thứ 3 của Nhật Bản vẫn sử dụng Level 1 Phân chia
             processFeature: (f, targetFu) => {
                 let newF = removeJapanIslands(f);
                 if (!newF) return null;
                 let name = newF.properties.NL_NAME_1 || newF.properties.NAME_1 || '';
                 let clean = name.replace(/[都道府県]$/, '');
-                if (clean === '沖縄') return null;
+                if (clean === 'Okinawa') return null;
                 let edo = japanToEdoMap[clean] || clean;
                 let region = edoToRegionMap[edo] || edo;
                 if (region === targetFu) {
@@ -3622,12 +3622,12 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                 return null;
             }
         },
-        '朝鲜': { 
+        'Triều Tiên': { 
             codes: ['KOR', 'PRK'], 
             fetchLevel: 2, 
             processFeature: (f, targetFu) => {
                 let provName = f.properties.NAME_1 || f.properties.NL_NAME_1 || '';
-                let paldoName = koreaToJoseonMap[provName] || '京畿道';
+                let paldoName = koreaToJoseonMap[provName] || 'Gyeonggi-do';
                 if (paldoName === targetFu) {
                     let modernCounty = f.properties.NAME_2 || f.properties.NL_NAME_2 || '';
                     let cleanCounty = modernCounty.replace(/[- ]?(si|gun|gu|do|shi|city|county)$/i, '').replace(/[市郡구군시]$/, '');
@@ -3639,20 +3639,20 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                         joseonName = joseonCountyMap[cleanCounty] || joseonCountyMap[modernCounty];
                     }
                     f.properties._fu = paldoName;
-                    f.properties.name = joseonName; // 允许为undefined，后续物理吸附
+                    f.properties.name = joseonName; // Cho phép là undefined, Hút dính vật lý tiếp theo
                     return f;
                 }
                 return null;
             }
         },
-        '喀尔喀': { codes: ['MNG'], map1: khalkhaToCountyMap, map2: khalkhaCountyToFuMap },
-        '尼婆罗': { codes: ['NPL'], map1: nepalToCountyMap, map2: nepalCountyToFuMap },
-        '不丹': { codes: ['BTN'], map1: bhutanToCountyMap, map2: bhutanCountyToFuMap },
-        '澜沧': { codes: ['LAO'], map1: lancangToCountyMap, map2: lancangCountyToFuMap },
-        '暹罗': { codes: ['THA'], map1: siamToCountyMap, map2: siamCountyToFuMap },
-        '郑主': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['交趾', '清华'] },
-        '广南': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['顺化', '广南', '占城', '水真腊'] },
-        '莫卧儿': { codes: ['IND', 'PAK', 'BGD'], map1: mughalToCountyMap, map2: mughalCountyToFuMap }
+        'Khách Nhĩ Khách (Khalkha)': { codes: ['MNG'], map1: khalkhaToCountyMap, map2: khalkhaCountyToFuMap },
+        'Nepal': { codes: ['NPL'], map1: nepalToCountyMap, map2: nepalCountyToFuMap },
+        'Bhutan': { codes: ['BTN'], map1: bhutanToCountyMap, map2: bhutanCountyToFuMap },
+        'Lạn Thương': { codes: ['LAO'], map1: lancangToCountyMap, map2: lancangCountyToFuMap },
+        'Xiêm La': { codes: ['THA'], map1: siamToCountyMap, map2: siamCountyToFuMap },
+        'Chúa Trịnh': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['Giao Chỉ', 'Thanh Hóa'] },
+        'Quảng Nam': { codes: ['VNM'], map1: vietnamToCountyMap, map2: vietnamCountyToFuMap, validFus: ['Thuận Hóa', 'Quảng Nam', 'Chiêm Thành', 'Thủy Chân Lạp'] },
+        'Mughal': { codes: ['IND', 'PAK', 'BGD'], map1: mughalToCountyMap, map2: mughalCountyToFuMap }
     };
 
     if (customForeignMapCounty[mingProv]) {
@@ -3666,9 +3666,9 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
 
             let currentFeatures = JSON.parse(JSON.stringify(geoData.features));
 
-            if (mingProv === '郑主') {
+            if (mingProv === 'Chúa Trịnh') {
                 currentFeatures = currentFeatures.filter(f => { let c = getFeatureCenter(f); return c && c[1] >= 17.5; });
-            } else if (mingProv === '广南') {
+            } else if (mingProv === 'Quảng Nam') {
                 currentFeatures = currentFeatures.filter(f => { let c = getFeatureCenter(f); return c && c[1] < 17.5; });
             }
 
@@ -3696,8 +3696,8 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                     if (countyName) {
                         let fuName = conf.map2[countyName] || countyName;
                         if (conf.validFus && !conf.validFus.includes(fuName)) {
-                            fuName = mingProv === '郑主' ? '清华' : (mingProv === '广南' ? '顺化' : conf.validFus[0]);
-                            countyName = mingProv === '郑主' ? '乂安' : (mingProv === '广南' ? '广平' : Object.keys(conf.map2).find(k => conf.map2[k] === fuName) || countyName);
+                            fuName = mingProv === 'Chúa Trịnh' ? 'Thanh Hóa' : (mingProv === 'Quảng Nam' ? 'Thuận Hóa' : conf.validFus[0]);
+                            countyName = mingProv === 'Chúa Trịnh' ? 'Nghệ An' : (mingProv === 'Quảng Nam' ? 'Quảng Bình' : Object.keys(conf.map2).find(k => conf.map2[k] === fuName) || countyName);
                         }
                         let newF = JSON.parse(JSON.stringify(f));
                         newF.properties._fu = fuName;
@@ -3709,7 +3709,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                 }
             });
 
-            // 物理吸附（无缝处理离岛或未匹配区划）
+            // Hấp phụ vật lý (Xử lý liền mạch các đảo xa hoặc khu vực chưa khớp)
             unmappedFeatures.forEach(uf => {
                 if (mappedFeatures.length > 0) {
                     let closestF = mappedFeatures[0];
@@ -3729,17 +3729,17 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                         fallbackCounty = Object.keys(conf.map2).find(k => conf.map2[k] === mingFu) || Object.keys(conf.map1)[0];
                     } else {
                         const safeDaoFallback = {
-                            '京畿道': '汉城府', '平安道': '平壤府', '咸镜道': '咸兴府', '黄海道': '海州牧',
-                            '江原道': '江陵大都护府', '忠清道': '公州牧', '庆尚道': '庆州府', '全罗道': '全州府'
+                            'Gyeonggi-do': 'Phủ Hán Thành', 'Pyongan-do': 'Phủ Bình Nhưỡng', 'Hamgyong-do': 'Phủ Hamheung', 'Hwanghae-do': 'Mục Haeju',
+                            'Gangwon-do': 'Phủ Đại đô hộ Gangneung', 'Chungcheong-do': 'Mục Gongju', 'Gyeongsang-do': 'Phủ Gyeongju', 'Jeolla-do': 'Phủ Jeonju'
                         };
-                        fallbackCounty = safeDaoFallback[mingFu] || '未知区域';
+                        fallbackCounty = safeDaoFallback[mingFu] || 'Khu vực không xác định';
                     }
                     uf.properties.name = fallbackCounty;
                 }
                 mappedFeatures.push(uf);
             });
 
-            // 最后根据传入的目标府组装地图块
+            // Cuối cùng lắp ráp các khối bản đồ theo phủ mục tiêu được truyền vào
             mappedFeatures.forEach(f => {
                 if (f.properties._fu === mingFu) {
                     let cName = f.properties.name;
@@ -3750,7 +3750,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
         }
 
         const features = [];
-        // 调用增强版的 Turf 合并逻辑，剥除残留的内部区县线孔洞
+        // Gọi phiên bản tăng cường Turf Gộp logic, loại bỏ các lỗ hổng ranh giới quận huyện bên trong còn sót lại
         for (const cName of Object.keys(countyMap)) {
             const mergedFeat = await mergeFeaturesWithTurf(countyMap[cName], cName);
             features.push(mergedFeat);
@@ -3760,8 +3760,8 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
 
 
     const genericForeignCodesCounty = {
-        '莫卧儿': ['IND', 'PAK', 'BGD'], 
-        '澜沧': ['LAO'], '暹罗': ['THA']
+        'Mughal': ['IND', 'PAK', 'BGD'], 
+        'Lạn Thương': ['LAO'], 'Xiêm La': ['THA']
     };
 
     if (genericForeignCodesCounty[mingProv]) {
@@ -3771,7 +3771,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
             const geoData = await fetchGeoJSON(`${code}_2`); 
             if (geoData && geoData.features) {
                 geoData.features.forEach(f => {
-                    let prefName = f.properties.NL_NAME_1 || f.properties.NAME_1 || '未知区域';
+                    let prefName = f.properties.NL_NAME_1 || f.properties.NAME_1 || 'Khu vực không xác định';
                     if (prefName === mingFu) {
                         let newF = JSON.parse(JSON.stringify(f));
                         let countyName = newF.properties.NL_NAME_2 || newF.properties.NAME_2 || newF.properties.NAME_1;
@@ -3791,70 +3791,70 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
     let modernProvs = Object.keys(modernToMingProvince).filter(k => modernToMingProvince[k] === mingProv);
 
     
-    // ==== 跨省飞地提取逻辑开始 ====
-    if (['察哈尔', '土默特', '朵颜三卫'].includes(mingProv)) {
-        if (!modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
-        if (!modernProvs.includes('河北省')) modernProvs.push('河北省');
-        if (mingProv === '朵颜三卫' && !modernProvs.includes('辽宁省')) modernProvs.push('辽宁省');
+    // ==== Bắt đầu logic trích xuất vùng lãnh thổ tách rời liên tỉnh ====
+    if (['Sát Cáp Nhĩ', 'Thổ Mặc Đặc', 'Đóa Nhan Tam Vệ'].includes(mingProv)) {
+        if (!modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
+        if (!modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+        if (mingProv === 'Đóa Nhan Tam Vệ' && !modernProvs.includes('Tỉnh Liêu Ninh')) modernProvs.push('Tỉnh Liêu Ninh');
     }
-    if (mingProv === '青海' && !modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
+    if (mingProv === 'Thanh Hải' && !modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
 
-    // 西南与两广跨省拉取：
-    if (mingProv === '四川') {
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
-        if (!modernProvs.includes('云南省')) modernProvs.push('云南省');
+    // Kéo dữ liệu liên tỉnh Tây Nam và Lưỡng Quảng:
+    if (mingProv === 'Tứ Xuyên') {
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
+        if (!modernProvs.includes('Tỉnh Vân Nam')) modernProvs.push('Tỉnh Vân Nam');
     }
-    if (mingProv === '贵州') {
-        if (!modernProvs.includes('四川省')) modernProvs.push('四川省');
-        if (!modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-        if (!modernProvs.includes('湖南省')) modernProvs.push('湖南省');
+    if (mingProv === 'Quý Châu') {
+        if (!modernProvs.includes('Tỉnh Tứ Xuyên')) modernProvs.push('Tỉnh Tứ Xuyên');
+        if (!modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+        if (!modernProvs.includes('Tỉnh Hồ Nam')) modernProvs.push('Tỉnh Hồ Nam');
     }
-    if (mingProv === '云南' && !modernProvs.includes('四川省')) modernProvs.push('四川省');
-    if (mingProv === '广东' && !modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-    if (mingProv === '广西') {
-        if (!modernProvs.includes('广东省')) modernProvs.push('广东省');
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
-        if (!modernProvs.includes('湖南省')) modernProvs.push('湖南省');
+    if (mingProv === 'Vân Nam' && !modernProvs.includes('Tỉnh Tứ Xuyên')) modernProvs.push('Tỉnh Tứ Xuyên');
+    if (mingProv === 'Quảng Đông' && !modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+    if (mingProv === 'Quảng Tây') {
+        if (!modernProvs.includes('Tỉnh Quảng Đông')) modernProvs.push('Tỉnh Quảng Đông');
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
+        if (!modernProvs.includes('Tỉnh Hồ Nam')) modernProvs.push('Tỉnh Hồ Nam');
     }
-    if (mingProv === '湖广') {
-        if (!modernProvs.includes('广西壮族自治区')) modernProvs.push('广西壮族自治区');
-        if (!modernProvs.includes('贵州省')) modernProvs.push('贵州省');
+    if (mingProv === 'Hồ Quảng') {
+        if (!modernProvs.includes('Khu tự trị dân tộc Choang Quảng Tây')) modernProvs.push('Khu tự trị dân tộc Choang Quảng Tây');
+        if (!modernProvs.includes('Tỉnh Quý Châu')) modernProvs.push('Tỉnh Quý Châu');
     }
     
-    // 华东/中原跨省飞地拉取：
-    if (mingProv === '南直隶' && !modernProvs.includes('江西省')) modernProvs.push('江西省');
-    if (mingProv === '北直隶') {
-        if (!modernProvs.includes('河南省')) modernProvs.push('河南省');
-        if (!modernProvs.includes('山东省')) modernProvs.push('山东省');
+    // Hoa Đông/Lấy dữ liệu vùng lãnh thổ tách rời liên tỉnh ở Trung Nguyên:
+    if (mingProv === 'Nam Trực Lệ' && !modernProvs.includes('Tỉnh Giang Tây')) modernProvs.push('Tỉnh Giang Tây');
+    if (mingProv === 'Bắc Trực Lệ') {
+        if (!modernProvs.includes('Tỉnh Hà Nam')) modernProvs.push('Tỉnh Hà Nam');
+        if (!modernProvs.includes('Tỉnh Sơn Đông')) modernProvs.push('Tỉnh Sơn Đông');
     }
-    if (mingProv === '河南' && !modernProvs.includes('河北省')) modernProvs.push('河北省');
-    if (mingProv === '山东') {
-        if (!modernProvs.includes('河北省')) modernProvs.push('河北省');
-        if (!modernProvs.includes('河南省')) modernProvs.push('河南省');
+    if (mingProv === 'Hà Nam' && !modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+    if (mingProv === 'Sơn Đông') {
+        if (!modernProvs.includes('Tỉnh Hà Bắc')) modernProvs.push('Tỉnh Hà Bắc');
+        if (!modernProvs.includes('Tỉnh Hà Nam')) modernProvs.push('Tỉnh Hà Nam');
     }
     
-    // 西北与东北/边疆跨省拉取：
-    if (mingProv === '陕西') {
-        if (!modernProvs.includes('青海省')) modernProvs.push('青海省');
-        if (!modernProvs.includes('宁夏回族自治区')) modernProvs.push('宁夏回族自治区');
+    // Tây Bắc và Đông Bắc/Kéo liên tỉnh vùng biên giới:
+    if (mingProv === 'Thiểm Tây') {
+        if (!modernProvs.includes('Tỉnh Thanh Hải')) modernProvs.push('Tỉnh Thanh Hải');
+        if (!modernProvs.includes('Khu tự trị dân tộc Hồi Ninh Hạ')) modernProvs.push('Khu tự trị dân tộc Hồi Ninh Hạ');
     }
-    if (mingProv === '朵颜三卫' && !modernProvs.includes('吉林省')) modernProvs.push('吉林省');
-    if (mingProv === '野人女真' && !modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
+    if (mingProv === 'Đóa Nhan Tam Vệ' && !modernProvs.includes('Tỉnh Cát Lâm')) modernProvs.push('Tỉnh Cát Lâm');
+    if (mingProv === 'Dã Nhân Nữ Chân' && !modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
 
 
     
-    // 修复：确保宁夏第三层能拉取内蒙古（阿拉善）
-    if (mingProv === '宁夏') {
-        if (!modernProvs.includes('内蒙古自治区')) modernProvs.push('内蒙古自治区');
-        if (!modernProvs.includes('甘肃省')) modernProvs.push('甘肃省');
+    // Sửa lỗi: Đảm bảo lớp thứ ba của Ninh Hạ có thể lấy dữ liệu Nội Mông (A Lạp Thiện)
+    if (mingProv === 'Ninh Hạ') {
+        if (!modernProvs.includes('Khu tự trị Nội Mông Cổ')) modernProvs.push('Khu tự trị Nội Mông Cổ');
+        if (!modernProvs.includes('Tỉnh Cam Túc')) modernProvs.push('Tỉnh Cam Túc');
     }
-    // ==== 跨省飞地提取逻辑结束 ====
+    // ==== Kết thúc logic trích xuất vùng lãnh thổ tách rời liên tỉnh ====
 
     let rawFeatures = [];
 
     for (let mp of modernProvs) {
-        if (mp === '北京市' || mp === '天津市') {
-            const adcode = mp === '北京市' ? '110000' : '120000';
+        if (mp === 'Thành phố Bắc Kinh' || mp === 'Thành phố Thiên Tân') {
+            const adcode = mp === 'Thành phố Bắc Kinh' ? '110000' : '120000';
             const geo = await fetchGeoJSON(adcode);
             if (geo && geo.features) {
                 geo.features.forEach(f => {
@@ -3874,7 +3874,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
             continue;
         }
 
-        if (mp === '上海市') {
+        if (mp === 'Thành phố Thượng Hải') {
             const geo = await fetchGeoJSON('310000');
             if (geo && geo.features) {
                 geo.features.forEach(f => {
@@ -3893,11 +3893,11 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
             }
             continue;
         }
-        if (mp === '重庆市') {
+        if (mp === 'Thành phố Trùng Khánh') {
             const geo = await fetchGeoJSON('500000');
             if (geo && geo.features) {
                 geo.features.forEach(f => {
-                    const mapping = citySplitConfig['重庆市'].mapping;
+                    const mapping = citySplitConfig['Thành phố Trùng Khánh'].mapping;
                     const fu = mapping[f.properties.name] || mapping['default'];
                     if (fu === mingFu) {
                         let newF = JSON.parse(JSON.stringify(f));
@@ -3935,7 +3935,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                                 }
                             });
                         } else {
-                            // 回退处理：如果没有子区县数据（如特殊切分市）
+                            // Xử lý dự phòng: Nếu không có dữ liệu quận huyện con (Như phân chia thành phố đặc biệt)
                             const mappedTo = mapping['default'] || modernCityToMingFu[cityName] || modernProvinceDefaultFu[mp] || mingProv;
                             if (mappedTo === mingFu) {
                                 let newF = JSON.parse(JSON.stringify(cityFeat));
@@ -3966,7 +3966,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
                             rawFeatures.push(newF);
                         });
                     } else {
-                        // 核心修复回退处理：应对如海南省各市县、东莞、中山等无下级轮廓的直筒子市
+                        // Xử lý lùi lại sửa lỗi cốt lõi: Ứng phó với các thành phố cấp tỉnh không có đường viền cấp dưới như các thành phố và huyện của Tỉnh Hải Nam, Đông Quản, Trung Sơn, v.v.
                         let newF = JSON.parse(JSON.stringify(cityFeat));
                         newF.properties._parentCity = cityName;
                         rawFeatures.push(newF);
@@ -3992,7 +3992,7 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
     }
 
     const mergedFeatures = [];
-    // 替换为 for...of 异步循环，调用 Turf 并且清除孔洞
+    // Thay thế bằng for...of Vòng lặp không đồng bộ, gọi Turf Và xóa các lỗ hổng
     for (const cName of Object.keys(countyMap)) {
         const mergedFeat = await mergeFeaturesWithTurf(countyMap[cName], cName);
         mergedFeatures.push(mergedFeat);
@@ -4003,26 +4003,26 @@ async function buildMingCountyGeoJSON(mingProv, mingFu) {
 
 
 // ==========================================
-// 天下府州全图后台构建逻辑
+// Logic xây dựng nền tảng của Bản đồ Toàn cảnh Phủ Châu
 // ==========================================
 let globalNationalPrefectureGeoJSON = null;
 async function getNationalPrefectureGeoJSON(chartInstance) {
     if (globalNationalPrefectureGeoJSON) return globalNationalPrefectureGeoJSON;
     
     if (chartInstance) {
-        chartInstance.showLoading({text:'正在拼合天下府州全图，首次加载需几秒...', color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
+        chartInstance.showLoading({text:'Đang ghép bản đồ toàn cảnh phủ châu thiên hạ, tải lần đầu sẽ mất vài giây...', color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
     }
     
     const allProvs = Object.keys(mingProvinceColors);
     const features = [];
     
-    // 分批次并发加载，防止主线程卡死
+    // Tải đồng thời theo đợt để tránh làm treo luồng chính
     for (let i = 0; i < allProvs.length; i += 5) {
         const chunk = allProvs.slice(i, i + 5);
         const results = await Promise.all(chunk.map(async p => {
             const geo = await buildMingPrefectureGeoJSON(p);
             if (geo && geo.features) {
-                // 给每个府州打上所属省份的标签，用于后续上色
+                // Gắn thẻ tỉnh trực thuộc cho mỗi phủ châu để tô màu sau này
                 geo.features.forEach(f => f.properties._prov = p);
             }
             return geo;
@@ -4030,7 +4030,7 @@ async function getNationalPrefectureGeoJSON(chartInstance) {
         for (let geo of results) {
             if (geo && geo.features) features.push(...geo.features);
         }
-        await new Promise(r => setTimeout(r, 15)); // 短暂休眠让出线程
+        await new Promise(r => setTimeout(r, 15)); // Tạm nghỉ để nhường luồng xử lý
     }
     
     globalNationalPrefectureGeoJSON = { type: 'FeatureCollection', features };
@@ -4039,7 +4039,7 @@ async function getNationalPrefectureGeoJSON(chartInstance) {
 }
 
 // ==========================================
-// 地图渲染控制
+// Kiểm soát kết xuất bản đồ
 // ==========================================
 function renderMingNationMap() {
     const win = mingMapFrame.contentWindow;
@@ -4083,15 +4083,15 @@ function renderMingNationMap() {
     if (mingMapHeroLocation) {
         option.series.push({
             type: 'scatter', coordinateSystem: 'geo', zlevel: 5, silent: true,
-            // 移除冗余动画时间设置，交由全局管控
-            data: [{ name: '主角位置', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
+            // Loại bỏ cài đặt thời gian hiệu ứng thừa, chuyển sang quản lý toàn cục
+            data: [{ name: 'Vị trí nhân vật chính', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
             symbolSize: 12, itemStyle: { color: '#e74c3c', borderColor: '#fff', borderWidth: 1.5, shadowBlur: 3, shadowColor: 'rgba(0,0,0,0.8)' },
-            label: { show: true, formatter: '主角位置', position: 'right', color: '#fff', fontSize: 12, textBorderColor: '#000', textBorderWidth: 2 },
+            label: { show: true, formatter: 'Vị trí nhân vật chính', position: 'right', color: '#fff', fontSize: 12, textBorderColor: '#000', textBorderWidth: 2 },
             tooltip: { show: false } 
         });
     }
 
-    // 【核心修复】：全局关闭实例动画，让红点永远死死粘住底图，消灭一切拖拽脱节与层级乱飞现象
+    // [Sửa lỗi cốt lõi]: Tắt hoạt ảnh phiên bản toàn cục, để chấm đỏ luôn bám chặt vào bản đồ nền, xóa bỏ mọi hiện tượng kéo thả bị đứt đoạn và phân cấp bay loạn.
     option.animation = false;
     mingMapChartInstance.setOption(option, true);
 
@@ -4100,15 +4100,15 @@ function renderMingNationMap() {
     mingMapCurrentProvince = null;
     mingMapCurrentPrefecture = null;
     mingMapPrefectureGeoState = null;
-    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = '<span class="crumb current" data-action="back-nation">🌏 天下</span>';
+    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = '<span class="crumb current" data-action="back-nation">🌏 Thiên hạ</span>';
     mingMapFrameDocument.getElementById('breadcrumb-wrapper').style.display = 'flex';
     mingMapFrameDocument.getElementById('back-btn').style.display = 'none';
     updateMingLegendNation();
 }
 
 
-let mingMapOpenedFus = []; // 新增：保存所有同时展开的府州，支持多选查看
-let mingMapDisplayMode = 'single'; // 新增：控制当前是单层模式(single)还是全景模式(panorama)，默认单层
+let mingMapOpenedFus = []; // Mới: Lưu tất cả các phủ châu được mở rộng cùng lúc, hỗ trợ xem khi chọn nhiều
+let mingMapDisplayMode = 'single'; // Mới: Kiểm soát chế độ lớp đơn hiện tại(single) Hay chế độ toàn cảnh(panorama), Mặc định một lớp
 
 async function renderMingPrefectureMap(mingName) {
     if (!mingMapChartInstance || !mingMapFrame.contentWindow.echarts) return;
@@ -4117,18 +4117,18 @@ async function renderMingPrefectureMap(mingName) {
     let geoJSON;
     let mapName;
     
-    // ================== 数据拉取分支 ==================
+    // ================== Nhánh lấy dữ liệu ==================
     if (mingMapDisplayMode === 'panorama') {
         geoJSON = await getNationalPrefectureGeoJSON(mingMapChartInstance);
         if (!geoJSON || !geoJSON.features.length) return;
         mapName = 'ming_fu_all';
     } else {
-        // 单层模式恢复最原始的数据拉取方式
-        mingMapChartInstance.showLoading({text:'加载府州...',color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
+        // Chế độ lớp đơn khôi phục cách lấy dữ liệu nguyên bản nhất
+        mingMapChartInstance.showLoading({text:'Tải phủ châu...',color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
         geoJSON = await buildMingPrefectureGeoJSON(mingName);
         mingMapChartInstance.hideLoading();
         if (!geoJSON || !geoJSON.features.length) {
-            mingMapChartInstance.setOption({title:{text:'暂无府州边界',left:'center',top:'center',textStyle:{color:'#e8d5a3', fontSize: 16}},backgroundColor:'#0a0e17'});
+            mingMapChartInstance.setOption({title:{text:'Tạm thời không có ranh giới Phủ Châu',left:'center',top:'center',textStyle:{color:'#e8d5a3', fontSize: 16}},backgroundColor:'#0a0e17'});
             setTimeout(() => { if (mingMapChartInstance) mingMapChartInstance.setOption({title:{text:''}}); }, 1500);
             return;
         }
@@ -4139,7 +4139,7 @@ async function renderMingPrefectureMap(mingName) {
         echarts.registerMap(mapName, geoJSON);
     }
     
-    // ================== 缩放与中心点计算 ==================
+    // ================== Tính toán thu phóng và tâm điểm ==================
     let currentOpt = mingMapChartInstance.getOption();
     let currentZoom = (currentOpt && currentOpt.geo && currentOpt.geo.length) ? currentOpt.geo[0].zoom : 1.15;
     let currentCenter = (currentOpt && currentOpt.geo && currentOpt.geo.length) ? currentOpt.geo[0].center : [108, 34];
@@ -4147,7 +4147,7 @@ async function renderMingPrefectureMap(mingName) {
     let targetZoom = mingMapPrefectureGeoState?.zoom || Math.max(currentZoom, 1.8);
     let targetCenter = mingMapPrefectureGeoState?.center || mingProvinceCenters[mingName] || currentCenter; 
 
-    // 如果是单层模式，恢复原始比例和默认居中算法，不强行绑定全景坐标
+    // Nếu là chế độ đơn tầng, khôi phục tỷ lệ ban đầu và thuật toán căn giữa mặc định, không bắt buộc gắn với tọa độ toàn cảnh.
     if (mingMapDisplayMode === 'single') {
         targetZoom = mingMapPrefectureGeoState?.zoom || 1.2;
         targetCenter = mingMapPrefectureGeoState?.center || null;
@@ -4155,7 +4155,7 @@ async function renderMingPrefectureMap(mingName) {
 
     let highlightRegions = []; 
 
-    // ================== 样式分配分支 ==================
+    // ================== Nhánh phân bổ kiểu ==================
     if (mingMapDisplayMode === 'panorama') {
         geoJSON.features.forEach(f => {
             let provName = f.properties._prov;
@@ -4176,10 +4176,10 @@ async function renderMingPrefectureMap(mingName) {
         });
     }
 
-    // 搜索定位拦截
+    // Chặn định vị tìm kiếm
     if (mingMapSearchTarget && mingMapSearchTarget.province === mingName) {
         targetCenter = [mingMapSearchTarget.lng, mingMapSearchTarget.lat];
-        // 在全景模式下，必须使用巨大的 zoom 值才能放大对焦到一个府
+        // Ở chế độ toàn cảnh, bắt buộc phải sử dụng loại khổng lồ zoom giá trị mới có thể phóng to và lấy nét vào một phủ
         targetZoom = mingMapDisplayMode === 'panorama' ? 15 : 3.5; 
         if (mingMapSearchTarget.fu) {
             highlightRegions.push({
@@ -4193,20 +4193,20 @@ async function renderMingPrefectureMap(mingName) {
 
     let seriesData = [ {type:'map', map:mapName, geoIndex:0, silent:false} ]; 
 
-    // 全景模式下，主角无论在哪都始终显示；单层模式下，只在当前聚焦的省份内显示
+    // Ở chế độ toàn cảnh, nhân vật chính luôn được hiển thị dù ở đâu; ở chế độ đơn tầng, chỉ hiển thị trong tỉnh đang được tiêu điểm hiện tại.
     const showHero = mingMapHeroLocation && (mingMapDisplayMode === 'panorama' || mingMapHeroLocation.prov === mingName);
 
     if (showHero) {
         seriesData.push({
             type: 'scatter', coordinateSystem: 'geo', zlevel: 5, silent: true, 
-            data: [{ name: '主角位置', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
+            data: [{ name: 'Vị trí nhân vật chính', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
             symbolSize: 14, itemStyle: { color: '#e74c3c', borderColor: '#fff', borderWidth: 1.5, shadowBlur: 3, shadowColor: 'rgba(0,0,0,0.8)' },
-            label: { show: true, formatter: '主角位置', position: 'right', color: '#fff', fontSize: 13, textBorderColor: '#000', textBorderWidth: 2 },
+            label: { show: true, formatter: 'Vị trí nhân vật chính', position: 'right', color: '#fff', fontSize: 13, textBorderColor: '#000', textBorderWidth: 2 },
             tooltip: { show: false }
         });
     }
 
-    // ================== Echarts 渲染配置生成 ==================
+    // ================== Echarts Tạo cấu hình kết xuất ==================
     let geoConfig = {
         map:mapName, roam:true, zoom: targetZoom, center: targetCenter,
         scaleLimit:{min:0.5, max: isMingMobile() ? 60 : 40}, 
@@ -4217,13 +4217,13 @@ async function renderMingPrefectureMap(mingName) {
     if (mingMapDisplayMode === 'panorama') {
         geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 11, color: 'rgba(255,255,255,0.4)' };
     } else {
-        // 单层模式恢复原始单层默认底色
+        // Chế độ lớp đơn khôi phục màu nền mặc định ban đầu
         geoConfig.itemStyle = {areaColor:'#1e2d45',borderColor:'#3a5070',borderWidth:1.2};
         geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 14 };
     }
 
     mingMapChartInstance.setOption({
-        animation: false, // 【核心修复】：关闭全局动画，根除橡皮筋拖拉延迟感
+        animation: false, // [Sửa lỗi cốt lõi]: Tắt hiệu ứng toàn cục, loại bỏ cảm giác trễ khi kéo thả
         backgroundColor:'#0a0e17',
         tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'}},
         geo: geoConfig,
@@ -4233,9 +4233,9 @@ async function renderMingPrefectureMap(mingName) {
     mingMapCurrentLevel = 'province'; 
     mingMapCurrentProvince = mingName;
     mingMapCurrentPrefecture = null;
-    mingMapOpenedFus = []; // 进入省份层时重置展开的府州记录
+    mingMapOpenedFus = []; // Đặt lại bản ghi phủ châu đã mở rộng khi vào lớp tỉnh
     
-    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 天下</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">📍 ${mingName}</span>`;
+    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">📍 ${mingName}</span>`;
     mingMapFrameDocument.getElementById('breadcrumb-wrapper').style.display = 'flex';
     
     const backBtn = mingMapFrameDocument.getElementById('back-btn');
@@ -4245,24 +4245,24 @@ async function renderMingPrefectureMap(mingName) {
 }
 
 // ==========================================
-// 地图右侧面板控制逻辑 (缩放/定位)
+// Logic điều khiển bảng bên phải bản đồ (Thu phóng/Định vị)
 // ==========================================
 function handleMapControlBtn(action) {
-    // 拦截模式切换点击事件
+    // Đánh chặn sự kiện click chuyển đổi chế độ
     if (action === 'toggle-mode') {
         mingMapDisplayMode = mingMapDisplayMode === 'single' ? 'panorama' : 'single';
         const btn = mingMapFrameDocument.getElementById('mode-toggle-btn');
         if (btn) {
-            btn.title = `切换模式(当前:${mingMapDisplayMode === 'single' ? '单层' : '全景'})`;
+            btn.title = `Chuyển đổi chế độ(Hiện tại:${mingMapDisplayMode === 'single' ? 'Một lớp' : 'Toàn cảnh'})`;
             btn.innerText = mingMapDisplayMode === 'single' ? '🗺️' : '🌐';
             btn.style.color = mingMapDisplayMode === 'single' ? '#8899aa' : '#d4af37';
         }
         
-        // 立即刷新当前界面以应用新模式
+        // Làm mới giao diện hiện tại ngay lập tức để áp dụng chế độ mới
         if (mingMapCurrentLevel === 'province' && mingMapCurrentProvince) {
             renderMingPrefectureMap(mingMapCurrentProvince);
         } else if (mingMapCurrentLevel === 'prefecture' && mingMapCurrentProvince && mingMapCurrentPrefecture) {
-            // 从全景切回单层时，清除多选，仅保留当前聚焦的府
+            // Khi chuyển từ toàn cảnh về một lớp, xóa phần chọn nhiều, chỉ giữ lại phủ đang tập trung
             if (mingMapDisplayMode === 'single' && mingMapOpenedFus.length > 1) {
                 mingMapOpenedFus = [{ prov: mingMapCurrentProvince, fu: mingMapCurrentPrefecture }];
             }
@@ -4278,10 +4278,10 @@ function handleMapControlBtn(action) {
     let currentZoom = opt.geo[0].zoom || 1;
     
     if (action === 'zoom-in') {
-        // 修改：强制动画时间为0，瞬间缩放，不产生漂移
+        // Sửa đổi: Buộc thời gian hiệu ứng bằng 0, thu phóng tức thì, không bị trôi
         mingMapChartInstance.setOption({ animationDurationUpdate: 0, geo: { zoom: currentZoom * 1.5 } });
     } else if (action === 'zoom-out') {
-        // 修改：强制动画时间为0
+        // Sửa đổi: Buộc thời gian hiệu ứng là 0
         mingMapChartInstance.setOption({ animationDurationUpdate: 0, geo: { zoom: currentZoom / 1.5 } });
     } else if (action === 'reset') {
         mingMapChartInstance.setOption({ animationDurationUpdate: 0 }); 
@@ -4294,7 +4294,7 @@ function handleMapControlBtn(action) {
         const isCounty = mingMapCurrentLevel === 'prefecture' && mingMapCurrentProvince === mingMapHeroLocation.prov && mingMapCurrentPrefecture === mingMapHeroLocation.fu;
         
         if (isNation || isProv || isCounty) {
-            // 全景模式下，地图底图极大，需要极高的倍率才能拉近；单层模式下底图小，维持 4 倍即可
+            // Ở chế độ toàn cảnh, bản đồ nền rất lớn, cần tỷ lệ phóng to cực cao mới có thể kéo lại gần; ở chế độ đơn tầng, bản đồ nền nhỏ, chỉ cần giữ nguyên mức 4x là đủ.
             let heroZoom = mingMapDisplayMode === 'panorama' ? 25 : 4;
             mingMapChartInstance.setOption({ 
                 animationDurationUpdate: 0, 
@@ -4310,7 +4310,7 @@ function handleMapControlBtn(action) {
 
 
 
-// 第三层：渲染区县级地图
+// Lớp thứ 3: Render bản đồ cấp quận/huyện
 async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     if (!mingMapChartInstance || !mingMapFrame.contentWindow.echarts) return;
     const echarts = mingMapFrame.contentWindow.echarts;
@@ -4318,7 +4318,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     if (action === 'open') {
         const existingIdx = mingMapOpenedFus.findIndex(item => item.prov === mingProv && item.fu === mingFu);
         if (existingIdx < 0) {
-            // 单层模式下不支持多选，打开新府前自动清空之前的记录
+            // Chế độ đơn tầng không hỗ trợ chọn nhiều, trước khi mở phủ mới sẽ tự động xóa các bản ghi trước đó.
             if (mingMapDisplayMode === 'single') mingMapOpenedFus = [];
             mingMapOpenedFus.push({ prov: mingProv, fu: mingFu });
         }
@@ -4329,7 +4329,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
         return;
     }
 
-    mingMapChartInstance.showLoading({text:`加载区县数据...`,color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
+    mingMapChartInstance.showLoading({text:`Tải dữ liệu quận huyện...`,color:'#d4af37', maskColor:'rgba(10,14,23,0.8)'});
     
     let countyFeatures = [];
     for (let item of mingMapOpenedFus) {
@@ -4343,7 +4343,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     let combinedGeoJSON;
     let bgFeatures = [];
     
-    // ================== 数据拼合分支 ==================
+    // ================== Nhánh hợp nhất dữ liệu ==================
     if (mingMapDisplayMode === 'panorama') {
         const nationalPrefGeoJSON = await getNationalPrefectureGeoJSON(null);
         bgFeatures = nationalPrefGeoJSON.features.filter(f => {
@@ -4351,10 +4351,10 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
         });
         combinedGeoJSON = { type: 'FeatureCollection', features: [...bgFeatures, ...countyFeatures] };
     } else {
-        // 单层模式：彻底抛弃背景底层，只保留当前展开的府县
+        // Chế độ một lớp: Bỏ hoàn toàn lớp nền dưới, chỉ giữ lại phủ huyện đang mở rộng
         if (!countyFeatures.length) {
             mingMapChartInstance.hideLoading();
-            mingMapChartInstance.setOption({title:{text:'暂无该府区县数据',left:'center',top:'center',textStyle:{color:'#e8d5a3', fontSize: 16}},backgroundColor:'#0a0e17'});
+            mingMapChartInstance.setOption({title:{text:'Hiện chưa có dữ liệu quận/huyện của phủ này',left:'center',top:'center',textStyle:{color:'#e8d5a3', fontSize: 16}},backgroundColor:'#0a0e17'});
             setTimeout(() => { if (mingMapChartInstance) mingMapChartInstance.setOption({title:{text:''}}); }, 1500);
             return;
         }
@@ -4375,7 +4375,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
 
     let highlightRegions = [];
 
-    // ================== 样式分配分支 ==================
+    // ================== Nhánh phân bổ kiểu ==================
     if (mingMapDisplayMode === 'panorama') {
         bgFeatures.forEach(f => {
             let provName = f.properties._prov;
@@ -4409,7 +4409,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
                 exactCenter = getFeatureCenter(targetFeature);
             }
             if (!exactCenter) {
-                // 如果计算不出县的中心，使用该府的中心作为备用，防止对焦跑偏
+                // Nếu không tính được trung tâm của huyện, hãy sử dụng trung tâm của phủ đó làm dự phòng, để tránh việc lấy nét bị lệch.
                 let fuList = mingFuZhouCenters[mingProv] || [];
                 let fuObj = fuList.find(f => f.name === mingFu);
                 if (fuObj) exactCenter = [fuObj.lng, fuObj.lat];
@@ -4417,7 +4417,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
             
             if (exactCenter) targetCenter = exactCenter;
             
-            // 全景模式下，需要极高的 zoom 才能放大对焦到一个微小的区县
+            // Trong chế độ toàn cảnh, cần mức độ cao của zoom Mới có thể phóng to và lấy nét vào một quận huyện nhỏ bé
             targetZoom = mingMapDisplayMode === 'panorama' ? 30 : 5.0; 
             highlightRegions.push({
                 name: targetCounty,
@@ -4434,12 +4434,12 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
                 let prefCenter = getFeatureCenter(targetPrefFeature);
                 if (prefCenter) {
                     targetCenter = prefCenter;
-                    // 顺便提升全景模式下：即使是普通点击列表进入府，也能体验自动拉近视觉的效果
+                    // Nhân tiện nâng cấp ở chế độ toàn cảnh: ngay cả khi chỉ nhấp bình thường vào danh sách để vào phủ, vẫn có thể trải nghiệm hiệu ứng tự động kéo góc nhìn lại gần.
                     if (targetZoom < 12) targetZoom = 12;
                 }
             }
         } else {
-            // 单层模式：不用强行定住全景座标，直接回到 1.2 默认居中显示整个单府
+            // Chế độ đơn tầng: Không cần phải cố định tọa độ toàn cảnh, trực tiếp quay lại phiên bản 1.2 mặc định căn giữa hiển thị toàn bộ phủ đơn.
             targetCenter = null;
             targetZoom = 1.2;
         }
@@ -4447,7 +4447,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
 
     let seriesData = [ {type:'map', map:mapName, geoIndex:0, silent:false} ];
 
-    // 全景模式下，主角无论在哪都始终显示；单层模式下，只有主角在当前展开的府州内才显示
+    // Ở chế độ toàn cảnh, nhân vật chính luôn được hiển thị dù ở đâu; ở chế độ đơn tầng, nhân vật chính chỉ hiển thị khi ở trong phủ châu đang mở hiện tại.
     const showHero = mingMapHeroLocation && (
         mingMapDisplayMode === 'panorama' || 
         mingMapOpenedFus.some(item => item.prov === mingMapHeroLocation.prov && item.fu === mingMapHeroLocation.fu)
@@ -4456,14 +4456,14 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     if (showHero) {
         seriesData.push({
             type: 'scatter', coordinateSystem: 'geo', zlevel: 5, silent: true, 
-            data: [{ name: '主角位置', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
+            data: [{ name: 'Vị trí nhân vật chính', value: mingMapHeroLocation.coord, rawLoc: mingMapHeroLocation.raw }],
             symbolSize: 16, itemStyle: { color: '#e74c3c', borderColor: '#fff', borderWidth: 2, shadowBlur: 3, shadowColor: 'rgba(0,0,0,0.8)' },
-            label: { show: true, formatter: '主角位置', position: 'top', color: '#fff', fontSize: 14, textBorderColor: '#000', textBorderWidth: 2 },
+            label: { show: true, formatter: 'Vị trí nhân vật chính', position: 'top', color: '#fff', fontSize: 14, textBorderColor: '#000', textBorderWidth: 2 },
             tooltip: { show: false }
         });
     }
 
-    // ================== Echarts 渲染配置生成 ==================
+    // ================== Echarts Tạo cấu hình kết xuất ==================
     let geoConfig = {
         map:mapName, roam:true, zoom: targetZoom, center: targetCenter,
         scaleLimit:{min:0.5, max: isMingMobile() ? 80 : 35}, 
@@ -4474,13 +4474,13 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     if (mingMapDisplayMode === 'panorama') {
         geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 12, color: 'rgba(255,255,255,0.6)' };
     } else {
-        // 单层模式恢复原始单层默认底色
+        // Chế độ lớp đơn khôi phục màu nền mặc định ban đầu
         geoConfig.itemStyle = {areaColor:'#1a2740',borderColor:'#3a5070',borderWidth:1};
         geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 15 };
     }
 
     mingMapChartInstance.setOption({
-        animation: false, // 【核心修复】：全局禁用动画，解决散点拖拽漂移的根本方案
+        animation: false, // [Sửa lỗi cốt lõi]: Tắt hiệu ứng toàn cục, giải pháp cốt lõi để giải quyết tình trạng bị trôi khi kéo thả các điểm
         backgroundColor:'#0a0e17',
         tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'}},
         geo: geoConfig,
@@ -4492,9 +4492,9 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     mingMapCurrentPrefecture = mingFu; 
     
     mingMapFrameDocument.getElementById('breadcrumb-wrapper').style.display = 'flex';
-    let titleStr = mingMapOpenedFus.length > 1 ? `已展开 ${mingMapOpenedFus.length} 府` : mingFu;
+    let titleStr = mingMapOpenedFus.length > 1 ? `Đã mở rộng ${mingMapOpenedFus.length} Phủ` : mingFu;
     
-    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 天下</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb" data-action="back-province">📍 ${mingProv}</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">🏘️ ${titleStr}</span>`;
+    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb" data-action="back-province">📍 ${mingProv}</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">🏘️ ${titleStr}</span>`;
     
     const backBtn = mingMapFrameDocument.getElementById('back-btn');
     backBtn.style.display = 'flex';
@@ -4520,7 +4520,7 @@ function updateMingLegendProvince(name) {
 }
 
 // ==========================================
-// 生命周期与事件
+// Vòng đời và sự kiện
 // ==========================================
 async function initMingEChartsMap() {
     const win = mingMapFrame.contentWindow;
@@ -4536,20 +4536,20 @@ async function initMingEChartsMap() {
 
     mingMapChartInstance = win.echarts.init(mapChartEl);
     
-    // 清除可能重复绑定的事件
+    // Xóa các sự kiện có thể bị bind trùng lặp
     mingMapChartInstance.off('click');
     mingMapChartInstance.off('dblclick');
 
-    // 记录时间与点击区域，用于手动判定双击（兼容移动端）
+    // Ghi lại thời gian và khu vực nhấp chuột, dùng để phán đoán nhấp đúp thủ công (Tương thích với thiết bị di động)
     let lastClickTime = 0;
     let lastClickName = '';
 
-    // 合并单击与双击事件：利用时间差精确处理
+    // Hợp nhất sự kiện nhấp và nhấp đúp: dùng độ trễ thời gian để xử lý chính xác
     mingMapChartInstance.on('click', (params) => {
-        if (!params.name || params.name === '主角位置') return;
+        if (!params.name || params.name === 'Vị trí nhân vật chính') return;
         
         const currentTime = new Date().getTime();
-        // 如果两次点击间隔在 400 毫秒以内，并且点击的是同一个地方，则判定为双击
+        // Nếu khoảng cách giữa hai lần nhấp chuột dưới 400 mili-giây và nhấp vào cùng một vị trí, sẽ được tính là nhấp đúp.
         const isDoubleClick = (currentTime - lastClickTime < 400) && (lastClickName === params.name);
         lastClickTime = currentTime;
         lastClickName = params.name;
@@ -4569,7 +4569,7 @@ async function initMingEChartsMap() {
         }
 
         // ==============================
-        // 1. 处理双击动作 (仅执行收起逻辑)
+        // 1. Xử lý thao tác nhấp đúp (Chỉ thực thi logic thu gọn)
         // ==============================
         if (isDoubleClick) {
             if (isProvinceName) return; 
@@ -4577,16 +4577,16 @@ async function initMingEChartsMap() {
             if (mingMapCurrentLevel === 'prefecture' && targetProv && targetFu) {
                 const existingIdx = mingMapOpenedFus.findIndex(item => item.prov === targetProv && item.fu === targetFu);
                 if (existingIdx >= 0) {
-                    // 核心：从数组中剔除，并触发刷新模式（不改变视角）
+                    // Cốt lõi: Loại bỏ khỏi mảng và kích hoạt chế độ làm mới (Không thay đổi góc nhìn)
                     mingMapOpenedFus.splice(existingIdx, 1);
                     renderMingCountyMap(mingMapCurrentProvince || targetProv, '', 'refresh');
                 }
             }
-            return; // 双击处理完毕，直接终止，不再执行下方的单击逻辑
+            return; // Xử lý nhấp đúp hoàn tất, chấm dứt ngay, không thực thi logic nhấp chuột duy nhất bên dưới
         }
 
         // ==============================
-        // 2. 处理单击动作 (打开、跳转、清除高亮)
+        // 2. Xử lý thao tác nhấp chuột (Mở, chuyển hướng, xóa highlight)
         // ==============================
         if (mingMapCurrentLevel === 'nation') {
             if (isProvinceName) {
@@ -4603,17 +4603,17 @@ async function initMingEChartsMap() {
                 return;
             }
             
-            if (targetProv && targetFu && targetFu !== '琉球国') {
+            if (targetProv && targetFu && targetFu !== 'Nước Lưu Cầu') {
                 const isOpen = mingMapOpenedFus.some(item => item.prov === targetProv && item.fu === targetFu);
                 if (!isOpen) {
                     if (mingMapCurrentLevel === 'province') {
                         const opt = mingMapChartInstance.getOption();
                         if (opt && opt.geo && opt.geo[0]) mingMapPrefectureGeoState = { center: opt.geo[0].center, zoom: opt.geo[0].zoom };
                     }
-                    // 单击触发打开
+                    // Nhấp chuột kích hoạt mở
                     renderMingCountyMap(targetProv, targetFu, 'open');
                 } else {
-                    // 已经打开的地方，单击只清除金黄色搜索高亮，不自动收起
+                    // Những nơi đã mở, khi nhấp chuột trái chỉ xóa vùng sáng tìm kiếm màu vàng kim, không tự động thu gọn.
                     const opt = mingMapChartInstance.getOption();
                     if (opt && opt.geo && opt.geo[0]) {
                         let currentRegions = opt.geo[0].regions || [];
@@ -4622,7 +4622,7 @@ async function initMingEChartsMap() {
                     }
                 }
             } else {
-                // 无主之地，取消搜索高亮
+                // Vùng vô chủ, hủy highlight tìm kiếm
                 const opt = mingMapChartInstance.getOption();
                 if (opt && opt.geo && opt.geo[0]) {
                     let currentRegions = opt.geo[0].regions || [];
@@ -4678,7 +4678,7 @@ function bindMingFrameEvents() {
     const clickHandler = (event) => {
         const target = event.target;
         
-        // 1. 处理下拉提示选项点击
+        // 1. Xử lý click tùy chọn gợi ý thả xuống
         const suggLi = target.closest('li[data-sugg]');
         if (suggLi) {
             const data = JSON.parse(decodeURIComponent(suggLi.dataset.sugg));
@@ -4686,28 +4686,28 @@ function bindMingFrameEvents() {
             return;
         }
         
-        // 2. 点击非搜索区域时，隐藏下拉列表，并在输入为空时收起搜索框
+        // 2. Khi nhấp vào khu vực không phải tìm kiếm, hãy ẩn danh sách thả xuống và thu gọn ô tìm kiếm khi ô nhập liệu trống.
         const suggEl = mingMapFrameDocument.getElementById('search-suggestions');
         const searchBox = mingMapFrameDocument.getElementById('search-box');
         const searchInput = mingMapFrameDocument.getElementById('map-search-input');
         
         if (!target.closest('#search-wrapper')) {
             if (suggEl) suggEl.style.display = 'none';
-            // 如果点击了外面，并且搜索框里没有字，就自动折叠收缩
+            // Nếu nhấp ra bên ngoài và không có chữ nào trong ô tìm kiếm, sẽ tự động gập thu gọn lại.
             if (searchBox && searchBox.classList.contains('expanded') && searchInput && !searchInput.value.trim()) {
                 searchBox.classList.remove('expanded');
             }
         }
 
 
-        // ================= 新增开始 =================
-        // 3. 处理地图控制按钮点击
+        // ================= Bắt đầu thêm mới =================
+        // 3. Xử lý click nút điều khiển bản đồ
         const ctrlBtn = target.closest('.ctrl-btn');
         if (ctrlBtn && ctrlBtn.dataset.action) {
             handleMapControlBtn(ctrlBtn.dataset.action);
             return;
         }
-        // ================= 新增结束 =================
+        // ================= Kết thúc thêm mới =================
 
         if (target.closest('[data-action="search"]')) {
             doMingMapSearch();
@@ -4725,12 +4725,12 @@ function bindMingFrameEvents() {
             return;
         }
 
-        // 处理日志弹窗逻辑 (点击按钮打开 / 点击关闭按钮或蒙层黑边关闭)
+        // Xử lý logic cửa sổ nhật ký (Nhấp vào nút để mở / Nhấn nút đóng hoặc viền đen lớp phủ để đóng)
         if (target.closest('[data-action="show-update"]')) {
             const modal = mingMapFrameDocument.getElementById('update-modal');
             if (modal) modal.style.display = 'flex';
             
-            // 点击后消除红点，并记录当前版本号到本地缓存
+            // Xóa chấm đỏ sau khi nhấp và ghi lại số phiên bản hiện tại vào bộ nhớ đệm cục bộ
             saveMingStorage('last_seen_version', MING_MAP_VERSION);
             const dot = mingMapFrameDocument.getElementById('update-red-dot');
             if (dot) dot.style.display = 'none';
@@ -4742,7 +4742,7 @@ function bindMingFrameEvents() {
             return;
         }
 
-        // 面包屑/返回按钮：回退逻辑
+        // Breadcrumb/Nút quay lại: Logic quay lui
         if (target.closest('[data-action="back-nation"]')) {
             renderMingNationMap();
             return;
@@ -4752,7 +4752,7 @@ function bindMingFrameEvents() {
             return;
         }
 
-        // 图例点击下钻
+        // Nhấp vào chú giải để xem chi tiết
         const legendLi = target.closest('li[data-ming]');
         if (legendLi) {
             if (mingMapCurrentLevel === 'nation' && mingMapChartInstance) {
@@ -4775,7 +4775,7 @@ function bindMingFrameEvents() {
     };
 
     const keyHandler = (event) => {
-        // 传入 true 标识这是回车键触发的
+        // Nhập vào true Xác định đây là do phím Enter kích hoạt
         if (event.key === 'Enter' && event.target.id === 'map-search-input') doMingMapSearch(true);
     };
 
@@ -4795,7 +4795,7 @@ function bindMingFrameEvents() {
 
 
 // ==========================================
-// 悬浮窗 (Lamp) 与 Iframe 容器逻辑
+// Cửa sổ nổi (Lamp) Và Iframe Logic vùng chứa
 // ==========================================
 function mingViewport() {
     const parent = window.parent || window;
@@ -4911,7 +4911,7 @@ function clampMingLampToViewport() {
 }
 
 function cleanupMingMap() {
-    if (mingMapSyncTimer) clearInterval(mingMapSyncTimer); // 【新增：清理定时器】  
+    if (mingMapSyncTimer) clearInterval(mingMapSyncTimer); // [Thêm mới: Xóa bộ hẹn giờ] 
     if (mingMapChartInstance) {
         try { mingMapChartInstance.dispose(); } catch(e) {}
         mingMapChartInstance = null;
@@ -4934,8 +4934,8 @@ function bootstrapMingMap() {
 
     mingMapLamp = parentDocument.createElement('div');
     mingMapLamp.id = LAMP_ID;
-    mingMapLamp.title = '大明舆图';
-    mingMapLamp.innerHTML = '<span class="ming-map-char">图</span>';
+    mingMapLamp.title = 'Bản đồ Đại Minh';
+    mingMapLamp.innerHTML = '<span class="ming-map-char">Bản đồ</span>';
     Object.assign(mingMapLamp.style, {
         position: 'fixed', border: '1.5px solid #d4af37', borderRadius: '50%',
         background: 'radial-gradient(circle, #2a3d5c 0%, #0a0e17 100%)',
@@ -4987,7 +4987,7 @@ function bootstrapMingMap() {
             mingMapLampDragMoved = false;
             mingMapIsOpen = true;
             applyMingFrameLayout();
-            mingMapSyncHeroLocation(); // 打开地图时主动拉取一次位置
+            mingMapSyncHeroLocation(); // Tự động lấy vị trí một lần khi mở bản đồ
         }
         mingMapLampDragMoved = false;
     });
@@ -5002,20 +5002,20 @@ function bootstrapMingMap() {
     
     window.addEventListener('pagehide', cleanupMingMap, { once: true });
 
-    // 【新增】启动自动获取 MVU 位置的定时器 (每2.5秒检测一次当前地点是否有变动)
+    // [Thêm mới]Bắt đầu tự động lấy MVU bộ hẹn giờ vị trí (Kiểm tra xem Địa điểm hiện tại có thay đổi không sau mỗi 2.5 giây)
     mingMapSyncTimer = setInterval(mingMapSyncHeroLocation, 2500);
     setTimeout(mingMapSyncHeroLocation, 500);
 }
 
 export function bootMap() {
-    // 清理由于在线更新可能残留的旧实例和旧定时器
+    // Dọn dẹp các phiên bản và bộ đếm thời gian cũ có thể còn sót lại do cập nhật trực tuyến
     if (window._mingMapActiveCleanup) {
         window._mingMapActiveCleanup();
     }
     
-    // 启动地图
+    // Khởi động bản đồ
     bootstrapMingMap();
     
-    // 将清理函数暴露给全局，供下次更新时调用
+    // Hiển thị hàm dọn dẹp ra toàn cục để sử dụng cho lần cập nhật tiếp theo
     window._mingMapActiveCleanup = cleanupMingMap;
 }
