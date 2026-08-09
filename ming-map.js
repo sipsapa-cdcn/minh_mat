@@ -4935,7 +4935,7 @@ function bootstrapMingMap() {
     mingMapLamp = parentDocument.createElement('div');
     mingMapLamp.id = LAMP_ID;
     mingMapLamp.title = 'Bản đồ Đại Minh';
-    mingMapLamp.innerHTML = '<span class="ming-map-char">🌍</span>';
+    mingMapLamp.innerHTML = '<span class="ming-map-char">🗺️</span>';
     Object.assign(mingMapLamp.style, {
         position: 'fixed', border: '1.5px solid #d4af37', borderRadius: '50%',
         background: 'radial-gradient(circle, #2a3d5c 0%, #0a0e17 100%)',
