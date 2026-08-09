@@ -1984,6 +1984,176 @@ const customProvincePoints = {
 // ==========================================
 // 数据请求缓存与状态管理
 // ==========================================
+// ==========================================
+// LỚP HIỂN THỊ TIẾNG VIỆT (chỉ dùng để hiển thị chữ ra màn hình)
+// QUAN TRỌNG: object này CHỈ được dùng trong các hàm render (label bản đồ,
+// tooltip, chú giải, breadcrumb, kết quả tìm kiếm...). TUYỆT ĐỐI không
+// được dùng key của object này để tra cứu logic (màu sắc, tọa độ, dữ liệu
+// GeoJSON...) vì toàn bộ logic bên trong vẫn chạy bằng tên chữ Hán gốc.
+// Muốn thêm/sửa tên hiển thị: chỉ cần thêm/sửa 1 dòng bên dưới, không cần
+// đụng vào bất kỳ chỗ nào khác trong file.
+// ==========================================
+const MING_VI_NAMES = {
+    // --- Cấp 1: Thiên hạ (quốc gia / đại khu) ---
+    '北直隶':'Bắc Trực Lệ','南直隶':'Nam Trực Lệ','山东':'Sơn Đông','山西':'Sơn Tây','河南':'Hà Nam',
+    '陕西':'Thiểm Tây','湖广':'Hồ Quảng','江西':'Giang Tây','浙江':'Chiết Giang','福建':'Phúc Kiến',
+    '广东':'Quảng Đông','广西':'Quảng Tây','云南':'Vân Nam','贵州':'Quý Châu','四川':'Tứ Xuyên',
+    '辽东':'Liêu Đông','宁夏':'Ninh Hạ','后金':'Hậu Kim','野人女真':'Dã Nhân Nữ Chân',
+    '察哈尔':'Sát Cáp Nhĩ','土默特':'Thổ Mặc Đặc','朵颜三卫':'Đóa Nhan Tam Vệ','喀尔喀':'Khách Nhĩ Khách (Khalkha)',
+    '西域':'Tây Vực','乌思藏':'Ô Tư Tạng','青海':'Thanh Hải','东番':'Đông Phiên',
+    '日本':'Nhật Bản','琉球':'Lưu Cầu','朝鲜':'Triều Tiên','安南':'An Nam','莫卧儿':'Mughal',
+    '暹罗':'Xiêm La','不丹':'Bhutan','尼婆罗':'Nepal','吕宋':'Luzon','爪哇':'Java',
+    '澳洲':'Úc','澜沧':'Lạn Thương','郑主':'Chúa Trịnh','广南':'Quảng Nam',
+
+    // --- Cấp 2: Phủ / Châu / Vệ (Nam Trực Lệ) ---
+    '应天府':'Ứng Thiên Phủ','凤阳府':'Phượng Dương Phủ','淮安府':'Hoài An Phủ','扬州府':'Dương Châu Phủ',
+    '苏州府':'Tô Châu Phủ','松江府':'Tùng Giang Phủ','常州府':'Thường Châu Phủ','镇江府':'Trấn Giang Phủ',
+    '庐州府':'Lư Châu Phủ','安庆府':'An Khánh Phủ','太平府':'Thái Bình Phủ','池州府':'Trì Châu Phủ',
+    '宁国府':'Ninh Quốc Phủ','徽州府':'Huy Châu Phủ','徐州':'Từ Châu','滁州':'Trừ Châu','和州':'Hòa Châu','广德州':'Quảng Đức Châu',
+
+    // --- Bắc Trực Lệ ---
+    '顺天府':'Thuận Thiên Phủ','保定府':'Bảo Định Phủ','河间府':'Hà Gian Phủ','真定府':'Chân Định Phủ',
+    '顺德府':'Thuận Đức Phủ','广平府':'Quảng Bình Phủ','大名府':'Đại Danh Phủ','永平府':'Vĩnh Bình Phủ',
+    '延庆州':'Duyên Khánh Châu','保安州':'Bảo An Châu',
+
+    // --- Hồ Quảng ---
+    '武昌府':'Vũ Xương Phủ','汉阳府':'Hán Dương Phủ','黄州府':'Hoàng Châu Phủ','承天府':'Thừa Thiên Phủ',
+    '德安府':'Đức An Phủ','荆州府':'Kinh Châu Phủ','襄阳府':'Tương Dương Phủ','长沙府':'Trường Sa Phủ',
+    '衡州府':'Hành Châu Phủ','永州府':'Vĩnh Châu Phủ','宝庆府':'Bảo Khánh Phủ','常德府':'Thường Đức Phủ',
+    '辰州府':'Thần Châu Phủ','郧阳府':'Vân Dương Phủ','岳州府':'Nhạc Châu Phủ','施州卫':'Thi Châu Vệ',
+    '大庸卫':'Đại Dung Vệ','靖州':'Tĩnh Châu','郴州':'Sâm Châu',
+
+    // --- Tứ Xuyên ---
+    '成都府':'Thành Đô Phủ','重庆府':'Trùng Khánh Phủ','遵义府':'Tuân Nghĩa Phủ','保宁府':'Bảo Ninh Phủ',
+    '顺庆府':'Thuận Khánh Phủ','叙州府':'Tự Châu Phủ','夔州府':'Quỳ Châu Phủ','松潘卫':'Tùng Phan Vệ',
+    '建昌卫':'Kiến Xương Vệ','龙安府':'Long An Phủ','马湖府':'Mã Hồ Phủ','潼川州':'Đồng Xuyên Châu',
+    '嘉定州':'Gia Định Châu','雅州':'Nhã Châu','泸州':'Lô Châu','乌蒙府':'Ô Mông Phủ','乌撒卫':'Ô Tát Vệ',
+    '东川府':'Đông Xuyên Phủ','镇雄府':'Trấn Hùng Phủ','眉州':'Mi Châu','邛州':'Cung Châu','朵甘(四川)':'Đóa Cam (Tứ Xuyên)',
+
+    // --- Giang Tây ---
+    '南昌府':'Nam Xương Phủ','九江府':'Cửu Giang Phủ','赣州府':'Cống Châu Phủ','吉安府':'Cát An Phủ',
+    '抚州府':'Phủ Châu Phủ','建昌府':'Kiến Xương Phủ','广信府':'Quảng Tín Phủ','饶州府':'Nhiêu Châu Phủ',
+    '瑞州府':'Thụy Châu Phủ','袁州府':'Viên Châu Phủ','临江府':'Lâm Giang Phủ','南康府':'Nam Khang Phủ','南安府':'Nam An Phủ',
+
+    // --- Chiết Giang ---
+    '杭州府':'Hàng Châu Phủ','嘉兴府':'Gia Hưng Phủ','湖州府':'Hồ Châu Phủ','宁波府':'Ninh Ba Phủ',
+    '绍兴府':'Thiệu Hưng Phủ','温州府':'Ôn Châu Phủ','金华府':'Kim Hoa Phủ','衢州府':'Cù Châu Phủ',
+    '严州府':'Nghiêm Châu Phủ','台州府':'Thai Châu Phủ','处州府':'Xử Châu Phủ',
+
+    // --- Phúc Kiến ---
+    '福州府':'Phúc Châu Phủ','泉州府':'Tuyền Châu Phủ','漳州府':'Chương Châu Phủ','建宁府':'Kiến Ninh Phủ',
+    '汀州府':'Đinh Châu Phủ','延平府':'Diên Bình Phủ','邵武府':'Thiệu Vũ Phủ','兴化府':'Hưng Hóa Phủ','福宁州':'Phúc Ninh Châu',
+
+    // --- Quảng Đông ---
+    '广州府':'Quảng Châu Phủ','潮州府':'Triều Châu Phủ','惠州府':'Huệ Châu Phủ','肇庆府':'Triệu Khánh Phủ',
+    '高州府':'Cao Châu Phủ','琼州府':'Quỳnh Châu Phủ','韶州府':'Thiều Châu Phủ','南雄府':'Nam Hùng Phủ',
+    '雷州府':'Lôi Châu Phủ','廉州府':'Liêm Châu Phủ','罗定州':'La Định Châu',
+
+    // --- Quảng Tây ---
+    '桂林府':'Quế Lâm Phủ','南宁府':'Nam Ninh Phủ','柳州府':'Liễu Châu Phủ','梧州府':'Ngô Châu Phủ',
+    '浔州府':'Tầm Châu Phủ','镇安府':'Trấn An Phủ','思明府':'Tư Minh Phủ','平乐府':'Bình Nhạc Phủ',
+    '庆远府':'Khánh Viễn Phủ','思恩府':'Tư Ân Phủ','泗城州':'Tứ Thành Châu',
+
+    // --- Vân Nam ---
+    '云南府':'Vân Nam Phủ','大理府':'Đại Lý Phủ','临安府':'Lâm An Phủ','永昌府':'Vĩnh Xương Phủ',
+    '广南府':'Quảng Nam Phủ','顺宁府':'Thuận Ninh Phủ','车里宣慰司':'Xa Lý Tuyên Úy Ty','曲靖府':'Khúc Tĩnh Phủ',
+    '澂江府':'Trừng Giang Phủ','武定府':'Vũ Định Phủ','广西府':'Quảng Tây Phủ','元江府':'Nguyên Giang Phủ',
+    '楚雄府':'Sở Hùng Phủ','姚安府':'Diêu An Phủ','鹤庆府':'Hạc Khánh Phủ','丽江府':'Lệ Giang Phủ',
+    '景东府':'Cảnh Đông Phủ','镇沅府':'Trấn Nguyên Phủ','蒙化府':'Mông Hóa Phủ',
+
+    // --- Quý Châu ---
+    '贵阳府':'Quý Dương Phủ','安顺府':'An Thuận Phủ','思南府':'Tư Nam Phủ','黎平府':'Lê Bình Phủ',
+    '都匀府':'Đô Quân Phủ','平越府':'Bình Việt Phủ','思州府':'Tư Châu Phủ','铜仁府':'Đồng Nhân Phủ',
+    '石阡府':'Thạch Thiên Phủ','镇远府':'Trấn Viễn Phủ','水西宣慰司':'Thủy Tây Tuyên Úy Ty','普安州':'Phổ An Châu',
+
+    // --- Sơn Tây ---
+    '太原府':'Thái Nguyên Phủ','大同府':'Đại Đồng Phủ','平阳府':'Bình Dương Phủ','潞安府':'Lộ An Phủ',
+    '汾州府':'Phần Châu Phủ','泽州':'Trạch Châu','辽州':'Liêu Châu','沁州':'Thấm Châu',
+
+    // --- Thiểm Tây ---
+    '西安府':'Tây An Phủ','凤翔府':'Phượng Tường Phủ','汉中府':'Hán Trung Phủ','延安府':'Diên An Phủ',
+    '庆阳府':'Khánh Dương Phủ','平凉府':'Bình Lương Phủ','巩昌府':'Củng Xương Phủ','临洮府':'Lâm Thao Phủ',
+    '兴安州':'Hưng An Châu','肃州卫':'Túc Châu Vệ','甘州卫':'Cam Châu Vệ','凉州卫':'Lương Châu Vệ',
+    '兰州':'Lan Châu','洮州卫':'Thao Châu Vệ','西宁卫':'Tây Ninh Vệ',
+
+    '宁夏卫':'Ninh Hạ Vệ',
+
+    // --- Sơn Đông ---
+    '济南府':'Tế Nam Phủ','兖州府':'Duyện Châu Phủ','东昌府':'Đông Xương Phủ','青州府':'Thanh Châu Phủ',
+    '莱州府':'Lai Châu Phủ','登州府':'Đăng Châu Phủ',
+
+    // --- Hà Nam ---
+    '开封府':'Khai Phong Phủ','河南府':'Hà Nam Phủ','归德府':'Quy Đức Phủ','汝宁府':'Nhữ Ninh Phủ',
+    '南阳府':'Nam Dương Phủ','彰德府':'Chương Đức Phủ','卫辉府':'Vệ Huy Phủ','怀庆府':'Hoài Khánh Phủ','汝州':'Nhữ Châu',
+
+    // --- Liêu Đông (vệ sở) ---
+    '沈阳中卫':'Thẩm Dương Trung Vệ','辽阳卫':'Liêu Dương Vệ','金州卫':'Kim Châu Vệ','复州卫':'Phục Châu Vệ',
+    '海州卫':'Hải Châu Vệ','广宁卫':'Quảng Ninh Vệ','广宁中屯卫':'Quảng Ninh Trung Đồn Vệ','铁岭卫':'Thiết Lĩnh Vệ',
+    '宁远卫':'Ninh Viễn Vệ','广宁后屯卫':'Quảng Ninh Hậu Đồn Vệ','营州卫':'Doanh Châu Vệ','盖州卫':'Cái Châu Vệ',
+    '抚顺千户所':'Phủ Thuận Thiên Hộ Sở','凤凰堡':'Phượng Hoàng Bảo','镇江堡':'Trấn Giang Bảo','义州卫':'Nghĩa Châu Vệ',
+    '广宁右屯卫':'Quảng Ninh Hữu Đồn Vệ','开原卫':'Khai Nguyên Vệ','广宁前屯卫':'Quảng Ninh Tiền Đồn Vệ',
+
+    // --- Hậu Kim ---
+    '赫图阿拉':'Hách Đồ A Lạp','长白山部':'Trường Bạch Sơn Bộ','瓦尔喀部':'Ngoã Nhĩ Khách Bộ','宁古塔':'Ninh Cổ Tháp',
+    '乌拉城':'Ô Lạp Thành','伊通堡':'Y Thông Bảo','叶赫城':'Diệp Hách Thành','哈达城':'Cáp Đạt Thành',
+
+    // --- Dã Nhân Nữ Chân ---
+    '阿勒楚喀':'A Lặc Sở Khách','索伦部':'Tác Luân Bộ','杜尔伯特部':'Đỗ Nhĩ Bá Đặc Bộ','呼兰部':'Hô Lan Bộ',
+    '忽尔哈部':'Hốt Nhĩ Cáp Bộ','穆棱部':'Mục Lăng Bộ','赫哲部':'Hách Triết Bộ','使犬部':'Sử Khuyển Bộ',
+    '库尔喀部':'Khố Nhĩ Khách Bộ','萨哈连部':'Tát Cáp Liên Bộ','飞牙喀部':'Phi Nha Khách Bộ','使鹿部':'Sử Lộc Bộ','达斡尔部':'Đạt Oát Nhĩ Bộ',
+
+    // --- Sát Cáp Nhĩ / Thổ Mặc Đặc / Đóa Nhan Tam Vệ ---
+    '察哈尔部':'Sát Cáp Nhĩ Bộ','苏尼特部':'Tô Ni Đặc Bộ',
+    '土默特部':'Thổ Mặc Đặc Bộ','鄂尔多斯部':'Ngạc Nhĩ Đa Tư Bộ','归化城':'Quy Hóa Thành','乌拉特部':'Ô Lạp Đặc Bộ',
+    '朵颜卫':'Đóa Nhan Vệ','泰宁卫':'Thái Ninh Vệ','福余卫':'Phúc Dư Vệ','科尔沁部':'Khoa Nhĩ Thấm Bộ',
+
+    // --- Thanh Hải / Tây Vực / Ô Tư Tạng ---
+    '和硕特部':'Hòa Thạc Đặc Bộ','必里卫':'Tất Lý Vệ','朵甘(青海)':'Đóa Cam (Thanh Hải)',
+    '瓦剌':'Ngoã Lạt','叶尔羌':'Diệp Nhĩ Khương','吐鲁番':'Thổ Lỗ Phồn','哈密卫':'Cáp Mật Vệ',
+    '藏巴汗':'Tạng Ba Hãn','朵甘':'Đóa Cam','古格':'Cổ Cách',
+
+    // --- Đông Phiên / Lưu Cầu ---
+    '鸡笼(西葡)':'Kê Lung (Tây Ban Nha/Bồ Đào Nha)','大员(荷兰)':'Đại Viên (Hà Lan)',
+    '东番诸部':'Đông Phiên Chư Bộ','澎湖巡检司':'Bành Hồ Tuần Kiểm Ty','琉球国':'Nước Lưu Cầu',
+
+    // --- Nhật Bản ---
+    '畿内':'Kỳ Nội','东海道':'Đông Hải Đạo','东山道':'Đông Sơn Đạo','北陆道':'Bắc Lục Đạo',
+    '山阴道':'Sơn Âm Đạo','山阳道':'Sơn Dương Đạo','南海道':'Nam Hải Đạo','西海道':'Tây Hải Đạo','虾夷':'Hà Di',
+
+    // --- Triều Tiên ---
+    '京畿道':'Gyeonggi-do','平安道':'Pyongan-do','咸镜道':'Hamgyong-do','黄海道':'Hwanghae-do',
+    '江原道':'Gangwon-do','忠清道':'Chungcheong-do','庆尚道':'Gyeongsang-do','全罗道':'Jeolla-do',
+
+    // --- Khách Nhĩ Khách (Khalkha) ---
+    '土谢图汗部':'Thổ Tạ Đồ Hãn Bộ','车臣汗部':'Xa Thần Hãn Bộ','扎萨克图汗部':'Trát Tát Khắc Đồ Hãn Bộ','和托辉特部':'Hòa Thác Huy Đặc Bộ',
+
+    // --- Nepal / Bhutan ---
+    '马拉王朝':'Vương triều Malla','乔比西诸国':'Chư quốc Chaubisi','拜塞诸国':'Chư quốc Baisi','森王朝':'Vương triều Sen',
+    '西不丹':'Tây Bhutan','中不丹':'Trung Bhutan','东不丹':'Đông Bhutan',
+
+    // --- Lạn Thương (Lào) ---
+    '琅勃拉邦':'Luang Prabang','万象':'Vạn Tượng','占巴塞':'Champasak','勐潘':'Mường Phuan',
+
+    // --- Xiêm La ---
+    '北部':'Miền Bắc','中部核心':'Miền Trung (trung tâm)','伊善地区':'Vùng Isan','马来半岛':'Bán đảo Mã Lai',
+
+    // --- Chúa Trịnh / Chúa Nguyễn (Việt Nam) ---
+    '交趾':'Giao Chỉ','清华':'Thanh Hóa',
+    '顺化':'Thuận Hóa','占城':'Chiêm Thành','水真腊':'Thủy Chân Lạp',
+
+    // --- Mughal (Ấn Độ) ---
+    '德里':'Delhi','拉合尔':'Lahore','喀布尔':'Kabul','孟加拉':'Bengal','古吉拉特':'Gujarat',
+    '摩尔瓦':'Malwa','德干':'Deccan','比哈尔':'Bihar','阿杰梅尔':'Ajmer','穆尔坦':'Multan','阿萨姆':'Assam','南印度':'Nam Ấn Độ',
+};
+
+// Ghi chú: tên cấp huyện/quận (Level 3, hàng nghìn địa danh trong
+// modernCountyToMingCounty / preciseCountyMap) CHƯA có trong từ điển trên.
+// Những tên không tìm thấy sẽ tự động fallback về chữ Hán gốc (an toàn,
+// không lỗi) — có thể bổ sung dần vào MING_VI_NAMES ở trên bất cứ lúc nào.
+function viName(name) {
+    return MING_VI_NAMES[name] || name;
+}
+
 const geoJsonCache = {};
 const geoJsonPromises = {}; // 增加 Promise 锁，防止瞬间并发请求同一文件
 
@@ -2306,7 +2476,7 @@ function mingMapStyleText() {
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-        background: var(--bg); font-family: 'Noto Sans SC', serif;
+        background: var(--bg); font-family: 'Noto Serif SC', serif;
         overflow: hidden; height: 100vh; width: 100vw; user-select: none;
         touch-action: none;
     }
@@ -2875,7 +3045,7 @@ function handleSearchInput(e) {
     for (let prov in mingFuZhouCenters) {
         mingFuZhouCenters[prov].forEach(fu => {
             if (fu.name.includes(kw)) {
-                results.push({ type: 'province', name: fu.name, prov: prov, desc: `${prov} · Phủ châu`, lng: fu.lng, lat: fu.lat, matchIdx: fu.name.indexOf(kw) });
+                results.push({ type: 'province', name: fu.name, prov: prov, desc: `${viName(prov)} · Phủ châu`, lng: fu.lng, lat: fu.lat, matchIdx: fu.name.indexOf(kw) });
                 seen.add('fu:' + fu.name);
             }
         });
@@ -2886,7 +3056,7 @@ function handleSearchInput(e) {
     const addCountyResult = (mingCounty, info, matchStr) => {
         const key = 'county:' + mingCounty + '_' + info.prov;
         if (!seen.has(key)) {
-            results.push({ type: 'prefecture', name: mingCounty, prov: info.prov, fu: info.fu, desc: `${info.prov} · ${info.fu}`, matchIdx: matchStr.indexOf(kw) });
+            results.push({ type: 'prefecture', name: mingCounty, prov: info.prov, fu: info.fu, desc: `${viName(info.prov)} · ${viName(info.fu)}`, matchIdx: matchStr.indexOf(kw) });
             seen.add(key);
         }
     };
@@ -2930,7 +3100,7 @@ function handleSearchInput(e) {
     // Hiển thị danh sách thả xuống
     suggEl.innerHTML = topResults.map(r => {
         const dataStr = encodeURIComponent(JSON.stringify(r));
-        return `<li data-sugg="${dataStr}"><span class="sugg-title">${r.name}</span><span class="sugg-desc">${r.desc}</span></li>`;
+        return `<li data-sugg="${dataStr}"><span class="sugg-title">${viName(r.name)}</span><span class="sugg-desc">${r.desc}</span></li>`;
     }).join('');
     suggEl.style.display = 'flex';
 }
@@ -4063,14 +4233,14 @@ function renderMingNationMap() {
     
     let option = {
         backgroundColor:'#0a0e17',
-        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#8b7355',textStyle:{color:'#e8d5a3'}},
+        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#8b7355',textStyle:{color:'#e8d5a3'},formatter:(p)=>viName(p.name)},
         geo:{
             map:'ming_nation',
             roam:true,
             zoom: targetZoom,
             center: targetCenter,
             scaleLimit:{min:0.7,max:6},
-            label:{show:true,color:'#ffffff',fontSize:11},emphasis:{label:{color:'#ffffff'}},
+            label:{show:true,color:'#ffffff',fontSize:11,formatter:(p)=>viName(p.name)},emphasis:{label:{color:'#ffffff'}},
             itemStyle:{areaColor:'#1a2740',borderColor:'#2a3d5c',borderWidth:1},
             regions: mingGeo.features.map(f=>({
                 name: f.properties.name,
@@ -4170,7 +4340,8 @@ async function renderMingPrefectureMap(mingName) {
                 label: { 
                     show: true, hideOverlap: true,
                     color: provName === mingName ? '#ffffff' : 'rgba(255,255,255,0.4)', 
-                    fontSize: provName === mingName ? (isMingMobile() ? 12 : 14) : (isMingMobile() ? 8 : 10)
+                    fontSize: provName === mingName ? (isMingMobile() ? 12 : 14) : (isMingMobile() ? 8 : 10),
+                    formatter: (p)=>viName(p.name)
                 }
             });
         });
@@ -4185,7 +4356,7 @@ async function renderMingPrefectureMap(mingName) {
             highlightRegions.push({
                 name: mingMapSearchTarget.fu,
                 itemStyle: { areaColor: 'rgba(212, 175, 55, 0.6)', borderColor: '#fff', borderWidth: 2 },
-                label: { show: true, color: '#ffffff', fontSize: 14, fontWeight: 'bold' } 
+                label: { show: true, color: '#ffffff', fontSize: 14, fontWeight: 'bold', formatter: (p)=>viName(p.name) } 
             });
         }
         mingMapSearchTarget = null;
@@ -4215,17 +4386,17 @@ async function renderMingPrefectureMap(mingName) {
     };
 
     if (mingMapDisplayMode === 'panorama') {
-        geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 11, color: 'rgba(255,255,255,0.4)' };
+        geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 11, color: 'rgba(255,255,255,0.4)', formatter: (p)=>viName(p.name) };
     } else {
         // Chế độ lớp đơn khôi phục màu nền mặc định ban đầu
         geoConfig.itemStyle = {areaColor:'#1e2d45',borderColor:'#3a5070',borderWidth:1.2};
-        geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 14 };
+        geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 14, formatter: (p)=>viName(p.name) };
     }
 
     mingMapChartInstance.setOption({
         animation: false, // [Sửa lỗi cốt lõi]: Tắt hiệu ứng toàn cục, loại bỏ cảm giác trễ khi kéo thả
         backgroundColor:'#0a0e17',
-        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'}},
+        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'},formatter:(p)=>viName(p.name)},
         geo: geoConfig,
         series: seriesData
     }, true);
@@ -4235,7 +4406,7 @@ async function renderMingPrefectureMap(mingName) {
     mingMapCurrentPrefecture = null;
     mingMapOpenedFus = []; // Đặt lại bản ghi phủ châu đã mở rộng khi vào lớp tỉnh
     
-    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">📍 ${mingName}</span>`;
+    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">📍 ${viName(mingName)}</span>`;
     mingMapFrameDocument.getElementById('breadcrumb-wrapper').style.display = 'flex';
     
     const backBtn = mingMapFrameDocument.getElementById('back-btn');
@@ -4387,7 +4558,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
                     areaColor: provColor, opacity: isSameProv ? 0.9 : 0.6, 
                     borderColor: '#111827', borderWidth: 0.8
                 },
-                label: { show: true, hideOverlap: true, color: 'rgba(255,255,255,0.3)', fontSize: isMingMobile() ? 8 : 10 }
+                label: { show: true, hideOverlap: true, color: 'rgba(255,255,255,0.3)', fontSize: isMingMobile() ? 8 : 10, formatter: (p)=>viName(p.name) }
             });
         });
         countyFeatures.forEach(f => {
@@ -4395,7 +4566,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
             highlightRegions.push({
                 name: f.properties.name,
                 itemStyle: { areaColor: provColor, borderColor: '#e8d5a3', borderWidth: 1.5 },
-                label: { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 10 : 14 } 
+                label: { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 10 : 14, formatter: (p)=>viName(p.name) } 
             });
         });
     }
@@ -4422,7 +4593,7 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
             highlightRegions.push({
                 name: targetCounty,
                 itemStyle: { areaColor: 'rgba(212, 175, 55, 0.6)', borderColor: '#fff', borderWidth: 2 },
-                label: { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 13 : 16, fontWeight: 'bold' }
+                label: { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 13 : 16, fontWeight: 'bold', formatter: (p)=>viName(p.name) }
             });
         }
         mingMapSearchTarget = null; 
@@ -4472,17 +4643,17 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     };
 
     if (mingMapDisplayMode === 'panorama') {
-        geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 12, color: 'rgba(255,255,255,0.6)' };
+        geoConfig.label = { show: true, hideOverlap: true, fontSize: isMingMobile() ? 9 : 12, color: 'rgba(255,255,255,0.6)', formatter: (p)=>viName(p.name) };
     } else {
         // Chế độ lớp đơn khôi phục màu nền mặc định ban đầu
         geoConfig.itemStyle = {areaColor:'#1a2740',borderColor:'#3a5070',borderWidth:1};
-        geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 15 };
+        geoConfig.label = { show: true, hideOverlap: true, color: '#ffffff', fontSize: isMingMobile() ? 12 : 15, formatter: (p)=>viName(p.name) };
     }
 
     mingMapChartInstance.setOption({
         animation: false, // [Sửa lỗi cốt lõi]: Tắt hiệu ứng toàn cục, giải pháp cốt lõi để giải quyết tình trạng bị trôi khi kéo thả các điểm
         backgroundColor:'#0a0e17',
-        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'}},
+        tooltip:{trigger:'item',backgroundColor:'rgba(20,25,38,0.95)',borderColor:'#d4af37',textStyle:{color:'#e8d5a3'},formatter:(p)=>viName(p.name)},
         geo: geoConfig,
         series: seriesData
     }, true);
@@ -4492,9 +4663,9 @@ async function renderMingCountyMap(mingProv, mingFu, action = 'open') {
     mingMapCurrentPrefecture = mingFu; 
     
     mingMapFrameDocument.getElementById('breadcrumb-wrapper').style.display = 'flex';
-    let titleStr = mingMapOpenedFus.length > 1 ? `Đã mở rộng ${mingMapOpenedFus.length} Phủ` : mingFu;
+    let titleStr = mingMapOpenedFus.length > 1 ? `Đã mở rộng ${mingMapOpenedFus.length} Phủ` : viName(mingFu);
     
-    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb" data-action="back-province">📍 ${mingProv}</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">🏘️ ${titleStr}</span>`;
+    mingMapFrameDocument.getElementById('breadcrumb').innerHTML = `<span class="crumb" data-action="back-nation">🌏 Thiên hạ</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb" data-action="back-province">📍 ${viName(mingProv)}</span><span class="separator" style="color:var(--text-secondary)">›</span><span class="crumb current">🏘️ ${titleStr}</span>`;
     
     const backBtn = mingMapFrameDocument.getElementById('back-btn');
     backBtn.style.display = 'flex';
@@ -4506,7 +4677,7 @@ function updateMingLegendNation() {
     const legendListEl = mingMapFrameDocument.getElementById('legend-list');
     let html = '';
     mingLegendNames.forEach(p => {
-        if (mingProvinceColors[p]) html += `<li data-ming="${p}"><span class="legend-dot" style="background:${mingProvinceColors[p]};"></span>${p}</li>`;
+        if (mingProvinceColors[p]) html += `<li data-ming="${p}"><span class="legend-dot" style="background:${mingProvinceColors[p]};"></span>${viName(p)}</li>`;
     });
     legendListEl.innerHTML = html;
 }
@@ -4515,7 +4686,7 @@ function updateMingLegendProvince(name) {
     const legendListEl = mingMapFrameDocument.getElementById('legend-list');
     const list = mingFuZhouCenters[name]||[];
     let html = '';
-    list.forEach(f => html += `<li data-ming-fu="${f.name}">● ${f.name}</li>`);
+    list.forEach(f => html += `<li data-ming-fu="${f.name}">● ${viName(f.name)}</li>`);
     legendListEl.innerHTML = html;
 }
 
@@ -4935,7 +5106,7 @@ function bootstrapMingMap() {
     mingMapLamp = parentDocument.createElement('div');
     mingMapLamp.id = LAMP_ID;
     mingMapLamp.title = 'Bản đồ Đại Minh';
-    mingMapLamp.innerHTML = '<span class="ming-map-char">🗺️</span>';
+    mingMapLamp.innerHTML = '<span class="ming-map-char">Bản đồ</span>';
     Object.assign(mingMapLamp.style, {
         position: 'fixed', border: '1.5px solid #d4af37', borderRadius: '50%',
         background: 'radial-gradient(circle, #2a3d5c 0%, #0a0e17 100%)',
@@ -4949,7 +5120,7 @@ function bootstrapMingMap() {
     lampStyle.id = LAMP_ID+'-style';
     lampStyle.textContent = `
         #${LAMP_ID} .ming-map-char {
-            font-family: 'Noto Sans SC', serif; font-size: 20px; font-weight: bold;
+            font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: bold;
             color: #e8d5a3; text-shadow: 0 0 4px rgba(212,175,55,0.6);
             line-height: 1; position: relative; z-index: 1;
         }
