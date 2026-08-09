@@ -1993,6 +1993,40 @@ const customProvincePoints = {
 // Muốn thêm/sửa tên hiển thị: chỉ cần thêm/sửa 1 dòng bên dưới, không cần
 // đụng vào bất kỳ chỗ nào khác trong file.
 // ==========================================
+// ==========================================
+// Bảng riêng cho Nhật Bản: hiển thị bằng Romaji (Hepburn) thay vì
+// phiên âm Hán Việt, vì tên quốc/đạo thời Edo ít người Việt biết tới
+// qua âm Hán Việt trong khi Romaji lại phổ biến và dễ nhận ra hơn.
+// Bảng này được viName() ưu tiên tra cứu TRƯỚC MING_VI_NAMES, nên dù
+// 8 tên "đạo" (畿内, 东海道...) có trùng key với bảng bên dưới thì bản
+// Romaji ở đây vẫn luôn thắng.
+// ==========================================
+const JAPAN_ROMAJI_NAMES = {
+    // --- 8 đạo (region) ---
+    '畿内':'Kinai','东海道':'Tōkaidō','东山道':'Tōsandō','北陆道':'Hokurikudō',
+    '山阴道':'San\'indō','山阳道':'Sanyōdō','南海道':'Nankaidō','西海道':'Saikaidō','虾夷':'Ezo',
+    // --- Quốc (kuni) thuộc Kỳ Nội (Kinai) ---
+    '山城':'Yamashiro','大和':'Yamato','摄津':'Settsu','河内':'Kawachi','和泉':'Izumi',
+    // --- Quốc thuộc Đông Hải Đạo (Tōkaidō) ---
+    '伊贺':'Iga','伊势':'Ise','志摩':'Shima','尾张':'Owari','三河':'Mikawa','远江':'Tōtōmi',
+    '骏河':'Suruga','伊豆':'Izu','甲斐':'Kai','相模':'Sagami','武藏':'Musashi','安房':'Awa (Chiba)',
+    '上总':'Kazusa','下总':'Shimōsa','常陆':'Hitachi',
+    // --- Quốc thuộc Đông Sơn Đạo (Tōsandō) ---
+    '近江':'Ōmi','美浓':'Mino','飞驒':'Hida','信浓':'Shinano','上野':'Kōzuke','下野':'Shimotsuke',
+    '陆奥':'Mutsu','出羽':'Dewa',
+    // --- Quốc thuộc Bắc Lục Đạo (Hokurikudō) ---
+    '若狭':'Wakasa','越前':'Echizen','加贺':'Kaga','能登':'Noto','越中':'Ecchū','越后':'Echigo','佐渡':'Sado',
+    // --- Quốc thuộc Sơn Âm Đạo (San\'indō) ---
+    '丹波':'Tanba','丹后':'Tango','但马':'Tajima','因幡':'Inaba','伯耆':'Hōki','出云':'Izumo','石见':'Iwami','隐岐':'Oki',
+    // --- Quốc thuộc Sơn Dương Đạo (Sanyōdō) ---
+    '播磨':'Harima','美作':'Mimasaka','备前':'Bizen','备中':'Bitchū','备后':'Bingo','安艺':'Aki','周防':'Suō','长门':'Nagato',
+    // --- Quốc thuộc Nam Hải Đạo (Nankaidō) ---
+    '纪伊':'Kii','淡路':'Awaji','阿波':'Awa (Tokushima)','赞岐':'Sanuki','伊予':'Iyo','土佐':'Tosa',
+    // --- Quốc thuộc Tây Hải Đạo (Saikaidō) ---
+    '筑前':'Chikuzen','筑后':'Chikugo','丰前':'Buzen','丰后':'Bungo','肥前':'Hizen','肥后':'Higo',
+    '日向':'Hyūga','大隅':'Ōsumi','萨摩':'Satsuma','壹岐':'Iki','对马':'Tsushima',
+};
+
 const MING_VI_NAMES = {
     // --- Cấp 1: Thiên hạ (quốc gia / đại khu) ---
     '北直隶':'Bắc Trực Lệ','南直隶':'Nam Trực Lệ','山东':'Sơn Đông','山西':'Sơn Tây','河南':'Hà Nam',
@@ -2116,9 +2150,7 @@ const MING_VI_NAMES = {
     '鸡笼(西葡)':'Kê Lung (Tây Ban Nha/Bồ Đào Nha)','大员(荷兰)':'Đại Viên (Hà Lan)',
     '东番诸部':'Đông Phiên Chư Bộ','澎湖巡检司':'Bành Hồ Tuần Kiểm Ty','琉球国':'Nước Lưu Cầu',
 
-    // --- Nhật Bản ---
-    '畿内':'Kỳ Nội','东海道':'Đông Hải Đạo','东山道':'Đông Sơn Đạo','北陆道':'Bắc Lục Đạo',
-    '山阴道':'Sơn Âm Đạo','山阳道':'Sơn Dương Đạo','南海道':'Nam Hải Đạo','西海道':'Tây Hải Đạo','虾夷':'Hà Di',
+    // --- Nhật Bản: xem bảng JAPAN_ROMAJI_NAMES ở trên (hiển thị Romaji) ---
 
     // --- Triều Tiên ---
     '京畿道':'Gyeonggi-do','平安道':'Pyongan-do','咸镜道':'Hamgyong-do','黄海道':'Hwanghae-do',
@@ -2614,10 +2646,102 @@ const MING_VI_NAMES_COUNTY = {
 '龙江堡':'Long Giang Bảo','龙泉县':'Long Tuyền Huyện','龙游县':'Long Du Huyện','龙溪县':'Long Khê Huyện',
 '龙潭山城':'Long Đàm Sơn Thành','龙里卫':'Long Lý Vệ','龙镇':'Long Trấn','龙门卫':'Long Môn Vệ',
 '龙门县':'Long Môn Huyện','龙阳县':'Long Dương Huyện',
+
+// ==========================================
+// Bổ sung: tên cấp huyện/phủ/mục/quận/đô hộ phủ của Triều Tiên (bát đạo
+// 1634, dữ liệu từ joseonCountyMap) và tên cấp huyện của Khách Nhĩ Khách
+// (Khalkha Mông Cổ, dữ liệu từ khalkhaToCountyMap). Đây là các tên
+// bằng Hán tự nên áp dụng cùng quy tắc phiên âm Hán Việt như trên.
+// ==========================================
+'三水都护府':'Tam Thủy Đô Hộ Phủ','三陟都护府':'Tam Trắc Đô Hộ Phủ','东莱都护府':'Đông Lai Đô Hộ Phủ',
+'中和都护府':'Trung Hòa Đô Hộ Phủ','丰川都护府':'Phong Xuyên Đô Hộ Phủ','临陂县':'Lâm Bi Huyện',
+'丹阳郡':'Đan Dương Quận','义城县':'Nghĩa Thành Huyện','义州府':'Nghĩa Châu Phủ',
+'云山郡':'Vân Sơn Quận','井邑县':'Tỉnh Ấp Huyện','仁川都护府':'Nhân Xuyên Đô Hộ Phủ',
+'价川郡':'Giới Xuyên Quận','任实县':'Nhâm Thực Huyện','伊川郡':'Y Xuyên Quận',
+'会宁都护府':'Hội Ninh Đô Hộ Phủ','保宁县':'Bảo Ninh Huyện','信川郡':'Tín Xuyên Quận',
+'光州牧':'Quang Châu Mục','光阳县':'Quang Dương Huyện','全州府':'Toàn Châu Phủ',
+'公州牧':'Công Châu Mục','兴阳县':'Hưng Dương Huyện','军威县':'Quân Uy Huyện',
+'凤山郡':'Phượng Sơn Quận','利川都护府':'Lợi Xuyên Đô Hộ Phủ','加平郡':'Gia Bình Quận',
+'务安县':'Vụ An Huyện','北仓郡':'Bắc Thương Quận','北青都护府':'Bắc Thanh Đô Hộ Phủ',
+'华川县':'Hoa Xuyên Huyện','南原都护府':'Nam Nguyên Đô Hộ Phủ','南阳都护府':'Nam Dương Đô Hộ Phủ',
+'博川郡':'Bác Xuyên Quận','厚昌郡':'Hậu Xương Quận','原州牧':'Nguyên Châu Mục',
+'吉州牧':'Cát Châu Mục','咸兴府':'Hàm Hưng Phủ','咸安郡':'Hàm An Quận',
+'咸平县':'Hàm Bình Huyện','咸阳郡':'Hàm Dương Quận','唐津县':'Đường Tân Huyện',
+'善山都护府':'Thiện Sơn Đô Hộ Phủ','固城县':'Cố Thành Huyện','坡州牧':'Pha Châu Mục',
+'堤川县':'Đê Xuyên Huyện','大同郡':'Đại Đồng Quận','大邱都护府':'Đại Khâu Đô Hộ Phủ',
+'大静县':'Đại Tĩnh Huyện','天安都护府':'Thiên An Đô Hộ Phủ','孟山县':'Mạnh Sơn Huyện',
+'宁越郡':'Ninh Việt Quận','宁边大都护府':'Ninh Biên Đại Đô Hộ Phủ','宁远郡':'Ninh Viễn Quận',
+'安东大都护府':'An Đông Đại Đô Hộ Phủ','安城郡':'An Thành Quận','安山郡':'An Sơn Quận',
+'安岳郡':'An Nhạc Quận','安州牧':'An Châu Mục','安边都护府':'An Biên Đô Hộ Phủ',
+'定州牧':'Định Châu Mục','定平都护府':'Định Bình Đô Hộ Phủ','宜宁县':'Nghi Ninh Huyện',
+'宝城郡':'Bảo Thành Quận','宣川郡':'Tuyên Xuyên Quận','密阳都护府':'Mật Dương Đô Hộ Phủ',
+'富宁都护府':'Phú Ninh Đô Hộ Phủ','富平都护府':'Phú Bình Đô Hộ Phủ','尚州牧':'Thượng Châu Mục',
+'尼山县':'Ni Sơn Huyện','居昌郡':'Cư Xương Quận','巨济县':'Cự Tế Huyện',
+'平壤府':'Bình Nhưỡng Phủ','平山都护府':'Bình Sơn Đô Hộ Phủ','平康县':'Bình Khang Huyện',
+'平昌郡':'Bình Xương Quận','平海郡':'Bình Hải Quận','庆兴都护府':'Khánh Hưng Đô Hộ Phủ',
+'庆山县':'Khánh Sơn Huyện','庆州府':'Khánh Châu Phủ','庆源都护府':'Khánh Nguyên Đô Hộ Phủ',
+'康津县':'Khang Tân Huyện','康翎县':'Khang Linh Huyện','延安都护府':'Diên An Đô Hộ Phủ',
+'开城府':'Khai Thành Phủ','德川郡':'Đức Xuyên Quận','忠州牧':'Trung Châu Mục',
+'怀德县':'Hoài Đức Huyện','慈城郡':'Từ Thành Quận','成川都护府':'Thành Xuyên Đô Hộ Phủ',
+'扶余县':'Phù Dư Huyện','扶安县':'Phù An Huyện','报恩县':'Báo Ân Huyện',
+'抱川郡':'Bão Xuyên Quận','振威县':'Chấn Uy Huyện','新溪县':'Tân Khê Huyện',
+'旌善郡':'Tinh Thiện Quận','昌原都护府':'Xương Nguyên Đô Hộ Phủ','昌城都护府':'Xương Thành Đô Hộ Phủ',
+'昌宁县':'Xương Ninh Huyện','明川都护府':'Minh Xuyên Đô Hộ Phủ','星州牧':'Tinh Châu Mục',
+'春川都护府':'Xuân Xuyên Đô Hộ Phủ','晋州牧':'Tấn Châu Mục','机张县':'Cơ Trương Huyện',
+'杆城郡':'Can Thành Quận','杨口县':'Dương Khẩu Huyện','杨州牧':'Dương Châu Mục',
+'杨根郡':'Dương Căn Quận','松禾县':'Tùng Hòa Huyện','果川县':'Quả Xuyên Huyện',
+'梁山郡':'Lương Sơn Quận','楚山郡':'Sở Sơn Quận','槐山郡':'Hòe Sơn Quận',
+'横城县':'Hoành Thành Huyện','殷山县':'Ân Sơn Huyện','殷栗县':'Ân Lật Huyện',
+'水原都护府':'Thủy Nguyên Đô Hộ Phủ','永兴大都护府':'Vĩnh Hưng Đại Đô Hộ Phủ','永同县':'Vĩnh Đồng Huyện',
+'永川郡':'Vĩnh Xuyên Quận','永柔县':'Vĩnh Nhu Huyện','求礼县':'Cầu Lễ Huyện',
+'汉城府':'Hán Thành Phủ','江华都护府':'Giang Hoa Đô Hộ Phủ','江界都护府':'Giang Giới Đô Hộ Phủ',
+'江西县':'Giang Tây Huyện','江陵大都护府':'Giang Lăng Đại Đô Hộ Phủ','沃川郡':'Ốc Xuyên Quận',
+'河东县':'Hà Đông Huyện','泗川县':'Tứ Xuyên Huyện','泰安郡':'Thái An Quận',
+'泰川县':'Thái Xuyên Huyện','洪原郡':'Hồng Nguyên Quận','洪川县':'Hồng Xuyên Huyện',
+'洪州牧':'Hồng Châu Mục','济州牧':'Tế Châu Mục','海南县':'Hải Nam Huyện',
+'海州牧':'Hải Châu Mục','涟川县':'Liên Xuyên Huyện','淮阳都护府':'Hoài Dương Đô Hộ Phủ',
+'淳昌郡':'Thuần Xương Quận','清州牧':'Thanh Châu Mục','清道郡':'Thanh Đạo Quận',
+'渭原郡':'Vị Nguyên Quận','漆谷都护府':'Tất Cốc Đô Hộ Phủ','潭阳都护府':'Đàm Dương Đô Hộ Phủ',
+'灵光郡':'Linh Quang Quận','灵岩郡':'Linh Nham Quận','熙川郡':'Hi Xuyên Quận',
+'燕岐县':'Yến Kỳ Huyện','牙山县':'Nha Sơn Huyện','珍岛郡':'Trân Lai Quận',
+'理山郡':'Lý Sơn Quận','瑞山郡':'Thụy Sơn Quận','瓮津都护府':'Ứng Tân Đô Hộ Phủ',
+'甑山县':'Tăng Sơn Huyện','甲山都护府':'Giáp Sơn Đô Hộ Phủ','白川郡':'Bạch Xuyên Quận',
+'盈德县':'Doanh Đức Huyện','益山郡':'Ích Sơn Quận','碧潼郡':'Bích Đồng Quận',
+'礼山县':'Lễ Sơn Huyện','稳城都护府':'Ổn Thành Đô Hộ Phủ','端川郡':'Đoan Xuyên Quận',
+'罗州牧':'La Châu Mục','肃川都护府':'Túc Xuyên Đô Hộ Phủ','舒川郡':'Thư Xuyên Quận',
+'英阳县':'Anh Dương Huyện','茂山府':'Mậu Sơn Phủ','茂朱府':'Mậu Chu Phủ',
+'荣川郡':'Vinh Xuyên Quận','蔚山都护府':'Uất Sơn Đô Hộ Phủ','蔚珍县':'Uất Trân Huyện',
+'衿川县':'Khâm Xuyên Huyện','襄阳都护府':'Tương Dương Đô Hộ Phủ','谷山都护府':'Cốc Sơn Đô Hộ Phủ',
+'载宁郡':'Tải Ninh Quận','迎日县':'Nghênh Nhật Huyện','通川郡':'Thông Xuyên Quận',
+'遂安郡':'Toại An Quận','郭山郡':'Quách Sơn Quận','醴泉郡':'Lễ Tuyền Quận',
+'金化县':'Kim Hóa Huyện','金堤郡':'Kim Đê Quận','金山郡':'Kim Sơn Quận',
+'金川郡':'Kim Xuyên Quận','金浦郡':'Kim Phố Quận','金海都护府':'Kim Hải Đô Hộ Phủ',
+'钟城都护府':'Chung Thành Đô Hộ Phủ','铁原都护府':'Thiết Nguyên Đô Hộ Phủ','铁山都护府':'Thiết Sơn Đô Hộ Phủ',
+'锦山郡':'Cẩm Sơn Quận','镇川县':'Trấn Xuyên Huyện','镜城都护府':'Kính Thành Đô Hộ Phủ',
+'长兴都护府':'Trường Hưng Đô Hộ Phủ','长城都护府':'Trường Thành Đô Hộ Phủ','长水县':'Trường Thủy Huyện',
+'长津郡':'Trường Tân Quận','长渊县':'Trường Uyên Huyện','闻庆县':'Văn Khánh Huyện',
+'阳德县':'Dương Đức Huyện','阴城县':'Âm Thành Huyện','陕川郡':'Thiểm Xuyên Quận',
+'青松都护府':'Thanh Tùng Đô Hộ Phủ','顺天都护府':'Thuận Thiên Đô Hộ Phủ','顺川郡':'Thuận Xuyên Quận',
+'骊州牧':'Ly Châu Mục','高敞县':'Cao Sưởng Huyện','高灵县':'Cao Linh Huyện',
+'高阳郡':'Cao Dương Quận','麟蹄县':'Lân Đề Huyện','黄州牧':'Hoàng Châu Mục',
+'龙仁县':'Long Nhân Huyện','龙川郡':'Long Xuyên Quận','龟城都护府':'Quy Thành Đô Hộ Phủ',
+'东戈壁':'Đông Qua Bích','东方':'Đông Phương','中央':'Trung Ương',
+'中戈壁':'Trung Qua Bích','乌兰巴托':'Ô Lan Ba Thác','乌布苏':'Ô Bố Tô',
+'前杭爱':'Tiền Hàng Ái','南戈壁':'Nam Qua Bích','后杭爱':'Hậu Hàng Ái',
+'唐努乌梁海':'Đường Nỗ Ô Lương Hải','土谢图中部':'Thổ Tạ Đồ Trung Bộ','土谢图北部':'Thổ Tạ Đồ Bắc Bộ',
+'土谢图南部':'Thổ Tạ Đồ Nam Bộ','土谢图西部':'Thổ Tạ Đồ Tây Bộ','巴彦乌列盖':'Ba Ngạn Ô Liệt Cái',
+'巴彦洪戈尔':'Ba Ngạn Hồng Qua Nhĩ','布尔干':'Bố Nhĩ Can','库伦':'Khố Luân',
+'库苏古尔':'Khố Tô Cổ Nhĩ','戈壁苏木贝尔':'Qua Bích Tô Mộc Bối Nhĩ','戈壁诸部':'Qua Bích Chư Bộ',
+'戈壁阿尔泰':'Qua Bích A Nhĩ Thái','扎布汗':'Trát Bố Hãn','扎萨克图中部':'Trát Tát Khắc Đồ Trung Bộ',
+'扎萨克图南部':'Trát Tát Khắc Đồ Nam Bộ','扎萨克图西部':'Trát Tát Khắc Đồ Tây Bộ','科布多':'Khoa Bố Đa',
+'肯特':'Khẳng Đặc','色楞格':'Sắc Lăng Cách','苏赫巴托':'Tô Hách Ba Thác',
+'赛音诺颜部':'Tái Âm Nặc Nhan Bộ','车臣汗东部':'Xa Thần Hãn Đông Bộ','车臣汗中部':'Xa Thần Hãn Trung Bộ',
+'车臣汗南部':'Xa Thần Hãn Nam Bộ','车臣汗西南部':'Xa Thần Hãn Tây Nam Bộ','达尔汗':'Đạt Nhĩ Hãn',
+'鄂尔浑':'Ngạc Nhĩ Hồn','阿尔泰乌梁海':'A Nhĩ Thái Ô Lương Hải',
 };
 
 function viName(name) {
-    return MING_VI_NAMES[name] || MING_VI_NAMES_COUNTY[name] || name;
+    return JAPAN_ROMAJI_NAMES[name] || MING_VI_NAMES[name] || MING_VI_NAMES_COUNTY[name] || name;
 }
 
 const geoJsonCache = {};
