@@ -4917,7 +4917,7 @@ function la() {
                     t.includes("Độ khó - Trung bình") ||
                     t.includes("Độ khó - Chân thực") ||
                     t.includes("Độ khó - Tuyệt cảnh")
-                    ? { ...e, enabled: t.includes(`Độ khó-${r}`) }
+                    ? { ...e, enabled: t.includes(`Độ khó - ${r}`) }
                     : e;
                 });
               (await n(Ra(), i, { render: "immediate" }),
