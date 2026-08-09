@@ -2942,7 +2942,7 @@ function mingMapStyleText() {
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-        background: var(--bg); font-family: 'Noto Serif SC', serif;
+        background: var(--bg); font-family: 'Noto Sans SC', serif;
         overflow: hidden; height: 100vh; width: 100vw; user-select: none;
         touch-action: none;
     }
@@ -5572,7 +5572,7 @@ function bootstrapMingMap() {
     mingMapLamp = parentDocument.createElement('div');
     mingMapLamp.id = LAMP_ID;
     mingMapLamp.title = 'Bản đồ Đại Minh';
-    mingMapLamp.innerHTML = '<span class="ming-map-char">Bản đồ</span>';
+    mingMapLamp.innerHTML = '<span class="ming-map-char">🗺️</span>';
     Object.assign(mingMapLamp.style, {
         position: 'fixed', border: '1.5px solid #d4af37', borderRadius: '50%',
         background: 'radial-gradient(circle, #2a3d5c 0%, #0a0e17 100%)',
@@ -5586,7 +5586,7 @@ function bootstrapMingMap() {
     lampStyle.id = LAMP_ID+'-style';
     lampStyle.textContent = `
         #${LAMP_ID} .ming-map-char {
-            font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: bold;
+            font-family: 'Noto Sans SC', serif; font-size: 25px; font-weight: bold;
             color: #e8d5a3; text-shadow: 0 0 4px rgba(212,175,55,0.6);
             line-height: 1; position: relative; z-index: 1;
         }
