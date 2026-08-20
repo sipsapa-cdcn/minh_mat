@@ -1259,17 +1259,17 @@
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px 16px;">
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px 14px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; gap: 10px;">
                     <div style="display: flex; align-items: flex-start; gap: 10px; flex: 1;">
                         <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;"></i>
                         ${avatarStr}
-                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
                             <div style="display: flex; align-items: flex-start; gap: 8px;">
-                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; line-height: 20px;">${html(name)}</strong>
-                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.4;">${html(info['Thân phận'] || 'Vô chức')}</span>
+                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; padding-top: 1px;">${html(name)}</strong>
+                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.3;">${html(info['Thân phận'] || 'Vô chức')}</span>
                             </div>
-                            <div>
+                            <div style="line-height: 1;">
                                 ${presenceTag}
                             </div>
                         </div>
@@ -1280,8 +1280,8 @@
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Hạ thuộc và mạc liêu" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                <div class="cwe-event-story" style="width: 100%; padding-top: 8px; border-top: 1px dashed var(--line-strong);">
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Trung tâm: <span style="color:var(--gold);">${info['Trung tâm'] ?? 0}</span> | Hảo cảm: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
@@ -1675,17 +1675,17 @@
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px 16px;">
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px 14px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; gap: 10px;">
                     <div style="display: flex; align-items: flex-start; gap: 10px; flex: 1;">
                         <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;"></i>
                         ${avatarStr}
-                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
                             <div style="display: flex; align-items: flex-start; gap: 8px;">
-                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; line-height: 20px;">${html(name)}</strong>
-                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.4;">${html(info['Thân phận'] || 'Tông thất')}</span>
+                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; padding-top: 1px;">${html(name)}</strong>
+                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.3;">${html(info['Thân phận'] || 'Tông thất')}</span>
                             </div>
-                            <div>
+                            <div style="line-height: 1;">
                                 ${presenceTag}
                             </div>
                         </div>
@@ -1696,8 +1696,8 @@
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Thân thuộc" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                <div class="cwe-event-story" style="width: 100%; padding-top: 8px; border-top: 1px dashed var(--line-strong);">
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Hảo cảm độ: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
