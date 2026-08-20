@@ -258,7 +258,7 @@
     }
 
     function inferEquipmentLayout(camp, preset = '') {
-        const text = `${preset} ${camp?.Binh chủng || ''} ${camp?.Trang bị || ''}`;
+        const text = `${preset} ${camp?.['Binh chủng'] || ''} ${camp?.['Trang bị'] || ''}`;
         if (preset === 'Kỵ quân chế thức' || /[Kỵ mã lạc đà]/.test(text)) return { 'Chủ chiến binh khí': 'Mã đao', 'Viễn xạ binh khí': 'Kỵ cung', 'Phòng cụ': 'Khinh giáp', 'Hỏa khí': 'Không', 'Tọa kỵ': 'Chiến mã', 'Tề bị suất': 55, 'Hoàn hảo suất': 70 };
         if (preset === 'Hỏa khí chế thức' || /[Hỏa khí điểu súng súng pháo xa doanh]/.test(text)) return { 'Chủ chiến binh khí': 'Yêu đao', 'Viễn xạ binh khí': 'Điểu súng', 'Phòng cụ': 'Miên giáp', 'Hỏa khí': 'Điểu súng', 'Tọa kỵ': 'Không', 'Tề bị suất': 50, 'Hoàn hảo suất': 65 };
         if (preset === 'Thủy sư chế thức' || /[Thủy sư thuyền chu]/.test(text)) return { 'Chủ chiến binh khí': 'Yêu đao', 'Viễn xạ binh khí': 'Cung nỗ', 'Phòng cụ': 'Miên giáp', 'Hỏa khí': 'Hỏa súng', 'Tọa kỵ': 'Chiến thuyền', 'Tề bị suất': 55, 'Hoàn hảo suất': 65 };
@@ -334,7 +334,7 @@
 
     function grainStorageEntries(storageData) {
         return entries(storageData).filter(([name, item]) => {
-            const unit = String(item?.Đơn vị || ''); const itemName = String(name);
+            const unit = String(item?.['Đơn vị'] || ''); const itemName = String(name);
             if (NON_HUMAN_GRAIN_KEYS.some(key => itemName.includes(key))) return false;
             return unit === 'Thạch' || ARMY_GRAIN_KEYS.some(key => itemName.includes(key));
         }).sort(([a], [b]) => {
@@ -344,7 +344,7 @@
     }
 
     function availableArmyGrain(data) {
-        return roundMarketNumber(grainStorageEntries(get(data, 'Kinh tế.Thương trữ', {})).reduce((sum, [, item]) => sum + Math.max(0, number(item?.Số lượng, 0)), 0));
+        return roundMarketNumber(grainStorageEntries(get(data, 'Kinh tế.Thương trữ', {})).reduce((sum, [, item]) => sum + Math.max(0, number(item?.['Số lượng'], 0)), 0));
     }
 
     function consumeStoredArmyGrain(data, required, options = {}) {
