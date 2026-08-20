@@ -2510,8 +2510,8 @@
     const places = [
         { name: 'Ngọ Môn', zone: 'Cửa thành', x: 0.50, y: 0.94, w: 0.12, h: 0.04, desc: 'Chính nam môn của Tử Cấm Thành, khí thế hoành tráng nhất. Dùng để ban phát chiếu thư Hoàng đế, đại quân khải hoàn hiến phù. Nếu đại thần chọc giận Hoàng đế, "Đình trượng" cũng được chấp hành tại đây.' },
         { name: 'Huyền Vũ Môn', zone: 'Cửa thành', x: 0.50, y: 0.06, w: 0.10, h: 0.03, desc: 'Chính bắc môn của cung thành, thường ngày dành cho nội quan, cung nữ, thái giám ra vào mua sắm hoặc làm tạp dịch.' },
-        { name: 'Đông Hoa Môn', zone: 'Cửa thành', x: 0.06, y: 0.72, w: 0.04, h: 0.05, desc: 'Đông môn của cung thành, do gần Nội Các và Thái tử cung, các Nội Các đại thần và quan viên thượng triều thường ra vào qua cửa này.' },
-        { name: 'Tây Hoa Môn', zone: 'Cửa thành', x: 0.94, y: 0.72, w: 0.04, h: 0.05, desc: 'Tây môn của cung thành, kết nối với Tây Uyển (Thái Dịch Trì). Hoàng đế xuất cung đến Tây Uyển du ngoạn thường đi cửa này.' },
+        { name: 'Đông Hoa Môn', zone: 'Cửa thành', x: 0.06, y: 0.72, w: 0.055, h: 0.075, desc: 'Đông môn của cung thành, do gần Nội Các và Thái tử cung, các Nội Các đại thần và quan viên thượng triều thường ra vào qua cửa này.' },
+        { name: 'Tây Hoa Môn', zone: 'Cửa thành', x: 0.94, y: 0.72, w: 0.055, h: 0.075, desc: 'Tây môn của cung thành, kết nối với Tây Uyển (Thái Dịch Trì). Hoàng đế xuất cung đến Tây Uyển du ngoạn thường đi cửa này.' },
         { name: 'Hoàng Cực Môn', zone: 'Ngoại triều trung khu', x: 0.50, y: 0.78, w: 0.12, h: 0.03, desc: 'Chính môn của ngoại triều. Tuyệt đại đa số thời kỳ nhà Minh, Hoàng đế mỗi ngày tại đây cử hành "Ngự môn thính chính" (tảo triều).' },
         { name: 'Hoàng Cực Điện', zone: 'Ngoại triều trung khu', x: 0.50, y: 0.69, w: 0.16, h: 0.05, desc: 'Biểu tượng quyền lực cao nhất của vương triều Đại Minh. Chuyên dùng để cử hành các đại điển quốc gia như Hoàng đế đăng cơ, đại hôn, sách phong, mệnh tướng xuất chinh.' },
         { name: 'Trung Cực Điện', zone: 'Ngoại triều trung khu', x: 0.50, y: 0.62, w: 0.08, h: 0.04, desc: 'Nơi Hoàng đế tạm nghỉ, đọc chúc văn, tiếp nhận quan viên chấp sự bái triều trước khi diễn ra đại điển.' },
@@ -2590,15 +2590,57 @@
             }
 
             ctx.fillStyle = isLight ? '#ffffff' : '#ffefd5';
-            ctx.font = 'bold 16px "华文楷体", "KaiTi", "Noto Serif SC", serif';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.shadowColor = isLight ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 2; ctx.shadowOffsetY = 1;
 
-            if (p.name.length > 4) ctx.font = 'bold 13px "华文楷体", serif';
+            const fontFamily = '"Noto Serif", "Times New Roman", "DejaVu Serif", serif';
 
-            let textY = py;
-            if (p.name === 'Ngự Hoa Viên') textY = py - ph / 2 + 14;
-            ctx.fillText(p.name, px, textY);
+            // Cửa thành Đông/Tây giữ hình dáng dọc, chữ xoay theo chiều cửa
+            if (p.name === 'Đông Hoa Môn' || p.name === 'Tây Hoa Môn') {
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(-Math.PI / 2);
+                ctx.font = `bold 13px ${fontFamily}`;
+                ctx.fillText(p.name, 0, 0);
+                ctx.restore();
+            } else {
+                let fontSize = 14;
+
+                if (p.name.length >= 9) fontSize = 13;
+                if (p.name.length >= 12) fontSize = 12;
+
+                ctx.font = `bold ${fontSize}px ${fontFamily}`;
+
+                const maxTextWidth = pw - 10;
+                const words = p.name.split(' ');
+                const lines = [];
+                let line = '';
+
+                for (const word of words) {
+                    const test = line ? `${line} ${word}` : word;
+
+                    if (!line || ctx.measureText(test).width <= maxTextWidth) {
+                        line = test;
+                    } else {
+                        lines.push(line);
+                        line = word;
+                    }
+                }
+
+                if (line) lines.push(line);
+
+                const lineHeight = fontSize + 2;
+
+                if (lines.length === 1) {
+                    ctx.fillText(lines[0], px, py);
+                } else {
+                    const startY = py - ((lines.length - 1) * lineHeight) / 2;
+
+                    lines.slice(0, 2).forEach((text, index) => {
+                        ctx.fillText(text, px, startY + index * lineHeight);
+                    });
+                }
+            }
 
             ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
         });
