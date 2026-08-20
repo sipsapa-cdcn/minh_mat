@@ -908,7 +908,7 @@
     // ==========================================
     // 4. Khung cấu trúc DOM
     // ==========================================
-    const lamp = doc.createElement('div'); lamp.id = LAMP_ID; lamp.innerHTML = 'Cung'; doc.body.appendChild(lamp);
+    const lamp = doc.createElement('div'); lamp.id = LAMP_ID; lamp.innerHTML = '🏯'; doc.body.appendChild(lamp);
 
     const modal = doc.createElement('div'); modal.id = MODAL_ID;
     modal.innerHTML = `
