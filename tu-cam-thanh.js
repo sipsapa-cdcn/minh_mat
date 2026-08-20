@@ -1303,11 +1303,21 @@
         for (const { key, task } of arr) {
             let borderColor = 'var(--cinnabar-bright)';
             if (task['Tiến độ'] && (task['Tiến độ'].includes('Hoàn thành') || task['Tiến độ'].includes('Giải quyết'))) borderColor = 'var(--jade)';
-            htmlStr += `<div class="cwe-event-row" style="border-left: 2px solid ${borderColor}; padding-left: 10px; grid-template-columns: 80px minmax(0, 1fr) auto;">
-                <div class="cwe-event-when"><i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor};"></i><strong>${html(key)}</strong><span>${html(task['Loại hình'] || 'Đại chính')}</span></div>
-                <div class="cwe-event-story"><h4>Tiến độ: <span style="color: ${borderColor};">${html(task['Tiến độ'] || 'Chưa rõ')}</span></h4><p style="margin-top: 6px;">${html(task['Thuyết minh'] || 'Chưa có thuyết minh')}</p></div>
-                <div class="cwe-command-actions" style="align-self:center;">
-                    <button class="danger" data-action="delete-item" data-path="Thời cục và nhiệm vụ.Nhiệm vụ hiện tại" data-key="${html(key)}">Xóa</button>
+            
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${borderColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
+                        <i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor}; position: absolute; left: 0; top: 6px;"></i>
+                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
+                        <span class="cm-tag" style="margin-left: 8px; border-color: ${borderColor}; color: ${borderColor};">${html(task['Loại hình'] || 'Đại chính')}</span>
+                    </div>
+                    <div class="cwe-command-actions">
+                        <button class="danger" data-action="delete-item" data-path="Thời cục và nhiệm vụ.Nhiệm vụ hiện tại" data-key="${html(key)}">Xóa</button>
+                    </div>
+                </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Tiến độ: <span style="color: ${borderColor};">${html(task['Tiến độ'] || 'Chưa rõ')}</span></h4>
+                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(task['Thuyết minh'] || 'Chưa có thuyết minh')}</p>
                 </div>
             </div>`;
         }
@@ -1383,11 +1393,20 @@
             let valColor = val > 0 ? 'var(--jade)' : (val < 0 ? 'var(--cinnabar-bright)' : 'var(--muted)');
             let valText = val > 0 ? `+${val.toLocaleString()}` : val.toLocaleString();
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 2px solid ${valColor}; padding-left: 10px;">
-                <div class="cwe-event-when"><i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor};"></i><strong style="color:var(--gold);">${html(key)}</strong><span>Tài vụ</span></div>
-                <div class="cwe-event-story"><h4>Hạn ngạch tháng: <span style="color: ${valColor};">${html(valText)} lượng</span></h4><p style="margin-top: 6px;">${html(item['Thuyết minh'] || 'Chưa có thuyết minh')}</p></div>
-                <div class="cwe-command-actions" style="align-self:center;">
-                    <button class="danger" data-action="delete-item" data-path="Kinh tế.Tài sản" data-key="${html(key)}">Xóa</button>
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${valColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
+                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 6px;"></i>
+                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
+                        <span class="cm-tag" style="margin-left: 8px; color: var(--muted);">Tài vụ</span>
+                    </div>
+                    <div class="cwe-command-actions">
+                        <button class="danger" data-action="delete-item" data-path="Kinh tế.Tài sản" data-key="${html(key)}">Xóa</button>
+                    </div>
+                </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hạn ngạch tháng: <span style="color: ${valColor};">${html(valText)} lượng</span></h4>
+                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(item['Thuyết minh'] || 'Chưa có thuyết minh')}</p>
                 </div>
             </div>`;
         }
@@ -1432,14 +1451,20 @@
             let valText = dir === 'in' ? `+${val.toLocaleString()}` : `-${val.toLocaleString()}`;
             let path = dir === 'in' ? 'Kinh tế.Lưu thủy.Nguyệt nhập' : 'Kinh tế.Lưu thủy.Nguyệt xuất';
 
-            grainHtml += `<div class="cwe-event-row" style="border-left: 2px solid ${valColor}; padding-left: 10px;">
-                <div class="cwe-event-when"><i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor};"></i><strong style="color:var(--gold);">${html(key)}</strong><span>${html(item['Ngày tháng'] || 'Chưa rõ')}</span></div>
-                <div class="cwe-event-story">
-                    <h4>${html(item['Loại hình'] || 'Lương thảo')}: <span style="color: ${valColor};">${html(valText)} ${html(unit)}</span></h4>
-                    <p style="margin-top: 6px;">${html(item['Thuyết minh'] || 'Chưa có thuyết minh')}</p>
+            grainHtml += `<div class="cwe-event-row" style="border-left: 3px solid ${valColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
+                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 6px;"></i>
+                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
+                        <span class="cm-tag" style="margin-left: 8px; color: var(--muted);">${html(item['Ngày tháng'] || 'Chưa rõ')}</span>
+                    </div>
+                    <div class="cwe-command-actions">
+                        <button class="danger" data-action="delete-item" data-path="${path}" data-key="${html(key)}">Xóa</button>
+                    </div>
                 </div>
-                <div class="cwe-command-actions" style="align-self:center;">
-                    <button class="danger" data-action="delete-item" data-path="${path}" data-key="${html(key)}">Xóa</button>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">${html(item['Loại hình'] || 'Lương thảo')}: <span style="color: ${valColor};">${html(valText)} ${html(unit)}</span></h4>
+                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(item['Thuyết minh'] || 'Chưa có thuyết minh')}</p>
                 </div>
             </div>`;
         }
