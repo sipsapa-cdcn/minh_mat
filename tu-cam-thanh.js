@@ -1107,31 +1107,34 @@
                 const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--cinnabar-bright); font-style:italic;';
                 const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
 
-                const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
+                const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; margin-left: 8px;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
                 
                 const g = generals[name];
-                const statsHtml = g ? `<div style="margin-top: 4px; font-size: 11px; color: var(--cinnabar-bright); border: 1px dashed rgba(181, 77, 57, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
+                const statsHtml = g ? `<div style="margin: 4px 0; font-size: 11px; color: var(--cinnabar-bright); border: 1px dashed rgba(181, 77, 57, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
+
+                let avatarStr = avatarImage(name);
+                if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
 
                 output += `
-                <div class="cwe-event-row" style="border-left: 2px solid var(--cinnabar-bright);">
-                    <div class="cwe-event-when">
-                        <i style="background: var(--cinnabar-bright); box-shadow: 0 0 0 1px var(--cinnabar-bright);"></i>
-                        ${avatarImage(name)}
-                        <strong style="color:var(--cinnabar-bright);">${html(name)}</strong>
-                    </div>
-                    <div class="cwe-event-story">
-                        <div style="margin-bottom:4px; font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                            <span>${html(info['Thân phận'] || 'Chưa rõ')}</span>
+                <div class="cwe-event-row" style="border-left: 3px solid var(--cinnabar-bright); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                        <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                            <i style="background: var(--cinnabar-bright); box-shadow: 0 0 0 1px var(--cinnabar-bright); position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                            ${avatarStr}
+                            <strong style="font-size: 15px; color:var(--cinnabar-bright); display: inline-block; margin: 0 8px 0 0;">${html(name)}</strong>
+                            <span class="cm-tag" style="color: var(--muted); margin: 0;">${html(info['Thân phận'] || 'Chưa rõ')}</span>
                             ${presenceTag}
                         </div>
-                        <h4>Cừu hận độ: <span style="color:var(--cinnabar-bright);">${info['Cừu hận độ'] ?? 0}</span></h4>
-                        ${statsHtml}
-                        <p style="${voiceStyle} margin-top: 4px;">"${html(info['Tiếng lòng nhân vật'] || '...')}" ${changeTag}</p>
+                        <div class="cwe-command-actions">
+                            ${portraitButton(name)}
+                            ${loreButton(name)}
+                            <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Cừu địch" data-key="${html(name)}">Lãng quên</button>
+                        </div>
                     </div>
-                    <div class="cwe-command-actions" style="align-self:center; justify-content:flex-end;">
-                        ${portraitButton(name)}
-                        ${loreButton(name)}
-                        <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Cừu địch" data-key="${html(name)}">Lãng quên</button>
+                    <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                        <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Cừu hận độ: <span style="color:var(--cinnabar-bright);">${info['Cừu hận độ'] ?? 0}</span></h4>
+                        ${statsHtml}
+                        <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || '...')}" ${changeTag}</p>
                     </div>
                 </div>`;
             }
@@ -1184,15 +1187,17 @@
                 const tone = fav < 0 ? 'var(--cinnabar-bright)' : (fav > 30 ? 'var(--jade)' : 'var(--gold)');
 
                 output += `
-                <div class="cwe-event-row" data-power-name="${html(name)}" style="cursor: pointer; border-left: 2px solid ${tone};">
-                    <div class="cwe-event-when">
-                        <i style="background: ${tone}; box-shadow: 0 0 0 1px ${tone};"></i>
-                        <strong>${html(name)}</strong>
-                        <span style="color: ${tone};">${html(power['Trạng thái'] || 'Chưa tiếp xúc')}</span>
+                <div class="cwe-event-row" data-power-name="${html(name)}" style="cursor: pointer; border-left: 3px solid ${tone}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                        <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                            <i style="background: ${tone}; box-shadow: 0 0 0 1px ${tone}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                            <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(name)}</strong>
+                            <span class="cm-tag" style="border-color: ${tone}; color: ${tone}; margin: 0;">${html(power['Trạng thái'] || 'Chưa tiếp xúc')}</span>
+                        </div>
                     </div>
-                    <div class="cwe-event-story">
-                        <h4>Hảo cảm: <span style="color:${tone};">${fav > 0 ? '+' : ''}${fav}</span> | Binh lực: ${troops > 0 ? troops.toLocaleString() : 'Chưa rõ'}</h4>
-                        <p style="color: var(--muted); margin-top: 4px;">Binh chủng chủ lực: ${html(type || 'Quân tình chưa rõ')}</p>
+                    <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                        <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hảo cảm: <span style="color:${tone};">${fav > 0 ? '+' : ''}${fav}</span> | Binh lực: ${troops > 0 ? troops.toLocaleString() : 'Chưa rõ'}</h4>
+                        <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">Binh chủng chủ lực: ${html(type || 'Quân tình chưa rõ')}</p>
                     </div>
                 </div>`;
             }
@@ -1246,30 +1251,33 @@
             const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
             const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
 
-            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
+            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; margin-left: 8px;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             const g = generals[name];
-            const statsHtml = g ? `<div style="margin-top: 4px; font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
+            const statsHtml = g ? `<div style="margin: 4px 0; font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
 
-            htmlStr += `<div class="cwe-event-row">
-            <div class="cwe-event-when">
-                <i></i>
-                ${avatarImage(name)}
-                <strong>${html(name)}</strong>
-            </div>
-            <div class="cwe-event-story">
-                <div style="margin-bottom:4px; font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                    <span>${html(info['Thân phận'] || 'Vô chức')}</span>
-                    ${presenceTag}
+            let avatarStr = avatarImage(name);
+            if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
+
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        ${avatarStr}
+                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(name)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">${html(info['Thân phận'] || 'Vô chức')}</span>
+                        ${presenceTag}
+                    </div>
+                    <div class="cwe-command-actions">
+                        ${portraitButton(name)}
+                        ${loreButton(name)}
+                        <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Hạ thuộc và mạc liêu" data-key="${html(name)}">Lãng quên</button>
+                    </div>
                 </div>
-                <h4>Trung tâm: ${info['Trung tâm'] ?? 0} | Hảo cảm: ${info['Hảo cảm độ'] ?? 0}</h4>
-                ${statsHtml}
-                <p style="${voiceStyle} margin-top: 4px;">"${html(info['Tiếng lòng nhân vật'] || 'Bạn quân như bạn hổ...')}" ${changeTag}</p>
-            </div>
-            <div class="cwe-command-actions" style="align-self:center; flex-wrap:wrap; justify-content:flex-end;">
-                ${portraitButton(name)}
-                ${loreButton(name)}
-                <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Hạ thuộc và mạc liêu" data-key="${html(name)}">Lãng quên</button>
-            </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Trung tâm: <span style="color:var(--gold);">${info['Trung tâm'] ?? 0}</span> | Hảo cảm: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
+                    ${statsHtml}
+                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Bạn quân như bạn hổ...')}" ${changeTag}</p>
+                </div>
             </div>`;
         }
         if (arr.length === 0) htmlStr += emptyLine('Tạm không có ghi chép.');
@@ -1514,11 +1522,20 @@
             if (item['Tiến độ'] && (item['Tiến độ'].includes('Đã phổ biến') || item['Tiến độ'].includes('Hoàn thành'))) borderColor = 'var(--jade)';
             else if (item['Tiến độ'] && item['Tiến độ'].includes('Đang thử nghiệm')) borderColor = 'var(--cinnabar-bright)';
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 2px solid ${borderColor}; padding-left: 10px;">
-                <div class="cwe-event-when"><i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor};"></i><strong style="color:${borderColor};">${html(key)}</strong><span>Cách vật</span></div>
-                <div class="cwe-event-story"><h4>Tiến độ: <span style="color: ${borderColor};">${html(item['Tiến độ'] || 'Chưa rõ')}</span></h4><p style="margin-top: 6px;">${html(item['Miêu tả'] || 'Chưa có miêu tả')}</p></div>
-                <div class="cwe-command-actions" style="align-self:center;">
-                    <button class="danger" data-action="delete-item" data-path="Khoa kỹ" data-key="${html(key)}">Xóa</button>
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${borderColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        <strong style="font-size: 15px; color: ${borderColor}; display: inline-block; margin: 0 8px 0 0;">${html(key)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">Cách vật</span>
+                    </div>
+                    <div class="cwe-command-actions">
+                        <button class="danger" data-action="delete-item" data-path="Khoa kỹ" data-key="${html(key)}">Xóa</button>
+                    </div>
+                </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Tiến độ: <span style="color: ${borderColor};">${html(item['Tiến độ'] || 'Chưa rõ')}</span></h4>
+                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(item['Miêu tả'] || 'Chưa có miêu tả')}</p>
                 </div>
             </div>`;
         }
@@ -1570,20 +1587,26 @@
             const voiceStyle = hasChanged ? 'color:#e885a1; font-weight:bold;' : 'color:#d46a8a; font-style:italic;';
             const changeTag = hasChanged ? `<span style="font-size:10px; background:#d46a8a; color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
 
-            htmlStr += `<div class="cwe-event-row" data-private-name="${html(name)}" style="cursor: pointer; border-left: 2px solid #d46a8a;">
-            <div class="cwe-event-when">
-                <i style="background: #d46a8a; box-shadow: 0 0 0 1px #d46a8a;"></i>
-                ${avatarImage(name)}
-                <strong style="color: #d46a8a;">${html(name)}</strong><span>${html(info['Quan hệ'] || 'Phi tần')}</span>
-            </div>
-            <div class="cwe-event-story">
-                <h4>Hảo cảm: <span style="color:#d46a8a;">${info['Hảo cảm độ'] ?? 0}</span> | Thai sản: <span style="color:#d46a8a;">${info['Sinh dục']?.['Trạng thái'] || 'Chưa rõ'}</span></h4>
-                <p style="${voiceStyle} margin-top: 4px;">"${html(info['Tiếng lòng nhân vật'] || 'Thâm cung tịch mịch...')}" ${changeTag}</p>
-            </div>
-            <div class="cwe-command-actions" style="align-self:center; display:flex; gap:6px;">
-                ${portraitButton(name)}
-                ${loreButton(name)}
-            </div>
+            let avatarStr = avatarImage(name);
+            if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
+
+            htmlStr += `<div class="cwe-event-row" data-private-name="${html(name)}" style="cursor: pointer; border-left: 3px solid #d46a8a; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background: #d46a8a; box-shadow: 0 0 0 1px #d46a8a; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        ${avatarStr}
+                        <strong style="font-size: 15px; color: #d46a8a; display: inline-block; margin: 0 8px 0 0;">${html(name)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">${html(info['Quan hệ'] || 'Phi tần')}</span>
+                    </div>
+                    <div class="cwe-command-actions">
+                        ${portraitButton(name)}
+                        ${loreButton(name)}
+                    </div>
+                </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hảo cảm: <span style="color:#d46a8a;">${info['Hảo cảm độ'] ?? 0}</span> | Thai sản: <span style="color:#d46a8a;">${info['Sinh dục']?.['Trạng thái'] || 'Chưa rõ'}</span></h4>
+                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Thâm cung tịch mịch...')}" ${changeTag}</p>
+                </div>
             </div>`;
         }
         if (arr.length === 0) htmlStr += emptyLine('Tạm không có ghi chép.');
@@ -1635,30 +1658,33 @@
             const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
             const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
 
-            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
+            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; margin-left: 8px;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             const g = generals[name];
-            const statsHtml = g ? `<div style="margin-top: 4px; font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
+            const statsHtml = g ? `<div style="margin: 4px 0; font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
 
-            htmlStr += `<div class="cwe-event-row">
-            <div class="cwe-event-when">
-                <i></i>
-                ${avatarImage(name)}
-                <strong>${html(name)}</strong>
-            </div>
-            <div class="cwe-event-story">
-                <div style="margin-bottom:4px; font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                    <span>${html(info['Thân phận'] || 'Tông thất')}</span>
-                    ${presenceTag}
+            let avatarStr = avatarImage(name);
+            if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
+
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        ${avatarStr}
+                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(name)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">${html(info['Thân phận'] || 'Tông thất')}</span>
+                        ${presenceTag}
+                    </div>
+                    <div class="cwe-command-actions">
+                        ${portraitButton(name)}
+                        ${loreButton(name)}
+                        <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Thân thuộc" data-key="${html(name)}">Lãng quên</button>
+                    </div>
                 </div>
-                <h4>Hảo cảm độ: ${info['Hảo cảm độ'] ?? 0}</h4>
-                ${statsHtml}
-                <p style="${voiceStyle} margin-top: 4px;">"${html(info['Tiếng lòng nhân vật'] || 'Hoàng ân hạo đãng...')}" ${changeTag}</p>
-            </div>
-            <div class="cwe-command-actions" style="align-self:center; flex-wrap:wrap; justify-content:flex-end;">
-                ${portraitButton(name)}
-                ${loreButton(name)}
-                <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Thân thuộc" data-key="${html(name)}">Lãng quên</button>
-            </div>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hảo cảm độ: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
+                    ${statsHtml}
+                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Hoàng ân hạo đãng...')}" ${changeTag}</p>
+                </div>
             </div>`;
         }
         if (arr.length === 0) htmlStr += emptyLine('Tạm không có ghi chép.');
