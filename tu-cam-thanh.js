@@ -601,8 +601,8 @@
         .zjc-org-node:last-child::before { bottom: auto; height: 24px; }
         .zjc-org-node::after { content: ''; position: absolute; top: 15px; left: 4px; width: 10px; height: 1px; background: var(--line-strong); }
         .zjc-org-item { border: 1px solid var(--line); background: rgba(0,0,0,0.3); border-radius: 6px; padding: 6px 10px; display: inline-block; width: 100%; box-sizing: border-box; }
-        .zjc-org-title { color: var(--gold); font-weight: bold; font-size: 13px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-        .zjc-org-rank { font-size: 10px; color: var(--cinnabar-bright); background: rgba(181, 77, 57, 0.1); padding: 2px 5px; border-radius: 4px; font-weight: normal; white-space: nowrap; }
+        .zjc-org-title { color: var(--gold); font-weight: bold; font-size: 13px; margin-bottom: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; text-align: center; }
+        .zjc-org-rank { font-size: 10px; color: var(--cinnabar-bright); background: rgba(181, 77, 57, 0.1); padding: 3px 6px; border-radius: 4px; font-weight: normal; white-space: normal; line-height: 1.4; max-width: 95%; border: 1px solid rgba(181, 77, 57, 0.3); }
         .zjc-org-desc { color: var(--muted); font-size: 11px; }
         .zjc-org-root { text-align: center; font-weight: bold; font-size: 16px; color: var(--ink-bright); border: 2px solid var(--gold); background: rgba(199, 155, 93, 0.15); padding: 8px; border-radius: 8px; margin-bottom: 12px; }
         .zjc-org-group-title { font-size: 14px; color: var(--ink-bright); margin: 12px 0 6px 0; padding-left: 18px; position: relative; font-weight: bold; }
