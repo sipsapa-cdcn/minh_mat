@@ -1251,7 +1251,7 @@
             const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
             const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px; flex-shrink: 0;">Tiếng lòng thay đổi</span>` : '';
 
-            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; flex-shrink: 0;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
+            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
             const statsHtml = g ? `<div style="font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2); margin: 0;">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
@@ -1259,32 +1259,34 @@
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
-                
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; gap: 10px;">
-                    <div class="cwe-event-when" style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; flex: 1;">
-                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 9px; height: 9px; border: 2px solid var(--paper); border-radius: 50%; flex-shrink: 0;"></i>
+                    <div style="display: flex; align-items: flex-start; gap: 10px; flex: 1;">
+                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;"></i>
                         ${avatarStr}
-                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0; flex-shrink: 0;">${html(name)}</strong>
-                        <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left;">${html(info['Thân phận'] || 'Vô chức')}</span>
-                        ${presenceTag}
+                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; line-height: 20px;">${html(name)}</strong>
+                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.4;">${html(info['Thân phận'] || 'Vô chức')}</span>
+                            </div>
+                            <div>
+                                ${presenceTag}
+                            </div>
+                        </div>
                     </div>
-                    <div class="cwe-command-actions" style="flex-shrink: 0; display: flex; gap: 6px; white-space: nowrap;">
+                    <div class="cwe-command-actions" style="flex-shrink: 0; display: flex; gap: 6px;">
                         ${portraitButton(name)}
                         ${loreButton(name)}
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Hạ thuộc và mạc liêu" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-
-                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
-                    <!-- Đã sửa: Flexbox ngang cho Chỉ số và Hảo cảm -->
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
+                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Trung tâm: <span style="color:var(--gold);">${info['Trung tâm'] ?? 0}</span> | Hảo cảm: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
                     <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Bạn quân như bạn hổ...')}" ${changeTag}</p>
                 </div>
-
             </div>`;
         }
         if (arr.length === 0) htmlStr += emptyLine('Tạm không có ghi chép.');
@@ -1665,7 +1667,7 @@
             const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
             const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px; flex-shrink: 0;">Tiếng lòng thay đổi</span>` : '';
 
-            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; flex-shrink: 0;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
+            const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
             const statsHtml = g ? `<div style="font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2); margin: 0;">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
@@ -1673,31 +1675,34 @@
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
-            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
-                
+            htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid var(--gold); display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; gap: 10px;">
-                    <div class="cwe-event-when" style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; flex: 1;">
-                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 9px; height: 9px; border: 2px solid var(--paper); border-radius: 50%; flex-shrink: 0;"></i>
+                    <div style="display: flex; align-items: flex-start; gap: 10px; flex: 1;">
+                        <i style="background: var(--gold); box-shadow: 0 0 0 1px var(--gold); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;"></i>
                         ${avatarStr}
-                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0; flex-shrink: 0;">${html(name)}</strong>
-                        <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left;">${html(info['Thân phận'] || 'Tông thất')}</span>
-                        ${presenceTag}
+                        <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <strong style="font-size: 15px; color: var(--gold); margin: 0; flex-shrink: 0; line-height: 20px;">${html(name)}</strong>
+                                <span class="cm-tag" style="color: var(--muted); margin: 0; text-align: left; white-space: normal; line-height: 1.4;">${html(info['Thân phận'] || 'Tông thất')}</span>
+                            </div>
+                            <div>
+                                ${presenceTag}
+                            </div>
+                        </div>
                     </div>
-                    <div class="cwe-command-actions" style="flex-shrink: 0; display: flex; gap: 6px; white-space: nowrap;">
+                    <div class="cwe-command-actions" style="flex-shrink: 0; display: flex; gap: 6px;">
                         ${portraitButton(name)}
                         ${loreButton(name)}
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Thân thuộc" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-
-                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
+                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Hảo cảm độ: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
                     <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Hoàng ân hạo đãng...')}" ${changeTag}</p>
                 </div>
-
             </div>`;
         }
         if (arr.length === 0) htmlStr += emptyLine('Tạm không có ghi chép.');
