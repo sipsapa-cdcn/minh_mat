@@ -2590,24 +2590,80 @@
             }
 
             ctx.fillStyle = isLight ? '#ffffff' : '#ffefd5';
-            ctx.font = 'bold 16px "华文楷体", "KaiTi", "Noto Serif SC", serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.shadowColor = isLight ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 2; ctx.shadowOffsetY = 1;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
 
-            if (p.name.length > 4) ctx.font = 'bold 13px "华文楷体", serif';
+            ctx.shadowColor = isLight ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.9)';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetY = 1;
 
-            let textY = py;
-            if (p.name === 'Ngự Hoa Viên') textY = py - ph / 2 + 14;
-            ctx.fillText(p.name, px, textY);
+            const labelFont = '"Sarasa Mono J", "Times New Roman", "DejaVu Serif", serif';
 
-            ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+            let fontSize = 14;
+
+            if (p.name.length <= 8) {
+                fontSize = 14;
+            } else if (p.name.length <= 11) {
+                fontSize = 13;
+            } else {
+                fontSize = 12;
+            }
+
+            ctx.font = `bold ${fontSize}px ${labelFont}`;
+
+            if (p.name === 'Đông Hoa Môn' || p.name === 'Tây Hoa Môn') {
+                const gateLines = p.name.split(' ');
+                const gateLineHeight = 12;
+                const gateStartY = py - gateLineHeight;
+
+                gateLines.forEach((line, index) => {
+                    ctx.fillText(line, px, gateStartY + index * gateLineHeight);
+                });
+            } else {
+                
+                const maxTextWidth = pw - 8;
+
+                if (ctx.measureText(p.name).width <= maxTextWidth) {
+                    ctx.fillText(p.name, px, py);
+                } else {
+                    const words = p.name.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+
+                    for (const word of words) {
+                        const testLine = currentLine
+                            ? `${currentLine} ${word}`
+                            : word;
+
+                        if (!currentLine || ctx.measureText(testLine).width <= maxTextWidth) {
+                            currentLine = testLine;
+                        } else {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        }
+                    }
+
+                    if (currentLine) lines.push(currentLine);
+
+                    const lineHeight = fontSize + 2;
+                    const visibleLines = lines.slice(0, 2);
+                    const startY = py - ((visibleLines.length - 1) * lineHeight) / 2;
+
+                    visibleLines.forEach((line, index) => {
+                        ctx.fillText(line, px, startY + index * lineHeight);
+                    });
+                }
+            }
+
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
         });
 
         // Trang sức và trục trung tâm
         ctx.setLineDash([6, 8]); ctx.strokeStyle = isLight ? 'rgba(173, 124, 43, 0.4)' : 'rgba(212, 175, 55, 0.2)'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(w / 2, 40); ctx.lineTo(w / 2, h - 40); ctx.stroke(); ctx.setLineDash([]);
 
-        ctx.fillStyle = isLight ? '#856d54' : '#b09880'; ctx.font = '18px "华文楷体", serif'; ctx.textAlign = 'center';
+        ctx.fillStyle = isLight ? '#856d54' : '#b09880'; ctx.font = '18px "Sarasa Mono J", "Times New Roman", serif'; ctx.textAlign = 'center';
         ctx.fillText('Bắc', w / 2, 22); ctx.fillText('Nam', w / 2, h - 15);
         ctx.fillText('Đông', w - 25, h / 2); ctx.fillText('Tây', 25, h / 2);
 
