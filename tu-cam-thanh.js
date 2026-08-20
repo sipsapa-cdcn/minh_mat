@@ -1306,10 +1306,10 @@
             
             htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${borderColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
-                        <i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor}; position: absolute; left: 0; top: 6px;"></i>
-                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
-                        <span class="cm-tag" style="margin-left: 8px; border-color: ${borderColor}; color: ${borderColor};">${html(task['Loại hình'] || 'Đại chính')}</span>
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(key)}</strong>
+                        <span class="cm-tag" style="border-color: ${borderColor}; color: ${borderColor}; margin: 0;">${html(task['Loại hình'] || 'Đại chính')}</span>
                     </div>
                     <div class="cwe-command-actions">
                         <button class="danger" data-action="delete-item" data-path="Thời cục và nhiệm vụ.Nhiệm vụ hiện tại" data-key="${html(key)}">Xóa</button>
@@ -1395,10 +1395,10 @@
 
             htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${valColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
-                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 6px;"></i>
-                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
-                        <span class="cm-tag" style="margin-left: 8px; color: var(--muted);">Tài vụ</span>
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(key)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">Tài vụ</span>
                     </div>
                     <div class="cwe-command-actions">
                         <button class="danger" data-action="delete-item" data-path="Kinh tế.Tài sản" data-key="${html(key)}">Xóa</button>
@@ -1453,10 +1453,10 @@
 
             grainHtml += `<div class="cwe-event-row" style="border-left: 3px solid ${valColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <div class="cwe-event-when" style="padding-left: 14px; position: relative;">
-                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 6px;"></i>
-                        <strong style="font-size: 15px; color: var(--gold);">${html(key)}</strong>
-                        <span class="cm-tag" style="margin-left: 8px; color: var(--muted);">${html(item['Ngày tháng'] || 'Chưa rõ')}</span>
+                    <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
+                        <i style="background:${valColor}; box-shadow: 0 0 0 1px ${valColor}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
+                        <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(key)}</strong>
+                        <span class="cm-tag" style="color: var(--muted); margin: 0;">${html(item['Ngày tháng'] || 'Chưa rõ')}</span>
                     </div>
                     <div class="cwe-command-actions">
                         <button class="danger" data-action="delete-item" data-path="${path}" data-key="${html(key)}">Xóa</button>
