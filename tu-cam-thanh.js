@@ -2522,14 +2522,14 @@
         { name: 'Khôn Ninh Cung', zone: 'Nội đình chính tẩm', x: 0.50, y: 0.26, w: 0.14, h: 0.05, desc: 'Chính cung tẩm điện của Hoàng hậu Đại Minh, nơi thống lý nội chính, là động phòng khi Hoàng đế đại hôn.' },
         { name: 'Đông Lục Cung', zone: 'Đông Tây lục cung', x: 0.28, y: 0.33, w: 0.10, h: 0.12, desc: 'Đông lộ nội đình, quần thể tẩm cung của tần phi Hoàng đế.' },
         { name: 'Tây Lục Cung', zone: 'Đông Tây lục cung', x: 0.72, y: 0.33, w: 0.10, h: 0.12, desc: 'Tây lộ nội đình, quần thể tẩm cung của tần phi Hoàng đế.' },
-        { name: 'Phụng Tiên Điện', zone: 'Đông Tây lục cung', x: 0.26, y: 0.46, w: 0.08, h: 0.06, desc: 'Gia miếu nội đình tế tự tổ tiên của hoàng thất nhà Minh, dịp sinh thần hay tiết khánh Hoàng đế tất đến đây tế bái.' },
+        { name: 'Phụng Tiên Điện', zone: 'Đông Tây lục cung', x: 0.26, y: 0.445, w: 0.08, h: 0.055, desc: 'Gia miếu nội đình tế tự tổ tiên của hoàng thất nhà Minh, dịp sinh thần hay tiết khánh Hoàng đế tất đến đây tế bái.' },
         { name: 'Vũ Anh Điện', zone: 'Văn võ lưỡng dực', x: 0.76, y: 0.68, w: 0.10, h: 0.05, desc: 'Tiện điện nơi Hoàng đế trai cư, triệu kiến phụ thần. Cuối Minh cũng thường làm nơi san khắc lịch thư.' },
         { name: 'Văn Hoa Điện', zone: 'Văn võ lưỡng dực', x: 0.24, y: 0.68, w: 0.10, h: 0.05, desc: 'Nơi Hoàng đế cử hành Kinh diên giảng học (nghe nho thần giảng thụ kinh sử).' },
         { name: 'Văn Uyên Các', zone: 'Trọng địa/Nội Các', x: 0.24, y: 0.60, w: 0.08, h: 0.04, desc: 'Đại chính trung khu của nhà Minh! Trọng địa cốt lõi nơi Đại học sĩ (Nội Các phụ thần) đương trị biện công, tiến hành "Phiếu nghĩ".' },
-        { name: 'Từ Khánh Cung', zone: 'Đông Cung/Thái hậu', x: 0.24, y: 0.52, w: 0.10, h: 0.06, desc: 'Còn gọi là Đoan Bản Cung, cuối Minh thường làm Đông Cung cư sở của Hoàng thái tử, Thái tử cư ngụ và tiếp nhận giáo dục tại đây.' },
+        { name: 'Từ Khánh Cung', zone: 'Đông Cung/Thái hậu', x: 0.24, y: 0.535, w: 0.10, h: 0.06, desc: 'Còn gọi là Đoan Bản Cung, cuối Minh thường làm Đông Cung cư sở của Hoàng thái tử, Thái tử cư ngụ và tiếp nhận giáo dục tại đây.' },
         { name: 'Từ Ninh Cung', zone: 'Đông Cung/Thái hậu', x: 0.78, y: 0.46, w: 0.12, h: 0.08, desc: 'Cư sở chính quy dưỡng lão của các đời Hoàng thái hậu, Thái hoàng thái hậu nhà Minh.' },
         { name: 'Ngự Hoa Viên', zone: 'Viên lâm', x: 0.50, y: 0.15, w: 0.16, h: 0.10, desc: 'Viên lâm cực bắc cung thành, dành cho Đế Hậu tần phi du ngoạn ngắm hoa.' },
-        { name: 'Khâm An Điện', zone: 'Viên lâm', x: 0.50, y: 0.17, w: 0.08, h: 0.04, desc: 'Nằm chính giữa Ngự Hoa Viên, chủ yếu dùng để thờ phụng Huyền Thiên Thượng Đế (Chân Vũ Đại Đế), phù hộ hoàng cung.' },
+        { name: 'Khâm An Điện', zone: 'Viên lâm', x: 0.50, y: 0.18, w: 0.08, h: 0.04, desc: 'Nằm chính giữa Ngự Hoa Viên, chủ yếu dùng để thờ phụng Huyền Thiên Thượng Đế (Chân Vũ Đại Đế), phù hộ hoàng cung.' },
         { name: 'Nội Kim Thủy Hà', zone: 'Thủy hệ', x: 0.50, y: 0.85, w: 0.40, h: 0.02, desc: 'Dải sông ngọc đới ngoằn ngoèo ngoài Hoàng Cực Môn. Năm tòa cầu đá phân chia theo đẳng cấp, cầu chính giữa chỉ có Hoàng đế được phép đi qua.' }
     ];
 
