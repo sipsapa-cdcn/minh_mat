@@ -84,7 +84,7 @@
     const ORG_DATA = [
         // Nhóm 1: Nội đình & Trung khu (Quyền lực cốt lõi)
         {
-            group: 'Một、 Văn quan thể hệ·Nội đình & Trung khu (Đại não hoàng quyền)',
+            group: '⓵ Văn quan thể hệ·Nội đình & Trung khu (Đại não hoàng quyền)',
             items: [
                 { name: 'Thái sư / Thái phó / Thái bảo', rank: 'Chính nhất phẩm', desc: '【Tam Công】Vinh dự tối cao của văn thần, thường là chức hàm hư phong, không có thực quyền.' },
                 { name: 'Nội Các Thủ phụ', rank: 'Thực quyền tể tướng (Bản quan Chính ngũ phẩm đến Chính nhị phẩm)', desc: '【Phiếu nghĩ đại quyền】Đứng đầu Nội Các, chủ trì xử lý quốc chính, nhưng cần Hoàng đế "Phê hồng" mới có hiệu lực.' },
@@ -94,7 +94,7 @@
         },
         // Nhóm 2: Ngoại triều Bộ Viện (Cơ quan chấp hành trung ương)
         {
-            group: 'Hai、 Văn quan thể hệ·Ngoại triều (Lục Bộ & Đô Sát Viện)',
+            group: '⓶ Văn quan thể hệ·Ngoại triều (Lục Bộ & Đô Sát Viện)',
             items: [
                 { name: 'Thượng thư (Lục Bộ)', rank: 'Chính nhị phẩm (Thường gia hàm Vinh Lộc Đại phu)', desc: '【Cửu khanh】Trưởng quan tối cao của các bộ (Lại, Hộ, Lễ, Binh, Hình, Công), thực quyền rất nặng.' },
                 { name: 'Thị lang (Lục Bộ)', rank: 'Chính tam phẩm', desc: '【Phó trưởng quan】Phụ tá Thượng thư xử lý sự vụ của bộ.' },
@@ -104,7 +104,7 @@
         },
         // Nhóm 3: Quan lại Địa phương (Hệ thống cai trị)
         {
-            group: 'Ba、 Văn quan thể hệ·Địa phương (Từ Tỉnh đến Huyện)',
+            group: '⓷ Văn quan thể hệ·Địa phương (Từ Tỉnh đến Huyện)',
             items: [
                 { name: 'Tuần phủ', rank: 'Sai khiển (Thường mang hàm Hữu Phó Đô Ngự sử, Tòng nhị phẩm)', desc: '【Phong cương đại lại】Trưởng quan quân chính một tỉnh, vốn là sai khiển trung ương, cuối Minh thực thể hóa.' },
                 { name: 'Tổng đốc', rank: 'Sai khiển (Thường mang hàm Binh bộ Thượng thư, Chính nhị phẩm)', desc: '【Quản hạt nhiều tỉnh】Tiết chế quân dân nhiều tỉnh, chuyên lo bình định phản loạn hoặc biên phòng.' },
@@ -116,7 +116,7 @@
         },
         // Nhóm 4: Hệ thống Võ tướng Sai khiển (Thống binh thực tế)
         {
-            group: 'Bốn、 Võ tướng thể hệ·Trấn thú sai khiển (Thống binh thực tế)',
+            group: '⓸ Võ tướng thể hệ·Trấn thú sai khiển (Thống binh thực tế)',
             items: [
                 { name: 'Tổng binh quan', rank: 'Sai khiển (Không định phẩm, bản quan thường mang hàm Đô đốc Chính nhất đến Chính nhị phẩm)', desc: '【Trấn thủ nhất phương】Chủ soái một trấn, thống binh 1 vạn～3 vạn người. Chịu sự tiết chế của Tổng đốc, Tuần phủ, văn quý võ tiện, tự xưng “Mạt tướng”.' },
                 { name: 'Phó tướng', rank: 'Sai khiển (Bản quan thường mang hàm Đô đốc Thiêm sự v.v. Chính nhị phẩm)', desc: '【Hiệp thủ phó soái】Hỗ trợ Tổng binh, phân phòng yếu địa, thống binh 5 ngàn～1 vạn người.' },
@@ -127,7 +127,7 @@
         },
         // Nhóm 5: Hệ thống Võ tướng Bản quan (Hư hàm định phẩm, nguồn gốc lạm phát)
         {
-            group: 'Năm、 Võ tướng thể hệ·Vệ sở bản quan (Hư hàm định phẩm)',
+            group: '⓹ Võ tướng thể hệ·Vệ sở bản quan (Hư hàm định phẩm)',
             items: [
                 { name: 'Tả Đô đốc / Hữu Đô đốc', rank: 'Chính nhất phẩm', desc: '【Cực phẩm hư hàm】Vãn Minh lạm thưởng, thường thụ dư cho Tổng binh quan lập chiến công, khiến phẩm cấp hư cao, nhưng không có thực quyền binh.' },
                 { name: 'Đô đốc Đồng tri', rank: 'Tòng nhất phẩm', desc: '【Phó Đô đốc】Phẩm cấp gần với Đô đốc, thường dùng làm gia hàm, nâng cao địa vị võ tướng, vẫn không trực tiếp lĩnh binh.' },
@@ -139,7 +139,7 @@
         },
         // Nhóm 6: Hệ thống Võ tướng Tản quan (Phẩm cấp vinh dự, không nắm binh)
         {
-            group: 'Sáu、 Võ tướng thể hệ·Võ giai tản quan (Vinh dự tản giai)',
+            group: '⓺ Võ tướng thể hệ·Võ giai tản quan (Vinh dự tản giai)',
             items: [
                 { name: 'Đặc Tiến Vinh Lộc Đại phu', rank: 'Chính nhất phẩm', desc: '【Võ thần tối cao tản giai】Không có thực quyền, chỉ gia tặng võ tướng có công huân, nâng cao ân điển triều đình.' },
                 { name: 'Phiêu Kỵ Tướng quân', rank: 'Chính nhị phẩm', desc: '【Võ tản giai】Thường thụ Đô đốc trở lên, biểu dương quân công, nhưng không trực tiếp lĩnh binh.' },
@@ -544,7 +544,7 @@
             color: var(--ink);
             background-image: radial-gradient(rgba(205, 170, 111, 0.04) 1px, transparent 1px); background-size: 4px 4px;
             box-shadow: 0 28px 90px var(--shadow), inset 0 0 0 4px rgba(205, 170, 111, 0.035);
-            font-family: 'Sarasa Mono J', 'PingFang SC', sans-serif;
+            font-family: 'KaiGen Gothic CN', 'PingFang SC', sans-serif;
         }
 
         .cwe-header {
@@ -914,7 +914,7 @@
     modal.innerHTML = `
         <div class="cwe-panel">
             <header class="cwe-header">
-                <div class="cwe-brand"><div class="cwe-brand-mark">Minh</div><div><h1>Đại Minh Hoàng Cực Đồ Chí</h1><p>Sùng Trinh triều · Tử Cấm Thành Thực Lục</p></div></div>
+                <div class="cwe-brand"><div class="cwe-brand-mark">🀢</div><div><h1>Đại Minh Hoàng Cực Đồ Chí</h1><p>Sùng Trinh triều · Tử Cấm Thành Thực Lục</p></div></div>
                 <div class="cwe-header-actions">
                     <button id="zjc-btn-theme">🌙 Đêm tối</button>
                     <button id="zjc-btn-close">Đóng</button>
