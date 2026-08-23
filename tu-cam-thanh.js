@@ -198,9 +198,29 @@
     function roundMarketNumber(value, digits = 3) { const factor = 10 ** digits; return Math.round((number(value, 0) + Number.EPSILON) * factor) / factor; }
 
     function tag(text, tone = '') { return `<span class="cm-tag ${tone}">${html(text)}</span>`; }
-    function bar(label, value, options = {}) { const min = options.min ?? 0; const max = options.max ?? 100; const current = number(value, 0); const percent = clamp(((current - min) / (max - min)) * 100, 0, 100); const tone = options.tone ?? (current < 30 ? 'low' : current > 70 ? 'high' : 'mid'); return `<div class="cm-bar-row"><div class="cm-bar-head"><span>${html(label)}</span><b>${html(current)}</b></div><div class="cm-bar"><i class="${tone}" style="width:${percent}%"></i></div></div>`; }
+    function bar(label, value, options = {}) { const min = options.min ?? 0; const max = options.max ?? 100; const current = number(value, 0); const percent = clamp(((current - min) / (max - min)) * 100, 0, 100); const tone = options.tone ?? (current < 30 ? 'low' : current > 70 ? 'high' : 'mid'); const suffix = options.suffix ?? ''; return `<div class="cm-bar-row"><div class="cm-bar-head"><span>${html(label)}</span><b>${html(current)}${html(suffix)}</b></div><div class="cm-bar"><i class="${tone}" style="width:${percent}%"></i></div></div>`; }
     function meta(label, value) { return `<div class="cm-meta"><span>${html(label)}</span><b>${html(value)}</b></div>`; }
     function emptyLine(text) { return `<p class="cm-empty" style="color:var(--faint); padding:10px; text-align:center; font-style:italic;">${html(text)}</p>`; }
+
+    // --- Trợ giúp thẻ doanh trại quân sự ---
+    function campInitials(name) {
+        const words = String(name || '').trim().split(/\s+/).filter(Boolean);
+        if (words.length === 0) return '?';
+        if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+        return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+    }
+    function campStatusPill(status) {
+        const s = String(status || '');
+        const cls = s.includes('Đãi mệnh') ? 'ready' : 'busy';
+        return `<span class="cm-status-pill ${cls}"><i></i>${html(s || 'Chưa rõ')}</span>`;
+    }
+    function campTierTag(tier) {
+        const s = String(tier || 'Chưa rõ');
+        const cls = /Ô hợp|Kém|Tán loạn/i.test(s) ? 'poor' : /Tinh nhuệ|Thiện chiến|Ưu tú/i.test(s) ? 'elite' : '';
+        return `<span class="cm-tier-tag ${cls}">${html(s)}</span>`;
+    }
+    function fatigueTone(v) { return v < 30 ? 'high' : v < 70 ? 'mid' : 'low'; }
+    function fatigueLabel(v) { return v <= 15 ? 'Sung sức' : v <= 40 ? 'Bình thường' : v <= 70 ? 'Mệt mỏi' : 'Kiệt sức'; }
 
     function getPortraitData() {
         const lib = getST('CanmingPortraitLibrary');
@@ -755,6 +775,72 @@
         .cm-power-chevron { font-size:20px; color:var(--muted); line-height:1; transition:transform 0.15s; }
         .cm-power-row:hover .cm-power-chevron { transform:translateX(3px); color:var(--gold); }
 
+        /* Thẻ chỉ số nhanh (KPI) đầu trang quân vụ */
+        .cm-kpi-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+        .cm-kpi-card { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:rgba(0,0,0,0.22); }
+        .cm-kpi-card .cm-kpi-label { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+        .cm-kpi-card .cm-kpi-val { font-size:16px; font-weight:700; color:var(--ink-bright); margin-top:4px; letter-spacing:0.01em; }
+        .cm-kpi-card .cm-kpi-val small { font-size:11px; font-weight:400; color:var(--muted); }
+        .cm-kpi-icon { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-size:15px; flex-shrink:0; background:rgba(199,155,93,0.1); border:1px solid rgba(199,155,93,0.28); color:var(--gold); }
+        .cm-kpi-icon.jade { background:rgba(120,153,142,0.12); border-color:rgba(120,153,142,0.3); color:var(--jade); }
+        .cm-kpi-icon.faint { background:rgba(255,255,255,0.03); border-color:var(--line); color:var(--muted); }
+        .cm-kpi-badge { font-size:9px; padding:1px 6px; border-radius:999px; border:1px solid; margin-left:2px; }
+        .cm-kpi-badge.good { color:var(--jade); border-color:rgba(120,153,142,0.4); background:rgba(120,153,142,0.12); }
+        .cm-kpi-badge.warn { color:var(--gold); border-color:rgba(199,155,93,0.4); background:rgba(199,155,93,0.12); }
+        .cm-kpi-badge.bad { color:var(--cinnabar-bright); border-color:rgba(219,114,88,0.4); background:rgba(181,77,57,0.14); }
+
+        /* Danh sách doanh trại quân sự (thẻ) */
+        .cm-camp-grid { display:flex; flex-direction:column; gap:14px; }
+        .cm-camp-card { position:relative; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,0.02); padding:16px 18px; transition:border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+        .cm-camp-card:hover { border-color:var(--gold); box-shadow:0 10px 26px rgba(0,0,0,0.18); }
+        .cm-camp-card.warn { border-left:3px solid var(--gold); }
+        .cm-camp-card.danger { border-left:3px solid var(--cinnabar-bright); }
+
+        .cm-camp-top { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:14px; }
+        .cm-camp-left { display:flex; align-items:flex-start; gap:14px; min-width:0; }
+        .cm-camp-avatar { width:46px; height:46px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; background:rgba(199,155,93,0.08); border:1px solid var(--line-strong); color:var(--gold); flex-shrink:0; font-family:'Noto Sans SC', serif; }
+        .cm-camp-avatar .top { font-size:9px; color:var(--muted); letter-spacing:0.06em; }
+        .cm-camp-avatar .main { font-size:13px; font-weight:700; color:var(--ink-bright); line-height:1.1; }
+        .cm-camp-name-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+        .cm-camp-name-row h3 { margin:0; font-size:16px; font-family:'Noto Sans SC', serif; color:var(--ink-bright); font-weight:700; letter-spacing:0.02em; }
+        .cm-camp-loc { font-size:12px; color:var(--muted); }
+        .cm-camp-meta-row { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:5px; font-size:12px; color:var(--muted); }
+        .cm-camp-meta-row b { color:var(--ink-bright); font-weight:600; }
+        .cm-camp-meta-row .dot { color:var(--faint); }
+
+        .cm-status-pill { display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:999px; font-size:10px; font-weight:600; border:1px solid; white-space:nowrap; }
+        .cm-status-pill i { width:5px; height:5px; border-radius:50%; }
+        .cm-status-pill.ready { color:var(--jade); border-color:rgba(120,153,142,0.4); background:rgba(120,153,142,0.12); }
+        .cm-status-pill.ready i { background:var(--jade); animation:cmPulseDot 1.6s infinite; }
+        .cm-status-pill.busy { color:var(--gold); border-color:rgba(199,155,93,0.4); background:rgba(199,155,93,0.12); }
+        .cm-status-pill.busy i { background:var(--gold); }
+        @keyframes cmPulseDot { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+        .cm-tier-tag { font-size:10px; padding:1px 7px; border-radius:4px; border:1px solid var(--line); color:var(--muted); background:rgba(0,0,0,0.25); white-space:nowrap; }
+        .cm-tier-tag.elite { color:var(--gold); border-color:rgba(199,155,93,0.5); background:rgba(199,155,93,0.1); font-weight:600; }
+        .cm-tier-tag.poor { color:var(--cinnabar-bright); border-color:rgba(219,114,88,0.5); background:rgba(181,77,57,0.12); font-weight:600; }
+
+        .cm-camp-cta { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:10px; border:1px solid rgba(199,155,93,0.5); background:linear-gradient(180deg, rgba(42,32,24,0.85), rgba(32,24,18,0.85)); color:var(--gold); font-size:12px; font-weight:600; cursor:pointer; transition:0.2s; white-space:nowrap; flex-shrink:0; }
+        .cm-camp-cta:hover { border-color:var(--gold); color:var(--ink-bright); }
+        .cm-camp-cta em { font-style:normal; }
+
+        .cm-camp-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px 18px; padding:12px 14px; margin-bottom:14px; border:1px solid var(--line); border-radius:12px; background:rgba(0,0,0,0.22); }
+
+        .cm-camp-bottom { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; }
+        .cm-camp-equip { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+        .cm-camp-equip .lbl { font-size:11px; color:var(--faint); margin-right:2px; }
+        .cm-camp-equip .rate { font-size:10px; color:var(--gold); margin-left:2px; white-space:nowrap; }
+        .cm-camp-badges { display:flex; flex-wrap:wrap; gap:6px; }
+        .cm-tag.good { color:var(--jade); border-color:rgba(120,153,142,0.35); background:rgba(120,153,142,0.1); }
+        .cm-tag.bad { color:var(--cinnabar-bright); border-color:rgba(219,114,88,0.4); background:rgba(181,77,57,0.12); font-weight:600; }
+
+        @media (max-width:760px) {
+            .cm-kpi-row { grid-template-columns:1fr; }
+            .cm-camp-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .cm-camp-top { flex-direction:column; align-items:stretch; }
+            .cm-camp-cta { justify-content:center; }
+        }
+
         /* Quân lệnh & Bảng gấp */
         .cm-fold { border:1px solid var(--line); border-radius:12px; background:rgba(20,15,10,0.6); margin:0 0 12px; overflow:hidden; }
         .cm-fold summary { list-style:none; cursor:pointer; padding:12px 16px; color:var(--gold); font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:space-between; outline:none; }
@@ -876,6 +962,8 @@
         .zjc-light-theme .cm-command-modal header { background: rgba(225, 215, 198, 0.9); }
         .zjc-light-theme .cm-command-general select, .zjc-light-theme .cm-refit-line select, .zjc-light-theme .zjc-sort, .zjc-light-theme .zjc-search { background: rgba(255,255,255,0.6) !important; }
         .zjc-light-theme .cm-command-banner span, .zjc-light-theme .cm-tag { background: rgba(255,255,255,0.5); }
+        .zjc-light-theme .cm-kpi-card, .zjc-light-theme .cm-camp-card, .zjc-light-theme .cm-camp-stats { background: rgba(255,255,255,0.42); }
+        .zjc-light-theme .cm-tier-tag { background: rgba(255,255,255,0.5); }
         .zjc-light-theme #zjc-tooltip { background: rgba(243, 239, 229, 0.95); }
 
         /* Khống chế style trực tiếp */
@@ -903,6 +991,11 @@
 
 
 
+    if (!doc.getElementById('zjc-map-fonts')) {
+        const fontLink = doc.createElement('link'); fontLink.id = 'zjc-map-fonts'; fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Noto+Serif+SC:wght@400;600;700&display=swap';
+        doc.head.appendChild(fontLink);
+    }
     const styleEl = doc.createElement('style'); styleEl.id = STYLE_ID; styleEl.textContent = CSS; doc.head.appendChild(styleEl);
 
     // ==========================================
@@ -1745,18 +1838,42 @@
         }
 
         // Render thống kê
+        const grainTone = !armySupply.grain ? '' : runway >= 2 ? 'good' : runway >= 1 ? 'warn' : 'bad';
         doc.getElementById('military-stats-container').innerHTML = `
             <div class="cwe-section-head">
-                <div><h2>Quân đội dưới quyền</h2></div>
-                <div class="zjc-count" style="color:var(--faint); font-size:12px; text-align:right;">
-                    Tại biên ${Object.keys(camps).length} chi | Tìm được ${arr.length} chi<br>
-                    <strong style="color:var(--gold);">Tổng binh lực ${armySupply.people.toLocaleString()} người</strong>
+                <div>
+                    <h2>Quân đội dưới quyền</h2>
+                    <p style="margin:4px 0 0;">Tại biên ${Object.keys(camps).length} chi · Tìm được ${arr.length} chi</p>
+                </div>
+                <div class="zjc-count" style="text-align:right;">
+                    <span style="display:block; font-size:10px; color:var(--faint); letter-spacing:0.08em;">TỔNG BIÊN CHẾ</span>
+                    <strong style="color:var(--gold); font-family:'Noto Sans SC', serif;">${Object.keys(camps).length} chi doanh</strong>
+                    <span style="display:block; font-size:10px; color:var(--faint); letter-spacing:0.08em; margin-top:6px;">TỔNG BINH LỰC</span>
+                    <strong style="color:var(--ink-bright);">${armySupply.people.toLocaleString()} người</strong>
                 </div>
             </div>
-            <div style="display:flex; justify-content:space-between; padding: 12px 18px; background: rgba(0,0,0,0.3); border:1px solid var(--line); border-radius:8px; margin-bottom:15px; font-size:13px; color:var(--muted);">
-                <span>Nguyệt độ quân phí: <strong style="color:var(--ink-bright);">${armySupply.cost.toLocaleString()} lượng</strong></span>
-                <span>Quân lương tồn kho: <strong style="color:var(--ink-bright);">${grain.toLocaleString()} thạch</strong> ${armySupply.grain ? `(${runway} tháng)` : ''}</span>
-                <span>Quân lệnh thi hành: <strong style="color:var(--ink-bright);">${activeOrders.length} đạo</strong></span>
+            <div class="cm-kpi-row">
+                <div class="cm-kpi-card">
+                    <div>
+                        <div class="cm-kpi-label">Nguyệt độ quân phí</div>
+                        <div class="cm-kpi-val">${armySupply.cost.toLocaleString()} <small>lượng</small></div>
+                    </div>
+                    <div class="cm-kpi-icon">🪙</div>
+                </div>
+                <div class="cm-kpi-card">
+                    <div>
+                        <div class="cm-kpi-label">Quân lương dự trữ ${armySupply.grain ? `<span class="cm-kpi-badge ${grainTone}">${runway} tháng</span>` : ''}</div>
+                        <div class="cm-kpi-val">${grain.toLocaleString()} <small>thạch</small></div>
+                    </div>
+                    <div class="cm-kpi-icon jade">🌾</div>
+                </div>
+                <div class="cm-kpi-card">
+                    <div>
+                        <div class="cm-kpi-label">Quân lệnh đang thi hành</div>
+                        <div class="cm-kpi-val">${activeOrders.length} <small>đạo lệnh</small></div>
+                    </div>
+                    <div class="cm-kpi-icon faint">📜</div>
+                </div>
             </div>
         `;
 
@@ -1765,33 +1882,70 @@
         if (arr.length === 0) {
             campHtml = `<p class="cm-empty">Tạm không có doanh ngũ liên quan.</p>`;
         } else {
+            campHtml = '<div class="cm-camp-grid">';
             for (const { name, camp } of arr) {
-                const stateColor = camp['Trạng thái'] === 'Đãi mệnh' ? 'var(--jade)' : 'var(--cinnabar-bright)';
+                const morale = number(camp['Sĩ khí'], 0);
+                const training = number(camp['Huấn luyện'], 0);
+                const logistics = number(camp['Hậu cần'], 0);
+                const fatigue = number(camp['Bì lao'], 0);
+                const isPoorTier = /Ô hợp|Kém|Tán loạn/i.test(camp['Đẳng cấp'] || '');
+                const isLowMorale = morale < 40;
 
                 const equip = camp['Trang bị biên chế'] || {};
-                const unpaid = camp['Số tháng khiếm nợ'] > 0 ? `<span style="color:var(--cinnabar-bright); font-weight:bold;">Khiếm nợ ${camp['Số tháng khiếm nợ']} tháng</span>` : `Không khiếm nợ`;
-                const noFood = camp['Số ngày thiếu lương'] > 0 ? `<span style="color:var(--cinnabar-bright); font-weight:bold;">Đứt lương ${camp['Số ngày thiếu lương']} ngày</span>` : `Lương thảo đủ`;
-                const wounded = camp['Thương binh'] > 0 ? `<span style="color:var(--gold); font-weight:bold;">Thương binh ${camp['Thương binh']}</span>` : `Không thương binh`;
-                let equipStr = `Biên chế: ${html(equip['Chủ chiến binh khí'] || 'Không')}·${html(equip['Viễn xạ binh khí'] || 'Không')}·${html(equip['Phòng cụ'] || 'Không')}·${html(equip['Hỏa khí'] || 'Không')}·${html(equip['Tọa kỵ'] || 'Không')}`;
-                let equipRates = `(Tề bị ${equip['Tề bị suất'] || 0}% Hoàn hảo ${equip['Hoàn hảo suất'] || 0}%)`;
+                const equipList = [equip['Chủ chiến binh khí'], equip['Viễn xạ binh khí'], equip['Phòng cụ'], equip['Hỏa khí'], equip['Tọa kỵ']]
+                    .filter(v => v && v !== 'Không');
+                const equipTagsHtml = equipList.length ? equipList.map(v => tag(v)).join('') : `<span class="cm-tag">Chưa biên chế</span>`;
+                const equipRates = `(Tề bị ${equip['Tề bị suất'] || 0}% · Hoàn hảo ${equip['Hoàn hảo suất'] || 0}%)`;
 
-                campHtml += `<div class="cwe-event-row">
-                    <div class="cwe-event-when">
-                        <i style="background:${stateColor}; box-shadow: 0 0 0 1px ${stateColor};"></i>
-                        <strong>${html(name)}</strong>
-                        <span>Trú địa: ${html(camp['Trú địa'] || 'Chưa rõ')}</span>
+                const unpaidMonths = number(camp['Số tháng khiếm nợ'], 0);
+                const shortDays = number(camp['Số ngày thiếu lương'], 0);
+                const wounded = number(camp['Thương binh'], 0);
+                const unpaidBadge = unpaidMonths > 0 ? tag(`Khiếm nợ ${unpaidMonths} tháng`, 'bad') : tag('Không khiếm nợ', 'good');
+                const foodBadge = shortDays > 0 ? tag(`Đứt lương ${shortDays} ngày`, 'bad') : tag('Lương thảo đủ', 'good');
+                const woundedBadge = wounded > 0 ? tag(`Thương binh ${wounded}`, 'bad') : tag('Không thương binh', 'good');
+
+                campHtml += `<div class="cm-camp-card ${isPoorTier ? 'danger' : isLowMorale ? 'warn' : ''}">
+                    <div class="cm-camp-top">
+                        <div class="cm-camp-left">
+                            <div class="cm-camp-avatar"><span class="top">DOANH</span><span class="main">${html(campInitials(name))}</span></div>
+                            <div>
+                                <div class="cm-camp-name-row">
+                                    <h3>${html(name)}</h3>
+                                    ${campStatusPill(camp['Trạng thái'])}
+                                    <span class="cm-camp-loc">· Trú địa: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
+                                </div>
+                                <div class="cm-camp-meta-row">
+                                    <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
+                                    <span class="dot">|</span>
+                                    <span>Binh lực: <b>${number(camp['Nhân số'], 0).toLocaleString()}</b> người</span>
+                                    <span class="dot">|</span>
+                                    <span>Binh chủng: <span style="color:var(--ink);">${html(camp['Binh chủng'] || 'Chưa rõ')}</span></span>
+                                    <span class="dot">|</span>
+                                    ${campTierTag(camp['Đẳng cấp'])}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="cm-camp-cta" data-action="open-military-command" data-camp-name="${html(name)}"><span>Mở quân phủ thiêm áp</span><em>➔</em></button>
                     </div>
-                    <div class="cwe-event-story">
-                        <h4>Chủ tướng: ${html(camp['Tướng lĩnh'] || 'Chưa định')} | Binh lực: ${camp['Nhân số'] || 0} <span style="font-size:11px; font-weight:normal; color:${stateColor}; border:1px solid ${stateColor}; border-radius:4px; padding:1px 6px; margin-left:6px; vertical-align:middle;">${html(camp['Trạng thái'])}</span></h4>
-                        <p style="margin-bottom:3px;">Binh chủng: ${html(camp['Binh chủng'] || 'Chưa rõ')} | Đẳng cấp: ${html(camp['Đẳng cấp'] || 'Chưa rõ')} | Trang bị đại loại: ${html(camp['Trang bị'] || 'Chưa ghi')} | Sĩ khí: ${camp['Sĩ khí'] || 0} | Huấn luyện: ${camp['Huấn luyện'] || 0} | Hậu cần: ${camp['Hậu cần'] || 0} | Bì lao: ${camp['Bì lao'] || 0}</p>
-                        <p style="margin-bottom:3px; font-size:12px;">${equipStr} <span style="color:var(--faint);">${equipRates}</span></p>
-                        <p style="font-size:12px;">Quân tình: ${unpaid} | ${noFood} | ${wounded}</p>
+
+                    <div class="cm-camp-stats">
+                        ${bar('Sĩ khí', morale, { suffix: ' / 100' })}
+                        ${bar('Huấn luyện', training, { suffix: ' / 100' })}
+                        ${bar('Hậu cần', logistics, { suffix: ' / 100' })}
+                        ${bar('Bì lao (Mệt mỏi)', fatigue, { tone: fatigueTone(fatigue), suffix: `% (${fatigueLabel(fatigue)})` })}
                     </div>
-                    <div class="cwe-command-actions" style="align-self:center;">
-                        <button class="primary" data-action="open-military-command" data-camp-name="${html(name)}">Mở quân phủ thiêm áp</button>
+
+                    <div class="cm-camp-bottom">
+                        <div class="cm-camp-equip">
+                            <span class="lbl">Trang bị:</span>
+                            ${equipTagsHtml}
+                            <span class="rate">${equipRates}</span>
+                        </div>
+                        <div class="cm-camp-badges">${unpaidBadge}${foodBadge}${woundedBadge}</div>
                     </div>
                 </div>`;
             }
+            campHtml += '</div>';
         }
         doc.getElementById('list-military-camps').innerHTML = campHtml;
 
