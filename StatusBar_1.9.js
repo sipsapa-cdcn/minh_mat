@@ -3426,7 +3426,7 @@ function fa() {
     (function (e) {
       return "WAR" === e ? "war" : "NSFW" === e ? "private" : "safe";
     })(e),
-  )}</p>\n        <p class="cm-place">${an(wn(Je, "Thế giới vận hành.Địa điểm hiện tại", "Địa điểm chưa ghi"))}</p>\n      </div>\n    </div>\n    <div class="cm-grid two">\n      ${ia("Thân này", `\n        ${pa("Chức quan", wn(Je, "Nhân vật chính.Chức quan", "Chưa ghi"))}\n        ${pa("Danh vọng", `${wn(Je, "Nhân vật chính.Danh vọng", 0)} · ${wn(Je, "Nhân vật chính.Giai đoạn danh vọng", "Mặc mặc vô văn")}`)}\n        <div class="cm-mini-bars">\n          ${["Sinh mệnh", "Võ lực", "Thống suất", "Trí mưu", "Chính trị"].map((e) => ma(e, t[e] ?? 0)).join("")}\n        </div>`)}\n      ${ia("Việc chưa quyết", n.length ? `<div class="cm-list">${n.map(([e, t]) => `\n        <article class="cm-item">\n          <div class="cm-item-title"><b>${an(e)}</b>${ca(t['Trạng thái'] || "Chờ xử lý")}</div>\n          <p>${an(t['Khái yếu'] || "Tạm không có khái yếu")}</p>\n          ${t['Hiện trạng'] ? pa("Hiện trạng", t['Hiện trạng']) : ""}\n        </article>`).join("")}</div>` : oa("Trước mắt tạm không có việc được ghi chép rõ ràng."))}\n    </div>`;
+  )}</p>\n        <p class="cm-place">${an(wn(Je, "Thế giới vận hành.Địa điểm hiện tại", "Địa điểm chưa ghi"))}</p>\n      </div>\n    </div>\n    <div class="cm-grid two">\n      ${ia("Bản thân", `\n        ${pa("Chức quan", wn(Je, "Nhân vật chính.Chức quan", "Chưa ghi"))}\n        ${pa("Danh vọng", `${wn(Je, "Nhân vật chính.Danh vọng", 0)} · ${wn(Je, "Nhân vật chính.Giai đoạn danh vọng", "Mặc mặc vô văn")}`)}\n        <div class="cm-mini-bars">\n          ${["Sinh mệnh", "Võ lực", "Thống suất", "Trí mưu", "Chính trị"].map((e) => ma(e, t[e] ?? 0)).join("")}\n        </div>`)}\n      ${ia("Việc chưa quyết", n.length ? `<div class="cm-list">${n.map(([e, t]) => `\n        <article class="cm-item">\n          <div class="cm-item-title"><b>${an(e)}</b>${ca(t['Trạng thái'] || "Chờ xử lý")}</div>\n          <p>${an(t['Khái yếu'] || "Tạm không có khái yếu")}</p>\n          ${t['Hiện trạng'] ? pa("Hiện trạng", t['Hiện trạng']) : ""}\n        </article>`).join("")}</div>` : oa("Trước mắt tạm không có việc được ghi chép rõ ràng."))}\n    </div>`;
 }
 function ba() {
   return `<div class="cm-money-switch" role="tablist" aria-label="Trang tiền lương">\n    <button type="button" class="${"ledger" === Ze ? "active" : ""}" data-money-view="ledger">Phòng thu ngân</button>\n    <button type="button" class="${"market" === Ze ? "active" : ""}" data-money-view="market">Khu chợ</button>\n  </div>`;
@@ -3742,7 +3742,7 @@ function Ea() {
       return xa();
     case "people":
       return [
-        ["Danh lục quan trên", "Thượng tư", wn(Je, "Mạng lưới quan hệ.Thượng tư", {})],
+        ["Danh lục thượng tư", "Thượng tư", wn(Je, "Mạng lưới quan hệ.Thượng tư", {})],
         ["Đồng bào cố cựu", "Cố hữu và đồng liêu", wn(Je, "Mạng lưới quan hệ.Cố hữu và đồng liêu", {})],
         ["Môn hạ thuộc liêu", "Hạ thuộc và mạc liêu", wn(Je, "Mạng lưới quan hệ.Hạ thuộc và mạc liêu", {})],
         ["Giang hồ thị tỉnh", "Tam giáo cửu lưu", wn(Je, "Mạng lưới quan hệ.Tam giáo cửu lưu", {})],
