@@ -7892,7 +7892,7 @@ async function fi() {
     (Be.title = "Tàn Minh Dư Tẫn"),
     Be.setAttribute("aria-label", "Mở thanh trạng thái"),
     (Be.innerHTML =
-      '<span class="cm-seal-char">Minh</span><span class="cm-world-turn-count" title="Mở Thiên hạ diễn hóa">8</span>'),
+      '<span class="cm-seal-char">☬</span><span class="cm-world-turn-count" title="Mở Thiên hạ diễn hóa">8</span>'),
     Object.assign(Be.style, {
       position: "fixed",
       border: "1.5px solid #b54a3a",
