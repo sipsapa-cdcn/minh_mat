@@ -1324,7 +1324,7 @@ const $e = [
       "Hậu nhập": "https://i.postimg.cc/fTqbBmHr/wen-su-xian-hou-ru.png",
       "Túc giao": "https://i.postimg.cc/KvpYJBqS/wen-su-xian-zu-jiao.png",
     },
-  };
+  },
   _e = [
     {
       name: "Khuê trung bí khí",
