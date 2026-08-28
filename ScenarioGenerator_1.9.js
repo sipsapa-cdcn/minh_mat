@@ -2627,7 +2627,7 @@ function v(e) {
                 "technologies",
                 "relationships",
                 "factions",
-                "tasks",
+                "pending_matters",
                 "events",
               ],
               properties: {
