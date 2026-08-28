@@ -1710,6 +1710,153 @@ function zt(e = We) {
     kt = null;
   }
 }
+const VN_MAP_DICT = {
+    "大明": "Đại Minh", "后金": "Hậu Kim", "流寇": "Lưu khấu",
+    "云南": "Vân Nam", "北直隶": "Bắc Trực Lệ", "南直隶": "Nam Trực Lệ", "四川": "Tứ Xuyên",
+    "宁夏": "Ninh Hạ", "山东": "Sơn Đông", "山西": "Sơn Tây", "广东": "Quảng Đông",
+    "广西": "Quảng Tây", "江西": "Giang Tây", "河南": "Hà Nam", "浙江": "Chiết Giang",
+    "湖广": "Hồ Quảng", "福建": "Phúc Kiến", "贵州": "Quý Châu", "陕西": "Thiểm Tây",
+    "西北": "Tây Bắc", "辽东都司": "Liêu Đông Đô ty", "西属菲律宾": "Tây thuộc Philippines",
+    "阿瑜陀耶王国": "Vương quốc Ayutthaya", "柬埔寨王国": "Vương quốc Campuchia",
+    "澜沧王国": "Vương quốc Lan Xang", "尼泊尔诸王国": "Các vương quốc Nepal",
+    "辽东": "Liêu Đông", "漠南蒙古": "Mạc Nam Mông Cổ", "大越（郑阮纷争）": "Đại Việt (Trịnh Nguyễn phân tranh)",
+    "郑主": "Trịnh chủ", "澜沧": "Lan Thương", "荷兰东印度公司据点与影响区": "Cứ điểm và khu vực ảnh hưởng của Công ty Đông Ấn Hà Lan",
+    "荷兰东印度公司据点及势力范围": "Cứ điểm và khu vực ảnh hưởng của Công ty Đông Ấn Hà Lan",
+    "察哈尔": "Sát Cáp Nhĩ", "澳洲原住民诸族": "Các tộc thổ dân Úc Châu",
+    "澳洲土著部落": "Các tộc thổ dân Úc Châu", "野人女真": "Dã Nhân Nữ Chân",
+    "土默特": "Thổ Mặc Đặc", "朵颜三卫": "Đóa Nhan tam vệ", "喀尔喀": "Khách Nhĩ Khách",
+    "广南": "Quảng Nam", "澜沧· 真腊": "Lan Thương - Chân Lạp", "桐城": "Đồng Thành",
+    "和济堂": "Hòa Tế Đường", "安庆府": "An Khánh phủ", "江南": "Giang Nam",
+    "漠北": "Mạc Bắc", "朝鲜": "Triều Tiên", "日本": "Nhật Bản", "东番": "Đông Phiên",
+    "安南": "An Nam", "暹罗": "Xiêm La", "吕宋": "Lữ Tống", "爪哇": "Trảo Nha",
+    "乌思藏": "Ô Tư Tạng", "西域": "Tây Vực", "青海": "Thanh Hải", "莫卧儿": "Mạc Ngọa Nhi",
+    "不丹": "Bất Đan", "尼婆罗": "Ni Bà La", "澳洲": "Úc Châu",
+    "郧阳府": "Vân Dương phủ", "襄阳府": "Tương Dương phủ", "黄州府": "Hoàng Châu phủ",
+    "武昌府": "Vũ Xương phủ", "汉阳府": "Hán Dương phủ", "承天府": "Thừa Thiên phủ",
+    "德安府": "Đức An phủ", "荆州府": "Kinh Châu phủ", "大同府": "Đại Đồng phủ",
+    "太原府": "Thái Nguyên phủ", "汾州府": "Phần Châu phủ", "辽州": "Liêu Châu",
+    "沁州": "Thấm Châu", "泽州": "Trạch Châu", "平阳府": "Bình Dương phủ",
+    "潞安府": "Lộ An phủ", "真定府": "Chân Định phủ", "河间府": "Hà Gian phủ",
+    "顺德府": "Thuận Đức phủ", "广平府": "Quảng Bình phủ", "大名府": "Đại Danh phủ",
+    "永平府": "Vĩnh Bình phủ", "万全都司": "Vạn Toàn Đô ty", "保定府": "Bảo Định phủ",
+    "顺天府": "Thuận Thiên phủ", "济南府": "Tế Nam phủ", "东昌府": "Đông Xương phủ",
+    "兖州府": "Duyện Châu phủ", "青州府": "Thanh Châu phủ", "莱州府": "Lai Châu phủ",
+    "登州府": "Đăng Châu phủ", "彰德府": "Chương Đức phủ", "卫辉府": "Vệ Huy phủ",
+    "开封府": "Khai Phong phủ", "怀庆府": "Hoài Khánh phủ", "河南府": "Hà Nam phủ",
+    "南阳府": "Nam Dương phủ", "汝宁府": "Nhữ Ninh phủ", "归德府": "Quy Đức phủ",
+    "汝州": "Nhữ Châu", "汉中府": "Hán Trung phủ", "延安府": "Diên An phủ",
+    "西安府": "Tây An phủ", "凤翔府": "Phượng Tường phủ", "榆林卫": "Du Lâm vệ",
+    "庆阳府": "Khánh Dương phủ", "平凉府": "Bình Lương phủ", "巩昌府": "Củng Xương phủ",
+    "临洮府": "Lâm Thao phủ", "靖虏卫": "Tĩnh Lỗ vệ", "岷州卫": "Mân Châu vệ",
+    "洮州卫": "Thao Châu vệ", "宁夏卫": "Ninh Hạ vệ", "宁夏中卫": "Ninh Hạ Trung vệ",
+    "宁夏后卫": "Ninh Hạ Hậu vệ", "高台所": "Cao Đài sở", "肃州卫": "Túc Châu vệ",
+    "甘州卫": "Cam Châu vệ", "山丹卫": "Sơn Đan vệ", "西宁卫": "Tây Ninh vệ",
+    "永昌卫": "Vĩnh Xương vệ", "凉州卫": "Lương Châu vệ", "庄浪卫": "Trang Lãng vệ",
+    "镇番卫": "Trấn Phiên vệ", "泸州": "Lô Châu", "成都府": "Thành Đô phủ",
+    "潼川州": "Đồng Xuyên châu", "眉州": "Mi Châu", "邛州": "Cùng Châu",
+    "叙州府": "Tự Châu phủ", "永宁宣慰司": "Vĩnh Ninh Tuyên úy ty", "重庆府": "Trọng Khánh phủ",
+    "夔州府": "Quỳ Châu phủ", "顺庆府": "Thuận Khánh phủ", "嘉定州": "Gia Định châu",
+    "雅州": "Nhã Châu", "龙安府": "Long An phủ", "马湖府": "Mã Hồ phủ",
+    "保宁府": "Bảo Ninh phủ", "松潘卫": "Tùng Phan vệ", "天全六番招讨司": "Thiên Toàn Lục Phiên Chiêu thảo ty",
+    "乌蒙府": "Ô Mông phủ", "镇雄府": "Trấn Hùng phủ", "寻甸府": "Tầm Điện phủ",
+    "东川府": "Đông Xuyên phủ", "临安府": "Lâm An phủ", "四川行都司": "Tứ Xuyên Hành đô ty",
+    "曲靖府": "Khúc Tĩnh phủ", "广西府": "Quảng Tây phủ", "澂江府": "Trừng Giang phủ",
+    "云南府": "Vân Nam phủ", "广南府": "Quảng Nam phủ", "鹤庆府": "Hạc Khánh phủ",
+    "丽江府": "Lệ Giang phủ", "大理府": "Đại Lý phủ", "永昌府": "Vĩnh Xương phủ",
+    "姚安府": "Diêu An phủ", "武定府": "Vũ Định phủ", "威远州": "Uy Viễn châu",
+    "楚雄府": "Sở Hùng phủ", "元江府": "Nguyên Giang phủ", "者乐甸司": "Giả Nhạc Điện ty",
+    "车里宣慰司": "Xa Lý Tuyên úy ty", "永宁府": "Vĩnh Ninh phủ", "景东府": "Cảnh Đông phủ",
+    "蒙化府": "Mông Hóa phủ", "镇康州": "Trấn Khang châu", "湾甸州": "Loan Điện châu",
+    "顺宁府": "Thuận Ninh phủ", "南甸司": "Nam Điện ty", "孟定府": "Mạnh Định phủ",
+    "干崖宣抚司": "Can Nhai Tuyên phủ ty", "陇川宣抚司": "Lũng Xuyên Tuyên phủ ty",
+    "芒市司": "Mang Thị ty", "孟缅司": "Mạnh Miến ty", "孟琏司": "Mạnh Liễn ty",
+    "镇沅府": "Trấn Nguyên phủ", "贵阳府": "Quý Dương phủ", "安南卫": "An Nam vệ",
+    "铜仁府": "Đồng Nhân phủ", "安顺府": "An Thuận phủ", "思州府": "Tư Châu phủ",
+    "石阡府": "Thạch Thiên phủ", "黎平府": "Lê Bình phủ", "蛮夷": "Man Di",
+    "都匀府": "Đô Quân phủ", "平越府": "Bình Việt phủ", "乌撒府": "Ô Tát phủ",
+    "新添卫": "Tân Thiêm vệ", "龙里卫": "Long Lý vệ", "镇远府": "Trấn Viễn phủ",
+    "遵义府": "Tuân Nghĩa phủ", "赤水卫": "Xích Thủy vệ", "毕节卫": "Tất Tiết vệ",
+    "思南府": "Tư Nam phủ", "南宁府": "Nam Ninh phủ", "平乐府": "Bình Lạc phủ",
+    "梧州府": "Ngô Châu phủ", "桂林府": "Quế Lâm phủ", "浔州府": "Tầm Châu phủ",
+    "柳州府": "Liễu Châu phủ", "庆远府": "Khánh Viễn phủ", "思明府": "Tư Minh phủ",
+    "太平府": "Thái Bình phủ", "向武州": "Hướng Vũ châu", "归顺州": "Quy Thuận châu",
+    "田州": "Điền Châu", "安隆长官司": "An Long Trưởng quan ty", "镇安府": "Trấn An phủ",
+    "泗城州": "Tứ Thành châu", "江州": "Giang Châu", "思恩府": "Tư Ân phủ",
+    "湖州府": "Hồ Châu phủ", "嘉兴府": "Gia Hưng phủ", "常州府": "Thường Châu phủ",
+    "苏州府": "Tô Châu phủ", "松江府": "Tùng Giang phủ", "应天府": "Ứng Thiên phủ",
+    "镇江府": "Trấn Giang phủ", "邵武府": "Thiệu Vũ phủ", "泉州府": "Tuyền Châu phủ",
+    "建宁府": "Kiến Ninh phủ", "福宁州": "Phúc Ninh châu", "兴化府": "Hưng Hóa phủ",
+    "福州府": "Phúc Châu phủ", "延平府": "Diên Bình phủ", "汀州府": "Đinh Châu phủ",
+    "漳州府": "Chương Châu phủ", "处州府": "Xử Châu phủ", "衢州府": "Cù Châu phủ",
+    "严州府": "Nghiêm Châu phủ", "金华府": "Kim Hoa phủ", "绍兴府": "Thiệu Hưng phủ",
+    "台州府": "Thai Châu phủ", "温州府": "Ôn Châu phủ", "宁波府": "Ninh Ba phủ",
+    "杭州府": "Hàng Châu phủ", "广德州": "Quảng Đức châu", "徽州府": "Huy Châu phủ",
+    "宁国府": "Ninh Quốc phủ", "池州府": "Trì Châu phủ", "南安府": "Nam An phủ",
+    "临江府": "Lâm Giang phủ", "袁州府": "Viên Châu phủ", "吉安府": "Cát An phủ",
+    "抚州府": "Phủ Châu phủ", "建昌府": "Kiến Xương phủ", "南昌府": "Nam Xương phủ",
+    "饶州府": "Nhiêu Châu phủ", "广信府": "Quảng Tín phủ", "瑞州府": "Thụy Châu phủ",
+    "南康府": "Nam Khang phủ", "九江府": "Cửu Giang phủ", "赣州府": "Cám Châu phủ",
+    "长沙府": "Trường Sa phủ", "岳州府": "Nhạc Châu phủ", "常德府": "Thường Đức phủ",
+    "衡州府": "Hành Châu phủ", "郴州": "Sâm Châu", "永州府": "Vĩnh Châu phủ",
+    "宝庆府": "Bảo Khánh phủ", "靖州": "Tĩnh Châu", "永顺军民宣慰司": "Vĩnh Thuận Quân dân Tuyên úy ty",
+    "保靖州军民宣慰司": "Bảo Tĩnh châu Quân dân Tuyên úy ty", "高州府": "Cao Châu phủ",
+    "廉州府": "Liêm Châu phủ", "雷州府": "Lôi Châu phủ", "肇庆府": "Triệu Khánh phủ",
+    "韶州府": "Thiều Châu phủ", "南雄府": "Nam Hùng phủ", "广州府": "Quảng Châu phủ",
+    "惠州府": "Huệ Châu phủ", "潮州府": "Triều Châu phủ", "罗定州": "La Định châu",
+    "琼州府": "Quỳnh Châu phủ", "扬州府": "Dương Châu phủ", "淮安府": "Hoài An phủ",
+    "徐州": "Từ Châu", "庐州府": "Lư Châu phủ", "和州": "Hòa Châu",
+    "凤阳府": "Phượng Dương phủ", "滁州": "Trừ Châu", "辰州府": "Thần Châu phủ",
+    "施州卫": "Thi Châu vệ",
+    "江原道": "Giang Nguyên đạo", "京畿道": "Kinh Kỳ đạo", "忠清道": "Trung Thanh đạo",
+    "全罗道": "Toàn La đạo", "庆尚道": "Khánh Thượng đạo", "黄海道": "Hoàng Hải đạo",
+    "平安道": "Bình An đạo", "咸镜道": "Hàm Kính đạo",
+    "壹岐国": "Iki", "隐岐国": "Oki", "志摩国": "Shima", "河内国": "Kawachi",
+    "松前地": "Matsumae", "淡路国": "Awaji", "安房国": "Awa", "对马国": "Tsushima",
+    "和泉国": "Izumi", "伊贺国": "Iga", "若狭国": "Wakasa", "佐渡国": "Sado",
+    "山城国": "Yamashiro", "筑后国": "Chikugo", "丹后国": "Tango", "摄津国": "Settsu",
+    "因幡国": "Inaba", "伊豆国": "Izu", "赞岐国": "Sanuki", "尾张国": "Owari",
+    "备前国": "Bizen", "相模国": "Sagami", "伯耆国": "Hoki", "丰前国": "Buzen",
+    "能登国": "Noto", "加贺国": "Kaga", "但马国": "Tajima", "长门国": "Nagato",
+    "筑前国": "Chikuzen", "美作国": "Mimasaka", "上总国": "Kazusa", "备中国": "Bitchu",
+    "出云国": "Izumo", "丹波国": "Tamba", "下总国": "Shimosa", "远江国": "Totomi",
+    "越前国": "Echizen", "骏河国": "Suruga", "三河国": "Mikawa", "萨摩国": "Satsuma",
+    "伊势国": "Ise", "周防国": "Suo", "大和国": "Yamato", "大隅国": "Osumi",
+    "备后国": "Bingo", "石见国": "Iwami", "近江国": "Omi", "阿波国": "Awa",
+    "播磨国": "Harima", "飞驒国": "Hida", "安艺国": "Aki", "越中国": "Etchu",
+    "甲斐国": "Kai", "肥前国": "Hizen", "丰后国": "Bungo", "伊予国": "Iyo",
+    "纪伊国": "Kii", "常陆国": "Hitachi", "武藏国": "Musashi", "下野国": "Shimotsuke",
+    "上野国": "Kozuke", "土佐国": "Tosa", "肥后国": "Higo", "日向国": "Hyuga",
+    "美浓国": "Mino", "越后国": "Echigo", "信浓国": "Shinano", "出羽国": "Dewa",
+    "陆奥国": "Mutsu", "虾夷南部": "Nam Ezo",
+    "西班牙属北台湾": "Tây Ban Nha thuộc Bắc Đài Loan", "荷兰属台湾": "Hà Lan thuộc Đài Loan",
+    "台湾原住民诸部": "Các bộ thổ dân Đài Loan", "琉球国": "Lưu Cầu quốc",
+    "阿伊努诸部": "Các bộ Ainu", "后金及女真诸部": "Hậu Kim và các bộ Nữ Chân",
+    "蒙古诸部（含瓦剌）": "Các bộ Mông Cổ (gồm Oirat)", "哈密绿洲": "Ốc đảo Hami",
+    "吐鲁番绿洲": "Ốc đảo Turpan", "库车绿洲": "Ốc đảo Kuqa", "阿克苏绿洲": "Ốc đảo Aksu",
+    "喀什噶尔": "Kashgar", "叶尔羌": "Yarkand", "和田": "Hòa Điền", "伊犁河谷": "Thung lũng Y Lê",
+    "准噶尔—绰罗斯": "Dzungar - Choros", "和硕特西部": "Khoshut phía Tây",
+    "藏巴汗政权": "Chính quyền Tạng Ba Hãn", "格鲁派拉萨势力": "Thế lực phái Cách Lỗ Lhasa",
+    "阿里诸王": "Các vương Ngari", "康区诸土司": "Các thổ ty vùng Khăm",
+    "朵甘诸部": "Các bộ Mdo Kham", "和硕特蒙古": "Mông Cổ Khoshut",
+    "青海蒙古诸部": "Các bộ Mông Cổ Thanh Hải", "安多藏部": "Bộ Tạng Amdo",
+    "河湟诸土司": "Các thổ ty Hà Hoàng", "马来诸苏丹国": "Các vương quốc Hồi giáo Mã Lai",
+    "文莱苏丹国": "Vương quốc Hồi giáo Brunei",
+    "若开王国": "Vương quốc Arakan", "掸邦诸土司": "Các thổ ty bang Shan",
+    "东吁王朝（阿瓦）": "Vương triều Taungoo (Ava)", "印度教与伊斯兰诸邦": "Các bang Hindu và Hồi giáo",
+    "锡兰沿海诸国": "Các nước ven biển Ceylon", "康提王国": "Vương quốc Kandy",
+    "葡属锡兰据点": "Cứ điểm Ceylon thuộc Bồ Đào Nha", "喀布尔苏巴": "Kabul Subah",
+    "克什米尔苏巴": "Kashmir Subah", "拉合尔苏巴": "Lahore Subah", "木尔坦苏巴": "Multan Subah",
+    "德里苏巴": "Delhi Subah", "阿格拉苏巴": "Agra Subah", "阿杰梅尔苏巴": "Ajmer Subah",
+    "古吉拉特苏巴": "Gujarat Subah", "马尔瓦苏巴": "Malwa Subah", "阿拉哈巴德苏巴": "Allahabad Subah",
+    "奥德苏巴": "Awadh Subah", "比哈尔苏巴": "Bihar Subah", "孟加拉苏巴": "Bengal Subah",
+    "奥里萨苏巴": "Orissa Subah", "贝拉尔苏巴": "Berar Subah", "坎德什苏巴": "Khandesh Subah",
+    "德干苏巴": "Deccan Subah", "青藏高原外围": "Ngoại vi cao nguyên Thanh Tạng",
+    "比达尔苏丹国": "Bidar Sultanate", "比贾布尔苏丹国": "Bijapur Sultanate",
+    "艾哈迈德讷格尔苏丹国": "Ahmadnagar Sultanate", "戈尔康达苏丹国": "Golconda Sultanate",
+    "维查耶那伽罗残余": "Tàn dư Vijayanagara", "兰纳王国": "Vương quốc Lan Na",
+    "塔斯马尼亚原住民诸族": "Các tộc thổ dân Tasmania", "巴布亚诸部": "Các bộ lạc Papua"
+};
+
 const At = {
     "Vân Nam": new Set([
       220761, 220767, 220770, 220774, 220783, 220793, 220796, 220799, 220801,
@@ -1792,7 +1939,8 @@ function Wt(e) {
     features: t.features.flatMap((t) => {
       const n = (function (e) {
         const t = e?.properties || {},
-          n = Ot[t.name];
+          translatedName = VN_MAP_DICT[t.name] || t.name,
+          n = Ot[translatedName];
         if (n) return n;
         switch (t.category) {
           case "ming_administration":
@@ -1818,7 +1966,7 @@ function Wt(e) {
           case "mughal_subah":
             return "Mạc Ngọa Nhi";
           case "australian_indigenous_region":
-            return "Các tộc thổ dân Úc Châu" === t.name ? null : "Úc Châu";
+            return "Các tộc thổ dân Úc Châu" === translatedName ? null : "Úc Châu";
           default:
             return null;
         }
@@ -1830,7 +1978,7 @@ function Wt(e) {
               properties: {
                 ...t.properties,
                 overview_name: n,
-                name: t.properties.name,
+                name: VN_MAP_DICT[t.properties.name] || t.properties.name,
               },
             },
           ]
@@ -1944,6 +2092,13 @@ function Ft() {
         "east_asia_1634_provinces",
         (function () {
           const e = qe.contentWindow?.WORLD_1634_OVERVIEW;
+          if (e && e.features) {
+            e.features.forEach((f) => {
+              if (f.properties && f.properties.name && VN_MAP_DICT[f.properties.name]) {
+                f.properties.name = VN_MAP_DICT[f.properties.name];
+              }
+            });
+          }
           return e?.features ? e : { type: "FeatureCollection", features: [] };
         })(),
       ),
