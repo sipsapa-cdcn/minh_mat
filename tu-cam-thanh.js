@@ -211,7 +211,7 @@
     }
     function campStatusPill(status) {
         const s = String(status || '');
-        const cls = s.includes('Đãi mệnh') ? 'ready' : 'busy';
+        const cls = s.includes('Đợi lệnh') ? 'ready' : 'busy';
         return `<span class="cm-status-pill ${cls}"><i></i>${html(s || 'Chưa rõ')}</span>`;
     }
     function campTierTag(tier) {
@@ -290,7 +290,7 @@
         if (!camp['Trang bị biên chế'] || typeof camp['Trang bị biên chế'] !== 'object') camp['Trang bị biên chế'] = inferEquipmentLayout(camp);
         const layout = camp['Trang bị biên chế']; const inferred = inferEquipmentLayout(camp);
         for (const [key, value] of Object.entries(inferred)) if (layout[key] == null) layout[key] = value;
-        if (!['Đãi mệnh', 'Hành quân', 'Tác chiến', 'Huấn luyện', 'Hoán trang', 'Hưu chỉnh', 'Thiếu lương', 'Huyên náo'].includes(camp['Trạng thái'])) camp['Trạng thái'] = 'Đãi mệnh';
+        if (!['Đợi lệnh', 'Hành quân', 'Tác chiến', 'Huấn luyện', 'Hoán trang', 'Hưu chỉnh', 'Thiếu lương', 'Hoa biến'].includes(camp['Trạng thái'])) camp['Trạng thái'] = 'Đợi lệnh';
         camp['Bì lao'] = Math.round(clamp(number(camp['Bì lao'], 0), 0, 100));
         camp['Thương binh'] = Math.round(clamp(number(camp['Thương binh'], 0), 0, Math.max(0, number(camp['Nhân số'], 0))));
         camp['Số tháng khiếm nợ'] = Math.max(0, Math.round(number(camp['Số tháng khiếm nợ'], 0)));
@@ -451,7 +451,7 @@
             if (camp['Ghi chép quân vụ']['Tháng khao thưởng'] !== month) camp['Ghi chép quân vụ']['Số lần khao thưởng tháng này'] = 0;
             camp['Ghi chép quân vụ']['Tháng khao thưởng'] = month; camp['Ghi chép quân vụ']['Số lần khao thưởng tháng này'] += 1; camp['Ghi chép quân vụ']['Lần khao thưởng trước'] = get(data, 'Thế giới vận hành.Ngày hiện tại', '');
         }
-        if (camp['Số ngày thiếu lương'] <= 0 && camp['Trạng thái'] === 'Thiếu lương') camp['Trạng thái'] = 'Đãi mệnh';
+        if (camp['Số ngày thiếu lương'] <= 0 && camp['Trạng thái'] === 'Thiếu lương') camp['Trạng thái'] = 'Đợi lệnh';
     }
 
     function createMilitaryOrder(data, camp, quote) {
@@ -499,7 +499,7 @@
             if (!order || order['Trạng thái'] !== 'Đang tiến hành') throw new Error('Quân lệnh không còn hiệu lực');
             order['Trạng thái'] = 'Đã đình chỉ'; order['Hoàn thành kết quả'] = 'Đình chỉ bởi nhân vật chính, ngân lương đã khấu trừ không hoàn lại';
             const camp = get(statData, `Quân sự.Các doanh.${order['Mục tiêu doanh']}`);
-            if (camp && militaryOrderState(order['Loại hình']) === camp['Trạng thái']) camp['Trạng thái'] = camp['Số ngày thiếu lương'] > 0 ? 'Thiếu lương' : 'Đãi mệnh';
+            if (camp && militaryOrderState(order['Loại hình']) === camp['Trạng thái']) camp['Trạng thái'] = camp['Số ngày thiếu lương'] > 0 ? 'Thiếu lương' : 'Đợi lệnh';
             appendMilitaryLog(statData, { type: `${order['Loại hình']} đình chỉ`, campName: order['Mục tiêu doanh'], generalName: order['Thực thi tướng lĩnh'], result: order['Hoàn thành kết quả'] });
             await saveMvuData(statData);
             modalState = null;
@@ -1959,7 +1959,7 @@
                 const progress = Math.round((elapsed / required) * 100);
 
                 ordersHtml += `<article class="cm-order-slip">
-                    <div class="cm-order-seal">${html(order['Trạng thái'] === 'Đang tiến hành' ? 'Hành' : order['Trạng thái'] === 'Hoàn thành' ? 'Thành' : 'Chỉ')}</div>
+                    <div class="cm-order-seal">${html(order['Trạng thái'] === 'Đang tiến hành' ? 'Hành' : order['Trạng thái'] === 'Đã hoàn thành' ? 'Thành' : 'Chỉ')}</div>
                     <div class="cm-order-copy">
                         <div style="display:flex; justify-content:space-between;">
                             <b style="color:var(--ink-bright); font-size:14px;">${html(order['Loại hình'] || 'Quân lệnh')}</b>
