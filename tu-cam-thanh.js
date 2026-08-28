@@ -186,8 +186,8 @@
     const EQUIPMENT_TIER_COST = { 'Tàn phá': 0.03, 'Giản lậu': 0.12, 'Phổ thông': 0.36, 'Tinh lương': 0.8, 'Tinh nhuệ': 1.5 };
     const EQUIPMENT_TIER_DAYS = { 'Tàn phá': 3, 'Giản lậu': 7, 'Phổ thông': 12, 'Tinh lương': 25, 'Tinh nhuệ': 45 };
     const EQUIPMENT_LOADOUTS = ['Bộ tốt chế thức', 'Hỏa khí chế thức', 'Kỵ quân chế thức', 'Thủy sư chế thức'];
-    const NON_HUMAN_GRAIN_KEYS = ['Thảo liệu', 'Mã liệu', 'Tự liệu', 'Đậu bính'];
-    const ARMY_GRAIN_KEYS = ['Quân lương', 'Lương thực', 'Mễ', 'Đạo mễ', 'Cốc vật', 'Mạch', 'Túc', 'Tạp lương', 'Hoàng đậu'];
+    const NON_HUMAN_GRAIN_KEYS = ['Thảo liệu', 'Mã liệu', 'Tự liệu', 'Đậu bính', 'Cỏ khô', 'Thảo đậu', 'Mã thảo'];
+    const ARMY_GRAIN_KEYS = ['Quân lương', 'Lương thực', 'Mễ', 'Đạo mễ', 'Cốc vật', 'Mạch', 'Túc', 'Tạp lương', 'Hoàng đậu', 'Gạo', 'Lương thảo', 'Quân tiêu'];
 
     function html(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
     function get(source, path, fallback = '') { const value = String(path).split('.').filter(Boolean).reduce((current, key) => (current == null ? undefined : current[key]), source); return value == null || value === '' ? fallback : value; }
@@ -293,7 +293,7 @@
         if (!['Đợi lệnh', 'Hành quân', 'Tác chiến', 'Huấn luyện', 'Hoán trang', 'Hưu chỉnh', 'Thiếu lương', 'Hoa biến'].includes(camp['Trạng thái'])) camp['Trạng thái'] = 'Đợi lệnh';
         camp['Bì lao'] = Math.round(clamp(number(camp['Bì lao'], 0), 0, 100));
         camp['Thương binh'] = Math.round(clamp(number(camp['Thương binh'], 0), 0, Math.max(0, number(camp['Nhân số'], 0))));
-        camp['Số tháng khiếm nợ'] = Math.max(0, Math.round(number(camp['Số tháng khiếm nợ'], 0)));
+        camp['Số tháng nợ lương'] = Math.max(0, Math.round(number(camp['Số tháng nợ lương'], 0)));
         camp['Số ngày thiếu lương'] = Math.max(0, Math.round(number(camp['Số ngày thiếu lương'], 0)));
         if (!camp['Ghi chép quân vụ'] || typeof camp['Ghi chép quân vụ'] !== 'object') camp['Ghi chép quân vụ'] = {};
         if (camp['Ghi chép quân vụ']['Lần khao thưởng trước'] == null) camp['Ghi chép quân vụ']['Lần khao thưởng trước'] = '';
@@ -303,12 +303,12 @@
     }
 
     function classifyCampType(camp) {
-        const text = `${camp?.['Binh chủng'] || ''} ${camp?.['Đẳng cấp'] || ''} ${camp?.['Trang bị'] || ''}`;
-        if (/[Gia đinh thân binh nội đinh]/.test(text)) return 'retinue';
-        if (/[Kỵ mã la đà]/.test(text)) return 'cavalry';
-        if (/[Thủy sư thuyền chu]/.test(text)) return 'navy';
-        if (/[Hỏa khí điểu súng súng pháo xa doanh]/.test(text)) return 'firearm';
-        if (/[Dân tráng hương dũng đoàn luyện]/.test(text)) return 'militia';
+        const text = `${camp?.['Binh chủng'] || ''} ${camp?.['Đẳng cấp'] || ''} ${camp?.['Trang bị'] || ''} ${camp?.['Trang bị mục tiêu']?.['Phương án'] || ''}`.toLowerCase();
+        if (/(?:gia đinh|thân binh|nội đinh|thị vệ|hộ vệ|tiêu kỵ|tùy tùng)/i.test(text)) return 'retinue';
+        if (/(?:kỵ binh|thiết kỵ|du kỵ|kỵ xạ|khinh kỵ|mã đội|bát kỳ|kỵ quân|chiến mã|mã binh)/i.test(text)) return 'cavalry';
+        if (/(?:thủy sư|thủy quân|hạm đội|hạm thuyền|thuyền chu|hải phòng|thao chu|giang phòng|chiến thuyền|thủy đinh)/i.test(text)) return 'navy';
+        if (/(?:hỏa khí|điểu thương|hoả súng|điểu súng|hỏa pháo|hồng di|thần cơ|pháo xa|hỏa tiễn|phật lang cơ|súng xa)/i.test(text)) return 'firearm';
+        if (/(?:hương dũng|dân tráng|đoàn luyện|dân binh|nghĩa dũng|bảo giáp|thổ binh|hương binh)/i.test(text)) return 'militia';
         return 'infantry';
     }
 
@@ -402,12 +402,12 @@
 
         if (actionId === 'reward') {
             const moraleBase = Math.max(1, Math.round(8 * (1 - clamp(number(camp['Sĩ khí'], 50), 0, 100) / 115)));
-            const morale = Math.max(1, Math.floor((moraleBase * (camp['Số tháng khiếm nợ'] ? 0.55 : 1)) / (1 + rewardCount * 0.65)));
+            const morale = Math.max(1, Math.floor((moraleBase * (camp['Số tháng nợ lương'] ? 0.55 : 1)) / (1 + rewardCount * 0.65)));
             return { ...base, label: 'Khao thưởng sĩ tốt', silver: Math.ceil(people * 0.15 * (1 + rewardCount * 0.25)), effect: { 'Sĩ khí': morale }, note: `Lần thứ ${rewardCount + 1} trong tháng, liên tục khao thưởng hiệu quả giảm dần` };
         }
         if (actionId === 'pay-arrears') {
-            const months = Math.max(0, number(camp['Số tháng khiếm nợ'], 0)); if (!months) throw new Error('Doanh này hiện không khiếm nợ lương');
-            return { ...base, label: 'Bổ phát khiếm nợ', silver: Math.ceil(supply.money * months), effect: { 'Sĩ khí': Math.min(8, 2 + months * 2), 'Số tháng khiếm nợ': -months }, note: `Thanh toán ${months} tháng khiếm nợ` };
+            const months = Math.max(0, number(camp['Số tháng nợ lương'], 0)); if (!months) throw new Error('Doanh này hiện không nợ lương');
+            return { ...base, label: 'Bổ phát nợ lương', silver: Math.ceil(supply.money * months), effect: { 'Sĩ khí': Math.min(8, 2 + months * 2), 'Số tháng nợ lương': -months }, note: `Thanh toán ${months} tháng nợ lương` };
         }
         if (actionId === 'feast') { return { ...base, label: 'Gia xan khao quân', grain: Math.max(1, Math.ceil(supply.grain * 0.2)), effect: { 'Sĩ khí': 3, 'Bì lao': -6 }, note: 'Tiêu hao thương trữ quân lương, sĩ khí cao vẫn chịu ràng buộc giới hạn' }; }
         if (actionId === 'resupply') { return { ...base, label: 'Bổ tề doanh vụ', silver: Math.ceil(supply.money * 0.15), grain: Math.max(1, Math.ceil(supply.grain * 0.25)), effect: { 'Hậu cần': 7, 'Số ngày thiếu lương': -10 }, note: 'Bổ sung doanh cụ, dược liệu và mười ngày lương thảo khẩn cấp' }; }
@@ -445,7 +445,7 @@
     function applyImmediateMilitaryCommand(data, camp, quote) {
         const effect = quote.effect || {};
         camp['Sĩ khí'] = Math.round(clamp(number(camp['Sĩ khí'], 50) + number(effect['Sĩ khí'], 0), 0, 100)); camp['Hậu cần'] = Math.round(clamp(number(camp['Hậu cần'], 50) + number(effect['Hậu cần'], 0), 0, 100)); camp['Bì lao'] = Math.round(clamp(number(camp['Bì lao'], 0) + number(effect['Bì lao'], 0), 0, 100));
-        if (effect['Số tháng khiếm nợ']) camp['Số tháng khiếm nợ'] = Math.max(0, number(camp['Số tháng khiếm nợ'], 0) + effect['Số tháng khiếm nợ']); if (effect['Số ngày thiếu lương']) camp['Số ngày thiếu lương'] = Math.max(0, number(camp['Số ngày thiếu lương'], 0) + effect['Số ngày thiếu lương']);
+        if (effect['Số tháng nợ lương']) camp['Số tháng nợ lương'] = Math.max(0, number(camp['Số tháng nợ lương'], 0) + effect['Số tháng nợ lương']); if (effect['Số ngày thiếu lương']) camp['Số ngày thiếu lương'] = Math.max(0, number(camp['Số ngày thiếu lương'], 0) + effect['Số ngày thiếu lương']);
         if (quote.id === 'reward') {
             const month = extractYearMonth(get(data, 'Thế giới vận hành.Ngày hiện tại', '')) || '';
             if (camp['Ghi chép quân vụ']['Tháng khao thưởng'] !== month) camp['Ghi chép quân vụ']['Số lần khao thưởng tháng này'] = 0;
@@ -1086,69 +1086,6 @@
         doc.body.appendChild(toast); setTimeout(() => toast.remove(), 3500);
     }
 
-    // Cơ chế ký ức tiếng lòng
-    const HISTORY_KEY = 'zjc-voice-history';
-    let voiceChangeSet = new Set();
-    let lastNetworkStr = '';
-
-    function extractVoices(data) {
-        const voices = {};
-        const categories = ['Hạ thuộc và mạc liêu', 'Cừu địch', 'Tư duy', 'Thân thuộc'];
-        for (const cat of categories) {
-            const list = get(data, `Mạng lưới quan hệ.${cat}`, {});
-            for (const [name, info] of Object.entries(list)) {
-                if (info && info['Tiếng lòng nhân vật']) {
-                    voices[name] = info['Tiếng lòng nhân vật'];
-                }
-            }
-        }
-        return voices;
-    }
-
-    function initVoiceChanges(data) {
-        const networkData = get(data, 'Mạng lưới quan hệ', {});
-        const currentNetworkStr = JSON.stringify(networkData);
-
-        if (currentNetworkStr === lastNetworkStr) return;
-
-        try {
-            const stored = win.localStorage.getItem(HISTORY_KEY);
-            let history = stored ? JSON.parse(stored) : [];
-            if (!Array.isArray(history)) history = [];
-
-            const currentVoices = extractVoices(data);
-            const currentStr = JSON.stringify(currentVoices);
-
-            let matchIndex = -1;
-            for (let i = history.length - 1; i >= 0; i--) {
-                if (JSON.stringify(history[i]) === currentStr) {
-                    matchIndex = i;
-                    break;
-                }
-            }
-
-            let baseVoices = {};
-            if (matchIndex !== -1) {
-                history = history.slice(0, matchIndex + 1);
-                baseVoices = matchIndex > 0 ? history[matchIndex - 1] : {};
-            } else {
-                baseVoices = history.length > 0 ? history[history.length - 1] : {};
-                history.push(currentVoices);
-                if (history.length > 30) history.shift();
-            }
-
-            voiceChangeSet.clear();
-            for (const [name, voice] of Object.entries(currentVoices)) {
-                if (Object.hasOwn(baseVoices, name) && baseVoices[name] !== voice) {
-                    voiceChangeSet.add(name);
-                }
-            }
-
-            win.localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-            lastNetworkStr = currentNetworkStr;
-        } catch (e) { }
-    }
-
     // --- Cừu địch ---
     function renderEnemies() {
         const panel = doc.getElementById('panel-enemies');
@@ -1158,33 +1095,21 @@
                 <div class="cwe-section-head"><div><h2>Ân oán cừu thù</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="enemies" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
-                    <select class="zjc-sort" data-type="enemies" style="padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;"><option value="default">Sắp xếp mặc định</option><option value="voice">Tiếng lòng ưu tiên</option></select>
                 </div>
                 <div class="cwe-list-container" id="list-enemies"></div>
             `;
         }
 
         const data = getMvuData() || {};
-        initVoiceChanges(data);
         const enemies = get(data, 'Mạng lưới quan hệ.Cừu địch', {});
         const generals = get(data, 'Quân sự.Tướng lĩnh', {});
 
         const searchInput = panel.querySelector('.zjc-search').value.toLowerCase();
-        const sortMode = panel.querySelector('.zjc-sort').value;
 
         let arr = Object.entries(enemies).map(([name, info]) => ({ name, info }));
 
         if (searchInput) {
             arr = arr.filter(item => item.name.toLowerCase().includes(searchInput) || (item.info['Thân phận'] || '').toLowerCase().includes(searchInput));
-        }
-
-        if (sortMode === 'voice') {
-            arr.sort((a, b) => {
-                const aChange = voiceChangeSet.has(a.name) ? 1 : 0;
-                const bChange = voiceChangeSet.has(b.name) ? 1 : 0;
-                if (aChange !== bChange) return bChange - aChange;
-                return (b.info['Cừu hận độ'] ?? 0) - (a.info['Cừu hận độ'] ?? 0);
-            });
         }
 
         panel.querySelector('.zjc-count').innerText = `Tại danh sách ${Object.keys(enemies).length} người | Tìm được ${arr.length} người`;
@@ -1195,10 +1120,6 @@
         } else {
             for (const { name, info } of arr) {
                 if (!info || typeof info !== 'object') continue;
-
-                const hasChanged = (sortMode === 'voice') && voiceChangeSet.has(name);
-                const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--cinnabar-bright); font-style:italic;';
-                const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
 
                 const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; margin-left: 8px;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
                 
@@ -1227,7 +1148,6 @@
                     <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
                         <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Cừu hận độ: <span style="color:var(--cinnabar-bright);">${info['Cừu hận độ'] ?? 0}</span></h4>
                         ${statsHtml}
-                        <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || '...')}" ${changeTag}</p>
                     </div>
                 </div>`;
             }
@@ -1307,19 +1227,16 @@
                 <div class="cwe-section-head"><div><h2>Quan viên quyển tông</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="officials" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
-                    <select class="zjc-sort" data-type="officials" style="padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;"><option value="default">Sắp xếp mặc định</option><option value="voice">Tiếng lòng ưu tiên</option></select>
                 </div>
                 <div class="cwe-list-container" id="list-officials"></div>
             `;
         }
 
         const data = getMvuData() || {};
-        initVoiceChanges(data);
         const subordinates = data['Mạng lưới quan hệ']?.['Hạ thuộc và mạc liêu'] || {};
         const generals = data['Quân sự']?.['Tướng lĩnh'] || {};
 
         const searchInput = panel.querySelector('.zjc-search').value.toLowerCase();
-        const sortMode = panel.querySelector('.zjc-sort').value;
 
         let arr = Object.entries(subordinates).map(([name, info]) => ({ name, info }));
 
@@ -1327,23 +1244,10 @@
             arr = arr.filter(item => item.name.toLowerCase().includes(searchInput) || (item.info['Thân phận'] || '').toLowerCase().includes(searchInput));
         }
 
-        if (sortMode === 'voice') {
-            arr.sort((a, b) => {
-                const aChange = voiceChangeSet.has(a.name) ? 1 : 0;
-                const bChange = voiceChangeSet.has(b.name) ? 1 : 0;
-                if (aChange !== bChange) return bChange - aChange;
-                return (b.info['Hảo cảm độ'] ?? 0) - (a.info['Hảo cảm độ'] ?? 0);
-            });
-        }
-
         panel.querySelector('.zjc-count').innerText = `Tại danh sách ${Object.keys(subordinates).length} người | Tìm được ${arr.length} người`;
 
         let htmlStr = '';
         for (const { name, info } of arr) {
-            const hasChanged = (sortMode === 'voice') && voiceChangeSet.has(name);
-            const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
-            const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px; flex-shrink: 0;">Tiếng lòng thay đổi</span>` : '';
-
             const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
@@ -1372,7 +1276,6 @@
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Trung tâm: <span style="color:var(--gold);">${info['Trung tâm'] ?? 0}</span> | Hảo cảm: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
-                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Bạn quân như bạn hổ...')}" ${changeTag}</p>
                 </div>
             </div>`;
         }
@@ -1647,18 +1550,15 @@
                 <div class="cwe-section-head"><div><h2>Hậu cung Đồng sử</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="harem" placeholder="Tìm kiếm tên/thân phận/quan hệ..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
-                    <select class="zjc-sort" data-type="harem" style="padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;"><option value="default">Sắp xếp mặc định</option><option value="voice">Tiếng lòng ưu tiên</option></select>
                 </div>
                 <div class="cwe-list-container" id="list-harem"></div>
             `;
         }
 
         const data = getMvuData() || {};
-        initVoiceChanges(data);
         const harem = data['Mạng lưới quan hệ']?.['Tư duy'] || {};
 
         const searchInput = panel.querySelector('.zjc-search').value.toLowerCase();
-        const sortMode = panel.querySelector('.zjc-sort').value;
 
         let arr = Object.entries(harem).map(([name, info]) => ({ name, info }));
 
@@ -1666,23 +1566,10 @@
             arr = arr.filter(item => item.name.toLowerCase().includes(searchInput) || (item.info['Thân phận'] || '').toLowerCase().includes(searchInput) || (item.info['Quan hệ'] || '').toLowerCase().includes(searchInput));
         }
 
-        if (sortMode === 'voice') {
-            arr.sort((a, b) => {
-                const aChange = voiceChangeSet.has(a.name) ? 1 : 0;
-                const bChange = voiceChangeSet.has(b.name) ? 1 : 0;
-                if (aChange !== bChange) return bChange - aChange;
-                return (b.info['Hảo cảm độ'] ?? 0) - (a.info['Hảo cảm độ'] ?? 0);
-            });
-        }
-
         panel.querySelector('.zjc-count').innerText = `Tại danh sách ${Object.keys(harem).length} người | Tìm được ${arr.length} người`;
 
         let htmlStr = '';
         for (const { name, info } of arr) {
-            const hasChanged = (sortMode === 'voice') && voiceChangeSet.has(name);
-            const voiceStyle = hasChanged ? 'color:#e885a1; font-weight:bold;' : 'color:#d46a8a; font-style:italic;';
-            const changeTag = hasChanged ? `<span style="font-size:10px; background:#d46a8a; color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px;">Tiếng lòng thay đổi</span>` : '';
-
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
 
@@ -1701,7 +1588,6 @@
                 </div>
                 <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
                     <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hảo cảm: <span style="color:#d46a8a;">${info['Hảo cảm độ'] ?? 0}</span> | Thai sản: <span style="color:#d46a8a;">${info['Sinh dục']?.['Trạng thái'] || 'Chưa rõ'}</span></h4>
-                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Thâm cung tịch mịch...')}" ${changeTag}</p>
                 </div>
             </div>`;
         }
@@ -1715,21 +1601,18 @@
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
                 <div class="cwe-section-head"><div><h2>Hoàng thất Tông thân</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
-                <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
+                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="royal" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
-                    <select class="zjc-sort" data-type="royal" style="padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;"><option value="default">Sắp xếp mặc định</option><option value="voice">Tiếng lòng ưu tiên</option></select>
                 </div>
                 <div class="cwe-list-container" id="list-royal"></div>
             `;
         }
 
         const data = getMvuData() || {};
-        initVoiceChanges(data);
         const royals = data['Mạng lưới quan hệ']?.['Thân thuộc'] || {};
         const generals = data['Quân sự']?.['Tướng lĩnh'] || {};
 
         const searchInput = panel.querySelector('.zjc-search').value.toLowerCase();
-        const sortMode = panel.querySelector('.zjc-sort').value;
 
         let arr = Object.entries(royals).map(([name, info]) => ({ name, info }));
 
@@ -1737,23 +1620,10 @@
             arr = arr.filter(item => item.name.toLowerCase().includes(searchInput) || (item.info['Thân phận'] || '').toLowerCase().includes(searchInput));
         }
 
-        if (sortMode === 'voice') {
-            arr.sort((a, b) => {
-                const aChange = voiceChangeSet.has(a.name) ? 1 : 0;
-                const bChange = voiceChangeSet.has(b.name) ? 1 : 0;
-                if (aChange !== bChange) return bChange - aChange;
-                return (b.info['Hảo cảm độ'] ?? 0) - (a.info['Hảo cảm độ'] ?? 0);
-            });
-        }
-
         panel.querySelector('.zjc-count').innerText = `Tại danh sách ${Object.keys(royals).length} người | Tìm được ${arr.length} người`;
 
         let htmlStr = '';
         for (const { name, info } of arr) {
-            const hasChanged = (sortMode === 'voice') && voiceChangeSet.has(name);
-            const voiceStyle = hasChanged ? 'color:var(--cinnabar-bright); font-weight:bold;' : 'color:var(--gold); font-style:italic;';
-            const changeTag = hasChanged ? `<span style="font-size:10px; background:var(--cinnabar); color:#fff; padding:1px 4px; border-radius:3px; margin-left:6px; flex-shrink: 0;">Tiếng lòng thay đổi</span>` : '';
-
             const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
@@ -1782,7 +1652,6 @@
                         <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Hảo cảm độ: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
                         ${statsHtml}
                     </div>
-                    <p style="${voiceStyle} margin: 0; line-height: 1.6; font-size: 13px;">"${html(info['Tiếng lòng nhân vật'] || 'Hoàng ân hạo đãng...')}" ${changeTag}</p>
                 </div>
             </div>`;
         }
@@ -1845,11 +1714,12 @@
                     <h2>Quân đội dưới quyền</h2>
                     <p style="margin:4px 0 0;">Tại biên ${Object.keys(camps).length} chi · Tìm được ${arr.length} chi</p>
                 </div>
-                <div class="zjc-count" style="text-align:right;">
-                    <span style="display:block; font-size:10px; color:var(--faint); letter-spacing:0.08em;">TỔNG BIÊN CHẾ</span>
-                    <strong style="color:var(--gold); font-family:'Noto Sans SC', serif;">${Object.keys(camps).length} chi doanh</strong>
-                    <span style="display:block; font-size:10px; color:var(--faint); letter-spacing:0.08em; margin-top:6px;">TỔNG BINH LỰC</span>
-                    <strong style="color:var(--ink-bright);">${armySupply.people.toLocaleString()} người</strong>
+                <div class="zjc-count" style="text-align:right; display:flex; align-items:center; gap:8px; font-size:13px; font-family:'Noto Sans SC', serif;">
+                    <span style="color:var(--faint);">Tổng Binh Lực:</span>
+                    <strong style="color:var(--ink-bright); font-size:16px;">${armySupply.people.toLocaleString()}</strong>
+                    <span style="color:var(--line-strong);">—</span>
+                    <span style="color:var(--faint);">Tổng Biên Chế:</span>
+                    <strong style="color:var(--gold); font-size:16px;">${Object.keys(camps).length}</strong>
                 </div>
             </div>
             <div class="cm-kpi-row">
@@ -1897,7 +1767,7 @@
                 const equipTagsHtml = equipList.length ? equipList.map(v => tag(v)).join('') : `<span class="cm-tag">Chưa biên chế</span>`;
                 const equipRates = `(Tề bị ${equip['Tề bị suất'] || 0}% · Hoàn hảo ${equip['Hoàn hảo suất'] || 0}%)`;
 
-                const unpaidMonths = number(camp['Số tháng khiếm nợ'], 0);
+                const unpaidMonths = number(camp['Số tháng nợ lương'], 0);
                 const shortDays = number(camp['Số ngày thiếu lương'], 0);
                 const wounded = number(camp['Thương binh'], 0);
                 const unpaidBadge = unpaidMonths > 0 ? tag(`Khiếm nợ ${unpaidMonths} tháng`, 'bad') : tag('Không khiếm nợ', 'good');
@@ -1925,7 +1795,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="cm-camp-cta" data-action="open-military-command" data-camp-name="${html(name)}"><span>Mở quân phủ thiêm áp</span><em>➔</em></button>
                     </div>
 
                     <div class="cm-camp-stats">
@@ -1935,13 +1804,16 @@
                         ${bar('Bì lao (Mệt mỏi)', fatigue, { tone: fatigueTone(fatigue), suffix: `% (${fatigueLabel(fatigue)})` })}
                     </div>
 
-                    <div class="cm-camp-bottom">
-                        <div class="cm-camp-equip">
-                            <span class="lbl">Trang bị:</span>
-                            ${equipTagsHtml}
-                            <span class="rate">${equipRates}</span>
+                    <div class="cm-camp-bottom" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <div class="cm-camp-equip">
+                                <span class="lbl">Trang bị:</span>
+                                ${equipTagsHtml}
+                                <span class="rate">${equipRates}</span>
+                            </div>
+                            <div class="cm-camp-badges">${unpaidBadge}${foodBadge}${woundedBadge}</div>
                         </div>
-                        <div class="cm-camp-badges">${unpaidBadge}${foodBadge}${woundedBadge}</div>
+                        <button class="cm-camp-cta" data-action="open-military-command" data-camp-name="${html(name)}"><span>Mở quân phủ thiêm áp</span><em>➔</em></button>
                     </div>
                 </div>`;
             }
@@ -2117,7 +1989,6 @@
                             ${meta('Quan hệ', person['Quan hệ'] || 'Chưa ghi')}
                             <div class="cm-meta"><span>Trạng thái</span><b style="color:${presenceColor}; text-align:right;">${isPresent}</b></div>
                         </div>
-                        ${person['Tiếng lòng nhân vật'] ? `<p style="color:#d46a8a; font-style:italic; border-left:3px solid var(--line); padding-left:10px; margin:14px 0 6px; line-height:1.6;">"${html(person['Tiếng lòng nhân vật'])}"</p>` : ''}
 
                         <section class="cm-command-section"><h3>Nguyệt tín và Thai sản</h3>
                         <div class="cm-info-grid">
@@ -2155,7 +2026,7 @@
 
             let alertHtml = '';
             const alerts = [];
-            if (camp['Số tháng khiếm nợ'] > 0) alerts.push(`Tích khiếm quân lương <b style="font-size:15px;">${camp['Số tháng khiếm nợ']}</b> tháng`);
+            if (camp['Số tháng nợ lương'] > 0) alerts.push(`Tích khiếm quân lương <b style="font-size:15px;">${camp['Số tháng nợ lương']}</b> tháng`);
             if (camp['Số ngày thiếu lương'] > 0) alerts.push(`Đứt lương <b style="font-size:15px;">${camp['Số ngày thiếu lương']}</b> ngày`);
             if (camp['Thương binh'] > 0) alerts.push(`Doanh có thương binh <b style="font-size:15px;">${camp['Thương binh']}</b> người`);
             if (alerts.length > 0) {
@@ -2285,24 +2156,35 @@
 
         let modernDate = world['Công lịch ngày tháng'] || world['Công lịch'] || world['Tây nguyên'] || '';
         if (!modernDate && world['Ngày hiện tại']) {
-            modernDate = 'Công nguyên 1634';
-            const mMatch = world['Ngày hiện tại'].match(/([Nhất nhị tam tứ ngũ lục thất bát cửu thập]+) tháng/);
-            const dMatch = world['Ngày hiện tại'].match(/([sơ nhất nhị tam tứ ngũ lục thất bát cửu thập trấp tạp]+)[ngày mùng]/);
-            if (mMatch) modernDate += ` tháng ${mMatch[0]}`; if (dMatch) modernDate += ` ngày ${dMatch[0]}`;
+            const currentYear = world['Năm Công nguyên'] || 1634;
+            modernDate = `Công nguyên ${currentYear}`;
+            
+            // Xử lý linh hoạt theo cú pháp tiếng Việt: "mùng/ngày [D] tháng [M]" hoặc "[M] tháng [D] ngày"
+            const curDateStr = String(world['Ngày hiện tại']);
+            const mMatch = curDateStr.match(/tháng\s*([0-9]+|[Nhất nhị tam tứ ngũ lục thất bát cửu thập một hai ba tư năm sáu bảy tám chín mười chạp giêng]+)/i)
+                        || curDateStr.match(/([0-9]+|[Nhất nhị tam tứ ngũ lục thất bát cửu thập]+)\s*tháng/i);
+            const dMatch = curDateStr.match(/(?:ngày|mùng)\s*([0-9]+|[sơ nhất nhị tam tứ ngũ lục thất bát cửu thập trấp tạp một hai ba tư năm sáu bảy tám chín mười lăm rằm hai ba mươi]+)/i)
+                        || curDateStr.match(/([0-9]+|[sơ nhất nhị tam tứ ngũ lục thất bát cửu thập trấp tạp]+)\s*(?:ngày|mùng|nhật)/i);
+            
+            if (mMatch) modernDate += ` tháng ${mMatch[1].trim()}`;
+            if (dMatch) modernDate += ` ngày ${dMatch[1].trim()}`;
         }
 
         let modernTime = '', shichen = world['Mười hai canh giờ']?.['Canh giờ'] || '', ke = world['Mười hai canh giờ']?.['Khắc'] || '';
         let rawHour = world['Hai mươi bốn giờ']?.['Giờ'];
         let rawMin = world['Hai mươi bốn giờ']?.['Phút'];
 
+        const CANH_GIO_NAMES = ['Giờ Tý', 'Giờ Sửu', 'Giờ Dần', 'Giờ Mão', 'Giờ Thìn', 'Giờ Tỵ', 'Giờ Ngọ', 'Giờ Mùi', 'Giờ Thân', 'Giờ Dậu', 'Giờ Tuất', 'Giờ Hợi'];
+
         if (typeof rawHour === 'number' && typeof rawMin === 'number') {
             modernTime = `${rawHour.toString().padStart(2, '0')}:${rawMin.toString().padStart(2, '0')}`;
-            const NAMES = ['Giờ tý', 'Giờ sửu', 'Giờ dần', 'Giờ mão', 'Giờ thìn', 'Giờ tỵ', 'Giờ ngọ', 'Giờ mùi', 'Giờ thân', 'Giờ dậu', 'Giờ tuất', 'Giờ hợi'];
-            let idx = (rawHour === 23 || rawHour === 0) ? 0 : Math.floor((rawHour + 1) / 2); shichen = NAMES[idx];
+            let idx = (rawHour === 23 || rawHour === 0) ? 0 : Math.floor((rawHour + 1) / 2); 
+            shichen = CANH_GIO_NAMES[idx];
             const isFirstHour = (rawHour === 23 || rawHour % 2 === 1); const posIn120 = isFirstHour ? rawMin : 60 + rawMin;
             if (posIn120 < 15) ke = 'Sơ khắc'; else if (posIn120 < 30) ke = 'Nhất khắc'; else if (posIn120 < 45) ke = 'Nhị khắc'; else if (posIn120 < 60) ke = 'Tam khắc'; else if (posIn120 < 75) ke = 'Tứ khắc'; else if (posIn120 < 90) ke = 'Ngũ khắc'; else if (posIn120 < 105) ke = 'Lục khắc'; else ke = 'Thất khắc';
         } else if (shichen) {
-            const shichenBase = shichen; const NAMES = ['Giờ tý', 'Giờ sửu', 'Giờ dần', 'Giờ mão', 'Giờ thìn', 'Giờ tỵ', 'Giờ ngọ', 'Giờ mùi', 'Giờ thân', 'Giờ dậu', 'Giờ tuất', 'Giờ hợi']; const idx = NAMES.indexOf(shichenBase);
+            const shichenBase = shichen; 
+            const idx = CANH_GIO_NAMES.indexOf(shichenBase);
             if (idx !== -1) {
                 let baseHour = idx === 0 ? 23 : idx * 2 - 1, posIn120 = 0;
                 if (ke.includes('Sơ')) posIn120 = 0; else if (ke.includes('Nhất')) posIn120 = 15; else if (ke.includes('Nhị')) posIn120 = 30; else if (ke.includes('Tam')) posIn120 = 45; else if (ke.includes('Tứ')) posIn120 = 60; else if (ke.includes('Ngũ')) posIn120 = 75; else if (ke.includes('Lục')) posIn120 = 90; else if (ke.includes('Thất')) posIn120 = 105;
