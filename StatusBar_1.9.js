@@ -2138,7 +2138,7 @@ function Qt() {
     t = gt,
     n = new Set(),
     a = "night" === Ge || "star" === Ge,
-    r = a ? "#c0b090" : "#5c4530";
+    r = a ? "#e2d2b5" : "#4a3828";
   e &&
     Pe.forEach((t) => {
       (t.name.includes(e) ||
@@ -2163,10 +2163,13 @@ function Qt() {
         desc: o.desc,
         label: {
           show: !0,
-          fontSize: 12,
-          color: r,
+          fontSize: 13,
+          fontWeight: "Nhân vật chính" === o.id ? "bold" : "normal",
+          color: "Nhân vật chính" === o.id ? "#f0cf82" : r,
           distance: 16,
           opacity: d ? 0.35 : 1,
+          textBorderColor: a ? "rgba(8,15,21,.95)" : "rgba(245,238,225,.95)",
+          textBorderWidth: 3,
         },
         itemStyle: {
           opacity: d ? 0.22 : 1,
@@ -2195,11 +2198,14 @@ function Qt() {
           show: !0,
           formatter: i.label,
           fontSize: 11,
-          color: r,
+          fontWeight: o || c ? "bold" : "normal",
+          color: o || c ? (a ? "#e8d3ad" : "#5b432d") : r,
           opacity: s ? 0.08 : 1,
+          textBorderColor: a ? "rgba(8,15,21,.9)" : "rgba(245,238,225,.9)",
+          textBorderWidth: 2,
         },
         lineStyle: {
-          color: i.lineStyle?.color || (a ? "#6a5a40" : "#c0b090"),
+          color: i.lineStyle?.color || (a ? "#756348" : "#ad9068"),
           width: o || c ? 3 : i.lineStyle?.width || 1,
           type: i.lineStyle?.type || "solid",
           curveness: 0.15,
@@ -5965,7 +5971,7 @@ function _r() {
         if (!n) return;
         (kt && kt.dispose(), (kt = t.init(n)));
         const a = "night" === Ge || "star" === Ge,
-          r = a ? "#c0b090" : "#5c4530",
+          r = a ? "#e2d2b5" : "#4a3828",
           i = [
             { name: "Nhân vật chính", symbol: "circle", itemStyle: { color: "#d4a040" } },
             ...Ie.map((e) => ({
@@ -5985,7 +5991,15 @@ function _r() {
             symbolSize: e.symbolSize,
             symbol: e.symbol,
             desc: e.desc,
-            label: { show: !0, fontSize: 12, color: r, distance: 16 },
+            label: {
+              show: !0,
+              fontSize: 13,
+              fontWeight: "Nhân vật chính" === e.id ? "bold" : "normal",
+              color: "Nhân vật chính" === e.id ? "#f0cf82" : r,
+              distance: 16,
+              textBorderColor: a ? "rgba(8,15,21,.95)" : "rgba(245,238,225,.95)",
+              textBorderWidth: 3,
+            },
             itemStyle:
               "Nhân vật chính" === e.id
                 ? {
@@ -5998,9 +6012,16 @@ function _r() {
           s = Re.map((e) => ({
             source: e.source,
             target: e.target,
-            label: { show: !0, formatter: e.label, fontSize: 11, color: r },
+            label: {
+              show: !0,
+              formatter: e.label,
+              fontSize: 11,
+              color: r,
+              textBorderColor: a ? "rgba(8,15,21,.9)" : "rgba(245,238,225,.9)",
+              textBorderWidth: 2,
+            },
             lineStyle: {
-              color: e.lineStyle?.color || (a ? "#6a5a40" : "#c0b090"),
+              color: e.lineStyle?.color || (a ? "#756348" : "#ad9068"),
               width: e.lineStyle?.width || 1,
               type: e.lineStyle?.type || "solid",
               curveness: 0.15,
@@ -6013,8 +6034,8 @@ function _r() {
               "node" === e.dataType
                 ? `<b>${e.name}</b><br/><span style="font-size:12px;color:#999">${o[e.data.id]?.desc || ""}</span>`
                 : e.data.label?.formatter || e.data.label || "",
-            backgroundColor: a ? "rgba(30,22,16,.94)" : "rgba(255,248,226,.94)",
-            borderColor: a ? "rgba(180,140,100,.3)" : "rgba(150,120,80,.3)",
+            backgroundColor: a ? "rgba(30,22,16,.96)" : "rgba(255,248,226,.96)",
+            borderColor: a ? "rgba(180,140,100,.4)" : "rgba(150,120,80,.4)",
             textStyle: { color: r },
           },
           legend: { show: !1 },
@@ -6028,9 +6049,9 @@ function _r() {
               nodes: c,
               links: s,
               force: {
-                repulsion: 1200,
-                edgeLength: [120, 350],
-                gravity: 0.12,
+                repulsion: 1500,
+                edgeLength: [140, 350],
+                gravity: 0.1,
                 friction: 0.6,
               },
               emphasis: { focus: "adjacency", lineStyle: { width: 3 } },
