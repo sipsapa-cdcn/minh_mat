@@ -2189,7 +2189,7 @@ function Jt() {
         layoutCenter: ["50%", "50%"],
         layoutSize: "92%",
         scaleLimit: { min: 0.8, max: 12 },
-        label: { show: !1, color: c ? "#ead2aa" : "#5c3b25", fontSize: 10, fontWeight: 500 },
+        label: { show: s, color: c ? "#ead2aa" : "#5c3b25", fontSize: 9 },
         itemStyle: {
           areaColor: o,
           borderColor: c ? "rgba(235,205,160,.72)" : "rgba(104,66,34,.66)",
