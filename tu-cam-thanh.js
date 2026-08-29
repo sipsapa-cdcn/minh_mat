@@ -1089,7 +1089,15 @@
     // --- Helper: Thanh tiến trình mini (Micro Bar) ---
     function microBar(label, value, colorTone, max = 100) {
         const percent = Math.min(100, Math.max(0, (Number(value) || 0) / max * 100));
-        return `<div style="flex: 1; min-width: 0;"><div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;"><span style="font-size: 11px; color: var(--muted); letter-spacing: 0.02em;">${label}</span><b style="font-size: 13px; color: ${colorTone}; font-family: 'Sitka', 'Times New Romans', serif;">${value}</b></div><div style="height: 4px; background: rgba(0,0,0,0.4); border-radius: 2px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"><div style="height: 100%; width: ${percent}%; background: ${colorTone}; box-shadow: 0 0 6px ${colorTone}; border-radius: 2px; transition: width 0.3s ease;"></div></div></div>`;
+        return `<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+                <span style="font-size: 11px; color: var(--muted); letter-spacing: 0.02em; line-height: 1;">${label}</span>
+                <b style="font-size: 13px; color: ${colorTone}; font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${value}</b>
+            </div>
+            <div style="width: 100%; height: 4px; min-height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; box-sizing: content-box;">
+                <div style="height: 100%; width: ${percent}%; background: ${colorTone}; box-shadow: 0 0 4px ${colorTone}; border-radius: 2px;"></div>
+            </div>
+        </div>`;
     }
     // --- Helper: Khối Ngũ Duy (RPG Stats Grid) ---
     function renderWudui(g) {
@@ -1798,7 +1806,7 @@
                                 <div class="cm-camp-name-row">
                                     <h3>${html(name)}</h3>
                                     ${campStatusPill(camp['Trạng thái'])}
-                                    <span class="cm-camp-loc"> 🗡 Quân doanh đồn trú: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
+                                    <span class="cm-camp-loc"> ⏣ Quân doanh đồn trú: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
                                 </div>
                                 <div class="cm-camp-meta-row">
                                     <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
