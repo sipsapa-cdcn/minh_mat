@@ -1094,8 +1094,8 @@
                 <span style="font-size: 11px; color: var(--muted); letter-spacing: 0.02em; line-height: 1;">${label}</span>
                 <b style="font-size: 13px; color: ${colorTone}; font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${value}</b>
             </div>
-            <div style="width: 100%; height: 4px; min-height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; box-sizing: content-box;">
-                <div style="height: 100%; width: ${percent}%; background: ${colorTone}; box-shadow: 0 0 4px ${colorTone}; border-radius: 2px;"></div>
+            <div style="width: 100%; height: 3px; min-height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; box-sizing: content-box;">
+                <div style="height: 100%; width: ${percent}%; background: ${colorTone}; box-shadow: 0 0 2px ${colorTone}; border-radius: 2px;"></div>
             </div>
         </div>`;
     }
@@ -1806,7 +1806,7 @@
                                 <div class="cm-camp-name-row">
                                     <h3>${html(name)}</h3>
                                     ${campStatusPill(camp['Trạng thái'])}
-                                    <span class="cm-camp-loc"> ⏣ Quân doanh đồn trú: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
+                                    <span class="cm-camp-loc"> 𓊼 Quân doanh đồn trú: <strong style="color:var(--ink);">「${html(camp['Trú địa'] || 'Chưa rõ')}」</strong></span>
                                 </div>
                                 <div class="cm-camp-meta-row">
                                     <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
