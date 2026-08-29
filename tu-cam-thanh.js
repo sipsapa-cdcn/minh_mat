@@ -1806,7 +1806,7 @@
                                 <div class="cm-camp-name-row">
                                     <h3>${html(name)}</h3>
                                     ${campStatusPill(camp['Trạng thái'])}
-                                    <span class="cm-camp-loc"> 𓊼 Quân doanh đồn trú: <strong style="color:var(--ink);">「${html(camp['Trú địa'] || 'Chưa rõ')}」</strong></span>
+                                    <span class="cm-camp-loc"> 🏳 Quân doanh đồn trú: <strong style="color:var(--ink);">「${html(camp['Trú địa'] || 'Chưa rõ')}」</strong></span>
                                 </div>
                                 <div class="cm-camp-meta-row">
                                     <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
