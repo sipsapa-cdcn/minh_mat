@@ -220,7 +220,6 @@
         return `<span class="cm-tier-tag ${cls}">${html(s)}</span>`;
     }
     function fatigueTone(v) { return v < 30 ? 'high' : v < 70 ? 'mid' : 'low'; }
-    function fatigueLabel(v) { return v <= 15 ? 'Sung sức' : v <= 40 ? 'Bình thường' : v <= 70 ? 'Mệt mỏi' : 'Kiệt sức'; }
 
     function getPortraitData() {
         const lib = getST('CanmingPortraitLibrary');
@@ -1087,6 +1086,17 @@
         doc.body.appendChild(toast); setTimeout(() => toast.remove(), 3500);
     }
 
+    // --- Helper: Thanh tiến trình mini (Micro Bar) ---
+    function microBar(label, value, colorTone, max = 100) {
+        const percent = Math.min(100, Math.max(0, (Number(value) || 0) / max * 100));
+        return `<div style="flex: 1; min-width: 0;"><div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;"><span style="font-size: 11px; color: var(--muted); letter-spacing: 0.02em;">${label}</span><b style="font-size: 13px; color: ${colorTone}; font-family: 'Sitka', 'Times New Romans', serif;">${value}</b></div><div style="height: 4px; background: rgba(0,0,0,0.4); border-radius: 2px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"><div style="height: 100%; width: ${percent}%; background: ${colorTone}; box-shadow: 0 0 6px ${colorTone}; border-radius: 2px; transition: width 0.3s ease;"></div></div></div>`;
+    }
+    // --- Helper: Khối Ngũ Duy (RPG Stats Grid) ---
+    function renderWudui(g) {
+        if (!g) return '';
+        return `<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: rgba(0,0,0,0.25); border: 1px solid var(--line); border-radius: 8px; padding: 6px 4px; margin-top: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);"><div style="display: flex; flex-direction: column; align-items: center; justify-content: center;"><span style="font-size: 9px; color: var(--faint); letter-spacing: 0.05em; margin-bottom: 2px;">THỐNG SUẤT</span><b style="font-size: 15px; color: var(--gold); font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${g['Thống suất'] ?? 0}</b></div><div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05);"><span style="font-size: 9px; color: var(--faint); letter-spacing: 0.05em; margin-bottom: 2px;">VÕ LỰC</span><b style="font-size: 15px; color: var(--gold); font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${g['Võ lực'] ?? 0}</b></div><div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05);"><span style="font-size: 9px; color: var(--faint); letter-spacing: 0.05em; margin-bottom: 2px;">TRÍ MƯU</span><b style="font-size: 15px; color: var(--gold); font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${g['Trí mưu'] ?? 0}</b></div><div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05);"><span style="font-size: 9px; color: var(--faint); letter-spacing: 0.05em; margin-bottom: 2px;">CHÍNH TRỊ</span><b style="font-size: 15px; color: var(--gold); font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${g['Chính trị'] ?? 0}</b></div><div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05);"><span style="font-size: 9px; color: var(--faint); letter-spacing: 0.05em; margin-bottom: 2px;">UY VỌNG</span><b style="font-size: 15px; color: var(--gold); font-family: 'Sitka', 'Times New Romans', serif; line-height: 1;">${g['Uy vọng'] ?? 0}</b></div></div>`;
+    }
+
     // --- Cừu địch ---
     function renderEnemies() {
         const panel = doc.getElementById('panel-enemies');
@@ -1125,8 +1135,6 @@
                 const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block; margin-left: 8px;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
                 
                 const g = generals[name];
-                const statsHtml = g ? `<div style="margin: 4px 0; font-size: 11px; color: var(--cinnabar-bright); border: 1px dashed rgba(181, 77, 57, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2);">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
-
                 let avatarStr = avatarImage(name);
                 if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0 10px 0 0;"');
 
@@ -1146,9 +1154,11 @@
                             <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Cừu địch" data-key="${html(name)}">Lãng quên</button>
                         </div>
                     </div>
-                    <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
-                        <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Cừu hận độ: <span style="color:var(--cinnabar-bright);">${info['Cừu hận độ'] ?? 0}</span></h4>
-                        ${statsHtml}
+                    <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
+                        <div style="width: 70%; padding-right: 10px;">
+                            ${microBar('Cừu hận độ', info['Cừu hận độ'] ?? 0, 'var(--cinnabar-bright)')}
+                        </div>
+                        ${renderWudui(g)}
                     </div>
                 </div>`;
             }
@@ -1589,8 +1599,14 @@
                         ${loreButton(name)}
                     </div>
                 </div>
-                <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
-                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Hảo cảm: <span style="color:#d46a8a;">${info['Hảo cảm độ'] ?? 0}</span> | Thai sản: <span style="color:#d46a8a;">${info['Sinh dục']?.['Trạng thái'] || 'Chưa rõ'}</span></h4>
+                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong); display: flex; align-items: center; gap: 16px;">
+                    <div style="flex: 1;">
+                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, '#d46a8a')}
+                    </div>
+                    <div style="flex-shrink: 0; padding: 6px 12px; background: rgba(212, 106, 138, 0.08); border: 1px solid rgba(212, 106, 138, 0.25); border-radius: 8px; text-align: center; min-width: 90px;">
+                        <span style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 3px; letter-spacing: 0.05em;">THAI SẢN</span>
+                        <b style="font-size: 13px; color: #d46a8a; font-family: 'Sitka', 'Times New Romans', serif;">${html(info['Sinh dục']?.['Trạng thái'] || 'Chưa mang thai')}</b>
+                    </div>
                 </div>
             </div>`;
         }
@@ -1630,8 +1646,6 @@
             const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
-            const statsHtml = g ? `<div style="font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2); margin: 0;">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
-
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
@@ -1650,11 +1664,11 @@
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Thân thuộc" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-                <div class="cwe-event-story" style="width: 100%; padding-top: 8px; border-top: 1px dashed var(--line-strong);">
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
-                        <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Hảo cảm độ: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
-                        ${statsHtml}
+                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
+                    <div style="width: 70%; padding-right: 10px;">
+                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, 'var(--gold)')}
                     </div>
+                    ${renderWudui(g)}
                 </div>
             </div>`;
         }
@@ -1773,7 +1787,7 @@
                 const unpaidMonths = number(camp['Số tháng nợ lương'], 0);
                 const shortDays = number(camp['Số ngày thiếu lương'], 0);
                 const wounded = number(camp['Thương binh'], 0);
-                const unpaidBadge = unpaidMonths > 0 ? tag(`Khiếm nợ ${unpaidMonths} tháng`, 'bad') : tag('Không khiếm nợ', 'good');
+                const unpaidBadge = unpaidMonths > 0 ? tag(`Khiếm nợ ${unpaidMonths} tháng`, 'bad') : tag('Không khất lương', 'good');
                 const foodBadge = shortDays > 0 ? tag(`Đứt lương ${shortDays} ngày`, 'bad') : tag('Lương thảo đủ', 'good');
                 const woundedBadge = wounded > 0 ? tag(`Thương binh ${wounded}`, 'bad') : tag('Không thương binh', 'good');
 
@@ -1785,7 +1799,7 @@
                                 <div class="cm-camp-name-row">
                                     <h3>${html(name)}</h3>
                                     ${campStatusPill(camp['Trạng thái'])}
-                                    <span class="cm-camp-loc">· Trú địa: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
+                                    <span class="cm-camp-loc"> 🏕: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
                                 </div>
                                 <div class="cm-camp-meta-row">
                                     <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
@@ -1804,7 +1818,7 @@
                         ${bar('Sĩ khí', morale, { suffix: ' / 100' })}
                         ${bar('Huấn luyện', training, { suffix: ' / 100' })}
                         ${bar('Hậu cần', logistics, { suffix: ' / 100' })}
-                        ${bar('Bì lao (Mệt mỏi)', fatigue, { tone: fatigueTone(fatigue), suffix: `% (${fatigueLabel(fatigue)})` })}
+                        ${bar('Bì lao', fatigue, { tone: fatigueTone(fatigue), suffix: '%' })}
                     </div>
 
                     <div class="cm-camp-bottom" style="display: flex; justify-content: space-between; align-items: flex-end;">
