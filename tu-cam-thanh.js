@@ -1608,7 +1608,7 @@
                 </div>
                 <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong); display: flex; align-items: center; gap: 16px;">
                     <div style="flex: 1;">
-                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, '#d46a8a')}
+                        ${microBar('Hảo cảm', info['Hảo cảm độ'] ?? 0, '#d46a8a')}
                     </div>
                     <div style="flex-shrink: 0; padding: 6px 12px; background: rgba(212, 106, 138, 0.08); border: 1px solid rgba(212, 106, 138, 0.25); border-radius: 8px; text-align: center; min-width: 90px;">
                         <span style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 3px; letter-spacing: 0.05em;">THAI SẢN</span>
