@@ -1262,8 +1262,6 @@
             const presenceTag = `<span style="font-size:10px; border:1px solid ${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--line)'}; color:${info['Có mặt hay không'] ? 'var(--jade)' : 'var(--muted)'}; border-radius:3px; padding:1px 4px; display:inline-block;">${info['Có mặt hay không'] ? 'Có mặt' : 'Không có mặt'}</span>`;
             
             const g = generals[name];
-            const statsHtml = g ? `<div style="font-size: 11px; color: var(--gold); border: 1px dashed rgba(199, 155, 93, 0.4); padding: 3px 6px; border-radius: 4px; display: inline-block; background: rgba(0,0,0,0.2); margin: 0;">Thống suất ${g['Thống suất'] ?? 0} | Võ lực ${g['Võ lực'] ?? 0} | Trí mưu ${g['Trí mưu'] ?? 0} | Chính trị ${g['Chính trị'] ?? 0} | Uy vọng ${g['Uy vọng'] ?? 0}</div>` : '';
-
             let avatarStr = avatarImage(name);
             if (avatarStr) avatarStr = avatarStr.replace('class="zjc-avatar"', 'class="zjc-avatar" style="margin: 0; flex-shrink: 0;"');
 
@@ -1282,11 +1280,12 @@
                         <button class="danger" data-action="delete-item" data-path="Mạng lưới quan hệ.Hạ thuộc và mạc liêu" data-key="${html(name)}">Lãng quên</button>
                     </div>
                 </div>
-                <div class="cwe-event-story" style="width: 100%; padding-top: 8px; border-top: 1px dashed var(--line-strong);">
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
-                        <h4 style="font-size: 14px; margin: 0; color: var(--ink-bright);">Trung tâm: <span style="color:var(--gold);">${info['Trung tâm'] ?? 0}</span> | Hảo cảm: <span style="color:var(--gold);">${info['Hảo cảm độ'] ?? 0}</span></h4>
-                        ${statsHtml}
+                <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
+                    <div style="display: flex; gap: 20px; align-items: center;">
+                        ${microBar('Trung tâm', info['Trung tâm'] ?? 0, 'var(--gold)')}
+                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, 'var(--jade)')}
                     </div>
+                    ${renderWudui(g)}
                 </div>
             </div>`;
         }
@@ -1799,7 +1798,7 @@
                                 <div class="cm-camp-name-row">
                                     <h3>${html(name)}</h3>
                                     ${campStatusPill(camp['Trạng thái'])}
-                                    <span class="cm-camp-loc"> 🏕: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
+                                    <span class="cm-camp-loc"> 🗡 Quân doanh đồn trú: <strong style="color:var(--ink);">${html(camp['Trú địa'] || 'Chưa rõ')}</strong></span>
                                 </div>
                                 <div class="cm-camp-meta-row">
                                     <span>Chủ tướng: <b>${html(camp['Tướng lĩnh'] || 'Chưa định')}</b></span>
