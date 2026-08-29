@@ -1295,13 +1295,13 @@
                 <div id="list-government" style="margin-bottom:20px;"></div>
             `;
         }
-        const tasks = getMvuData()?.['Thời cục và nhiệm vụ']?.['Nhiệm vụ hiện tại'] || {};
+        const tasks = getMvuData()?.['Thời cục và nhiệm vụ']?.['Hạng mục chưa quyết'] || {};
 
         const searchInput = panel.querySelector('.zjc-search').value.toLowerCase();
         let arr = Object.entries(tasks).map(([key, task]) => ({ key, task }));
 
         if (searchInput) {
-            arr = arr.filter(item => item.key.toLowerCase().includes(searchInput) || (item.task['Loại hình'] || '').toLowerCase().includes(searchInput));
+            arr = arr.filter(item => item.key.toLowerCase().includes(searchInput) || (item.task['Trạng thái'] || '').toLowerCase().includes(searchInput));
         }
 
         panel.querySelector('.zjc-count').innerText = `Đang tiến hành ${Object.keys(tasks).length} kiện | Tìm được ${arr.length} kiện`;
@@ -1309,22 +1309,24 @@
         let htmlStr = '';
         for (const { key, task } of arr) {
             let borderColor = 'var(--cinnabar-bright)';
-            if (task['Tiến độ'] && (task['Tiến độ'].includes('Hoàn thành') || task['Tiến độ'].includes('Giải quyết'))) borderColor = 'var(--jade)';
+            if (task['Trạng thái'] === 'Hoàn thành' || (task['Hiện trạng'] && task['Hiện trạng'].includes('Hoàn thành'))) borderColor = 'var(--jade)';
+            else if (task['Trạng thái'] === 'Đang xử lý') borderColor = 'var(--gold)';
             
             htmlStr += `<div class="cwe-event-row" style="border-left: 3px solid ${borderColor}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                     <div class="cwe-event-when" style="padding-left: 14px; position: relative; display: flex; align-items: center;">
                         <i style="background:${borderColor}; box-shadow: 0 0 0 1px ${borderColor}; position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;"></i>
                         <strong style="font-size: 15px; color: var(--gold); display: inline-block; margin: 0 8px 0 0;">${html(key)}</strong>
-                        <span class="cm-tag" style="border-color: ${borderColor}; color: ${borderColor}; margin: 0;">${html(task['Loại hình'] || 'Đại chính')}</span>
+                        <span class="cm-tag" style="border-color: ${borderColor}; color: ${borderColor}; margin: 0;">${html(task['Trạng thái'] || 'Nhiệm vụ')}</span>
                     </div>
                     <div class="cwe-command-actions">
-                        <button class="danger" data-action="delete-item" data-path="Thời cục và nhiệm vụ.Nhiệm vụ hiện tại" data-key="${html(key)}">Xóa</button>
+                        <button class="danger" data-action="delete-item" data-path="Thời cục và nhiệm vụ.Hạng mục chưa quyết" data-key="${html(key)}">Xóa</button>
                     </div>
                 </div>
                 <div class="cwe-event-story" style="width: 100%; padding-top: 6px; border-top: 1px dashed var(--line-strong);">
-                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Tiến độ: <span style="color: ${borderColor};">${html(task['Tiến độ'] || 'Chưa rõ')}</span></h4>
-                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(task['Thuyết minh'] || 'Chưa có thuyết minh')}</p>
+                    <h4 style="font-size: 14px; margin: 0 0 6px 0; color: var(--ink-bright);">Tiến độ: <span style="color: ${borderColor};">${html(task['Hiện trạng'] || 'Chưa rõ')}</span></h4>
+                    <p style="margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px;">${html(task['Khái yếu'] || 'Chưa có thuyết minh')}</p>
+                    ${task['Nhắc nhở'] ? `<p style="margin: 6px 0 0 0; color: var(--cinnabar-bright); font-size: 12px; font-style: italic;">⚠️ ${html(task['Nhắc nhở'])}</p>` : ''}
                 </div>
             </div>`;
         }
@@ -2321,7 +2323,7 @@
             renderZjcModal();
 
             if (path.includes('Hạ thuộc và mạc liêu')) renderOfficials();
-            else if (path.includes('Nhiệm vụ hiện tại')) renderGovernment();
+            else if (path.includes('Hạng mục chưa quyết')) renderGovernment();
             else if (path.includes('Cừu địch')) renderEnemies();
             else if (path.includes('Thân thuộc')) renderRoyal();
             else if (path.includes('Tài sản') || path.includes('Lưu thủy')) renderAssets();
