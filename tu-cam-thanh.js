@@ -1164,7 +1164,7 @@
                     </div>
                     <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
                         <div style="width: 70%; padding-right: 10px;">
-                            ${microBar('Cừu hận độ', info['Cừu hận độ'] ?? 0, 'var(--cinnabar-bright)')}
+                            ${microBar('Cừu hận', info['Cừu hận độ'] ?? 0, 'var(--cinnabar-bright)')}
                         </div>
                         ${renderWudui(g)}
                     </div>
@@ -1291,7 +1291,7 @@
                 <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
                     <div style="display: flex; gap: 20px; align-items: center;">
                         ${microBar('Trung tâm', info['Trung tâm'] ?? 0, 'var(--gold)')}
-                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, 'var(--jade)')}
+                        ${microBar('Hảo cảm', info['Hảo cảm độ'] ?? 0, 'var(--jade)')}
                     </div>
                     ${renderWudui(g)}
                 </div>
@@ -1673,7 +1673,7 @@
                 </div>
                 <div class="cwe-event-story" style="width: 100%; padding-top: 10px; border-top: 1px dashed var(--line-strong);">
                     <div style="width: 70%; padding-right: 10px;">
-                        ${microBar('Hảo cảm độ', info['Hảo cảm độ'] ?? 0, 'var(--gold)')}
+                        ${microBar('Hảo cảm', info['Hảo cảm độ'] ?? 0, 'var(--gold)')}
                     </div>
                     ${renderWudui(g)}
                 </div>
@@ -1922,7 +1922,7 @@
                     </header>
                     <div class="cm-modal-body">
                         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--line); padding-bottom:8px; margin-bottom:12px;">
-                            <span style="color:var(--muted); font-size:14px;">Hảo cảm độ</span>
+                            <span style="color:var(--muted); font-size:14px;">Hảo cảm</span>
                             <b style="color:${fav < 0 ? 'var(--cinnabar-bright)' : 'var(--jade)'}; font-size:16px;">${fav}</b>
                         </div>
                         ${meta('Trạng thái', power['Trạng thái'] || 'Chưa tiếp xúc')}
@@ -2000,7 +2000,7 @@
                     </header>
                     <div class="cm-modal-body">
                         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--line); padding-bottom:8px; margin-bottom:12px;">
-                            <span style="color:var(--muted); font-size:14px;">Hảo cảm độ / Trung tâm</span>
+                            <span style="color:var(--muted); font-size:14px;">Hảo cảm / Trung tâm</span>
                             <div>
                                 <b style="color:${fav < 0 ? 'var(--cinnabar-bright)' : 'var(--jade)'}; font-size:16px;">${fav}</b>
                                 <span style="color:var(--line); margin:0 6px;">|</span>
