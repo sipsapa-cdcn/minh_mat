@@ -1092,7 +1092,7 @@
         if (!panel) return;
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Ân oán cừu thù</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Ân oán cừu thù</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="enemies" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1161,7 +1161,7 @@
         if (!panel) return;
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Thiên hạ thế lực</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Thiên hạ thế lực</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="factions" placeholder="Tìm kiếm tên/trạng thái/binh chủng..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1224,7 +1224,7 @@
         const panel = doc.getElementById('panel-officials');
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Quan viên quyển tông</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Quan viên quyển tông</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="officials" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1288,7 +1288,7 @@
         const panel = doc.getElementById('panel-government');
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Thời cục và Nhiệm vụ</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Nhiệm vụ thế cục</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="government" placeholder="Tìm kiếm nhiệm vụ/loại hình..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1348,8 +1348,8 @@
         if (!panel.querySelector('#zjc-assets-tabs')) {
             panel.innerHTML = `
                 <div class="cwe-section-head">
-                    <div><h2>Tài sản và Hậu cần</h2></div>
-                    <div class="zjc-count" style="color:var(--faint); font-size:12px; text-align:right;"></div>
+                    <div><h2>Tài sản hậu cần</h2></div>
+                    <div class="zjc-count" style="color:var(--faint); font-size:10px; text-align:right;"></div>
                 </div>
                 <div class="zjc-map-tabs" id="zjc-assets-tabs" style="display: flex !important; margin-bottom: 12px; border-radius: 8px;">
                     <button class="${activeView === 'industry' ? 'active' : ''}" data-view="industry">Sản nghiệp</button>
@@ -1498,7 +1498,7 @@
         const panel = doc.getElementById('panel-tech');
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Cách vật và Bách công</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Cách vật bách công</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="tech" placeholder="Tìm kiếm khoa kỹ/miêu tả..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1549,7 +1549,7 @@
         const panel = doc.getElementById('panel-harem');
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Hậu cung Đồng sử</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Hậu cung đồng sử</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                 <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="harem" placeholder="Tìm kiếm tên/thân phận/quan hệ..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
@@ -1602,7 +1602,7 @@
         const panel = doc.getElementById('panel-royal');
         if (!panel.querySelector('.cwe-toolbar')) {
             panel.innerHTML = `
-                <div class="cwe-section-head"><div><h2>Hoàng thất Tông thân</h2></div><div class="zjc-count" style="color:var(--faint); font-size:12px;"></div></div>
+                <div class="cwe-section-head"><div><h2>Hoàng thất tông thân</h2></div><div class="zjc-count" style="color:var(--faint); font-size:10px;"></div></div>
                  <div class="cwe-toolbar" style="display:flex; gap:10px; margin-bottom:15px;">
                     <input type="text" class="zjc-search" data-type="royal" placeholder="Tìm kiếm tên/thân phận..." style="flex:1; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.3); color:var(--ink-bright); outline:none;" />
                 </div>
