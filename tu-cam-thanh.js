@@ -527,7 +527,7 @@
             position: fixed; z-index: 2147483647; 
             background: rgba(16, 13, 10, 0.92);
             border: 1px solid rgba(199, 155, 93, 0.6); 
-            color: var(--gold); font-weight: bold; font-family: 'Times New Roman', 'Noto Sans SC', serif;
+            color: var(--gold); font-weight: bold; font-family: 'Sitka', 'Times New Romans', serif;
             display: flex; align-items: center; justify-content: center; cursor: grab;
             box-shadow: 0 8px 20px var(--shadow), inset 0 0 0 4px rgba(199, 155, 93, 0.05);
             user-select: none; touch-action: none; transition: all 0.3s ease; 
@@ -564,7 +564,7 @@
             color: var(--ink);
             background-image: radial-gradient(rgba(205, 170, 111, 0.04) 1px, transparent 1px); background-size: 4px 4px;
             box-shadow: 0 28px 90px var(--shadow), inset 0 0 0 4px rgba(205, 170, 111, 0.035);
-            font-family: 'KaiGen Gothic CN', 'PingFang SC', sans-serif;
+            font-family: 'VNF-Comic Sans', 'PingFang SC', 'Sitka', sans-serif;
         }
 
         .cwe-header {
@@ -574,9 +574,9 @@
         .cwe-brand { display: flex; align-items: center; gap: 10px; }
         .cwe-brand-mark {
             display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(199, 155, 93, 0.62); border-radius: 50%; color: var(--gold); background: rgba(16, 13, 10, 0.9); box-shadow: inset 0 0 0 4px rgba(199, 155, 93, 0.05);
-            font-family: 'Times New Roman', 'Noto Sans SC', serif; font-size: 18px; font-weight: bold;
+            font-family: 'Sitka', 'Times New Romans', serif; font-size: 18px; font-weight: bold;
         }
-        .cwe-brand h1 { margin: 0; color: var(--ink-bright); font-family: 'Times New Roman', 'Noto Sans SC', serif; font-size: 20px; font-weight: 700; letter-spacing: 0.1em; }
+        .cwe-brand h1 { margin: 0; color: var(--ink-bright); font-family: 'Sitka', 'Times New Romans', serif; font-size: 20px; font-weight: 700; letter-spacing: 0.1em; }
         .cwe-brand p { margin: 3px 0 0 0; color: var(--muted); font-size: 11px; }
         .cwe-header-actions { display: flex; gap: 8px;}
         .cwe-header-actions button { border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; color: var(--ink); background: rgba(16, 13, 10, 0.9); cursor: pointer; font-size: 12px; transition: 0.2s; }
@@ -592,7 +592,7 @@
         .cwe-map-header { display: none; justify-content: space-between; align-items: center; width: 100%; padding: 10px 15px; background: rgba(0,0,0,0.5); color: var(--gold); font-size: 14px; cursor: pointer; box-sizing: border-box; }
         
         .zjc-map-tabs { display: flex; width: 100%; border-bottom: 1px solid var(--line-strong); background: rgba(0,0,0,0.2); border-radius: 8px 8px 0 0; overflow: hidden; margin-bottom: 12px; flex-shrink: 0; }
-        .zjc-map-tabs button { flex: 1; background: transparent; border: none; color: var(--muted); padding: 8px 0; cursor: pointer; font-size: 13px; font-family: 'Times New Roman', 'Noto Sans SC', serif; transition: 0.2s; border-bottom: 2px solid transparent; }
+        .zjc-map-tabs button { flex: 1; background: transparent; border: none; color: var(--muted); padding: 8px 0; cursor: pointer; font-size: 13px; font-family: 'Sitka', 'Times New Romans', serif; transition: 0.2s; border-bottom: 2px solid transparent; }
         .zjc-map-tabs button:hover { color: var(--gold); }
         .zjc-map-tabs button.active { color: var(--ink-bright); border-bottom: 2px solid var(--gold); background: rgba(199, 155, 93, 0.1); }
         
@@ -637,7 +637,7 @@
         .cwe-command-bar::-webkit-scrollbar { height: 4px; }
         .cwe-command-bar::-webkit-scrollbar-thumb { border-radius: 4px; background: rgba(199, 155, 93, 0.4); }
         .cwe-command-bar nav { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; margin-bottom: 4px; }
-        .cwe-command-bar nav button { border: 0; border-right: 1px solid var(--line); padding: 6px 14px; color: var(--muted); background: transparent; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: 0.2s; font-family: 'Times New Roman', 'Noto Sans SC', serif; white-space: nowrap;}
+        .cwe-command-bar nav button { border: 0; border-right: 1px solid var(--line); padding: 6px 14px; color: var(--muted); background: transparent; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: 0.2s; font-family: 'Sitka', 'Times New Romans', serif; white-space: nowrap;}
         .cwe-command-bar nav button:last-child { border-right: 0; }
         .cwe-command-bar nav button:hover { color: var(--ink-bright); background: rgba(199, 155, 93, 0.08); }
         .cwe-command-bar nav button.active { color: #fff; background: var(--cinnabar); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
@@ -652,7 +652,7 @@
 
         .cwe-section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line-strong); margin-bottom: 12px; }
         .cwe-section-head p { margin: 0; color: var(--gold); font-size: 11px; letter-spacing: 0.12em; font-weight: bold; }
-        .cwe-section-head h2 { margin: 2px 0 0 0; color: var(--ink-bright); font-family: 'Times New Roman', 'Noto Sans SC', serif; font-size: 17px; }
+        .cwe-section-head h2 { margin: 2px 0 0 0; color: var(--ink-bright); font-family: 'Sitka', 'Times New Romans', serif; font-size: 17px; }
 
         .cwe-event-row { display: grid; min-width: 0; gap: 14px; grid-template-columns: 70px minmax(0, 1fr) auto; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.02); margin-bottom: 10px; align-items: center; transition: transform 0.2s, box-shadow 0.2s; }
         .cwe-event-row:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-color: var(--gold); }
@@ -661,7 +661,7 @@
         .cwe-event-when strong { display: block; color: var(--gold); font-size: 12px; font-weight: 600; margin-bottom: 2px; }
         .cwe-event-when span { color: var(--muted); font-size: 11px; }
         .cwe-event-story { min-width: 0; }
-        .cwe-event-story h4 { margin: 0 0 4px 0; color: var(--ink-bright); font-size: 15px; font-family: 'Times New Roman', 'Noto Sans SC', serif; }
+        .cwe-event-story h4 { margin: 0 0 4px 0; color: var(--ink-bright); font-size: 15px; font-family: 'Sitka', 'Times New Romans', serif; }
         .cwe-event-story p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 
         .cwe-command-actions { display: flex; gap: 6px; }
@@ -681,12 +681,12 @@
         .cwe-record { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--line); }
         .cwe-record:last-child { border-bottom: none; }
         .cwe-record p { margin: 0; color: var(--muted); font-size: 13px; }
-        .cwe-record h3 { margin: 0; color: var(--ink-bright); font-size: 14px; font-family: 'Times New Roman', 'Noto Sans SC', serif;}
+        .cwe-record h3 { margin: 0; color: var(--ink-bright); font-size: 14px; font-family: 'Sitka', 'Times New Romans', serif;}
 
         #zjc-tooltip { position: absolute; background: rgba(13, 10, 8, 0.95); border: 1px solid var(--gold); border-radius: 8px; padding: 10px 14px; color: var(--ink); pointer-events: none; display: none; z-index: 100; width: 200px; box-shadow: 0 8px 20px var(--shadow); transform: translate(-50%, -110%); backdrop-filter: blur(4px); }
-        #zjc-tooltip h4 { color: var(--gold); font-size: 14px; margin: 0 0 4px 0; border-bottom: 1px solid var(--line); padding-bottom: 4px; font-family: 'Times New Roman', 'Noto Sans SC', serif; }
+        #zjc-tooltip h4 { color: var(--gold); font-size: 14px; margin: 0 0 4px 0; border-bottom: 1px solid var(--line); padding-bottom: 4px; font-family: 'Sitka', 'Times New Romans', serif; }
         #zjc-tooltip p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
-        .zjc-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(29, 24, 19, 0.98); color: var(--ink-bright); padding: 12px 24px; border: 1px solid var(--gold); border-radius: 12px; z-index: 2147483647; font-family: 'Times New Roman', 'Noto Sans SC', serif; font-size: 14px; box-shadow: 0 8px 24px var(--shadow); animation: fadeIn 0.3s; pointer-events: none; }
+        .zjc-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(29, 24, 19, 0.98); color: var(--ink-bright); padding: 12px 24px; border: 1px solid var(--gold); border-radius: 12px; z-index: 2147483647; font-family: 'Sitka', 'Times New Romans', serif; font-size: 14px; box-shadow: 0 8px 24px var(--shadow); animation: fadeIn 0.3s; pointer-events: none; }
 
         /* ===== CSS Module Quân sự Tàn Minh (Căn chỉnh & style) ===== */
         .zjc-modal-mask { position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483647; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; padding:16px; box-sizing:border-box; backdrop-filter:blur(3px); pointer-events:auto; }
@@ -694,7 +694,7 @@
         .cm-command-modal { position:relative; width:100%; max-width:720px; max-height:85vh; max-height:85dvh; background:var(--paper); border:1px solid var(--gold); border-radius:12px; display:flex; flex-direction:column; box-shadow:0 16px 50px rgba(0,0,0,0.9); overflow:hidden; }
         .cm-command-modal header { display:flex; justify-content:space-between; align-items:center; padding:14px 20px; border-bottom:1px solid var(--line-strong); background:rgba(0,0,0,0.4); flex-shrink:0; }
         .cm-command-modal header p { margin:0; color:var(--gold); font-size:11px; font-weight:bold; letter-spacing:1px; }
-        .cm-command-modal header h2 { margin:4px 0 0; color:var(--ink-bright); font-size:20px; font-family:'Times New Roman', 'Noto Sans SC', serif; }
+        .cm-command-modal header h2 { margin:4px 0 0; color:var(--ink-bright); font-size:20px; font-family:'Sitka', 'Times New Romans', serif; }
         .cm-command-modal header button { background:transparent; border:none; color:var(--muted); font-size:24px; cursor:pointer; line-height:1; padding:0; display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; transition:0.2s; }
         .cm-command-modal header button:hover { color:var(--cinnabar-bright); background:rgba(255,255,255,0.05); }
         .cm-command-modal .cm-modal-body { padding:20px; overflow-y:auto; flex:1 1 auto; min-height:0; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:rgba(199, 155, 93, 0.4) transparent; }
@@ -732,7 +732,7 @@
         .cm-confirm-modal-body { overflow-y:auto; flex:1 1 auto; min-height:0; scrollbar-width:thin; scrollbar-color:rgba(199, 155, 93, 0.4) transparent; margin-bottom: 20px;}
         .cm-confirm-modal-body::-webkit-scrollbar { width:6px; }
         .cm-confirm-modal-body::-webkit-scrollbar-thumb { border-radius:8px; background:rgba(199, 155, 93, 0.3); }
-        .cm-confirm-modal h2 { margin:0 0 16px; color:var(--ink-bright); font-family:'Times New Roman', 'Noto Sans SC', serif;}
+        .cm-confirm-modal h2 { margin:0 0 16px; color:var(--ink-bright); font-family:'Sitka', 'Times New Romans', serif;}
         .cm-confirm-modal p { margin:0; color:var(--muted); font-size:14px; line-height:1.6; white-space:pre-line; }
         .cm-confirm-modal .btns { display:flex; justify-content:center; gap:16px; flex-shrink:0; }
         .cm-confirm-modal button { padding:10px 28px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px; transition:0.2s;}
@@ -762,13 +762,13 @@
         .cm-item { border:1px solid var(--line); border-radius:12px; background:rgba(0,0,0,0.2); padding:12px; transition:transform 0.2s; }
         .cm-item:hover { border-color:var(--gold); transform:translateY(-2px); }
         .cm-item-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid var(--line-strong); padding-bottom:6px; }
-        .cm-item-title b { color:var(--gold); font-size:15px; font-family:'Times New Roman', 'Noto Sans SC', serif;}
+        .cm-item-title b { color:var(--gold); font-size:15px; font-family:'Sitka', 'Times New Romans', serif;}
         .cm-mini-bars { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-bottom:8px; }
 
         /* Danh sách thế lực */
         .cm-power-row { width:100%; display:grid; grid-template-columns:44px 1fr auto; gap:12px; align-items:center; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:rgba(0,0,0,0.2); text-align:left; cursor:pointer; transition:all 0.15s; }
         .cm-power-row:hover { border-color:var(--gold); transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-        .cm-power-avatar { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background:rgba(199,155,93,0.1); border:1px solid var(--gold); color:var(--gold); font-weight:700; font-size:20px; flex-shrink:0; font-family:'Times New Roman', 'Noto Sans SC', serif; }
+        .cm-power-avatar { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background:rgba(199,155,93,0.1); border:1px solid var(--gold); color:var(--gold); font-weight:700; font-size:20px; flex-shrink:0; font-family:'Sitka', 'Times New Romans', serif; }
         .cm-power-body { display:flex; flex-direction:column; gap:4px; min-width:0; }
         .cm-power-name { font-weight:700; color:var(--ink-bright); display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15px; }
         .cm-power-tags { display:flex; gap:5px; flex-wrap:wrap; }
@@ -799,11 +799,11 @@
 
         .cm-camp-top { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:14px; }
         .cm-camp-left { display:flex; align-items:flex-start; gap:14px; min-width:0; }
-        .cm-camp-avatar { width:46px; height:46px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; background:rgba(199,155,93,0.08); border:1px solid var(--line-strong); color:var(--gold); flex-shrink:0; font-family:'Times New Roman', 'Noto Sans SC', serif; }
+        .cm-camp-avatar { width:46px; height:46px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; background:rgba(199,155,93,0.08); border:1px solid var(--line-strong); color:var(--gold); flex-shrink:0; font-family:'Sitka', 'Times New Romans', serif; }
         .cm-camp-avatar .top { font-size:9px; color:var(--muted); letter-spacing:0.06em; }
         .cm-camp-avatar .main { font-size:13px; font-weight:700; color:var(--ink-bright); line-height:1.1; }
         .cm-camp-name-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
-        .cm-camp-name-row h3 { margin:0; font-size:16px; font-family:'Times New Roman', 'Noto Sans SC', serif; color:var(--ink-bright); font-weight:700; letter-spacing:0.02em; }
+        .cm-camp-name-row h3 { margin:0; font-size:16px; font-family:'Sitka', 'Times New Romans', serif; color:var(--ink-bright); font-weight:700; letter-spacing:0.02em; }
         .cm-camp-loc { font-size:12px; color:var(--muted); }
         .cm-camp-meta-row { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:5px; font-size:12px; color:var(--muted); }
         .cm-camp-meta-row b { color:var(--ink-bright); font-weight:600; }
@@ -1717,7 +1717,7 @@
                     <h2>Quân đội dưới quyền</h2>
                     <p style="margin:4px 0 0;">Tại biên ${Object.keys(camps).length} chi · Tìm được ${arr.length} chi</p>
                 </div>
-                <div class="zjc-count" style="text-align:right; display:flex; align-items:center; gap:8px; font-size:13px; font-family:'Times New Roman', 'Noto Sans SC', serif;">
+                <div class="zjc-count" style="text-align:right; display:flex; align-items:center; gap:8px; font-size:13px; font-family:'Sitka', 'Times New Romans', serif;">
                     <span style="color:var(--faint);">Tổng Binh Lực:</span>
                     <strong style="color:var(--ink-bright); font-size:16px;">${armySupply.people.toLocaleString()}</strong>
                     <span style="color:var(--line-strong);">—</span>
