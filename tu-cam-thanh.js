@@ -633,9 +633,10 @@
 
         .cwe-main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--paper); }
         
-        .cwe-command-bar { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-bottom: 1px solid var(--line-strong); background: rgba(12, 9, 7, 0.88); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); z-index: 5; overflow-x: auto; scrollbar-width: none; }
-        .cwe-command-bar::-webkit-scrollbar { display: none; }
-        .cwe-command-bar nav { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+        .cwe-command-bar { display: flex; align-items: center; gap: 14px; padding: 10px 18px 8px 18px; border-bottom: 1px solid var(--line-strong); background: rgba(12, 9, 7, 0.88); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); z-index: 5; overflow-x: auto; scrollbar-width: thin; scrollbar-color: rgba(199, 155, 93, 0.3) transparent; }
+        .cwe-command-bar::-webkit-scrollbar { height: 4px; }
+        .cwe-command-bar::-webkit-scrollbar-thumb { border-radius: 4px; background: rgba(199, 155, 93, 0.4); }
+        .cwe-command-bar nav { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; margin-bottom: 4px; }
         .cwe-command-bar nav button { border: 0; border-right: 1px solid var(--line); padding: 6px 14px; color: var(--muted); background: transparent; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: 0.2s; font-family: 'Noto Sans SC', serif; white-space: nowrap;}
         .cwe-command-bar nav button:last-child { border-right: 0; }
         .cwe-command-bar nav button:hover { color: var(--ink-bright); background: rgba(199, 155, 93, 0.08); }
