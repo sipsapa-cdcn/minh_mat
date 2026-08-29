@@ -564,7 +564,7 @@
             color: var(--ink);
             background-image: radial-gradient(rgba(205, 170, 111, 0.04) 1px, transparent 1px); background-size: 4px 4px;
             box-shadow: 0 28px 90px var(--shadow), inset 0 0 0 4px rgba(205, 170, 111, 0.035);
-            font-family: 'Constantia', 'Times New Roman', 'Sitka', sans-serif;
+            font-family: 'Noto Serif SC', 'Times New Roman', 'Sitka', sans-serif;
         }
 
         .cwe-header {
