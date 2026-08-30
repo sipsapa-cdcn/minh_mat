@@ -16,7 +16,7 @@ import { registerMvuSchema } from 'https://testingcf.jsdelivr.net/gh/StageDog/ta
     const STYLE_ID = 'sys-mall-style';
     const SETTINGS_KEY = 'canming-sys-mall:settings';
     const POS_KEY = 'sys-mall-lamp-pos';
-    const SHELF_KEY = 'sys-mall-shelf'; // Khóa lưu trữ đệm kệ hàng cục bộ, tránh gây nhiễu Prompt MVU
+    const SHELF_KEY = 'sys-mall-shelf'; // Khóa lưu trữ đệm kệ hàng cục bộ
 
     // ==========================================
     // 1. ĐĂNG KÝ CẤU TRÚC BIẾN MVU
@@ -121,11 +121,11 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
     };
 
     const defaultSettings = { 
-        difficulty: 'normal', // Độ khó mặc định
+        difficulty: 'normal',
         connectionMode: 'tavern', 
         apiUrl: '', apiKey: '', model: '', apiSource: 'openai',
         temperature: 0.8, maxTokens: 1500, topP: 0.9, frequencyPenalty: 0, presencePenalty: 0,
-        itemCount: 10, // Số lượng sinh mặc định
+        itemCount: 10,
         customPrompt: MALL_PROMPTS['normal']
     };
 
@@ -215,7 +215,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
         throw new Error('Nội dung AI trả về không thể phân tích cú pháp thành JSON hợp lệ.');
     }
 
-    // Tự động gửi yêu cầu sinh hàng hóa tới AI
     async function refreshItems(userRequest = '') {
         const settings = getSettings();
         const itemCount = settings.itemCount || 10;
@@ -248,7 +247,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
         let text = '';
 
         if (settings.connectionMode === 'custom' && settings.apiUrl) {
-            // Chế độ 1: Kết nối trực tiếp API độc lập
             let apiUrl = settings.apiUrl.replace(/\/+$/, '');
             if (!apiUrl.endsWith('/chat/completions')) apiUrl += '/chat/completions';
             
@@ -272,7 +270,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
             text = data.choices?.[0]?.message?.content || '';
             
         } else {
-            // Chế độ 2: Model chính hiện tại của Tavern
             let csrfToken = '';
             try {
                 const getRequestHeaders = getST('getRequestHeaders');
@@ -317,7 +314,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
 
     let lastPurchase = null;
 
-    // Thu hồi giao dịch mua
     async function undoPurchase() {
         if (!lastPurchase) return;
         const data = getMvuData();
@@ -327,10 +323,8 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
         const type = item['Giá cả_Loại hình'];
         const refundAmount = Number(item['Giá cả_Trị số']) * qty;
 
-        // 1. Hoàn trả tiền tệ
         data['Nhân vật chính']['Tư khố']['Kim ngân đồng'][type] += refundAmount;
 
-        // 2. Thu hồi vật phẩm
         if (data['Nhân vật chính']['Tư khố']['Vật phẩm quan trọng'][name]) {
             data['Nhân vật chính']['Tư khố']['Vật phẩm quan trọng'][name]['Số lượng'] -= qty;
             if (data['Nhân vật chính']['Tư khố']['Vật phẩm quan trọng'][name]['Số lượng'] <= 0) {
@@ -345,7 +339,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
         showMallToast(`Đã thu hồi giao dịch, hoàn trả ${refundAmount} ${type}.`, 'info');
     }
 
-    // Mua hàng hóa (bổ sung tham số số lượng qty)
     async function buyItem(name, item, qty = 1) {
         const data = getMvuData();
         
@@ -369,7 +362,6 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
             return;
         }
 
-        // 1. Trừ tiền & Lưu vật phẩm vào Tư khố
         data['Nhân vật chính']['Tư khố']['Kim ngân đồng'][type] = current - totalPrice;
         
         let itemDesc = item['Giới thiệu'];
@@ -386,7 +378,7 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
         
         if (data['Hệ thống thương thành']) delete data['Hệ thống thương thành']; 
 
-        await saveMvuData(data); // Lưu vào MVU
+        await saveMvuData(data);
 
         lastPurchase = { name, item: JSON.parse(JSON.stringify(item)), qty };
 
@@ -396,24 +388,45 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
 
     async function fetchModels(apiUrl, apiKey) {
         if (!apiUrl) throw new Error('Xin hãy điền địa chỉ API trước.');
+        const cleanKey = (apiKey || '').trim();
+        const cleanUrl = apiUrl.trim();
+
         const getModelList = getST('getModelList');
         if (typeof getModelList === 'function') {
-            const res = await getModelList({ apiurl: apiUrl, key: apiKey });
-            if (res && res.length) return res;
+            try {
+                const res = await getModelList({ apiurl: cleanUrl, key: cleanKey });
+                if (res && res.length) return res;
+            } catch (e) {}
         }
-        const base = apiUrl.replace(/\/chat\/completions\/?$/i, '').replace(/\/v1\/?$/i, '').replace(/\/+$/, '');
+
+        let targetUrl = cleanUrl.replace(/\/chat\/completions\/?$/i, '').replace(/\/+$/, '');
+        if (!targetUrl.endsWith('/models')) {
+            targetUrl = targetUrl.endsWith('/v1') ? `${targetUrl}/models` : `${targetUrl}/v1/models`;
+        }
+
         const fetchFunc = getST('fetch') || window.fetch;
-        const response = await fetchFunc(`${base}/v1/models`, {
+        const headers = { 'Content-Type': 'application/json' };
+        if (cleanKey) {
+            headers['Authorization'] = cleanKey.toLowerCase().startsWith('bearer ') ? cleanKey : `Bearer ${cleanKey}`;
+        }
+
+        const response = await fetchFunc(targetUrl, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}) }
+            headers: headers
         });
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                throw new Error('HTTP 401 (Chưa xác thực): API Key trống, sai hoặc nhà cung cấp chặn truy vấn /models. Bạn có thể tự gõ tên Model vào ô bên dưới!');
+            }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         const data = await response.json();
         return (data.data || []).map(m => m.id || m.name).filter(Boolean);
     }
 
     // ==========================================
-    // 4. RENDER GIAO DIỆN & GẮN SỰ KIỆN (BAO GỒM ĐỔI TIỀN)
+    // 4. RENDER GIAO DIỆN & GẮN SỰ KIỆN
     // ==========================================
     async function doExchangeCurrency(action) {
         const data = getMvuData();
@@ -619,18 +632,21 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
             
             .sys-mall-head {
                 display: flex; justify-content: space-between; align-items: center;
-                padding: 16px 20px; border-bottom: 1px solid rgba(237,196,128,0.2);
-                background: rgba(0,0,0,0.3); flex-shrink: 0;
-                position: relative;
+                padding: 14px 18px; border-bottom: 1px solid rgba(237,196,128,0.15);
+                background: rgba(0,0,0,0.35); flex-shrink: 0;
             }
-            .sys-mall-head h2 { margin: 0; font-size: 20px; color: #d0784b; letter-spacing: 2px; font-weight: bold;}
-            .sys-mall-head-actions { display: flex; gap: 10px; align-items: center; }
+            .sys-mall-head h2 { margin: 0; font-size: 18px; color: #d0784b; letter-spacing: 1.5px; font-weight: bold; white-space: nowrap; }
+            .sys-mall-head-actions { display: flex; gap: 8px; align-items: center; }
             
-            .sys-mall-current-time {
-                position: absolute; left: 50%; transform: translateX(-50%);
-                background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 20px;
-                border: 1px solid rgba(237,196,128,0.3); font-size: 13px; color: #b99f76;
-                white-space: nowrap; pointer-events: none;
+            .sys-mall-time-banner {
+                display: flex; align-items: center; justify-content: center; gap: 6px;
+                padding: 6px 12px; background: rgba(0,0,0,0.25);
+                border-bottom: 1px solid rgba(237,196,128,0.1); font-size: 12px; color: #b99f76;
+                text-align: center; flex-shrink: 0;
+            }
+            .sys-mall-time-banner .sm-time-tag {
+                color: #f2dfba; font-weight: bold; background: rgba(237,196,128,0.1);
+                padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(237,196,128,0.2);
             }
             
             .sys-mall-icon-btn {
@@ -744,9 +760,9 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
                 #sys-mall-modal { padding: 10px; } 
                 .sys-mall-container { border-radius: 12px; }
                 .sys-mall-head { padding: 10px 14px; }
-                .sys-mall-head h2 { font-size: 17px; }
+                .sys-mall-head h2 { font-size: 16px; }
                 .sys-mall-icon-btn { width: 30px; height: 30px; font-size: 16px; }
-                .sys-mall-current-time { font-size: 11px; padding: 2px 8px; transform: translateX(-50%) scale(0.9); }
+                .sys-mall-time-banner { font-size: 11px; padding: 4px 8px; }
                 .sys-mall-wallet-bar { padding: 8px; }
                 .sm-wallet-val span { font-size: 12px; }
                 .sm-wallet-val b { font-size: 14px; }
@@ -777,7 +793,7 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
 
         const lamp = doc.createElement('div');
         lamp.id = LAMP_ID;
-        lamp.innerHTML = 'Thương';
+        lamp.innerHTML = '💰';
         lamp.title = 'Mở Vạn Giới Thương Thành';
         doc.body.appendChild(lamp);
 
@@ -787,12 +803,15 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
             <div class="sys-mall-container">
                 <header class="sys-mall-head">
                     <h2>Vạn Giới Thương Thành</h2>
-                    <div id="sys-mall-current-time" class="sys-mall-current-time">Thời gian chưa rõ</div>
                     <div class="sys-mall-head-actions">
                         <button class="sys-mall-icon-btn" id="sys-mall-btn-settings" title="Cài đặt API Thương Thành">⚙</button>
                         <button class="sys-mall-icon-btn" id="sys-mall-btn-close" title="Đóng">×</button>
                     </div>
                 </header>
+                <div class="sys-mall-time-banner">
+                    <span>⏳ Thời gian thế giới:</span>
+                    <span id="sys-mall-current-time" class="sm-time-tag">Đang đọc dữ liệu...</span>
+                </div>
                 <div class="sys-mall-wallet-bar">
                     <div class="sys-mall-wallet-row">
                         <div class="sys-mall-wallet-item">
@@ -953,8 +972,9 @@ Trước khi xuất JSON, bắt buộc phải rà soát từng món trong thẻ 
 
             lamp.style.width = size + 'px';
             lamp.style.height = size + 'px';
-            lamp.style.fontSize = isMobile ? '18px' : '22px';
+            lamp.style.fontSize = isMobile ? '20px' : '24px';
             lamp.style.borderRadius = '50%';
+            lamp.style.lineHeight = size + 'px';
             
             lamp.style.left = newLeft + 'px';
             lamp.style.top = newTop + 'px';
